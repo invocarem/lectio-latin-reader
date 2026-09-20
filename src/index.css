@@ -1,0 +1,371 @@
+:root {
+  --parchment: #f3ead8;
+  --parchment-deep: #e7d9bd;
+  --ink: #2a2218;
+  --ink-soft: #5a4d3c;
+  --rule: #c9b48a;
+  --cinnabar: #8a2f24;
+  --gold: #c9a227;
+  --highlight: #f0d9a0;
+  --panel: #fbf6ea;
+  --shadow: 0 18px 40px rgba(42, 34, 24, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  color: var(--ink);
+  background:
+    radial-gradient(1200px 600px at 10% -10%, #fff8e8 0%, transparent 50%),
+    radial-gradient(900px 500px at 110% 10%, #ead7b0 0%, transparent 45%),
+    var(--parchment);
+  font-family: "Source Serif 4", "Times New Roman", serif;
+}
+
+button,
+a {
+  font: inherit;
+}
+
+.home {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 3rem 1.5rem;
+}
+
+.home-card {
+  width: min(42rem, 100%);
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  box-shadow: var(--shadow);
+  padding: 3.2rem 3rem 2.6rem;
+}
+
+.home-kicker {
+  margin: 0 0 1rem;
+  color: var(--cinnabar);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+}
+
+.home h1 {
+  margin: 0;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  font-weight: 600;
+  line-height: 1.05;
+  font-style: italic;
+}
+
+.home h1 span {
+  display: block;
+  margin-top: 0.35rem;
+  font-size: 0.48em;
+  font-style: normal;
+  color: var(--ink-soft);
+  letter-spacing: 0.02em;
+}
+
+.home-meta {
+  margin: 1.4rem 0 0;
+  color: var(--ink-soft);
+  line-height: 1.55;
+}
+
+.home-rule {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  margin: 1.8rem 0;
+  border: 0;
+}
+
+.home p {
+  margin: 0;
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+
+.start {
+  margin-top: 2rem;
+  appearance: none;
+  border: 0;
+  background: var(--cinnabar);
+  color: #fbf6ea;
+  padding: 0.75rem 1.35rem;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+}
+
+.start:hover {
+  filter: brightness(1.08);
+}
+
+.app-shell {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.7rem 1.1rem;
+  border-bottom: 1px solid var(--rule);
+  background: rgba(251, 246, 234, 0.88);
+  backdrop-filter: blur(8px);
+  position: sticky;
+  top: 0;
+  z-index: 4;
+}
+
+.brand {
+  appearance: none;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  color: var(--ink);
+}
+
+.brand strong {
+  display: block;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.brand small {
+  color: var(--ink-soft);
+}
+
+.tools {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.tools button {
+  appearance: none;
+  border: 1px solid var(--rule);
+  background: var(--panel);
+  color: var(--ink);
+  padding: 0.4rem 0.7rem;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.tools button[aria-pressed="true"] {
+  background: var(--cinnabar);
+  color: #fbf6ea;
+  border-color: var(--cinnabar);
+}
+
+.reader {
+  display: grid;
+  grid-template-columns: 16.5rem 1fr minmax(0, 22rem);
+  min-height: 0;
+  overflow: hidden;
+}
+
+.reader.no-facsimile {
+  grid-template-columns: 16.5rem 1fr;
+}
+
+.toc {
+  border-right: 1px solid var(--rule);
+  padding: 1rem 0.7rem 2rem;
+  overflow: auto;
+  background: rgba(231, 217, 189, 0.35);
+  z-index: 3;
+}
+
+.toc h2 {
+  margin: 0 0 0.8rem 0.5rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--cinnabar);
+}
+
+.toc button {
+  width: 100%;
+  appearance: none;
+  border: 0;
+  background: none;
+  text-align: left;
+  padding: 0.45rem 0.55rem;
+  cursor: pointer;
+  color: var(--ink-soft);
+  line-height: 1.3;
+}
+
+.toc button.active,
+.toc button:hover {
+  background: var(--highlight);
+  color: var(--ink);
+}
+
+.toc .cap {
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--cinnabar);
+  display: block;
+}
+
+.toc .ttl {
+  display: block;
+  font-size: 0.86rem;
+}
+
+.columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 0;
+}
+
+.pane {
+  overflow: auto;
+  padding: 1.4rem 1.6rem 4rem;
+  min-height: 0;
+}
+
+.pane.latin {
+  border-right: 1px solid var(--rule);
+  font-family: "EB Garamond", serif;
+  font-size: 1.18rem;
+}
+
+.pane.english {
+  font-size: 1.02rem;
+}
+
+.lang-label {
+  position: sticky;
+  top: 0;
+  margin: -1.4rem -1.6rem 1rem;
+  padding: 0.55rem 1.6rem;
+  background: var(--parchment-deep);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  color: var(--cinnabar);
+  z-index: 2;
+}
+
+.unit {
+  margin: 0 0 1.15rem;
+  padding: 0.55rem 0.65rem;
+  border-left: 3px solid transparent;
+  cursor: pointer;
+  line-height: 1.55;
+  scroll-margin-top: 3.4rem;
+}
+
+.unit:hover {
+  background: rgba(240, 217, 160, 0.35);
+}
+
+.unit.active {
+  background: var(--highlight);
+  border-left-color: var(--cinnabar);
+}
+
+.unit.heading {
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: var(--cinnabar);
+  line-height: 1.25;
+}
+
+.num {
+  float: left;
+  margin: 0.15rem 0.55rem 0 0;
+  color: var(--cinnabar);
+  font-variant-numeric: oldstyle-nums;
+  font-size: 0.85em;
+}
+
+.facsimile {
+  border-left: 1px solid var(--rule);
+  background: #2a2218;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 0;
+}
+
+.facsimile header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 0.6rem 0.8rem;
+  color: #f3ead8;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.facsimile img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #1b160f;
+}
+
+@media (max-width: 1100px) {
+  .reader {
+    grid-template-columns: 14.5rem 1fr;
+    grid-template-rows: minmax(0, 1fr) 36vh;
+  }
+
+  .reader.no-facsimile {
+    grid-template-columns: 14.5rem 1fr;
+    grid-template-rows: minmax(0, 1fr);
+  }
+
+  .toc {
+    grid-row: 1 / span 2;
+  }
+
+  .reader.no-facsimile .toc {
+    grid-row: 1;
+  }
+
+  .facsimile {
+    grid-column: 2;
+    min-height: 0;
+    border-left: 0;
+    border-top: 1px solid var(--rule);
+  }
+}
+
+@media (max-width: 760px) {
+  .columns {
+    grid-template-columns: 1fr;
+  }
+
+  .pane.latin {
+    border-right: 0;
+    border-bottom: 1px solid var(--rule);
+    max-height: 50vh;
+  }
+
+  .home-card {
+    padding: 2rem 1.3rem;
+  }
+}
