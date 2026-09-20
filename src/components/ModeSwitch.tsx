@@ -6,26 +6,31 @@ type ModeSwitchProps = {
 };
 
 export function ModeSwitch({ mode, onMode }: ModeSwitchProps) {
+  const isActive = (m: ReaderMode) => m === mode;
   return (
     <div className="mode-switch" role="tablist" aria-label="Reading mode">
-      <button
-        type="button"
-        role="tab"
-        aria-selected={mode === "lectio"}
-        aria-pressed={mode === "lectio"}
-        onClick={() => onMode("lectio")}
-      >
-        Lectio
-      </button>
-      <button
-        type="button"
-        role="tab"
-        aria-selected={mode === "study"}
-        aria-pressed={mode === "study"}
-        onClick={() => onMode("study")}
-      >
-        Study
-      </button>
+      {isActive("lectio") ? (
+        <button
+          type="button"
+          role="tab"
+          aria-selected="true"
+          aria-pressed="true"
+          onClick={() => onMode("lectio")}
+        >
+          Lectio
+        </button>
+      ) : null}
+      {isActive("study") ? (
+        <button
+          type="button"
+          role="tab"
+          aria-selected="true"
+          aria-pressed="true"
+          onClick={() => onMode("study")}
+        >
+          Study
+        </button>
+      ) : null}
     </div>
   );
 }

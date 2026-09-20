@@ -3,6 +3,7 @@ import { Home } from "./components/Home";
 import { Lectio } from "./components/Lectio";
 import { Reader } from "./components/Reader";
 import { firstLectioId, lectioUnits, sourceIdOf, units } from "./content/work";
+import { platformSupportsStudy } from "./native";
 import type { ReaderMode } from "./types";
 
 export default function App() {
@@ -11,13 +12,18 @@ export default function App() {
   const [mode, setMode] = useState<ReaderMode>("lectio");
   const [focusId, setFocusId] = useState(startId);
 
+  // On the built mobile app (iPhone) only Lectio is available; Study is hidden.
+  const studyEnabled = platformSupportsStudy();
+
   function goHome() {
     setView("home");
   }
 
   function start(nextMode: ReaderMode) {
-    setMode(nextMode);
-    setFocusId(nextMode === "lectio" ? lectioUnits[0].id : units[0].id);
+    const effective: ReaderMode =
+      studyEnabled ? nextMode : "lectio";
+    setMode(effective);
+    setFocusId(effective === "lectio" ? lectioUnits[0].id : units[0].id);
     setView("read");
   }
 
@@ -34,11 +40,12 @@ export default function App() {
       <Home
         onLectio={() => start("lectio")}
         onStudy={() => start("study")}
+        studyEnabled={studyEnabled}
       />
     );
   }
 
-  if (mode === "study") {
+  if (mode === "study" && studyEnabled) {
     return (
       <Reader
         focusId={focusId}

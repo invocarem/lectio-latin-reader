@@ -3,9 +3,10 @@ import { work } from "../content/work";
 type HomeProps = {
   onLectio: () => void;
   onStudy: () => void;
+  studyEnabled?: boolean;
 };
 
-export function Home({ onLectio, onStudy }: HomeProps) {
+export function Home({ onLectio, onStudy, studyEnabled = true }: HomeProps) {
   return (
     <main className="home">
       <article className="home-card">
@@ -21,16 +22,20 @@ export function Home({ onLectio, onStudy }: HomeProps) {
         </p>
         <hr className="home-rule" />
         <p>
-          One short Latin paragraph at a time, with English at hand. Study mode
-          keeps the full parallel columns of each Patrologia section.
+          One short Latin paragraph at a time, with English at hand.
+          {studyEnabled ? (
+            <> Study mode keeps the full parallel columns of each Patrologia section.</>
+          ) : null}
         </p>
         <div className="home-actions">
           <button className="start" type="button" onClick={onLectio}>
-            Begin lectio
+            Lectio
           </button>
-          <button className="start ghost" type="button" onClick={onStudy}>
-            Study mode
-          </button>
+          {studyEnabled ? (
+            <button className="start ghost" type="button" onClick={onStudy}>
+              Study
+            </button>
+          ) : null}
         </div>
       </article>
     </main>
