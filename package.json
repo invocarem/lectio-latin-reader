@@ -7,16 +7,26 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
+    "cap:sync": "npm run build && npx cap sync ios",
+    "ios": "npm run cap:sync && npx cap open ios",
     "lexicon:extract": "python3 scripts/extract_wordlist.py",
     "lexicon:analyze": "bash scripts/analyze-in-docker.sh",
     "lexicon:parse": "python3 scripts/parse_analyses.py",
     "lexicon:curate": "python3 scripts/apply_overrides.py"
   },
   "dependencies": {
+    "@capacitor/core": "^8.5.2",
+    "@capacitor/ios": "^8.5.2",
+    "@capacitor/splash-screen": "^8.0.2",
+    "@capacitor/status-bar": "^8.0.3",
+    "@fontsource/cormorant-garamond": "^5.3.0",
+    "@fontsource/eb-garamond": "^5.2.7",
+    "@fontsource/source-serif-4": "^5.2.8",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.5.2",
     "@types/react": "^19.1.13",
     "@types/react-dom": "^19.1.9",
     "@vitejs/plugin-react": "^5.0.2",

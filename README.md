@@ -18,6 +18,61 @@ npm run build    # production build
 npm run preview  # serve the build
 ```
 
+## iOS (Mac)
+
+The iPhone app is a Capacitor shell around that Vite bundle, the same pattern as `~/code/lectio`. Xcode does **not** watch `src/`. It loads a copied snapshot in `ios/App/App/public`. `npm run dev` only updates the browser.
+
+This project uses a **separate** bundle ID, `com.invocarem.lectiolatinreader`. Do not reuse Lectio’s `com.invocarem.lectio`: Apple treats the bundle ID as the app, so sharing it would upload this binary as a new TestFlight build of Lectio and replace that app for testers.
+
+### First run
+
+You need a Mac with Xcode (from the App Store; open it once to finish setup). The app targets iOS 15+.
+
+```bash
+npm install
+npm run ios
+```
+
+That builds the web app, copies it into the iOS project, and opens `ios/App/App.xcodeproj`.
+
+1. In Xcode, select the **App** scheme and your iPhone (or a simulator) in the destination menu.
+2. Under **Signing & Capabilities**, choose your Apple Developer team. The bundle ID is `com.invocarem.lectiolatinreader`.
+3. Press Run (⌘R). On a physical phone, if iOS asks you to trust the developer, open **Settings → General → VPN & Device Management** and trust the certificate.
+
+### After changing web or UI code
+
+```bash
+npm run cap:sync
+```
+
+Then Run again in Xcode. That command is `npm run build` plus `npx cap sync ios`. Skipping it leaves Xcode on the old UI.
+
+If the phone still shows the previous UI after a sync, delete the app from the device and Run again. WKWebView can keep the old bundle.
+
+### TestFlight
+
+You need a paid [Apple Developer Program](https://developer.apple.com/programs/) membership (this project’s team is already set: `RD9Q6XUA82`). Bundle ID is `com.invocarem.lectiolatinreader`.
+
+1. Sync the web UI into the iOS project:
+
+   ```bash
+   npm run cap:sync
+   ```
+
+2. In [App Store Connect](https://appstoreconnect.apple.com) → **Apps** → **+**, create a new iOS app with bundle ID `com.invocarem.lectiolatinreader` (register that ID under [Certificates, Identifiers & Profiles](https://developer.apple.com/account/resources/identifiers/list) first if it is missing). You cannot attach this binary to the existing Lectio listing.
+
+3. In Xcode, open `ios/App/App.xcodeproj`. Select the **App** target → **Signing & Capabilities** → your team, Automatic signing.
+
+4. Destination menu: **Any iOS Device (arm64)** (not a simulator). **Product → Archive**.
+
+5. In the Organizer, **Distribute App** → **App Store Connect** → **Upload**. Xcode will create an Apple Distribution certificate on first upload if needed.
+
+6. Back in App Store Connect → the app → **TestFlight**. Wait until the build finishes processing (often 5–30 minutes).
+
+7. Internal testers (people on your App Store Connect team) can install from the TestFlight app as soon as processing finishes. External testers need a group, a short “What to Test” note, and a first-time Beta App Review.
+
+Each new TestFlight build needs a higher **Build** number (`CURRENT_PROJECT_VERSION` in the App target; it is `1` today). The marketing version (`1.0`) can stay the same.
+
 ## Contents
 
 The treatise is split into 82 units: retractatio, preface, twenty-two chapter titles, and numbered sections 1–57.
