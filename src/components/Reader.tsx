@@ -1,6 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { chapters, units } from "../content/work";
 import type { Unit } from "../types";
+import { DictPopup } from "./DictPopup";
+
+const WORD_RE = /([A-Za-z\u00C0-\u024F''\u2019]+)/;
+const WORD_ONLY = /^[A-Za-z\u00C0-\u024F''\u2019]+$/;
 
 type ReaderProps = {
   focusId: string;
@@ -16,10 +20,18 @@ function chapterFor(unit: Unit): string {
   return unit.id;
 }
 
+type DictState = {
+  word: string;
+  rect: DOMRect;
+  tokenKey: string;
+};
+
 export function Reader({ focusId, onFocus, onHome }: ReaderProps) {
   const [showPlate, setShowPlate] = useState(true);
+  const [dict, setDict] = useState<DictState | null>(null);
   const latinRef = useRef<HTMLDivElement>(null);
   const englishRef = useRef<HTMLDivElement>(null);
+  const closeDict = useCallback(() => setDict(null), []);
   const current = useMemo(
     () => units.find((unit) => unit.id === focusId) ?? units[0],
     [focusId],
@@ -64,7 +76,10 @@ export function Reader({ focusId, onFocus, onHome }: ReaderProps) {
               key={chapter.id}
               type="button"
               className={chapter.id === activeChapter ? "active" : undefined}
-              onClick={() => onFocus(chapter.firstUnitId)}
+              onClick={() => {
+                closeDict();
+                onFocus(chapter.firstUnitId);
+              }}
             >
               {chapter.caput != null ? (
                 <span className="cap">Caput {chapter.caput}</span>
@@ -83,7 +98,15 @@ export function Reader({ focusId, onFocus, onHome }: ReaderProps) {
                 unit={unit}
                 lang="latin"
                 active={unit.id === current.id}
-                onSelect={onFocus}
+                activeToken={dict?.tokenKey}
+                onSelect={(id) => {
+                  closeDict();
+                  onFocus(id);
+                }}
+                onWord={(word, el, tokenKey) => {
+                  onFocus(unit.id);
+                  setDict({ word, rect: el.getBoundingClientRect(), tokenKey });
+                }}
               />
             ))}
           </div>
@@ -95,11 +118,18 @@ export function Reader({ focusId, onFocus, onHome }: ReaderProps) {
                 unit={unit}
                 lang="english"
                 active={unit.id === current.id}
-                onSelect={onFocus}
+                onSelect={(id) => {
+                  closeDict();
+                  onFocus(id);
+                }}
               />
             ))}
           </div>
         </div>
+
+        {dict ? (
+          <DictPopup word={dict.word} anchor={dict.rect} onClose={closeDict} />
+        ) : null}
 
         {showPlate ? (
           <aside className="facsimile">
@@ -126,12 +156,16 @@ function UnitBlock({
   unit,
   lang,
   active,
+  activeToken,
   onSelect,
+  onWord,
 }: {
   unit: Unit;
   lang: "latin" | "english";
   active: boolean;
+  activeToken?: string;
   onSelect: (id: string) => void;
+  onWord?: (word: string, el: HTMLElement, tokenKey: string) => void;
 }) {
   const text = lang === "latin" ? unit.latin : unit.english;
   const heading = unit.kind !== "section";
@@ -144,9 +178,51 @@ function UnitBlock({
       {unit.section != null && !heading ? (
         <span className="num">{unit.section}.</span>
       ) : null}
-      {text}
+      {lang === "latin" && onWord ? (
+        <LatinText
+          text={text}
+          unitId={unit.id}
+          activeToken={activeToken}
+          onWord={onWord}
+        />
+      ) : (
+        text
+      )}
     </article>
   );
+}
+
+function LatinText({
+  text,
+  unitId,
+  activeToken,
+  onWord,
+}: {
+  text: string;
+  unitId: string;
+  activeToken?: string;
+  onWord: (word: string, el: HTMLElement, tokenKey: string) => void;
+}) {
+  return text.split(WORD_RE).map((part, index) => {
+    if (!part) return null;
+    if (!WORD_ONLY.test(part)) {
+      return <span key={index}>{part}</span>;
+    }
+    const tokenKey = `${unitId}:${index}`;
+    return (
+      <span
+        key={index}
+        className={tokenKey === activeToken ? "w active" : "w"}
+        data-word={part}
+        onClick={(event) => {
+          event.stopPropagation();
+          onWord(part, event.currentTarget, tokenKey);
+        }}
+      >
+        {part}
+      </span>
+    );
+  });
 }
 
 function shortTitle(title: string): string {

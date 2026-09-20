@@ -2,3 +2,10 @@ node_modules
 dist
 *.local
 .DS_Store
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+
+# Reproducible lexicon build artifact (regenerate with lexicon:analyze)
+src/content/lexicon/analyses.json
