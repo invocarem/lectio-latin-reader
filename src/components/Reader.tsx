@@ -1,24 +1,16 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { chapters, units } from "../content/work";
-import type { Unit } from "../types";
+import { chapterKey, chapters, units } from "../content/work";
+import type { ReaderMode, Unit } from "../types";
 import { DictPopup } from "./DictPopup";
-
-const WORD_RE = /([A-Za-z\u00C0-\u024F''\u2019]+)/;
-const WORD_ONLY = /^[A-Za-z\u00C0-\u024F''\u2019]+$/;
+import { LatinText } from "./LatinText";
+import { ModeSwitch } from "./ModeSwitch";
 
 type ReaderProps = {
   focusId: string;
   onFocus: (id: string) => void;
   onHome: () => void;
+  onMode: (mode: ReaderMode) => void;
 };
-
-function chapterFor(unit: Unit): string {
-  if (unit.kind === "title") return "title";
-  if (unit.kind === "retractatio") return "retractatio";
-  if (unit.kind === "praefatio") return "praefatio";
-  if (unit.caput != null) return `cap${unit.caput}-title`;
-  return unit.id;
-}
 
 type DictState = {
   word: string;
@@ -26,7 +18,7 @@ type DictState = {
   tokenKey: string;
 };
 
-export function Reader({ focusId, onFocus, onHome }: ReaderProps) {
+export function Reader({ focusId, onFocus, onHome, onMode }: ReaderProps) {
   const [showPlate, setShowPlate] = useState(true);
   const [dict, setDict] = useState<DictState | null>(null);
   const latinRef = useRef<HTMLDivElement>(null);
@@ -36,7 +28,7 @@ export function Reader({ focusId, onFocus, onHome }: ReaderProps) {
     () => units.find((unit) => unit.id === focusId) ?? units[0],
     [focusId],
   );
-  const activeChapter = chapterFor(current);
+  const activeChapter = chapterKey(current);
 
   useEffect(() => {
     const selector = `[data-unit="${current.id}"]`;
@@ -58,6 +50,7 @@ export function Reader({ focusId, onFocus, onHome }: ReaderProps) {
           <small>Bernard of Clairvaux · PL 182</small>
         </button>
         <div className="tools">
+          <ModeSwitch mode="study" onMode={onMode} />
           <button
             type="button"
             aria-pressed={showPlate}
@@ -190,39 +183,6 @@ function UnitBlock({
       )}
     </article>
   );
-}
-
-function LatinText({
-  text,
-  unitId,
-  activeToken,
-  onWord,
-}: {
-  text: string;
-  unitId: string;
-  activeToken?: string;
-  onWord: (word: string, el: HTMLElement, tokenKey: string) => void;
-}) {
-  return text.split(WORD_RE).map((part, index) => {
-    if (!part) return null;
-    if (!WORD_ONLY.test(part)) {
-      return <span key={index}>{part}</span>;
-    }
-    const tokenKey = `${unitId}:${index}`;
-    return (
-      <span
-        key={index}
-        className={tokenKey === activeToken ? "w active" : "w"}
-        data-word={part}
-        onClick={(event) => {
-          event.stopPropagation();
-          onWord(part, event.currentTarget, tokenKey);
-        }}
-      >
-        {part}
-      </span>
-    );
-  });
 }
 
 function shortTitle(title: string): string {

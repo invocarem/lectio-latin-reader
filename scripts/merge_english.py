@@ -1,13 +1,20 @@
 #!/usr/bin/env python3
-"""Attach matching English to each Latin unit and write de-gradibus.json."""
+"""Attach matching English to each Latin unit and write de-gradibus.json.
+
+Long units are then broken into lectio chunks (praefatio-s1, …) without
+changing latin-units.json. See scripts/split_lectio.py.
+"""
 from __future__ import annotations
 
 import json
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 LATIN = ROOT / "src/content/latin-units.json"
 OUT = ROOT / "src/content/de-gradibus.json"
+sys.path.insert(0, str(Path(__file__).parent))
+from split_lectio import add_chunks, report  # noqa: E402
 
 EN: dict[str, str] = {
     "title": "Saint Bernard, Abbot of Clairvaux: A Treatise on the Steps of Humility and of Pride.",
@@ -111,8 +118,10 @@ def main() -> None:
         )
     if missing:
         raise SystemExit(f"missing English for: {missing}")
+    add_chunks(units)
     OUT.parent.mkdir(parents=True, exist_ok=True)
     OUT.write_text(json.dumps(units, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    report(units)
     print(f"wrote {len(units)} units -> {OUT}")
 
 

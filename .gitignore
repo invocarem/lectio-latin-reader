@@ -22,3 +22,6 @@ xcuserdata
 *.xcuserstate
 *.xccheckout
 *.moved-aside
+
+# Reasonix agent workspace
+.reasonix

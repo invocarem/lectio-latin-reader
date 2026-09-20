@@ -1,10 +1,11 @@
 import { work } from "../content/work";
 
 type HomeProps = {
-  onStart: () => void;
+  onLectio: () => void;
+  onStudy: () => void;
 };
 
-export function Home({ onStart }: HomeProps) {
+export function Home({ onLectio, onStudy }: HomeProps) {
   return (
     <main className="home">
       <article className="home-card">
@@ -20,13 +21,17 @@ export function Home({ onStart }: HomeProps) {
         </p>
         <hr className="home-rule" />
         <p>
-          Latin is taken from the Migne plates of Bernard’s treatise. English is
-          written to match each numbered section, so both columns keep the same
-          step of the lectio.
+          One short Latin paragraph at a time, with English at hand. Study mode
+          keeps the full parallel columns of each Patrologia section.
         </p>
-        <button className="start" type="button" onClick={onStart}>
-          Begin reading
-        </button>
+        <div className="home-actions">
+          <button className="start" type="button" onClick={onLectio}>
+            Begin lectio
+          </button>
+          <button className="start ghost" type="button" onClick={onStudy}>
+            Study mode
+          </button>
+        </div>
       </article>
     </main>
   );

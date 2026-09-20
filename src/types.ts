@@ -5,6 +5,14 @@ export type UnitKind =
   | "chapter-title"
   | "section";
 
+export type LectioChunk = {
+  id: string;
+  part: number;
+  parts: number;
+  latin: string;
+  english: string;
+};
+
 export type Unit = {
   id: string;
   kind: UnitKind;
@@ -16,4 +24,13 @@ export type Unit = {
   column: number;
   facsimile: string | null;
   label: string;
+  chunks?: LectioChunk[];
 };
+
+export type LectioUnit = Unit & {
+  sourceId: string;
+  part: number;
+  parts: number;
+};
+
+export type ReaderMode = "lectio" | "study";

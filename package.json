@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
+    "content": "python3 scripts/merge_english.py",
     "cap:sync": "npm run build && npx cap sync ios",
     "ios": "npm run cap:sync && npx cap open ios",
     "lexicon:extract": "python3 scripts/extract_wordlist.py",
