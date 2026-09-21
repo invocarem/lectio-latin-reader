@@ -1,5 +1,6 @@
 import gradibusLexiconData from "./content/gradibus/lexicon/lexicon.json";
 import psalterLexiconData from "./content/psalter/lexicon/lexicon.json";
+import ruleLexiconData from "./content/rule/lexicon/lexicon.json";
 import type { WorkId } from "./types";
 
 export interface Edited {
@@ -93,12 +94,17 @@ function buildLexicon(payload: unknown): Lexicon {
 
 const lexiconCache = new Map<WorkId, Lexicon>();
 
+const lexiconData: Record<WorkId, unknown> = {
+  gradibus: gradibusLexiconData,
+  psalter: psalterLexiconData,
+  rule: ruleLexiconData,
+};
+
 /** The closed word list for a given work. */
 export function lexiconFor(workId: WorkId): Lexicon {
   let lexicon = lexiconCache.get(workId);
   if (!lexicon) {
-    const data = workId === "psalter" ? psalterLexiconData : gradibusLexiconData;
-    lexicon = buildLexicon(data);
+    lexicon = buildLexicon(lexiconData[workId]);
     lexiconCache.set(workId, lexicon);
   }
   return lexicon;
