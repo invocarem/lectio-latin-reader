@@ -135,27 +135,6 @@ a {
   border: 1px solid var(--cinnabar);
 }
 
-.mode-switch {
-  display: flex;
-  border: 1px solid var(--rule);
-  background: var(--panel);
-}
-
-.mode-switch button {
-  appearance: none;
-  border: 0;
-  background: transparent;
-  color: var(--ink);
-  padding: 0.4rem 0.7rem;
-  cursor: pointer;
-  font-size: 0.8rem;
-}
-
-.mode-switch button[aria-pressed="true"] {
-  background: var(--cinnabar);
-  color: #fbf6ea;
-}
-
 .lectio-shell {
   grid-template-rows: auto 1fr auto;
 }

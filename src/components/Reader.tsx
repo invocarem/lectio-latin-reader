@@ -1,15 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { chapterKey, chapters, units } from "../content/work";
-import type { ReaderMode, Unit } from "../types";
+import type { Unit } from "../types";
 import { DictPopup } from "./DictPopup";
 import { LatinText } from "./LatinText";
-import { ModeSwitch } from "./ModeSwitch";
 
 type ReaderProps = {
   focusId: string;
   onFocus: (id: string) => void;
   onHome: () => void;
-  onMode: (mode: ReaderMode) => void;
 };
 
 type DictState = {
@@ -18,7 +16,7 @@ type DictState = {
   tokenKey: string;
 };
 
-export function Reader({ focusId, onFocus, onHome, onMode }: ReaderProps) {
+export function Reader({ focusId, onFocus, onHome }: ReaderProps) {
   const [showPlate, setShowPlate] = useState(true);
   const [dict, setDict] = useState<DictState | null>(null);
   const latinRef = useRef<HTMLDivElement>(null);
@@ -50,7 +48,6 @@ export function Reader({ focusId, onFocus, onHome, onMode }: ReaderProps) {
           <small>Bernard of Clairvaux · PL 182</small>
         </button>
         <div className="tools">
-          <ModeSwitch mode="study" onMode={onMode} />
           <button
             type="button"
             aria-pressed={showPlate}

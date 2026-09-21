@@ -6,16 +6,14 @@ import {
   lectioById,
   lectioUnits,
 } from "../content/work";
-import type { LectioUnit, ReaderMode } from "../types";
+import type { LectioUnit } from "../types";
 import { DictPopup } from "./DictPopup";
 import { LatinText } from "./LatinText";
-import { ModeSwitch } from "./ModeSwitch";
 
 type LectioProps = {
   focusId: string;
   onFocus: (id: string) => void;
   onHome: () => void;
-  onMode: (mode: ReaderMode) => void;
 };
 
 type DictState = {
@@ -24,7 +22,7 @@ type DictState = {
   tokenKey: string;
 };
 
-export function Lectio({ focusId, onFocus, onHome, onMode }: LectioProps) {
+export function Lectio({ focusId, onFocus, onHome }: LectioProps) {
   const [showEnglish, setShowEnglish] = useState(true);
   const [showToc, setShowToc] = useState(false);
   const [dict, setDict] = useState<DictState | null>(null);
@@ -75,7 +73,6 @@ export function Lectio({ focusId, onFocus, onHome, onMode }: LectioProps) {
           >
             Capita
           </button>
-          <ModeSwitch mode="lectio" onMode={onMode} />
           <button
             type="button"
             aria-pressed={showEnglish}

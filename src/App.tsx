@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Home } from "./components/Home";
 import { Lectio } from "./components/Lectio";
 import { Reader } from "./components/Reader";
-import { firstLectioId, lectioUnits, sourceIdOf, units } from "./content/work";
+import { lectioUnits, units } from "./content/work";
 import { platformSupportsStudy } from "./native";
 import type { ReaderMode } from "./types";
 
@@ -27,14 +27,6 @@ export default function App() {
     setView("read");
   }
 
-  function switchMode(nextMode: ReaderMode) {
-    if (nextMode === mode) return;
-    setFocusId(
-      nextMode === "lectio" ? firstLectioId(sourceIdOf(focusId)) : sourceIdOf(focusId),
-    );
-    setMode(nextMode);
-  }
-
   if (view === "home") {
     return (
       <Home
@@ -47,21 +39,9 @@ export default function App() {
 
   if (mode === "study" && studyEnabled) {
     return (
-      <Reader
-        focusId={focusId}
-        onFocus={setFocusId}
-        onHome={goHome}
-        onMode={switchMode}
-      />
+      <Reader focusId={focusId} onFocus={setFocusId} onHome={goHome} />
     );
   }
 
-  return (
-    <Lectio
-      focusId={focusId}
-      onFocus={setFocusId}
-      onHome={goHome}
-      onMode={switchMode}
-    />
-  );
+  return <Lectio focusId={focusId} onFocus={setFocusId} onHome={goHome} />;
 }
