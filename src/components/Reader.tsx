@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { chapterKey, chapters, units } from "../content/work";
-import type { Unit } from "../types";
+import type { ReaderWork, Unit } from "../types";
 import { DictPopup } from "./DictPopup";
 import { LatinText } from "./LatinText";
 
 type ReaderProps = {
+  work: ReaderWork;
   focusId: string;
   onFocus: (id: string) => void;
   onHome: () => void;
@@ -16,7 +16,9 @@ type DictState = {
   tokenKey: string;
 };
 
-export function Reader({ focusId, onFocus, onHome }: ReaderProps) {
+export function Reader({ work, focusId, onFocus, onHome }: ReaderProps) {
+  const units = work.study?.units ?? [];
+  const chapters = work.study?.chapters ?? [];
   const [showPlate, setShowPlate] = useState(true);
   const [dict, setDict] = useState<DictState | null>(null);
   const latinRef = useRef<HTMLDivElement>(null);
@@ -24,9 +26,9 @@ export function Reader({ focusId, onFocus, onHome }: ReaderProps) {
   const closeDict = useCallback(() => setDict(null), []);
   const current = useMemo(
     () => units.find((unit) => unit.id === focusId) ?? units[0],
-    [focusId],
+    [units, focusId],
   );
-  const activeChapter = chapterKey(current);
+  const activeChapter = current ? chapterKey(current) : "";
 
   useEffect(() => {
     const selector = `[data-unit="${current.id}"]`;
@@ -40,12 +42,14 @@ export function Reader({ focusId, onFocus, onHome }: ReaderProps) {
     });
   }, [current.id]);
 
+  if (!current) return null;
+
   return (
     <div className="app-shell">
       <header className="topbar">
         <button className="brand" type="button" onClick={onHome}>
-          <strong>De gradibus</strong>
-          <small>Bernard of Clairvaux · PL 182</small>
+          <strong>{work.brandShort}</strong>
+          <small>{work.brandLine}</small>
         </button>
         <div className="tools">
           <button
@@ -118,7 +122,12 @@ export function Reader({ focusId, onFocus, onHome }: ReaderProps) {
         </div>
 
         {dict ? (
-          <DictPopup word={dict.word} anchor={dict.rect} onClose={closeDict} />
+          <DictPopup
+            word={dict.word}
+            anchor={dict.rect}
+            workId={work.id}
+            onClose={closeDict}
+          />
         ) : null}
 
         {showPlate ? (
@@ -194,4 +203,12 @@ function plateLabel(unit: Unit): string {
   const match = unit.facsimile?.match(/pl-(\d+)-(\d+)/);
   if (match) return `${match[1]}–${match[2]}`;
   return String(unit.column);
+}
+
+function chapterKey(unit: Pick<Unit, "id" | "kind" | "caput">): string {
+  if (unit.kind === "title") return "title";
+  if (unit.kind === "retractatio") return "retractatio";
+  if (unit.kind === "praefatio") return "praefatio";
+  if (unit.caput != null) return `cap${unit.caput}-title`;
+  return unit.id;
 }

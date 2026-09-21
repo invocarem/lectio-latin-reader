@@ -9,7 +9,7 @@ __pycache__/
 *.py[cod]
 
 # Reproducible lexicon build artifact (regenerate with lexicon:analyze)
-src/content/lexicon/analyses.json
+src/content/*/lexicon/analyses.json
 
 # Capacitor iOS (commit the Xcode project; skip generated copies)
 ios/App/Pods

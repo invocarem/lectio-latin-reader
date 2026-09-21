@@ -15,7 +15,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / "src/content/de-gradibus.json"
+OUT = ROOT / "src/content/gradibus/de-gradibus.json"
 
 TARGET_WORDS = 60
 NEVER_SPLIT = {"title", "chapter-title"}

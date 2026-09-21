@@ -1,4 +1,6 @@
-import lexiconData from "./content/lexicon/lexicon.json";
+import gradibusLexiconData from "./content/gradibus/lexicon/lexicon.json";
+import psalterLexiconData from "./content/psalter/lexicon/lexicon.json";
+import type { WorkId } from "./types";
 
 export interface Edited {
   lemma?: string;
@@ -30,13 +32,6 @@ interface LexiconPayload {
   entries: Entry[];
 }
 
-const payload = lexiconData as unknown as LexiconPayload;
-
-const byKey = new Map<string, Entry>();
-for (const entry of payload.entries) {
-  byKey.set(entry.key, entry);
-}
-
 /** Normalise a clicked token to a lexicon key (lowercase, punctuation stripped). */
 export function normalise(word: string): string {
   return word
@@ -49,33 +44,62 @@ function foldKey(key: string): string {
   return key.replaceAll("j", "i");
 }
 
-export function lookup(raw: string): Entry | undefined {
-  const key = normalise(raw);
-  if (!key) return undefined;
-  const exact = byKey.get(key);
-  if (exact) return exact;
-  const folded = foldKey(key);
-  if (folded !== key) return byKey.get(folded);
-  return undefined;
+export interface Lexicon {
+  lookup(raw: string): Entry | undefined;
+  glossFor(entry: Entry): string;
+  lemmaFor(entry: Entry): string;
+  sensesFor(entry: Entry): string[];
 }
 
-/** The preferred short gloss: the curated card first, else Whitaker's first sense. */
-export function glossFor(entry: Entry): string {
-  if (entry.edited?.gloss) {
-    return entry.edited.gloss;
+function buildLexicon(payload: unknown): Lexicon {
+  const byKey = new Map<string, Entry>();
+  for (const entry of (payload as LexiconPayload).entries) {
+    byKey.set(entry.key, entry);
   }
-  return entry.senses?.[0]?.gloss ?? (entry.no_gloss ? "(no gloss)" : "");
-}
 
-/** The preferred lemma: the curated card's lemma, else the first sense's lemma, else the key. */
-export function lemmaFor(entry: Entry): string {
-  if (entry.edited?.lemma) {
-    return entry.edited.lemma;
+  function lookup(raw: string): Entry | undefined {
+    const key = normalise(raw);
+    if (!key) return undefined;
+    const exact = byKey.get(key);
+    if (exact) return exact;
+    const folded = foldKey(key);
+    if (folded !== key) return byKey.get(folded);
+    return undefined;
   }
-  return entry.senses?.[0]?.lemma ?? entry.key;
+
+  /** The preferred short gloss: the curated card first, else Whitaker's first sense. */
+  function glossFor(entry: Entry): string {
+    if (entry.edited?.gloss) {
+      return entry.edited.gloss;
+    }
+    return entry.senses?.[0]?.gloss ?? (entry.no_gloss ? "(no gloss)" : "");
+  }
+
+  /** The preferred lemma: the curated card's lemma, else the first sense's lemma, else the key. */
+  function lemmaFor(entry: Entry): string {
+    if (entry.edited?.lemma) {
+      return entry.edited.lemma;
+    }
+    return entry.senses?.[0]?.lemma ?? entry.key;
+  }
+
+  /** All Whitaker gloss senses as lines. */
+  function sensesFor(entry: Entry): string[] {
+    return entry.senses?.map((s) => s.gloss).filter(Boolean) ?? [];
+  }
+
+  return { lookup, glossFor, lemmaFor, sensesFor };
 }
 
-/** All Whitaker gloss senses as lines. */
-export function sensesFor(entry: Entry): string[] {
-  return entry.senses?.map((s) => s.gloss).filter(Boolean) ?? [];
+const lexiconCache = new Map<WorkId, Lexicon>();
+
+/** The closed word list for a given work. */
+export function lexiconFor(workId: WorkId): Lexicon {
+  let lexicon = lexiconCache.get(workId);
+  if (!lexicon) {
+    const data = workId === "psalter" ? psalterLexiconData : gradibusLexiconData;
+    lexicon = buildLexicon(data);
+    lexiconCache.set(workId, lexicon);
+  }
+  return lexicon;
 }

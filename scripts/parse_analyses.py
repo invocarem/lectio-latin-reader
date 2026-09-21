@@ -16,7 +16,7 @@ import re
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-LEXICON = ROOT / "src/content/lexicon"
+LEXICON = ROOT / "src/content/gradibus/lexicon"
 
 POS_TOKENS = (
     "VPAR",

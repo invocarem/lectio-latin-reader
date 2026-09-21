@@ -11,8 +11,8 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-LATIN = ROOT / "src/content/latin-units.json"
-OUT = ROOT / "src/content/de-gradibus.json"
+LATIN = ROOT / "src/content/gradibus/latin-units.json"
+OUT = ROOT / "src/content/gradibus/de-gradibus.json"
 sys.path.insert(0, str(Path(__file__).parent))
 from split_lectio import add_chunks, report  # noqa: E402
 

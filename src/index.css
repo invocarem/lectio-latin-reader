@@ -39,8 +39,7 @@ a {
 
 .home {
   min-height: 100%;
-  display: grid;
-  place-items: center;
+  overflow: auto;
   padding:
     calc(3rem + env(safe-area-inset-top))
     max(1.5rem, env(safe-area-inset-right))
@@ -48,8 +47,16 @@ a {
     max(1.5rem, env(safe-area-inset-left));
 }
 
-.home-card {
+.home-list {
   width: min(42rem, 100%);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.home-card {
+  width: 100%;
   background: var(--panel);
   border: 1px solid var(--rule);
   box-shadow: var(--shadow);

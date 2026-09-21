@@ -83,9 +83,10 @@ The treatise is split into 82 source units: retractatio, preface, twenty-two cha
 | Path | Role |
 | --- | --- |
 | [`public/facsimiles/`](public/facsimiles/) | PL plates, including `pl-939-940.png` (retractatio) and `pl-945-946.png` |
-| [`src/content/de-gradibus.json`](src/content/de-gradibus.json) | Aligned Latin, English, plate references, and lectio `chunks` |
-| [`src/content/latin-units.json`](src/content/latin-units.json) | Latin units before English is merged (source) |
-| [`src/content/lexicon/`](src/content/lexicon/) | Closed word list: `lexicon.json` (reader), `overrides.json` (Bernard cards) |
+| [`src/content/gradibus/`](src/content/gradibus/) | The *De gradibus* work: `de-gradibus.json` (aligned Latin, English, plate references, lectio `chunks`), `latin-units.json` (source), `lexicon/` (Bernard word list) |
+| [`src/content/psalter/`](src/content/psalter/) | The Psalter work: `latin.md` + `scaffold.ts`/`work.ts`, `renderings/` (Coverdale, Douay-Rheims), `lexicon/` |
+| [`src/content/schema.ts`](src/content/schema.ts) | Legacy nested content schema (Work → parts → chapters → paragraphs → segments) |
+| [`src/content/works.ts`](src/content/works.ts) | Work registry listing every registered work for the reader |
 | [`scripts/merge_english.py`](scripts/merge_english.py) | Rebuilds `de-gradibus.json` from the Latin units and English map |
 | [`scripts/split_lectio.py`](scripts/split_lectio.py) | Breaks long units into lectio chunks |
 | [`scripts/extract_wordlist.py`](scripts/extract_wordlist.py) | `latin-units.json` → `forms.json` |

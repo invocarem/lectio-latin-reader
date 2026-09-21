@@ -1,13 +1,16 @@
 import { useEffect, useLayoutEffect, useRef } from "react";
-import { glossFor, lemmaFor, lookup, normalise, sensesFor } from "../dictionary";
+import { lexiconFor, normalise, type Lexicon } from "../dictionary";
+import type { WorkId } from "../types";
 
 type DictPopupProps = {
   word: string;
   anchor: DOMRect;
+  workId: WorkId;
   onClose: () => void;
 };
 
-export function DictPopup({ word, anchor, onClose }: DictPopupProps) {
+export function DictPopup({ word, anchor, workId, onClose }: DictPopupProps) {
+  const lex = lexiconFor(workId);
   const elRef = useRef<HTMLElement>(null);
 
   useLayoutEffect(() => {
@@ -44,11 +47,11 @@ export function DictPopup({ word, anchor, onClose }: DictPopupProps) {
   }, [onClose]);
 
   const key = normalise(word);
-  const entry = lookup(word);
+  const entry = lex.lookup(word);
 
   return (
     <aside className="dict" ref={elRef} role="dialog" aria-label="Dictionary">
-      {entry ? <DictCard entry={entry} /> : (
+      {entry ? <DictCard entry={entry} lex={lex} /> : (
         <div className="dict-empty">
           No dictionary entry for <em>{key}</em>.
         </div>
@@ -57,10 +60,10 @@ export function DictPopup({ word, anchor, onClose }: DictPopupProps) {
   );
 }
 
-function DictCard({ entry }: { entry: NonNullable<ReturnType<typeof lookup>> }) {
-  const lemma = lemmaFor(entry);
+function DictCard({ entry, lex }: { entry: NonNullable<ReturnType<Lexicon["lookup"]>>; lex: Lexicon }) {
+  const lemma = lex.lemmaFor(entry);
   const pos = entry.edited?.pos ?? entry.senses?.[0]?.pos ?? entry.pos?.[0] ?? "";
-  const extra = sensesFor(entry);
+  const extra = lex.sensesFor(entry);
   return (
     <>
       <div className="dict-head">
@@ -72,7 +75,7 @@ function DictCard({ entry }: { entry: NonNullable<ReturnType<typeof lookup>> }) 
         {lemma}
         {entry.count != null ? ` · ${entry.count}× in this text` : ""}
       </div>
-      <p className="dict-gloss">{glossFor(entry)}</p>
+      <p className="dict-gloss">{lex.glossFor(entry)}</p>
       {entry.edited?.note ? <p className="dict-note">{entry.edited.note}</p> : null}
       {extra.length > 1 ? (
         <details className="dict-more">

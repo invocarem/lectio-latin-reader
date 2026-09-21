@@ -1,16 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  chapterKey,
-  chapters,
-  firstLectioId,
-  lectioById,
-  lectioUnits,
-} from "../content/work";
-import type { LectioUnit } from "../types";
+import type { LectioUnit, ReaderWork } from "../types";
 import { DictPopup } from "./DictPopup";
 import { LatinText } from "./LatinText";
 
 type LectioProps = {
+  work: ReaderWork;
   focusId: string;
   onFocus: (id: string) => void;
   onHome: () => void;
@@ -22,15 +16,18 @@ type DictState = {
   tokenKey: string;
 };
 
-export function Lectio({ focusId, onFocus, onHome }: LectioProps) {
+export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
   const [showEnglish, setShowEnglish] = useState(true);
   const [showToc, setShowToc] = useState(false);
   const [dict, setDict] = useState<DictState | null>(null);
   const closeDict = useCallback(() => setDict(null), []);
 
+  const lectioUnits = work.lectio;
+  const chapters = work.chapters;
+
   const current = useMemo(
-    () => lectioById(focusId) ?? lectioUnits[0],
-    [focusId],
+    () => lectioUnits.find((unit) => unit.id === focusId) ?? lectioUnits[0],
+    [lectioUnits, focusId],
   );
   const index = lectioUnits.findIndex((unit) => unit.id === current.id);
   const prev = index > 0 ? lectioUnits[index - 1] : null;
@@ -38,7 +35,7 @@ export function Lectio({ focusId, onFocus, onHome }: LectioProps) {
     index >= 0 && index < lectioUnits.length - 1
       ? lectioUnits[index + 1]
       : null;
-  const activeChapter = chapterKey(current);
+  const activeChapter = current.chapterId ?? "";
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
@@ -62,8 +59,8 @@ export function Lectio({ focusId, onFocus, onHome }: LectioProps) {
     <div className="app-shell lectio-shell">
       <header className="topbar">
         <button className="brand" type="button" onClick={onHome}>
-          <strong>De gradibus</strong>
-          <small>Bernard of Clairvaux · PL 182</small>
+          <strong>{work.brandShort}</strong>
+          <small>{work.brandLine}</small>
         </button>
         <div className="tools">
           <button
@@ -94,7 +91,7 @@ export function Lectio({ focusId, onFocus, onHome }: LectioProps) {
                 className={chapter.id === activeChapter ? "active" : undefined}
                 onClick={() => {
                   closeDict();
-                  onFocus(firstLectioId(chapter.firstUnitId));
+                  onFocus(chapter.firstUnitId);
                   setShowToc(false);
                 }}
               >
@@ -162,7 +159,12 @@ export function Lectio({ focusId, onFocus, onHome }: LectioProps) {
       </nav>
 
       {dict ? (
-        <DictPopup word={dict.word} anchor={dict.rect} onClose={closeDict} />
+        <DictPopup
+          word={dict.word}
+          anchor={dict.rect}
+          workId={work.id}
+          onClose={closeDict}
+        />
       ) : null}
     </div>
   );

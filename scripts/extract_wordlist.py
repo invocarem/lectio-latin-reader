@@ -13,8 +13,8 @@ from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "src/content/latin-units.json"
-OUT = ROOT / "src/content/lexicon/forms.json"
+SOURCE = ROOT / "src/content/gradibus/latin-units.json"
+OUT = ROOT / "src/content/gradibus/lexicon/forms.json"
 
 CITATION = re.compile(
     r"\("

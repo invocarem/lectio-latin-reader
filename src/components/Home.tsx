@@ -1,43 +1,58 @@
-import { work } from "../content/work";
+import { works } from "../content/works";
+import type { ReaderMode, ReaderWork } from "../types";
 
 type HomeProps = {
-  onLectio: () => void;
-  onStudy: () => void;
+  onOpen: (workId: ReaderWork["id"], mode: ReaderMode) => void;
   studyEnabled?: boolean;
 };
 
-export function Home({ onLectio, onStudy, studyEnabled = true }: HomeProps) {
+export function Home({ onOpen, studyEnabled = true }: HomeProps) {
   return (
     <main className="home">
-      <article className="home-card">
-        <p className="home-kicker">Lectio</p>
-        <h1>
-          {work.latinTitle}
-          <span>{work.englishTitle}</span>
-        </h1>
-        <p className="home-meta">
-          {work.authorEnglish}
-          <br />
-          {work.edition}
-        </p>
-        <hr className="home-rule" />
-        <p>
-          One short Latin paragraph at a time, with English at hand.
-          {studyEnabled ? (
-            <> Study mode keeps the full parallel columns of each Patrologia section.</>
-          ) : null}
-        </p>
-        <div className="home-actions">
-          <button className="start" type="button" onClick={onLectio}>
-            Lectio
-          </button>
-          {studyEnabled ? (
-            <button className="start ghost" type="button" onClick={onStudy}>
-              Study
-            </button>
-          ) : null}
-        </div>
-      </article>
+      <div className="home-list">
+        {works.map((work) => (
+          <article className="home-card" key={work.id}>
+            <p className="home-kicker">Lectio</p>
+            <h1>
+              {work.latinTitle}
+              <span>{work.englishTitle}</span>
+            </h1>
+            {(work.authorEnglish ?? work.authorLatin) ? (
+              <p className="home-meta">
+                {work.authorEnglish ?? work.authorLatin}
+                {work.edition ? (
+                  <>
+                    <br />
+                    {work.edition}
+                  </>
+                ) : null}
+              </p>
+            ) : work.edition ? (
+              <p className="home-meta">{work.edition}</p>
+            ) : null}
+            <hr className="home-rule" />
+            {work.intro ? <p>{work.intro}</p> : null}
+            <div className="home-actions">
+              <button
+                className="start"
+                type="button"
+                onClick={() => onOpen(work.id, "lectio")}
+              >
+                Lectio
+              </button>
+              {work.studyEnabled && studyEnabled ? (
+                <button
+                  className="start ghost"
+                  type="button"
+                  onClick={() => onOpen(work.id, "study")}
+                >
+                  Study
+                </button>
+              ) : null}
+            </div>
+          </article>
+        ))}
+      </div>
     </main>
   );
 }
