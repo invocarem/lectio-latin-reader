@@ -8,32 +8,47 @@ const MIN_CHUNK_WORDS = 20;
 const ABBREV = new Set([
   "al",
   "apoc",
+  "act",
   "bar",
+  "baruch",
   "cant",
   "cantic",
   "cap",
   "cf",
   "col",
+  "coloss",
+  "colossens",
   "cor",
   "dan",
   "deut",
   "dr",
   "eccl",
+  "eccle",
   "eccli",
   "eph",
+  "ephes",
+  "esdr",
   "etc",
   "exod",
   "ezech",
   "ezek",
   "gal",
+  "galat",
   "gen",
   "hab",
+  "habac",
   "heb",
   "hebr",
+  "iob",
   "id",
   "ibid",
   "ioan",
+  "ioel",
   "isa",
+  "isai",
+  "iudic",
+  "ierem",
+  "iac",
   "jac",
   "jer",
   "jn",
@@ -43,14 +58,20 @@ const ABBREV = new Set([
   "jos",
   "jud",
   "lev",
+  "levit",
   "lk",
   "luc",
   "mal",
+  "malach",
   "mar",
   "marc",
+  "math",
   "matt",
   "matth",
+  "mach",
+  "machab",
   "mic",
+  "mich",
   "mk",
   "mr",
   "mt",
@@ -59,27 +80,36 @@ const ABBREV = new Set([
   "no",
   "num",
   "os",
+  "ose",
+  "ovid",
   "paral",
   "pet",
   "petr",
   "phil",
   "philipp",
+  "philip",
+  "philem",
   "prov",
   "ps",
   "psal",
   "reg",
   "rev",
   "rom",
+  "ruth",
   "s",
   "sap",
   "scil",
   "seq",
+  "serm",
   "sir",
   "song",
+  "soph",
+  "sophon",
   "sq",
   "ss",
   "st",
   "thess",
+  "thren",
   "tim",
   "tit",
   "tob",
@@ -246,17 +276,55 @@ function mergeTiny(groups: string[][], minWords = MIN_CHUNK_WORDS): string[][] {
  * Break a Latin+English unit into Gradibus-style lectio pages (~60 words).
  * O'Donnell-style all-lowercase Latin needs `{ allowLowercase: true }`.
  * English is always split with the capitalized-sentence rule (Pusey, etc.).
+ *
+ * `sentenceAligned` (used by cantica) assumes the English was written with
+ * one sentence per Latin sentence, in order. Pages are then cut on the Latin
+ * sentence boundaries and the English is sliced with the exact same
+ * sentence-index boundaries, so every page's Latin and English are the same
+ * material regardless of how word lengths fall. All other callers keep the
+ * legacy independent word-balance grouping below.
  */
 export function chunkLectio(
   unit: Chunkable,
-  opts: { allowLowercase?: boolean } = {},
+  opts: { allowLowercase?: boolean; sentenceAligned?: boolean } = {},
 ): LectioChunk[] {
   const allowLowercase = opts.allowLowercase ?? false;
-  const latin = unit.latin;
   const english = unit.english || "";
-  const la = coalesce(splitSentences(latin, allowLowercase));
-  const en = english ? coalesce(splitSentences(english, false)) : [""];
-  let n = desiredParts(la.length, wordCount(latin), unit.kind ?? "");
+
+  const laRaw = splitSentences(unit.latin, allowLowercase);
+  const enRaw = english ? splitSentences(english, false) : [];
+
+  if (
+    opts.sentenceAligned === true &&
+    laRaw.length > 0 &&
+    enRaw.length === laRaw.length
+  ) {
+    let n = desiredParts(laRaw.length, wordCount(unit.latin), unit.kind ?? "");
+    n = Math.max(1, Math.min(n, laRaw.length, Math.max(1, enRaw.length)));
+    const laGroups = mergeTiny(partition(laRaw, n));
+    const sizes = laGroups.map((g) => g.length);
+    const enGroups: string[][] = [];
+    let off = 0;
+    for (const s of sizes) {
+      enGroups.push(enRaw.slice(off, off + s));
+      off += s;
+    }
+    const parts = laGroups.length;
+    return laGroups.map((laG, index) => {
+      const part = index + 1;
+      return {
+        id: parts === 1 ? unit.id : `${unit.id}-s${part}`,
+        part,
+        parts,
+        latin: joinSents(laG),
+        english: joinSents(enGroups[index] ?? [""]),
+      };
+    });
+  }
+
+  const la = coalesce(laRaw);
+  const en = english ? coalesce(enRaw) : [""];
+  let n = desiredParts(la.length, wordCount(unit.latin), unit.kind ?? "");
   n = Math.max(1, Math.min(n, la.length, Math.max(1, en.length)));
 
   let laGroups = mergeTiny(partition(la, n));

@@ -1,10 +1,10 @@
 import type { Chapter, Segment, Work } from "../schema";
 import { scaffoldChapters } from "./scaffold";
-import eales from "./renderings/eales.json";
+import close from "./renderings/close.json";
 
 /**
  * Bernard's sermons on the Song of Songs are wired to the auto-generated
- * Latin scaffold. English is merged from content/cantica/renderings/eales.json
+ * Latin scaffold. English is merged from content/cantica/renderings/close.json
  * so regenerating scaffold.ts does not wipe it. Keep latin.md authoritative.
  */
 
@@ -14,7 +14,7 @@ type RenderingFile = {
 };
 
 function applyRenderings(chapters: Chapter[]): Chapter[] {
-  const eng = (eales as RenderingFile).chapters;
+  const eng = (close as RenderingFile).chapters;
   return chapters.map((chapter) => {
     const key = String(chapter.number ?? "");
     return {
@@ -25,7 +25,7 @@ function applyRenderings(chapters: Chapter[]): Chapter[] {
           (segment): Segment => ({
             ...segment,
             translations: {
-              eales: eng[key]?.[paragraph.n ?? ""] ?? "",
+              close: eng[key]?.[paragraph.n ?? ""] ?? "",
             },
           }),
         ),
@@ -59,10 +59,9 @@ export const cantica: Work = {
     "Patrologia Latina 183, cols. 785–1198, via Documenta Catholica Omnia. Bernard died in 1153; the 86 sermons reach Song 3:1.",
   translations: [
     {
-      id: "eales",
-      label: "Eales, 1895",
-      year: 1895,
-      note: "Samuel J. Eales, Cantica Canticorum: Eighty-Six Sermons on the Song of Solomon (1893/1895). Public domain (Internet Archive, Life and Works of Saint Bernard, vol. 4). English paragraphs are aligned to the PL numbered blocks in latin.md.",
+      id: "close",
+      label: "Close English",
+      note: "A close, sentence-aligned English rendering made for the lectio reader: one English sentence per Latin sentence, so each lectio page pairs its Latin and English as one unit.",
     },
   ],
   parts: GROUPS.map(([id, title, lo, hi]) => ({

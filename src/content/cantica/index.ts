@@ -8,7 +8,9 @@ import columnsFile from "./columns.json";
  * into the common ReaderWork shape. Lectio breaks long PL paragraphs into
  * ~60-word pages; Study keeps each numbered block whole beside the Migne plate.
  *
- * Lectio English is the public-domain Samuel J. Eales (1895) rendering.
+ * Lectio English is a close, sentence-aligned rendering written for the
+ * reader (one sentence per Latin sentence), so each Latin page pairs with
+ * the English for the same material.
  */
 
 type ColumnMap = {
@@ -60,13 +62,16 @@ function adapt(): ReaderWork {
         lastCol = col;
         for (const segment of paragraph.segments) {
           const baseId = `${chapterId}:${segment.id}`;
-          const english = segment.translations.eales ?? "";
-          const chunks = chunkLectio({
-            id: baseId,
-            kind: "section",
-            latin: segment.latin,
-            english,
-          });
+          const english = segment.translations.close ?? "";
+          const chunks = chunkLectio(
+            {
+              id: baseId,
+              kind: "section",
+              latin: segment.latin,
+              english,
+            },
+            { sentenceAligned: true },
+          );
           if (!firstLectioId) firstLectioId = chunks[0]?.id ?? baseId;
           for (const chunk of chunks) {
             lectio.push({
@@ -132,7 +137,7 @@ function adapt(): ReaderWork {
     brandShort: "Cantica",
     brandLine: "Bernard of Clairvaux · PL 183",
     intro:
-      "Bernard's eighty-six sermons on the Song of Songs, one short stretch at a time — Patrologia Latina with Eales's 1895 English at hand. The cycle reaches Song 3:1.",
+      "Bernard's eighty-six sermons on the Song of Songs, one short stretch at a time — Patrologia Latina with a close English reading at hand. The cycle reaches Song 3:1.",
     studyEnabled: true,
     lectio,
     chapters,
