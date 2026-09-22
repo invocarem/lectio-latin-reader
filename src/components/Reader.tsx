@@ -20,6 +20,7 @@ export function Reader({ work, focusId, onFocus, onHome }: ReaderProps) {
   const units = work.study?.units ?? [];
   const chapters = work.study?.chapters ?? [];
   const [showPlate, setShowPlate] = useState(true);
+  const [showEnglish, setShowEnglish] = useState(true);
   const [dict, setDict] = useState<DictState | null>(null);
   const latinRef = useRef<HTMLDivElement>(null);
   const englishRef = useRef<HTMLDivElement>(null);
@@ -54,6 +55,13 @@ export function Reader({ work, focusId, onFocus, onHome }: ReaderProps) {
         <div className="tools">
           <button
             type="button"
+            aria-pressed={showEnglish}
+            onClick={() => setShowEnglish((open) => !open)}
+          >
+            English
+          </button>
+          <button
+            type="button"
             aria-pressed={showPlate}
             onClick={() => setShowPlate((open) => !open)}
           >
@@ -62,7 +70,15 @@ export function Reader({ work, focusId, onFocus, onHome }: ReaderProps) {
         </div>
       </header>
 
-      <div className={showPlate ? "reader" : "reader no-facsimile"}>
+      <div
+        className={[
+          "reader",
+          showPlate ? "" : "no-facsimile",
+          showEnglish ? "" : "no-english",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
         <nav className="toc" aria-label="Chapters">
           <h2>Capita</h2>
           {chapters.map((chapter) => (
