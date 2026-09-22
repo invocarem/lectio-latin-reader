@@ -1,4 +1,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import {
+  MAX_ZOOM,
+  ZOOM_STEP,
+  clampZoom,
+  nextZoomWithWheel,
+  panTarget,
+  zoomAroundCursor,
+} from "../plateZoom";
 import type { ReaderWork, Unit } from "../types";
 import { DictPopup } from "./DictPopup";
 import { LatinText } from "./LatinText";
@@ -21,9 +29,21 @@ export function Reader({ work, focusId, onFocus, onHome }: ReaderProps) {
   const chapters = work.study?.chapters ?? [];
   const [showPlate, setShowPlate] = useState(true);
   const [showEnglish, setShowEnglish] = useState(true);
+  const [zoom, setZoomState] = useState(1);
+  const [dragging, setDragging] = useState(false);
   const [dict, setDict] = useState<DictState | null>(null);
   const latinRef = useRef<HTMLDivElement>(null);
   const englishRef = useRef<HTMLDivElement>(null);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const zoomImgRef = useRef<HTMLImageElement>(null);
+  const zoomRef = useRef(1);
+  const dragRef = useRef<{
+    pointerId: number;
+    startX: number;
+    startY: number;
+    scrollLeft: number;
+    scrollTop: number;
+  } | null>(null);
   const closeDict = useCallback(() => setDict(null), []);
   const current = useMemo(
     () => units.find((unit) => unit.id === focusId) ?? units[0],
@@ -42,6 +62,97 @@ export function Reader({ work, focusId, onFocus, onHome }: ReaderProps) {
       behavior: "smooth",
     });
   }, [current.id]);
+
+  const changeZoom = useCallback(
+    (next: ((z: number) => number) | number) => {
+      const v = clampZoom(
+        typeof next === "function" ? next(zoomRef.current) : next,
+      );
+      zoomRef.current = v;
+      setZoomState(v);
+    },
+    [],
+  );
+
+  const zoomIn = () => changeZoom((z) => z + ZOOM_STEP);
+  const zoomOut = () => changeZoom((z) => z - ZOOM_STEP);
+
+  const handlePlateWheel = useCallback(
+    (event: WheelEvent) => {
+      if (!current.facsimile) {
+        event.preventDefault();
+        return;
+      }
+      const viewport = viewportRef.current;
+      const img = zoomImgRef.current;
+      if (!viewport || !img) return;
+      event.preventDefault();
+      const rect = viewport.getBoundingClientRect();
+      const offsetX = event.clientX - rect.left;
+      const offsetY = event.clientY - rect.top;
+      const oldZoom = zoomRef.current;
+      const newZoom = nextZoomWithWheel(oldZoom, event.deltaY);
+      if (newZoom === oldZoom) return;
+      // Keep the image point under the cursor stationary while zooming.
+      const target = zoomAroundCursor({
+        scrollLeft: viewport.scrollLeft,
+        scrollTop: viewport.scrollTop,
+        offsetX,
+        offsetY,
+        from: oldZoom,
+        to: newZoom,
+      });
+      changeZoom(newZoom);
+      requestAnimationFrame(() => {
+        viewport.scrollLeft = target.scrollLeft;
+        viewport.scrollTop = target.scrollTop;
+      });
+    },
+    [current.facsimile, changeZoom],
+  );
+
+  // Attach a non-passive wheel listener so preventDefault works.
+  useEffect(() => {
+    const viewport = viewportRef.current;
+    if (!viewport) return;
+    viewport.addEventListener("wheel", handlePlateWheel, { passive: false });
+    return () => viewport.removeEventListener("wheel", handlePlateWheel);
+  }, [handlePlateWheel]);
+
+  // Start each plate back at the top-left once it is shown.
+  useEffect(() => {
+    viewportRef.current?.scrollTo({ top: 0, left: 0 });
+  }, [current.id]);
+
+  const startDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    const viewport = viewportRef.current;
+    if (!viewport || event.button !== 0 || !current.facsimile) return;
+    dragRef.current = {
+      pointerId: event.pointerId,
+      startX: event.clientX,
+      startY: event.clientY,
+      scrollLeft: viewport.scrollLeft,
+      scrollTop: viewport.scrollTop,
+    };
+    setDragging(true);
+    viewport.setPointerCapture(event.pointerId);
+  };
+
+  const moveDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    const drag = dragRef.current;
+    const viewport = viewportRef.current;
+    if (!drag || !viewport || event.pointerId !== drag.pointerId) return;
+    const target = panTarget(drag, event.clientX, event.clientY);
+    viewport.scrollLeft = target.scrollLeft;
+    viewport.scrollTop = target.scrollTop;
+  };
+
+  const endDrag = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (dragRef.current?.pointerId === event.pointerId) {
+      dragRef.current = null;
+      setDragging(false);
+    }
+  };
 
   if (!current) return null;
 
@@ -151,17 +262,67 @@ export function Reader({ work, focusId, onFocus, onHome }: ReaderProps) {
         {showPlate ? (
           <aside className="facsimile">
             <header>
-              <span>Plate</span>
-              <span>cols. {plateLabel(current)}</span>
+              <span className="facsimile-title">
+                <span>Plate</span>
+                <span>cols. {plateLabel(current)}</span>
+              </span>
+              <span
+                className="facsimile-zoom"
+                role="group"
+                aria-label="Zoom"
+              >
+                <button
+                  type="button"
+                  aria-label="Zoom out"
+                  onClick={zoomOut}
+                  disabled={!current.facsimile || zoom <= 1}
+                >
+                  −
+                </button>
+                <span className="facsimile-zoom-label">
+                  {Math.round(zoom * 100)}%
+                </span>
+                <button
+                  type="button"
+                  aria-label="Zoom in"
+                  onClick={zoomIn}
+                  disabled={!current.facsimile || zoom >= MAX_ZOOM}
+                >
+                  +
+                </button>
+                <button
+                  type="button"
+                  aria-label="Reset zoom"
+                  onClick={() => changeZoom(1)}
+                  disabled={!current.facsimile || zoom === 1}
+                >
+                  Reset
+                </button>
+              </span>
             </header>
-            {current.facsimile ? (
-              <img
-                src={`/facsimiles/${current.facsimile}`}
-                alt={`Patrologia Latina plate ${current.facsimile}`}
-              />
-            ) : (
-              <img alt="No facsimile for this unit" />
-            )}
+            <div
+              className={`facsimile-viewport${dragging ? " dragging" : ""}`}
+              ref={viewportRef}
+              onPointerDown={startDrag}
+              onPointerMove={moveDrag}
+              onPointerUp={endDrag}
+              onPointerCancel={endDrag}
+            >
+              {current.facsimile ? (
+                <img
+                  ref={zoomImgRef}
+                  src={`/facsimiles/${current.facsimile}`}
+                  alt={`Patrologia Latina plate ${current.facsimile}`}
+                  draggable={false}
+                  style={{ width: `${zoom * 100}%` }}
+                />
+              ) : (
+                <img
+                  className="facsimile-empty"
+                  alt="No facsimile for this unit"
+                />
+              )}
+            </div>
           </aside>
         ) : null}
       </div>
