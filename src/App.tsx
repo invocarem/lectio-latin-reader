@@ -3,6 +3,7 @@ import { Home } from "./components/Home";
 import { Lectio } from "./components/Lectio";
 import { Reader } from "./components/Reader";
 import { workById, works } from "./content/works";
+import { resolveSession } from "./lectioNav";
 import { platformSupportsStudy } from "./native";
 import type { ReaderMode, WorkId } from "./types";
 
@@ -23,16 +24,14 @@ export default function App() {
   function start(nextWorkId: WorkId, nextMode?: ReaderMode) {
     const work = workById(nextWorkId);
     if (!work) return;
-    // Study is per-work opt-in and gated on the platform.
-    const effective: ReaderMode =
-      work.studyEnabled && studyEnabled ? nextMode ?? "lectio" : "lectio";
+    const { mode: effective, focusId: nextFocus } = resolveSession(
+      work,
+      studyEnabled,
+      nextMode,
+    );
     setWorkId(work.id);
     setMode(effective);
-    setFocusId(
-      effective === "study"
-        ? work.study?.units[0]?.id ?? work.lectio[0].id
-        : work.lectio[0].id,
-    );
+    setFocusId(nextFocus);
     setView("read");
   }
 

@@ -1,5 +1,4 @@
-const WORD_RE = /([A-Za-z\u00C0-\u024F''\u2019]+)/;
-const WORD_ONLY = /^[A-Za-z\u00C0-\u024F''\u2019]+$/;
+import { isLatinWord, splitLatinParts } from "../latinWords";
 
 type LatinTextProps = {
   text: string;
@@ -9,9 +8,9 @@ type LatinTextProps = {
 };
 
 export function LatinText({ text, unitId, activeToken, onWord }: LatinTextProps) {
-  return text.split(WORD_RE).map((part, index) => {
+  return splitLatinParts(text).map((part, index) => {
     if (!part) return null;
-    if (!WORD_ONLY.test(part)) {
+    if (!isLatinWord(part)) {
       return <span key={index}>{part}</span>;
     }
     const tokenKey = `${unitId}:${index}`;
