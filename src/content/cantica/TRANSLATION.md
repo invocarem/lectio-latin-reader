@@ -46,7 +46,7 @@ Two enabling changes to `src/content/splitLectio.ts` (both low-risk):
 - [x] Eales references removed from `work.ts` / `index.ts`
 - [ ] `renderings/eales.json` deleted
 - [ ] README table updated (cantica row: `renderings/close.json`)
-- [x] `renderings/close.json` created (Sermones 1–11 translated)
+- [x] `renderings/close.json` created (Sermones 1–17 translated)
 - [x] validator `scripts/cantica_check.mjs` written (`--dump`, `--scan`, alignment check)
 - [x] `splitLectio.ts`: `sentenceAligned` opt-in added (cantica-only)
 - [x] `splitLectio.ts`/validator: PL `ABBREV` set extended; fracture scan clean
@@ -70,12 +70,12 @@ Sermon numbers match the `chapters` keys in `close.json`.
 - [x] 9
 - [x] 10
 - [x] 11
-- [ ] 12
-- [ ] 13
-- [ ] 14
-- [ ] 15
-- [ ] 16
-- [ ] 17
+- [x] 12
+- [x] 13
+- [x] 14
+- [x] 15
+- [x] 16
+- [x] 17
 - [ ] 18
 - [ ] 19
 - [ ] 20
