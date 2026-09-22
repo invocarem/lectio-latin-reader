@@ -1,0 +1,58 @@
+{
+  "entries": {
+    "galaad": {
+      "lemma": "Galaad",
+      "pos": "N",
+      "gloss": "Gilead — the mountainous region east of the Jordan (Song 4:1, 6:5).",
+      "note": "Flocks of goats 'which came up from Gilead'"
+    },
+    "engaddi": {
+      "lemma": "Engaddi",
+      "pos": "N",
+      "gloss": "En-gedi — an oasis on the western shore of the Dead Sea (Song 1:14).",
+      "note": "'A cluster of cypress my beloved is to me, in the vineyards of En-gedi'"
+    },
+    "bether": {
+      "lemma": "Bether",
+      "pos": "N",
+      "gloss": "Bether — a place or mountain range; Vulgate 'mountains of Bether' (Song 2:17).",
+      "note": "Hebrew ha-re ha-bater, 'the cleft/separation mountains'"
+    },
+    "isra": {
+      "lemma": "Israël",
+      "pos": "N",
+      "gloss": "Israel — the covenant people of God.",
+      "note": "Form 'Isra' arises because the ligature/ë splits the token (Israël)"
+    },
+    "sion": {
+      "lemma": "Sion",
+      "pos": "N",
+      "gloss": "Zion — the hill and citadel of Jerusalem, the people of God.",
+      "note": "Song 3:11 'come forth and see, daughters of Sion, King Solomon'"
+    },
+    "sanir": {
+      "lemma": "Sanir",
+      "pos": "N",
+      "gloss": "Senir — the Amorite name for Mount Hermon (Song 4:8).",
+      "note": "'From the top of Senir and Herman'"
+    },
+    "hermon": {
+      "lemma": "Hermon",
+      "pos": "N",
+      "gloss": "Hermon — the great snow-capped mountain north of Palestine (Song 4:8).",
+      "note": "'look from the top of Amana, from the top of Senir and Hermon'"
+    },
+    "aminadab": {
+      "lemma": "Aminadab",
+      "pos": "N",
+      "gloss": "Amminadab — a personal name (Song 6:11).",
+      "note": "'because of the chariots of Aminnadab'"
+    },
+    "hesebon": {
+      "lemma": "Hesebon",
+      "pos": "N",
+      "gloss": "Heshbon — an Amorite city east of the Jordan (Song 7:4).",
+      "note": "'your eyes like the pools in Heshbon'"
+    }
+  }
+}

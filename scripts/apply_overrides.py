@@ -1,22 +1,31 @@
 #!/usr/bin/env python3
-"""Merge curated gloss overrides into lexicon.json.
+"""Merge curated gloss overrides into a work's lexicon.json.
 
 Re-running is idempotent: any existing `edited` field is first removed.
+
+Usage:
+    python scripts/apply_overrides.py
+    python scripts/apply_overrides.py --work canticum
 """
 
 from __future__ import annotations
 
+import argparse
 import json
 import sys
-from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-LEXDIR = ROOT / "src/content/gradibus/lexicon"
+from _works import DEFAULT_WORK, lexicon_dir
 
 
 def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--work", default=DEFAULT_WORK, help=f"work id (default: {DEFAULT_WORK})")
+    args = parser.parse_args()
+
+    LEXDIR = lexicon_dir(args.work)
     lex = json.loads((LEXDIR / "lexicon.json").read_text(encoding="utf-8"))
-    overrides = json.loads((LEXDIR / "overrides.json").read_text(encoding="utf-8"))["entries"]
+    overrides_path = LEXDIR / "overrides.json"
+    overrides = json.loads(overrides_path.read_text(encoding="utf-8"))["entries"]
 
     entries = lex["entries"]
     by_key = {e["key"]: e for e in entries}

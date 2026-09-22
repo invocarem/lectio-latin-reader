@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """Turn Whitaker's raw batch output into a structured, reader-ready lexicon.
 
-Reads src/content/lexicon/analyses.json and writes src/content/lexicon/lexicon.json.
+Reads a work's analyses.json and writes that work's lexicon.json.
 
 Usage:
-    python scripts/parse_analyses.py
-    python scripts/parse_analyses.py --show
+    python scripts/parse_analyses.py                      # default work (gradibus)
+    python scripts/parse_analyses.py --work canticum
+    python scripts/parse_analyses.py --work canticum --show
 """
 
 from __future__ import annotations
@@ -13,10 +14,8 @@ from __future__ import annotations
 import argparse
 import json
 import re
-from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-LEXICON = ROOT / "src/content/gradibus/lexicon"
+from _works import DEFAULT_WORK, lexicon_dir
 
 POS_TOKENS = (
     "VPAR",
@@ -148,13 +147,16 @@ def parse_entry(entry: dict) -> dict:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--work", default=DEFAULT_WORK, help=f"work id (default: {DEFAULT_WORK})")
     parser.add_argument("--show", action="store_true", help="print a compact summary")
     args = parser.parse_args()
 
+    LEXICON = lexicon_dir(args.work)
+    root = LEXICON.parents[1]
     src = LEXICON / "analyses.json"
     out = LEXICON / "lexicon.json"
     if not src.is_file():
-        raise SystemExit(f"Missing {src.relative_to(ROOT)}. Run scripts/analyze_wordlist.py first.")
+        raise SystemExit(f"Missing {src.relative_to(root)}. Run scripts/analyze_wordlist.py first.")
 
     data = json.loads(src.read_text(encoding="utf-8"))
     entries = [parse_entry(e) for e in data["analyses"]]
@@ -162,14 +164,14 @@ def main() -> None:
     no_gloss = [e["key"] for e in entries if e["no_gloss"]]
 
     payload = {
-        "source": str(src.relative_to(ROOT)),
+        "source": str(src.relative_to(root)).replace("\\", "/"),
         "engine": data.get("engine"),
         "form_count": len(entries),
         "no_gloss_count": len(no_gloss),
         "entries": entries,
     }
     out.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    print(f"Wrote {out.relative_to(ROOT)} ({len(entries)} entries, {len(no_gloss)} with no gloss)")
+    print(f"Wrote {out.relative_to(root)} ({len(entries)} entries, {len(no_gloss)} with no gloss)")
 
     if args.show:
         print("\n--- top 15 by frequency ---")

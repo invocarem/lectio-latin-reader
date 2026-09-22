@@ -14,8 +14,8 @@ docker build -t whitaker-mcp -f services/whitaker/Dockerfile services/whitaker
 
 ```bash
 npm run lexicon:extract
-bash scripts/analyze-in-docker.sh 20    # smoke test
-bash scripts/analyze-in-docker.sh       # full list (a few minutes)
+bash scripts/analyze-in-docker.sh --limit 20    # smoke test
+bash scripts/analyze-in-docker.sh               # full list (a few minutes)
 npm run lexicon:parse
 npm run lexicon:curate
 ```

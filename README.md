@@ -84,8 +84,8 @@ The treatise is split into 82 source units: retractatio, preface, twenty-two cha
 | --- | --- |
 | [`public/facsimiles/`](public/facsimiles/) | Per-work PL plates: [`gradibus/`](public/facsimiles/gradibus/) (`pl-939-940.png` retractatio, `pl-941-942.png` treatise) and [`songs/`](public/facsimiles/songs/) (PL 183 sermons) |
 | [`src/content/gradibus/`](src/content/gradibus/) | The *De gradibus* work: `de-gradibus.json` (aligned Latin, English, plate references, lectio `chunks`), `latin-units.json` (source), `lexicon/` (Bernard word list) |
-| [`src/content/canticum/`](src/content/canticum/) | The Song of Songs: `latin.md` + `scaffold.ts`/`work.ts`, `renderings/douay.json` |
-| [`src/content/cantica/`](src/content/cantica/) | Bernard's *Sermones in Cantica Canticorum*: `latin.md` + `scaffold.ts`/`work.ts`, `renderings/eales.json`, `columns.json` (PL 183 plate map) |
+| [`src/content/canticum/`](src/content/canticum/) | The Song of Songs: `latin.md` + `scaffold.ts`/`work.ts`, `renderings/douay.json`, `lexicon/` |
+| [`src/content/cantica/`](src/content/cantica/) | Bernard's *Sermones in Cantica Canticorum*: `latin.md` + `scaffold.ts`/`work.ts`, `renderings/eales.json`, `columns.json` (PL 183 plate map), `lexicon/` |
 | [`src/content/psalter/`](src/content/psalter/) | The Psalter work: `latin.md` + `scaffold.ts`/`work.ts`, `renderings/` (Coverdale, Douay-Rheims), `lexicon/` |
 | [`src/content/rule/`](src/content/rule/) | The Rule of St Benedict work: `latin.md` + `scaffold.ts`/`work.ts`, `renderings/verheyen.json`, `lexicon/` |
 | [`src/content/confessions/`](src/content/confessions/) | Augustine's *Confessiones*: `latin.md` + `scaffold.ts`/`work.ts`, `renderings/pusey.json`, `lexicon/` |
@@ -99,14 +99,14 @@ The reader is a TypeScript Vite + React app. Lectio shows one paragraph; study m
 
 ## Lexicon
 
-Do not ship a general dictionary, and do not call Whitaker on every click. Extract the treatise once, analyze it in Docker, look the answers up locally.
+Do not ship a general dictionary, and do not call Whitaker on every click. Extract the word list once, analyze it in Docker, look the answers up locally. The pipeline tools take `--work` (default `gradibus`):
 
 ```bash
-npm run lexicon:extract
-bash scripts/analyze-in-docker.sh 20    # smoke test
-npm run lexicon:analyze                 # full list
-npm run lexicon:parse
-npm run lexicon:curate
+python scripts/extract_wordlist.py --work canticum      # build forms.json word list
+bash scripts/analyze-in-docker.sh --work canticum --limit 20   # smoke test
+bash scripts/analyze-in-docker.sh --work canticum       # full list
+python scripts/parse_analyses.py --work canticum        # analyses.json -> lexicon.json
+python scripts/apply_overrides.py --work canticum       # merge curated overrides.json
 ```
 
 Needs a Whitaker image (Words at `/opt/whitakers-words/bin/words`). Build with `docker build -t whitaker-mcp -f services/whitaker/Dockerfile services/whitaker` if you do not already have one. Detail: [`src/content/lexicon/README.md`](src/content/lexicon/README.md).
