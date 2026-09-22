@@ -86,6 +86,7 @@ The treatise is split into 82 source units: retractatio, preface, twenty-two cha
 | [`src/content/gradibus/`](src/content/gradibus/) | The *De gradibus* work: `de-gradibus.json` (aligned Latin, English, plate references, lectio `chunks`), `latin-units.json` (source), `lexicon/` (Bernard word list) |
 | [`src/content/psalter/`](src/content/psalter/) | The Psalter work: `latin.md` + `scaffold.ts`/`work.ts`, `renderings/` (Coverdale, Douay-Rheims), `lexicon/` |
 | [`src/content/rule/`](src/content/rule/) | The Rule of St Benedict work: `latin.md` + `scaffold.ts`/`work.ts`, `renderings/verheyen.json`, `lexicon/` |
+| [`src/content/confessions/`](src/content/confessions/) | Augustine's *Confessiones*: `latin.md` + `scaffold.ts`/`work.ts`, `renderings/pusey.json`, `lexicon/` |
 | [`src/content/schema.ts`](src/content/schema.ts) | Legacy nested content schema (Work → parts → chapters → paragraphs → segments) |
 | [`src/content/works.ts`](src/content/works.ts) | Work registry listing every registered work for the reader |
 | [`scripts/merge_english.py`](scripts/merge_english.py) | Rebuilds `de-gradibus.json` from the Latin units and English map |

@@ -43,9 +43,14 @@ def _is_abbrev(token: str) -> bool:
     return stripped.casefold() in ABBREV
 
 
-def split_sentences(text: str) -> list[str]:
+def split_sentences(text: str, *, allow_lowercase: bool = False) -> list[str]:
     """Split on .?! skipping citation abbreviations. Parentheses are not a fence:
-    PL asides are often unbalanced and would swallow the rest of a unit."""
+    PL asides are often unbalanced and would swallow the rest of a unit.
+
+    O'Donnell-style all-lowercase Latin does not capitalize after a period, so
+    pass allow_lowercase=True for those texts. Capitalized Latin (Bernard) keeps
+    the default, which still requires an uppercase letter after .?!
+    """
     text = text.strip()
     if not text:
         return []
@@ -71,7 +76,8 @@ def split_sentences(text: str) -> list[str]:
             last_m = re.search(r"([A-Za-z]+)$", core)
             last = last_m.group(1) if last_m else ""
             skip = _is_abbrev(last) or nxt.isdigit()
-            starts = at_end or (nxt and (nxt.isupper() or nxt in "«“\"'"))
+            letter_start = nxt.isalpha() if allow_lowercase else nxt.isupper()
+            starts = at_end or (nxt and (letter_start or nxt in "«“\"'"))
             if starts and not skip:
                 sent = "".join(buf).strip()
                 if sent:
@@ -170,10 +176,11 @@ def join_sents(sents: list[str]) -> str:
     return " ".join(sents).strip()
 
 
-def chunk_unit(unit: dict) -> list[dict]:
+def chunk_unit(unit: dict, *, allow_lowercase: bool = False) -> list[dict]:
     latin = unit["latin"]
     english = unit.get("english") or ""
-    la = coalesce(split_sentences(latin))
+    # Latin may be all-lowercase (O'Donnell); English renderings stay capitalized.
+    la = coalesce(split_sentences(latin, allow_lowercase=allow_lowercase))
     en = coalesce(split_sentences(english)) if english else [""]
     n = desired_parts(len(la), word_count(latin), unit.get("kind", ""))
     n = max(1, min(n, len(la), max(1, len(en))))

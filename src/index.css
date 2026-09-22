@@ -41,65 +41,75 @@ a {
   min-height: 100%;
   overflow: auto;
   padding:
-    calc(3rem + env(safe-area-inset-top))
+    calc(2.2rem + env(safe-area-inset-top))
     max(1.5rem, env(safe-area-inset-right))
-    calc(3rem + env(safe-area-inset-bottom))
+    calc(2.4rem + env(safe-area-inset-bottom))
     max(1.5rem, env(safe-area-inset-left));
 }
 
+.home-masthead {
+  width: min(64rem, 100%);
+  margin: 0 auto 1.6rem;
+}
+
+.home-masthead h1 {
+  margin: 0.15rem 0 0;
+  font-family: "Cormorant Garamond", serif;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  font-weight: 600;
+  line-height: 1.05;
+  font-style: italic;
+}
+
 .home-list {
-  width: min(42rem, 100%);
+  width: min(64rem, 100%);
   margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.1rem;
 }
 
 .home-card {
   width: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   background: var(--panel);
   border: 1px solid var(--rule);
   box-shadow: var(--shadow);
-  padding: 3.2rem 3rem 2.6rem;
+  padding: 1.6rem 1.5rem 1.4rem;
 }
 
 .home-kicker {
-  margin: 0 0 1rem;
+  margin: 0 0 0.7rem;
   color: var(--cinnabar);
   letter-spacing: 0.22em;
   text-transform: uppercase;
   font-size: 0.72rem;
 }
 
-.home h1 {
+.home-card h2 {
   margin: 0;
   font-family: "Cormorant Garamond", serif;
-  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  font-size: clamp(1.55rem, 2.4vw, 2rem);
   font-weight: 600;
-  line-height: 1.05;
+  line-height: 1.12;
   font-style: italic;
 }
 
-.home h1 span {
+.home-card h2 span {
   display: block;
-  margin-top: 0.35rem;
-  font-size: 0.48em;
+  margin-top: 0.28rem;
+  font-size: 0.58em;
   font-style: normal;
   color: var(--ink-soft);
   letter-spacing: 0.02em;
 }
 
 .home-meta {
-  margin: 1.4rem 0 0;
+  margin: 0.7rem 0 0;
   color: var(--ink-soft);
-  line-height: 1.55;
-}
-
-.home-rule {
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--gold), transparent);
-  margin: 1.8rem 0;
-  border: 0;
+  line-height: 1.45;
 }
 
 .home p {
@@ -108,13 +118,23 @@ a {
   color: var(--ink-soft);
 }
 
+@media (min-width: 800px) {
+  .home-list {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.25rem;
+  }
+
+  .home-card {
+    padding: 1.8rem 1.7rem 1.5rem;
+  }
+}
+
 .start {
-  margin-top: 2rem;
   appearance: none;
   border: 0;
   background: var(--cinnabar);
   color: #fbf6ea;
-  padding: 0.75rem 1.35rem;
+  padding: 0.7rem 1.2rem;
   cursor: pointer;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -129,11 +149,8 @@ a {
   display: flex;
   flex-wrap: wrap;
   gap: 0.7rem;
-  margin-top: 2rem;
-}
-
-.home-actions .start {
-  margin-top: 0;
+  margin-top: auto;
+  padding-top: 1.35rem;
 }
 
 .start.ghost {
@@ -506,7 +523,7 @@ a {
   }
 
   .home-card {
-    padding: 2rem 1.3rem;
+    padding: 1.35rem 1.2rem 1.2rem;
   }
 }
 

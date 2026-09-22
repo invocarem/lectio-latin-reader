@@ -9,29 +9,21 @@ type HomeProps = {
 export function Home({ onOpen, studyEnabled = true }: HomeProps) {
   return (
     <main className="home">
+      <header className="home-masthead">
+        <p className="home-kicker">Lectio</p>
+        <h1>A Latin reader</h1>
+      </header>
       <div className="home-list">
         {works.map((work) => (
           <article className="home-card" key={work.id}>
-            <p className="home-kicker">Lectio</p>
-            <h1>
+            <p className="home-kicker">{work.brandShort}</p>
+            <h2>
               {work.latinTitle}
               <span>{work.englishTitle}</span>
-            </h1>
-            {(work.authorEnglish ?? work.authorLatin) ? (
-              <p className="home-meta">
-                {work.authorEnglish ?? work.authorLatin}
-                {work.edition ? (
-                  <>
-                    <br />
-                    {work.edition}
-                  </>
-                ) : null}
-              </p>
-            ) : work.edition ? (
-              <p className="home-meta">{work.edition}</p>
+            </h2>
+            {work.authorEnglish ?? work.authorLatin ? (
+              <p className="home-meta">{work.authorEnglish ?? work.authorLatin}</p>
             ) : null}
-            <hr className="home-rule" />
-            {work.intro ? <p>{work.intro}</p> : null}
             <div className="home-actions">
               <button
                 className="start"

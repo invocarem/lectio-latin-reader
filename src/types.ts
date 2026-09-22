@@ -38,7 +38,7 @@ export type LectioUnit = Unit & {
 export type ReaderMode = "lectio" | "study";
 
 /** Unique id of a registered library work. */
-export type WorkId = "gradibus" | "psalter" | "rule";
+export type WorkId = "gradibus" | "psalter" | "rule" | "confessions";
 
 /** A TOC chapter (a psalm, a treatise caput, etc.). */
 export type Chapter = {

@@ -1,3 +1,4 @@
+import confessionsLexiconData from "./content/confessions/lexicon/lexicon.json";
 import gradibusLexiconData from "./content/gradibus/lexicon/lexicon.json";
 import psalterLexiconData from "./content/psalter/lexicon/lexicon.json";
 import ruleLexiconData from "./content/rule/lexicon/lexicon.json";
@@ -98,6 +99,7 @@ const lexiconData: Record<WorkId, unknown> = {
   gradibus: gradibusLexiconData,
   psalter: psalterLexiconData,
   rule: ruleLexiconData,
+  confessions: confessionsLexiconData,
 };
 
 /** The closed word list for a given work. */
