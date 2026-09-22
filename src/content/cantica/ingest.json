@@ -1,0 +1,13 @@
+{
+  "parser": {
+    "chapter_match": "^Sermo\\s+(\\d+)\\s*$",
+    "numeral": "decimal",
+    "id_prefix": "cantica",
+    "id_sep": ":"
+  },
+  "verify": {
+    "chapter": "cantica:\\d+",
+    "paragraph": "p\\d+"
+  },
+  "note": "latin.md marks each sermon `## Sermo N` (decimal). Chapter ids follow the namespacing rule for new works: cantica:1..cantica:86. Numbered blocks are the PL paragraph numbers, p1..pN within each sermon."
+}

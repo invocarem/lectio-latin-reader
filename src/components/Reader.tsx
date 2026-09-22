@@ -28,7 +28,7 @@ export function Reader({ work, focusId, onFocus, onHome }: ReaderProps) {
     () => units.find((unit) => unit.id === focusId) ?? units[0],
     [units, focusId],
   );
-  const activeChapter = current ? chapterKey(current) : "";
+  const activeChapter = current ? chapterKey(current, chapters) : "";
 
   useEffect(() => {
     const selector = `[data-unit="${current.id}"]`;
@@ -76,7 +76,9 @@ export function Reader({ work, focusId, onFocus, onHome }: ReaderProps) {
               }}
             >
               {chapter.caput != null ? (
-                <span className="cap">Caput {chapter.caput}</span>
+                <span className="cap">
+                  {chapter.capLabel ?? "Caput"} {chapter.caput}
+                </span>
               ) : null}
               <span className="ttl">{shortTitle(chapter.title)}</span>
             </button>
@@ -205,10 +207,18 @@ function plateLabel(unit: Unit): string {
   return String(unit.column);
 }
 
-function chapterKey(unit: Pick<Unit, "id" | "kind" | "caput">): string {
+function chapterKey(
+  unit: Pick<Unit, "id" | "kind" | "caput">,
+  chapters: { id: string; caput: number | null }[],
+): string {
   if (unit.kind === "title") return "title";
   if (unit.kind === "retractatio") return "retractatio";
   if (unit.kind === "praefatio") return "praefatio";
-  if (unit.caput != null) return `cap${unit.caput}-title`;
+  if (unit.caput != null) {
+    return (
+      chapters.find((chapter) => chapter.caput === unit.caput)?.id ??
+      `cap${unit.caput}-title`
+    );
+  }
   return unit.id;
 }

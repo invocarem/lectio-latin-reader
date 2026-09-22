@@ -25,3 +25,6 @@ xcuserdata
 
 # Reasonix agent workspace
 .reasonix
+
+# Ingest download cache
+tmp/

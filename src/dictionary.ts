@@ -1,3 +1,5 @@
+import canticaLexiconData from "./content/cantica/lexicon/lexicon.json";
+import canticumLexiconData from "./content/canticum/lexicon/lexicon.json";
 import confessionsLexiconData from "./content/confessions/lexicon/lexicon.json";
 import gradibusLexiconData from "./content/gradibus/lexicon/lexicon.json";
 import psalterLexiconData from "./content/psalter/lexicon/lexicon.json";
@@ -97,6 +99,8 @@ const lexiconCache = new Map<WorkId, Lexicon>();
 
 const lexiconData: Record<WorkId, unknown> = {
   gradibus: gradibusLexiconData,
+  canticum: canticumLexiconData,
+  cantica: canticaLexiconData,
   psalter: psalterLexiconData,
   rule: ruleLexiconData,
   confessions: confessionsLexiconData,

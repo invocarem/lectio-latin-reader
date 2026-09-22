@@ -1,0 +1,13 @@
+{
+  "parser": {
+    "chapter_match": "^Caput\\s+(\\d+)\\s*$",
+    "numeral": "decimal",
+    "id_prefix": "canticum",
+    "id_sep": ":"
+  },
+  "verify": {
+    "chapter": "canticum:\\d+",
+    "paragraph": "p\\d+"
+  },
+  "note": "latin.md marks each chapter `## Caput N` (decimal, Clementine/Vulgate numbering). Chapter ids follow the namespacing rule for new works: canticum:1..canticum:8. Verses become p1..pN within each chapter."
+}

@@ -82,8 +82,10 @@ The treatise is split into 82 source units: retractatio, preface, twenty-two cha
 
 | Path | Role |
 | --- | --- |
-| [`public/facsimiles/`](public/facsimiles/) | PL plates, including `pl-939-940.png` (retractatio) and `pl-945-946.png` |
+| [`public/facsimiles/`](public/facsimiles/) | Per-work PL plates: [`gradibus/`](public/facsimiles/gradibus/) (`pl-939-940.png` retractatio, `pl-941-942.png` treatise) and [`songs/`](public/facsimiles/songs/) (PL 183 sermons) |
 | [`src/content/gradibus/`](src/content/gradibus/) | The *De gradibus* work: `de-gradibus.json` (aligned Latin, English, plate references, lectio `chunks`), `latin-units.json` (source), `lexicon/` (Bernard word list) |
+| [`src/content/canticum/`](src/content/canticum/) | The Song of Songs: `latin.md` + `scaffold.ts`/`work.ts`, `renderings/douay.json` |
+| [`src/content/cantica/`](src/content/cantica/) | Bernard's *Sermones in Cantica Canticorum*: `latin.md` + `scaffold.ts`/`work.ts`, `renderings/eales.json`, `columns.json` (PL 183 plate map) |
 | [`src/content/psalter/`](src/content/psalter/) | The Psalter work: `latin.md` + `scaffold.ts`/`work.ts`, `renderings/` (Coverdale, Douay-Rheims), `lexicon/` |
 | [`src/content/rule/`](src/content/rule/) | The Rule of St Benedict work: `latin.md` + `scaffold.ts`/`work.ts`, `renderings/verheyen.json`, `lexicon/` |
 | [`src/content/confessions/`](src/content/confessions/) | Augustine's *Confessiones*: `latin.md` + `scaffold.ts`/`work.ts`, `renderings/pusey.json`, `lexicon/` |
@@ -91,7 +93,7 @@ The treatise is split into 82 source units: retractatio, preface, twenty-two cha
 | [`src/content/works.ts`](src/content/works.ts) | Work registry listing every registered work for the reader |
 | [`scripts/merge_english.py`](scripts/merge_english.py) | Rebuilds `de-gradibus.json` from the Latin units and English map |
 | [`scripts/split_lectio.py`](scripts/split_lectio.py) | Breaks long units into lectio chunks |
-| [`scripts/extract_wordlist.py`](scripts/extract_wordlist.py) | `latin-units.json` → `forms.json` |
+| [`scripts/extract_cantica_plates.py`](scripts/extract_cantica_plates.py) | Maps PL 183 columns onto sermon paragraphs and renders `public/facsimiles/songs/` |
 
 The reader is a TypeScript Vite + React app. Lectio shows one paragraph; study mode keeps chapter navigation on the left with Latin and English in parallel. The facsimile can be toggled from the study header.
 

@@ -2,7 +2,13 @@
 export type TranslationId = string;
 
 /** A library work. The id must be unique across the whole repository. */
-export type WorkId = "gradibus" | "psalter" | "rule" | "confessions";
+export type WorkId =
+  | "gradibus"
+  | "canticum"
+  | "cantica"
+  | "psalter"
+  | "rule"
+  | "confessions";
 
 export type NoteKind = "word" | "syntax" | "theology" | "text";
 
