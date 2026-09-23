@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <!-- Lectio home-screen icon: a Romanesque window with a crack.
+       Parchment and cinnabar match the reader palette. -->
+  <rect width="1024" height="1024" fill="#f3ead8"/>
+
+  <!-- Glass (slightly deeper than the field so the panes read) -->
+  <path
+    fill="#e2d3b4"
+    d="M 512 248
+       A 184 184 0 0 1 696 432
+       L 696 756
+       L 328 756
+       L 328 432
+       A 184 184 0 0 1 512 248
+       Z"
+  />
+
+  <!-- Frame: outer edge minus inner opening -->
+  <path
+    fill="#8a2f24"
+    fill-rule="evenodd"
+    d="M 512 192
+       A 240 240 0 0 1 752 432
+       L 752 812
+       L 272 812
+       L 272 432
+       A 240 240 0 0 1 512 192
+       Z
+       M 512 248
+       A 184 184 0 0 1 696 432
+       L 696 756
+       L 328 756
+       L 328 432
+       A 184 184 0 0 1 512 248
+       Z"
+  />
+
+  <!-- Sill -->
+  <rect x="248" y="800" width="528" height="44" rx="8" fill="#8a2f24"/>
+
+  <!-- Mullion and transom -->
+  <rect x="492" y="248" width="40" height="508" fill="#8a2f24"/>
+  <rect x="328" y="412" width="368" height="40" fill="#8a2f24"/>
+
+  <!-- Crack: filled zigzag so ImageMagick's SVG renderer keeps it -->
+  <path
+    fill="#2a2218"
+    d="M 622 292
+       L 636 298
+       L 608 362
+       L 658 430
+       L 646 438
+       L 586 516
+       L 630 604
+       L 618 612
+       L 548 698
+       L 572 748
+       L 556 748
+       L 530 694
+       L 600 608
+       L 556 520
+       L 632 436
+       L 582 366
+       Z"
+  />
+  <!-- Small side-split off the main crack -->
+  <path
+    fill="#2a2218"
+    d="M 586 516
+       L 598 528
+       L 542 560
+       L 534 548
+       Z"
+  />
+</svg>
