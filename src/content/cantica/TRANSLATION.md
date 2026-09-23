@@ -44,8 +44,8 @@ Two enabling changes to `src/content/splitLectio.ts` (both low-risk):
 - [x] `work.ts` points at `renderings/close.json` under translation id `close`
 - [x] `index.ts` reads `segment.translations.close` (Lectio English)
 - [x] Eales references removed from `work.ts` / `index.ts`
-- [ ] `renderings/eales.json` deleted
-- [ ] README table updated (cantica row: `renderings/close.json`)
+- [x] `renderings/eales.json` deleted
+- [x] README table updated (cantica row: `renderings/close.json`)
 - [x] `renderings/close.json` created (Sermones 1–18 translated)
 - [x] validator `scripts/cantica_check.mjs` written (`--dump`, `--scan`, alignment check)
 - [x] `splitLectio.ts`: `sentenceAligned` opt-in added (cantica-only)
@@ -77,13 +77,13 @@ Sermon numbers match the `chapters` keys in `close.json`.
 - [x] 16
 - [x] 17
 - [x] 18
-- [ ] 19
-- [ ] 20
+- [x] 19
+- [x] 20
 
 ### Sermones 21–46
-- [ ] 21
-- [ ] 22
-- [ ] 23
+- [x] 21
+- [x] 22
+- [x] 23
 - [ ] 24
 - [ ] 25
 - [ ] 26
