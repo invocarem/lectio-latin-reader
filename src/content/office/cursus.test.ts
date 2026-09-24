@@ -41,6 +41,74 @@ describe("weekly cursus", () => {
     expect(monTwelve.every((slot) => slot.custom)).toBe(true);
   });
 
+  test("Psalm 119 is lined out for the Office without editing the Gallican text", () => {
+    const verses = sliceVerses({ psalm: 119 });
+    expect(verses.map((verse) => verse.n)).toEqual(["1", "2", "3", "4", "5", "6"]);
+    expect(verses[0].latin.startsWith("Ad Dominum")).toBe(true);
+    expect(verses[0].latin.includes("Canticum graduum")).toBe(false);
+    expect(verses[4].latin).toContain("Heu mihi");
+    expect(verses[4].latin).toContain("multum incola fuit anima mea");
+    expect(verses[5].latin.startsWith("Cum his qui oderunt pacem")).toBe(true);
+  });
+
+  test("Psalm 12 is lined out by splitting Gallican verses", () => {
+    const verses = sliceVerses({ psalm: 12 });
+    expect(verses.map((verse) => verse.n)).toEqual(["1", "2", "3", "4", "5", "6"]);
+    expect(verses[0].latin.startsWith("Usquequo, Domine")).toBe(true);
+    expect(verses[2].latin.endsWith("Domine Deus meus.")).toBe(true);
+    expect(verses[3].latin.startsWith("Illumina oculos meos")).toBe(true);
+    expect(verses[3].latin.endsWith("adversus eum.")).toBe(true);
+    expect(verses[4].latin.startsWith("Qui tribulant me")).toBe(true);
+    expect(verses[4].latin.endsWith("speravi.")).toBe(true);
+    expect(verses[5].latin.startsWith("Exsultabit cor meum")).toBe(true);
+  });
+
+  test("Psalm 14 is lined out into its seven Benedictine office lines", () => {
+    const verses = sliceVerses({ psalm: 14 });
+    expect(verses.map((verse) => verse.n)).toEqual(["1", "2", "3", "4", "5", "6", "7"]);
+    expect(verses[0].latin.startsWith("Domine, quis habitabit")).toBe(true);
+    expect(verses[0].latin.includes("Psalmus David.")).toBe(false);
+    expect(verses[2].latin.endsWith("in lingua sua,")).toBe(true);
+    expect(verses[3].latin.startsWith("nec fecit proximo suo malum")).toBe(true);
+    expect(verses[3].latin.endsWith("adversus proximos suos.")).toBe(true);
+    expect(verses[4].latin.startsWith("Ad nihilum deductus est")).toBe(true);
+    expect(verses[4].latin.endsWith("glorificat.")).toBe(true);
+    expect(verses[5].latin.startsWith("Qui iurat proximo suo")).toBe(true);
+    expect(verses[5].latin).toContain("qui pecuniam suam");
+    expect(verses[5].latin.endsWith("non accepit :")).toBe(true);
+    expect(verses[6].latin.startsWith("qui facit haec")).toBe(true);
+    expect(verses[6].latin.endsWith("in aeternum.")).toBe(true);
+  });
+
+  test("Psalm 13 drops its title", () => {
+    expect(sliceVerses({ psalm: 13 })[0].latin.startsWith("Dixit insipiens")).toBe(true);
+  });
+
+  test("Songs of Ascents 120–133 drop the Canticum graduum title", () => {
+    expect(sliceVerses({ psalm: 120 })[0].latin.startsWith("Levavi oculos")).toBe(true);
+    expect(sliceVerses({ psalm: 126 })[0].latin.startsWith("Nisi Dominus")).toBe(true);
+    expect(sliceVerses({ psalm: 130 })[0].latin.startsWith("Domine, non est")).toBe(true);
+    expect(sliceVerses({ psalm: 132 })[0].latin.startsWith("Ecce quam bonum")).toBe(true);
+    expect(sliceVerses({ psalm: 133 })[0].latin.includes("Canticum graduum")).toBe(false);
+    expect(sliceVerses({ psalm: 120 })[1].n).toBe("2");
+  });
+
+  test("Psalm 1 splits Gallican verse 3 and keeps the rest", () => {
+    const verses = sliceVerses({ psalm: 1 });
+    expect(verses.map((verse) => verse.n)).toEqual(["1", "2", "3", "4", "5", "6", "7"]);
+    expect(verses[2].latin.endsWith("in tempore suo :")).toBe(true);
+    expect(verses[3].latin.startsWith("et folium eius non defluet")).toBe(true);
+    expect(verses[3].latin.endsWith("prosperabuntur.")).toBe(true);
+    expect(verses[4].latin.startsWith("Non sic impii")).toBe(true);
+    expect(verses[6].latin.startsWith("quoniam novit Dominus")).toBe(true);
+  });
+
+  test("a psalm with no map keeps Gallican verse numbers", () => {
+    const verses = sliceVerses({ psalm: 2 });
+    expect(verses[0].n).toBe("1");
+    expect(verses[0].latin.startsWith("Quare fremuerunt")).toBe(true);
+  });
+
   test("a Prime slice resolves verses from the Gallican chapter", () => {
     const verses = sliceVerses({ psalm: 9, from: 2, to: 21 });
     expect(verses[0].n).toBe("2");

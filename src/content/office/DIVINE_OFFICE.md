@@ -129,6 +129,7 @@ After section 4 the office matches what the Rule describes. Sections 5 and 6 fil
 - [x] Vespers: 115 with 116; 138, 143, and 144 each in two ranges taken from `latin.md`.
 - [x] Vigils table above, marked as custom.
 - [x] Office reader: choose weekday and hour, walk the slices one at a time.
+- [ ] Verse map for all 150 psalms, one psalm at a time, in `src/content/office/VERSE_MAP.md`. Psalms 1, 12–14, and 119–133 are entered (12 is relined, including cuts inside a Gallican verse; 13 drops *In finem. Psalmus David.*; 14 drops *Psalmus David.*; 119 is rejoined; 120–133 drop the *Canticum graduum* title). Every other psalm still shows the Gallican verses.
 
 ### 2. Ordinary of the hour
 
