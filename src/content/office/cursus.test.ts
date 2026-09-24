@@ -84,6 +84,19 @@ describe("weekly cursus", () => {
     expect(sliceVerses({ psalm: 13 })[0].latin.startsWith("Dixit insipiens")).toBe(true);
   });
 
+  test("Psalm 6 drops its title verse and keeps verses 2–11", () => {
+    const verses = sliceVerses({ psalm: 6 });
+    expect(verses.map((verse) => verse.n)).toEqual([
+      "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+    ]);
+    expect(verses[0].latin.startsWith("Domine, ne in furore tuo arguas me")).toBe(true);
+    expect(verses[0].latin.includes("In finem")).toBe(false);
+    expect(verses[0].latin.includes("Psalmus David")).toBe(false);
+    expect(verses[0].latin.includes("Pro octava")).toBe(false);
+    expect(verses[1].latin.startsWith("Miserere mei, Domine")).toBe(true);
+    expect(verses[9].latin.startsWith("Erubescant")).toBe(true);
+  });
+
   test("Compline Psalm 90 drops its Laus cantici David title", () => {
     const verses = sliceVerses({ psalm: 90 });
     expect(verses.map((verse) => verse.n)).toEqual([
@@ -110,8 +123,7 @@ describe("weekly cursus", () => {
     expect(verses[1].english.startsWith("Who stand in the house")).toBe(true);
   });
 
-  test("Psalm 4 drops the title verse and splits Gallican verse 2", () => {
-    const verses = sliceVerses({ psalm: 4 });
+  test("Psalm 4 drops the title verse and splits Gallican verse 2", () => {    const verses = sliceVerses({ psalm: 4 });
     expect(verses.map((verse) => verse.n)).toEqual(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]);
     expect(verses[0].latin.startsWith("Cum invocarem")).toBe(true);
     expect(verses[0].latin.includes("In finem")).toBe(false);

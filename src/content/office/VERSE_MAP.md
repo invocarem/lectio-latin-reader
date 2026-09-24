@@ -13,11 +13,11 @@ The cursus cuts (Psalms 9 and 17 at Prime, Psalm 118 in sections of eight, and t
 Check a psalm when its Benedictine lining is finished. A title drop alone is not finished.
 
 - [x] 1
-- [ ] 2
+- [x] 2
 - [ ] 3
 - [x] 4
 - [ ] 5
-- [ ] 6
+- [x] 6
 - [ ] 7
 - [ ] 8
 - [ ] 9
@@ -193,6 +193,10 @@ Gallican verse 1 is the title *In finem, in carminibus. Psalmus David.* — it i
 | 8 | Gallican 8 |
 | 9 | Gallican 9 |
 | 10 | Gallican 10 |
+
+### Psalmus 6
+
+Gallican verse 1 is the title *In finem, in carminibus. Psalmus David. Pro octava.* — it is dropped. The Office therefore shows ten lines, Gallican verses 2–11; line 1 begins *Domine, ne in furore tuo arguas me*. The content verses are unchanged.
 
 ### Psalmus 12
 

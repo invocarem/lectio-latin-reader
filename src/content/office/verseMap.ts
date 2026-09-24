@@ -85,6 +85,18 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
     { pieces: [{ verse: 9 }] },
     { pieces: [{ verse: 10 }] },
   ],
+  6: [
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+  ],
   90: dropTitle("Laus cantici David. "),
   13: dropTitle("In finem. Psalmus David. "),
   14: [
