@@ -64,6 +64,7 @@ function adapt(): ReaderWork {
     intro:
       "The Psalms, one verse at a time — Gallican Latin with the 1662 Coverdale and Challoner Douay-Rheims at hand.",
     studyEnabled: false,
+    officeEnabled: true,
     lectio,
     chapters,
   };

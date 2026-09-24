@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Home } from "./components/Home";
 import { Lectio } from "./components/Lectio";
+import { Office } from "./components/Office";
 import { Reader } from "./components/Reader";
 import { workById, works } from "./content/works";
 import { resolveSession } from "./lectioNav";
@@ -40,6 +41,10 @@ export default function App() {
   }
 
   const work = workById(workId) ?? defaultWork;
+
+  if (work.officeEnabled && mode === "office") {
+    return <Office work={work} onHome={goHome} />;
+  }
 
   if (work.studyEnabled && studyEnabled && mode === "study") {
     return (

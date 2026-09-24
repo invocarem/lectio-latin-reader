@@ -35,7 +35,7 @@ export type LectioUnit = Unit & {
   chapterId?: string;
 };
 
-export type ReaderMode = "lectio" | "study";
+export type ReaderMode = "lectio" | "study" | "office";
 
 /** Unique id of a registered library work. */
 export type WorkId =
@@ -74,6 +74,8 @@ export type ReaderWork = {
   intro?: string;
   /** Per-work opt-in for Study mode (and subject to platform gating). */
   studyEnabled: boolean;
+  /** Per-work opt-in for the Divine Office. The psalter only. */
+  officeEnabled?: boolean;
   /** One short reading at a time for Lectio. */
   lectio: LectioUnit[];
   /** TOC navigation for Lectio. */

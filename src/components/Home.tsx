@@ -32,6 +32,15 @@ export function Home({ onOpen, studyEnabled = true }: HomeProps) {
               >
                 Lectio
               </button>
+              {work.officeEnabled ? (
+                <button
+                  className="start ghost"
+                  type="button"
+                  onClick={() => onOpen(work.id, "office")}
+                >
+                  Office
+                </button>
+              ) : null}
               {work.studyEnabled && studyEnabled ? (
                 <button
                   className="start ghost"

@@ -23,14 +23,16 @@ export function lectioFocus<T extends { id: string }>(
 export function resolveSession(
   work: {
     studyEnabled: boolean;
+    officeEnabled?: boolean;
     lectio: { id: string }[];
     study?: { units: { id: string }[] };
   },
   platformStudy: boolean,
   requested?: ReaderMode,
 ): { mode: ReaderMode; focusId: string } {
-  const mode: ReaderMode =
-    work.studyEnabled && platformStudy ? requested ?? "lectio" : "lectio";
+  let mode: ReaderMode = "lectio";
+  if (requested === "office" && work.officeEnabled) mode = "office";
+  else if (requested === "study" && work.studyEnabled && platformStudy) mode = "study";
   const focusId =
     mode === "study"
       ? work.study?.units[0]?.id ?? work.lectio[0].id
