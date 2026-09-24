@@ -32,7 +32,11 @@ Two enabling changes to `src/content/splitLectio.ts` (both low-risk):
    `src/content/cantica/renderings/close.json` under
    `chapters["<sermon#>"]["<paragraph#>"]`. Use Arabic-numeral Bible refs
    (e.g. `(1 Cor. 3:2)`) so the English doesn't fracture, and do **not** carry
-   the PL footnote markers (trailing `2`, `3`, …) into English.
+   the PL footnote markers (trailing `2`, `3`, …) into English. Each chapter
+   also carries a `"title"` key with the English rendering of the sermon's
+   Latin heading (used as the paired English on the Study title page); a
+   chapter may consist of only a `"title"` before its paragraphs are
+   translated (e.g. Sermo 80).
 3. Validate with `node scripts/cantica_check.mjs` — it reports any paragraph
    whose English sentence count differs from its Latin.
 4. Do **not** edit `latin.md` or `scaffold.ts` (authoritative / regenerated).
@@ -144,9 +148,9 @@ Sermon numbers match the `chapters` keys in `close.json`.
 - [x] 77
 - [x] 78
 - [x] 79
-- [ ] 80
-- [ ] 81
-- [ ] 82
+- [x] 80
+- [x] 81
+- [x] 82
 - [x] 83
 - [x] 84
 - [x] 85

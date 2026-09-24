@@ -136,7 +136,7 @@ if (dumpSermon) {
       console.log(`  [${i + 1}] (${wordCount(s)}w) ${s}`);
     });
   }
-  console.log(`\nclose.json English for this sermon: ${Object.keys(close.chapters?.[dumpSermon] ?? {}).length} paragraph(s).`);
+  console.log(`\nclose.json English for this sermon: ${Object.keys(close.chapters?.[dumpSermon] ?? {}).filter((k) => k !== "title").length} paragraph(s).`);
   process.exit(0);
 }
 
@@ -169,3 +169,17 @@ if (mismatched.length) {
 } else if (withEnglish > 0) {
   console.log("\nAll translated paragraphs are sentence-aligned with their Latin. ✓");
 }
+
+// --- title coverage (sermons 1..86 should each carry an English title) ----
+const untitled = [];
+for (let s = 1; s <= 86; s++) {
+  const t = close.chapters?.[String(s)]?.title;
+  if (!t || !String(t).trim()) untitled.push(s);
+}
+if (untitled.length) {
+  console.log(`\nSermon(s) missing an English title: ${untitled.join(", ")}`);
+  process.exitCode = 1;
+} else {
+  console.log("All 86 sermons carry an English title. ✓");
+}
+

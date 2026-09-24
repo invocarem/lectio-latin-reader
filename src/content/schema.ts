@@ -38,6 +38,8 @@ export interface Chapter {
   number?: number;
   title: string;
   heading?: string;
+  /** English rendering of the heading, from renderings/*.json (cantica). */
+  englishHeading?: string;
   paragraphs: Paragraph[];
 }
 

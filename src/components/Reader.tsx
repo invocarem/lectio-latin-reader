@@ -7,6 +7,7 @@ import {
   panTarget,
   zoomAroundCursor,
 } from "../plateZoom";
+import { studyUnitsInView } from "../studyView";
 import type { ReaderWork, Unit } from "../types";
 import { DictPopup } from "./DictPopup";
 import { LatinText } from "./LatinText";
@@ -27,7 +28,7 @@ type DictState = {
 export function Reader({ work, focusId, onFocus, onHome }: ReaderProps) {
   const units = work.study?.units ?? [];
   const chapters = work.study?.chapters ?? [];
-  const [showPlate, setShowPlate] = useState(true);
+  const [showPlate, setShowPlate] = useState(work.study?.facsimile !== false);
   const [showEnglish, setShowEnglish] = useState(true);
   const [zoom, setZoomState] = useState(1);
   const [dragging, setDragging] = useState(false);
@@ -48,6 +49,10 @@ export function Reader({ work, focusId, onFocus, onHome }: ReaderProps) {
   const current = useMemo(
     () => units.find((unit) => unit.id === focusId) ?? units[0],
     [units, focusId],
+  );
+  const visibleUnits = useMemo(
+    () => studyUnitsInView(units, focusId, work.study?.mount),
+    [units, focusId, work.study?.mount],
   );
   const activeChapter = current ? chapterKey(current, chapters) : "";
 
@@ -117,7 +122,7 @@ export function Reader({ work, focusId, onFocus, onHome }: ReaderProps) {
     if (!viewport) return;
     viewport.addEventListener("wheel", handlePlateWheel, { passive: false });
     return () => viewport.removeEventListener("wheel", handlePlateWheel);
-  }, [handlePlateWheel]);
+  }, [handlePlateWheel, showPlate]);
 
   // Start each plate back at the top-left once it is shown.
   useEffect(() => {
@@ -215,7 +220,7 @@ export function Reader({ work, focusId, onFocus, onHome }: ReaderProps) {
         <div className="columns">
           <div className="pane latin" ref={latinRef}>
             <div className="lang-label">Latina</div>
-            {units.map((unit) => (
+            {visibleUnits.map((unit) => (
               <UnitBlock
                 key={`la-${unit.id}`}
                 unit={unit}
@@ -235,7 +240,7 @@ export function Reader({ work, focusId, onFocus, onHome }: ReaderProps) {
           </div>
           <div className="pane english" ref={englishRef}>
             <div className="lang-label">English</div>
-            {units.map((unit) => (
+            {visibleUnits.map((unit) => (
               <UnitBlock
                 key={`en-${unit.id}`}
                 unit={unit}

@@ -79,5 +79,12 @@ export type ReaderWork = {
   /** TOC navigation for Lectio. */
   chapters: Chapter[];
   /** Flat units + chapters for Study mode, present only when studyEnabled. */
-  study?: { units: Unit[]; chapters: Chapter[] };
+  study?: {
+    units: Unit[];
+    chapters: Chapter[];
+    /** Mount only the focused caput. Omit to mount the whole work. */
+    mount?: "caput";
+    /** Open the facsimile column on entry. Omit to open it. */
+    facsimile?: boolean;
+  };
 };

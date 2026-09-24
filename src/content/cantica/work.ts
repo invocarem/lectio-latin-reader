@@ -19,6 +19,7 @@ function applyRenderings(chapters: Chapter[]): Chapter[] {
     const key = String(chapter.number ?? "");
     return {
       ...chapter,
+      englishHeading: eng[key]?.title ?? undefined,
       paragraphs: chapter.paragraphs.map((paragraph) => ({
         ...paragraph,
         segments: paragraph.segments.map(

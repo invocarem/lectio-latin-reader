@@ -6,7 +6,8 @@ import columnsFile from "./columns.json";
 /**
  * Bernard's Sermones in Cantica Canticorum, adapted from the nested schema
  * into the common ReaderWork shape. Lectio breaks long PL paragraphs into
- * ~60-word pages; Study keeps each numbered block whole beside the Migne plate.
+ * ~60-word pages. Study mounts one sermon at a time, with the Migne plate
+ * closed until it is opened.
  *
  * Lectio English is a close, sentence-aligned rendering written for the
  * reader (one sentence per Latin sentence), so each Latin page pairs with
@@ -50,7 +51,7 @@ function adapt(): ReaderWork {
         section: null,
         heading,
         latin: heading.endsWith(".") ? heading : `${heading}.`,
-        english: "",
+        english: chapter.englishHeading ?? "",
         column: titleCol,
         facsimile: plateOf(titleCol),
         label: `Sermo ${n}`,
@@ -141,7 +142,12 @@ function adapt(): ReaderWork {
     studyEnabled: true,
     lectio,
     chapters,
-    study: { units: studyUnits, chapters: studyChapters },
+    study: {
+      units: studyUnits,
+      chapters: studyChapters,
+      mount: "caput",
+      facsimile: false,
+    },
   };
 }
 
