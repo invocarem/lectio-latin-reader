@@ -57,6 +57,35 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
     { pieces: [{ verse: 5 }] },
     { pieces: [{ verse: 6 }] },
   ],
+  4: [
+    {
+      pieces: [
+        {
+          verse: 2,
+          latinThrough: "dilatasti mihi.",
+          englishThrough: "thou hast enlarged me.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 2,
+          latinFrom: "Miserere mei",
+          englishFrom: "Have mercy on me",
+        },
+      ],
+    },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+  ],
+  90: dropTitle("Laus cantici David. "),
   13: dropTitle("In finem. Psalmus David. "),
   14: [
     {
@@ -141,16 +170,222 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
   ],
   120: dropTitle(GRADUAL),
   121: dropTitle(GRADUAL),
-  122: dropTitle(GRADUAL),
-  123: dropTitle(GRADUAL),
-  124: dropTitle(GRADUAL),
-  125: dropTitle(GRADUAL),
-  126: dropTitle("Canticum graduum Salomonis. "),
+  122: [
+    { pieces: [{ verse: 1, dropLatinPrefix: GRADUAL }] },
+    {
+      pieces: [
+        {
+          verse: 2,
+          latinThrough: "manibus dominorum suorum",
+          englishThrough: "hands of their masters,",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 2,
+          latinFrom: "sicut oculi ancillae",
+          englishFrom: "As the eyes of the handmaid",
+        },
+      ],
+    },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+  ],
+  123: [
+    {
+      pieces: [
+        { verse: 1, dropLatinPrefix: GRADUAL, englishFrom: "If it had not been" },
+        {
+          verse: 2,
+          latinThrough: "nisi quia Dominus erat in nobis :",
+          englishThrough: "If it had not been that the Lord was with us,",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 2,
+          latinFrom: "cum exsurgerent",
+          englishFrom: "When men rose up",
+        },
+        {
+          verse: 3,
+          latinThrough: "forte vivos deglutissent nos",
+          englishThrough: "swallowed us up alive.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 3,
+          latinFrom: "cum irasceretur",
+          englishFrom: "When their fury",
+        },
+        { verse: 4 },
+      ],
+    },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinThrough: "de laqueo venantium",
+          englishThrough: "snare of the fowlers.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinFrom: "laqueus contritus est",
+          englishFrom: "The snare is broken",
+        },
+      ],
+    },
+    { pieces: [{ verse: 8 }] },
+  ],
+  124: [
+    {
+      pieces: [
+        { verse: 1, dropLatinPrefix: GRADUAL, englishFrom: "They that trust" },
+        {
+          verse: 2,
+          latinThrough: "in Ierusalem.",
+          englishThrough: "In Jerusalem.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 2,
+          latinFrom: "Montes in circuitu eius",
+          englishFrom: "Mountains are round about",
+        },
+      ],
+    },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+  ],
+  125: [
+    { pieces: [{ verse: 1, dropLatinPrefix: GRADUAL, englishFrom: "When the Lord brought back" }] },
+    {
+      pieces: [
+        {
+          verse: 2,
+          latinThrough: "et lingua nostra exsultatione.",
+          englishThrough: "and our tongue with joy.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 2,
+          latinFrom: "Tunc dicent inter gentes",
+          englishFrom: "Then shall they say among the Gentiles",
+        },
+      ],
+    },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    {
+      pieces: [
+        {
+          verse: 6,
+          latinThrough: "mittentes semina sua.",
+          englishThrough: "casting their seeds.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 6,
+          latinFrom: "Venientes autem",
+          englishFrom: "But coming they shall come",
+        },
+      ],
+    },
+  ],
+  126: [
+    {
+      pieces: [
+        {
+          verse: 1,
+          dropLatinPrefix: "Canticum graduum Salomonis. ",
+          englishFrom: "Unless the Lord build",
+          latinThrough: "qui aedificant eam.",
+          englishThrough: "that build it.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 1,
+          latinFrom: "Nisi Dominus custodierit",
+          englishFrom: "Unless the Lord keep",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 2,
+          latinThrough: "panem doloris.",
+          englishThrough: "bread of sorrow.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 2,
+          latinFrom: "Cum dederit",
+          englishFrom: "When he shall give sleep",
+        },
+        { verse: 3 },
+      ],
+    },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+  ],
   127: dropTitle(GRADUAL),
   128: dropTitle(GRADUAL),
   129: dropTitle(GRADUAL),
   130: dropTitle("Canticum graduum David. "),
   131: dropTitle(GRADUAL),
   132: dropTitle("Canticum graduum David. "),
-  133: dropTitle(GRADUAL),
+  133: [
+    {
+      pieces: [
+        {
+          verse: 1,
+          dropLatinPrefix: GRADUAL,
+          latinThrough: "omnes servi Domini :",
+          englishThrough: "all ye servants of the Lord:",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 1,
+          latinFrom: "qui statis in domo",
+          englishFrom: "Who stand in the house",
+        },
+      ],
+    },
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+  ],
 };

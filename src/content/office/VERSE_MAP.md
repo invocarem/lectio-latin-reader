@@ -15,7 +15,7 @@ Check a psalm when its Benedictine lining is finished. A title drop alone is not
 - [x] 1
 - [ ] 2
 - [ ] 3
-- [ ] 4
+- [x] 4
 - [ ] 5
 - [ ] 6
 - [ ] 7
@@ -133,18 +133,18 @@ Check a psalm when its Benedictine lining is finished. A title drop alone is not
 - [x] 119
 - [ ] 120
 - [ ] 121
-- [ ] 122
-- [ ] 123
-- [ ] 124
-- [ ] 125
-- [ ] 126
+- [x] 122
+- [x] 123
+- [x] 124
+- [x] 125
+- [x] 126
 - [ ] 127
 - [ ] 128
 - [ ] 129
 - [ ] 130
 - [ ] 131
 - [ ] 132
-- [ ] 133
+- [x] 133
 - [ ] 134
 - [ ] 135
 - [ ] 136
@@ -177,6 +177,23 @@ Check a psalm when its Benedictine lining is finished. A title drop alone is not
 | 6 | Gallican 5 |
 | 7 | Gallican 6 |
 
+### Psalmus 4
+
+Gallican verse 1 is the title *In finem, in carminibus. Psalmus David.* — it is dropped. Gallican verse 2 is split at *Miserere mei:* the Office line 1 is *Cum invocarem… dilatasti mihi.*, line 2 begins *Miserere mei*. Verses 3–10 stay as they are.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 2 through *dilatasti mihi.* |
+| 2 | Gallican 2 from *Miserere mei* to the end |
+| 3 | Gallican 3 |
+| 4 | Gallican 4 |
+| 5 | Gallican 5 |
+| 6 | Gallican 6 |
+| 7 | Gallican 7 |
+| 8 | Gallican 8 |
+| 9 | Gallican 9 |
+| 10 | Gallican 10 |
+
 ### Psalmus 12
 
 An Office line may take part of a Gallican verse. `latinThrough` ends a slice, inclusive. `latinFrom` starts the next slice.
@@ -193,6 +210,10 @@ An Office line may take part of a Gallican verse. `latinThrough` ends a slice, i
 ### Psalmus 13
 
 Gallican verse numbers stay. Drop *In finem. Psalmus David.* Verse 1 begins *Dixit insipiens*.
+
+### Psalmus 90
+
+Gallican verse numbers stay. Drop the title *Laus cantici David.* from the Latin of verse 1, so it begins *Qui habitat*. Shown at Compline.
 
 ### Psalmus 14
 
@@ -219,15 +240,82 @@ The office lines split the five stored Gallican verses into seven office lines. 
 | 5 | 5 and 6 | *Heu mihi… Cedar ;* followed by *multum incola fuit anima mea.* |
 | 6 | 7 | *Cum his qui oderunt pacem…* |
 
-### Psalmi 120–133
+### Psalmus 122
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Canticum graduum.* |
+| 2 | Gallican 2 through *manibus dominorum suorum* |
+| 3 | *sicut oculi ancillae* to the end of Gallican 2 |
+| 4 | Gallican 3 |
+| 5 | Gallican 4 |
+
+### Psalmus 123
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Canticum graduum.*, then Gallican 2 through *nisi quia Dominus erat in nobis :* |
+| 2 | *cum exsurgerent* to the end of Gallican 2, then Gallican 3 through *forte vivos deglutissent nos* |
+| 3 | *cum irasceretur* to the end of Gallican 3, then Gallican 4 |
+| 4 | Gallican 5, from *torrentem* |
+| 5 | Gallican 6 |
+| 6 | Gallican 7 through *de laqueo venantium* |
+| 7 | *laqueus contritus est* to the end of Gallican 7 |
+| 8 | Gallican 8, *Adiutorium nostrum* |
+
+### Psalmus 124
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Canticum graduum.*, then *in Ierusalem.* |
+| 2 | *Montes in circuitu eius* to the end of Gallican 2 |
+| 3 | Gallican 3 |
+| 4 | Gallican 4, *benefac* |
+| 5 | Gallican 5, *Declinantes* |
+
+### Psalmus 125
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Canticum graduum.* |
+| 2 | Gallican 2 through *et lingua nostra exsultatione.* |
+| 3 | *Tunc dicent inter gentes* to the end of Gallican 2 |
+| 4 | Gallican 3 |
+| 5 | Gallican 4 |
+| 6 | Gallican 5 |
+| 7 | Gallican 6 through *mittentes semina sua.* |
+| 8 | *Venientes autem* to the end of Gallican 6 |
+
+### Psalmus 126
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Canticum graduum Salomonis.*, through *qui aedificant eam.* |
+| 2 | *Nisi Dominus custodierit* to the end of Gallican 1 |
+| 3 | Gallican 2 through *panem doloris.* |
+| 4 | *Cum dederit* to the end of Gallican 2, then Gallican 3 through *fructus ventris.* |
+| 5 | Gallican 4, *Sicut sagittae* |
+| 6 | Gallican 5, *Beatus vir* |
+
+### Psalmi 120–121, 127–132
 
 Each keeps its Gallican verse numbers. The Office drops the title from the Latin of verse 1.
 
-- 120–125, 127–129, 131, 133: drop *Canticum graduum.*
-- 126: drop *Canticum graduum Salomonis.*
+- 120, 121, 127–129, 131: drop *Canticum graduum.*
 - 130 and 132: drop *Canticum graduum David.*
 
-*Salomonis* and *David* belong to the title, so they go with it. The verse then begins at *Nisi Dominus*, *Domine, non est*, and *Ecce quam bonum*.
+*David* belongs to the title, so it goes with it. The verse then begins at *Domine, non est* and *Ecce quam bonum*.
+
+### Psalmus 133
+
+Shown at Compline. Splits Gallican verse 1: line 1 drops *Canticum graduum.* and runs through *omnes servi Domini :*; line 2 begins *qui statis in domo*. Gallican verses 2 and 3 stay as they are.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Canticum graduum.*, through *omnes servi Domini :* |
+| 2 | Gallican 1 from *qui statis in domo* to the end |
+| 3 | Gallican 2 |
+| 4 | Gallican 3 |
 
 ## Not entered
 
