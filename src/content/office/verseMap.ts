@@ -145,6 +145,126 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
       ],
     },
   ],
+  15: [
+    {
+      pieces: [
+        { verse: 1, dropLatinPrefix: "Tituli inscriptio, ipsi David. ", englishFrom: "Preserve me," },
+        { verse: 2 },
+      ],
+    },
+    { pieces: [{ verse: 3 }] },
+    {
+      pieces: [
+        {
+          verse: 4,
+          latinThrough: "postea acceleraverunt.",
+          englishThrough: "afterwards they made haste.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 4, latinFrom: "Non congregabo", englishFrom: "I will not gather together" },
+      ],
+    },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    {
+      pieces: [
+        {
+          verse: 10,
+          latinThrough: "videre corruptionem.",
+          englishThrough: "to see corruption.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 10, latinFrom: "Notas mihi fecisti", englishFrom: "Thou hast made known" },
+      ],
+    },
+  ],
+  16: [
+    {
+      pieces: [
+        {
+          verse: 1,
+          dropLatinPrefix: "Oratio David. ",
+          englishFrom: "Hear,",
+          latinThrough: "intende deprecationem meam.",
+          englishThrough: "attend to my supplication.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 1, latinFrom: "Auribus percipe", englishFrom: "Give ear" },
+      ],
+    },
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    {
+      pieces: [
+        {
+          verse: 8,
+          latinThrough: "ut pupillam oculi.",
+          englishThrough: "as the apple of thy eye.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 8, latinFrom: "Sub umbra", englishFrom: "Protect me" },
+        {
+          verse: 9,
+          latinThrough: "afflixerunt.",
+          englishThrough: "who have afflicted me.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 9, latinFrom: "Inimici mei", englishFrom: "My enemies" },
+        { verse: 10 },
+      ],
+    },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    {
+      pieces: [
+        { verse: 13 },
+        {
+          verse: 14,
+          latinThrough: "ab inimicis manus tuae.",
+          englishThrough: "From the enemies of thy hand.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 14,
+          latinFrom: "Domine, a paucis",
+          latinThrough: "adimpletus est venter eorum.",
+          englishFrom: "O Lord, divide them",
+          englishThrough: "from thy hidden stores.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 14, latinFrom: "Saturati sunt", englishFrom: "They are full" },
+      ],
+    },
+    { pieces: [{ verse: 15 }] },
+  ],
   12: [
     { pieces: [{ verse: 1, dropLatinPrefix: "In finem. Psalmus David. " }] },
     { pieces: [{ verse: 2 }] },

@@ -4,6 +4,8 @@ The Gallican psalter in `src/content/psalter/latin.md` stays as it is. Lectio re
 
 A psalm that is not listed here is shown in Gallican verses. Do not invent a lining. Add a psalm only when its Benedictine verses are known: which Gallican verses join, which title to drop from the Latin, and what the Office line numbers are.
 
+The reference for the Benedictine lining is the *Psallam Domino* blog (Kate Edwards), at <https://psallamdomino.blogspot.com> — in particular the per-psalm pages (for example the `ps 15` label shows Psalm 15 pointed for the Office). Read the lining there before adding or changing a psalm here.
+
 An Office line names one or more Gallican verse numbers, in order. Latin and Douay for those numbers are joined. `dropLatinPrefix` is removed from the start of the Latin of the first of those verses. The number on the page is the Office line, not the Gallican verse number.
 
 The cursus cuts (Psalms 9 and 17 at Prime, Psalm 118 in sections of eight, and the Vespers halves) are which day receives which Gallican verses. They are not this map.
@@ -26,8 +28,8 @@ Check a psalm when its Benedictine lining is finished. A title drop alone is not
 - [x] 12
 - [ ] 13
 - [x] 14
-- [ ] 15
-- [ ] 16
+- [x] 15
+- [x] 16
 - [ ] 17
 - [ ] 18
 - [ ] 19
@@ -233,6 +235,48 @@ The office lines split the five stored Gallican verses into seven office lines. 
 | 6 | *Qui iurat proximo suo* to *…non accepit :* (end of Gallican 4, then start of Gallican 5) |
 | 7 | Gallican 5 from *qui facit haec* to the end |
 
+### Psalmus 15
+
+The office lines split the ten stored Gallican verses into eleven office lines. Gallican 1 (whose *Tituli inscriptio, ipsi David.* is dropped) joins Gallican 2, because the Benedictine points *Conserva me… non eges* as one verse. Gallican 4 splits at *Non congregabo*, and Gallican 10 splits at *Notas mihi fecisti*.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Tituli inscriptio, ipsi David.*, then Gallican 2 |
+| 2 | Gallican 3 |
+| 3 | Gallican 4 through *postea acceleraverunt.* |
+| 4 | *Non congregabo* to the end of Gallican 4 |
+| 5 | Gallican 5 |
+| 6 | Gallican 6 |
+| 7 | Gallican 7 |
+| 8 | Gallican 8 |
+| 9 | Gallican 9 |
+| 10 | Gallican 10 through *videre corruptionem.* |
+| 11 | *Notas mihi fecisti* to the end of Gallican 10 |
+
+### Psalmus 16
+
+The office lines split the fifteen stored Gallican verses into seventeen office lines. Gallican 1 (*Oratio David.* dropped) splits at *Auribus percipe*; Gallican 8 and 9 split at *Sub umbra* and *Inimici mei*; Gallican 13 joins Gallican 14 through *ab inimicis manus tuae.* (the Benedictine point keeps *frameam tuam ab inimicis manus tuae.* as one verse); and Gallican 14 splits at *Domine, a paucis* and *Saturati sunt*.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Oratio David.*, through *intende deprecationem meam.* |
+| 2 | *Auribus percipe* to the end of Gallican 1 |
+| 3 | Gallican 2 |
+| 4 | Gallican 3 |
+| 5 | Gallican 4 |
+| 6 | Gallican 5 |
+| 7 | Gallican 6 |
+| 8 | Gallican 7 |
+| 9 | Gallican 8 through *ut pupillam oculi.* |
+| 10 | *Sub umbra alarum tuarum* to the end of Gallican 8, then Gallican 9 through *afflixerunt.* |
+| 11 | *Inimici mei* to the end of Gallican 9, then Gallican 10 |
+| 12 | Gallican 11 |
+| 13 | Gallican 12 |
+| 14 | Gallican 13, then Gallican 14 through *ab inimicis manus tuae.* |
+| 15 | *Domine, a paucis* through *adimpletus est venter eorum.* |
+| 16 | *Saturati sunt* to the end of Gallican 14 |
+| 17 | Gallican 15 |
+
 ### Psalmus 119
 
 | Office line | Gallican verses | Latin |
@@ -323,4 +367,4 @@ Shown at Compline. Splits Gallican verse 1: line 1 drops *Canticum graduum.* and
 
 ## Not entered
 
-Every other psalm, 2–11, 15–118, and 134–150. The Office still shows those in Gallican verses.
+Every other psalm, 2–11, 17–118, and 134–150. The Office still shows those in Gallican verses.

@@ -80,6 +80,55 @@ describe("weekly cursus", () => {
     expect(verses[6].latin.endsWith("in aeternum.")).toBe(true);
   });
 
+  test("Psalm 15 is lined out into its eleven Benedictine office lines", () => {
+    const verses = sliceVerses({ psalm: 15 });
+    expect(verses.map((verse) => verse.n)).toEqual([
+      "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11",
+    ]);
+    expect(verses[0].latin.startsWith("Conserva me, Domine")).toBe(true);
+    expect(verses[0].latin.includes("Tituli inscriptio")).toBe(false);
+    expect(verses[0].latin).toContain("Dixi Domino");
+    expect(verses[0].english.startsWith("Preserve me")).toBe(true);
+    expect(verses[0].english.includes("inscription of a title")).toBe(false);
+    expect(verses[1].latin.startsWith("Sanctis qui sunt in terra")).toBe(true);
+    expect(verses[2].latin.startsWith("Multiplicatae sunt infirmitates")).toBe(true);
+    expect(verses[2].latin.endsWith("acceleraverunt.")).toBe(true);
+    expect(verses[2].latin.includes("Non congregabo")).toBe(false);
+    expect(verses[3].latin.startsWith("Non congregabo")).toBe(true);
+    expect(verses[3].latin.endsWith("per labia mea.")).toBe(true);
+    expect(verses[4].latin.startsWith("Dominus pars")).toBe(true);
+    expect(verses[9].latin.startsWith("Quoniam non derelinques")).toBe(true);
+    expect(verses[9].latin.endsWith("corruptionem.")).toBe(true);
+    expect(verses[9].latin.includes("Notas mihi")).toBe(false);
+    expect(verses[10].latin.startsWith("Notas mihi fecisti")).toBe(true);
+    expect(verses[10].latin.endsWith("usque in finem.")).toBe(true);
+    expect(verses[10].english.startsWith("Thou hast made known")).toBe(true);
+  });
+
+  test("Psalm 16 is lined out into its seventeen Benedictine office lines", () => {
+    const verses = sliceVerses({ psalm: 16 });
+    expect(verses.map((verse) => verse.n)).toEqual(
+      ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17"],
+    );
+    expect(verses[0].latin.startsWith("Exaudi, Domine, iustitiam meam")).toBe(true);
+    expect(verses[0].latin.includes("Oratio David")).toBe(false);
+    expect(verses[1].latin.startsWith("Auribus percipe")).toBe(true);
+    expect(verses[8].latin.startsWith("A resistentibus dexterae tuae")).toBe(true);
+    expect(verses[8].latin.endsWith("ut pupillam oculi.")).toBe(true);
+    expect(verses[9].latin.startsWith("Sub umbra alarum tuarum")).toBe(true);
+    expect(verses[9].latin.endsWith("afflixerunt.")).toBe(true);
+    expect(verses[10].latin.startsWith("Inimici mei animam meam")).toBe(true);
+    expect(verses[10].latin.endsWith("superbiam.")).toBe(true);
+    expect(verses[13].latin.startsWith("Exsurge, Domine")).toBe(true);
+    expect(verses[13].latin).toContain("frameam tuam ab inimicis manus tuae.");
+    expect(verses[13].latin.includes("divide eos")).toBe(false);
+    expect(verses[14].latin.startsWith("Domine, a paucis de terra")).toBe(true);
+    expect(verses[14].latin.endsWith("venter eorum.")).toBe(true);
+    expect(verses[15].latin.startsWith("Saturati sunt filiis")).toBe(true);
+    expect(verses[15].latin.endsWith("parvulis suis.")).toBe(true);
+    expect(verses[16].latin.startsWith("Ego autem in iustitia")).toBe(true);
+  });
+
   test("Psalm 13 drops its title", () => {
     expect(sliceVerses({ psalm: 13 })[0].latin.startsWith("Dixit insipiens")).toBe(true);
   });
