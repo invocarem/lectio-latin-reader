@@ -384,6 +384,140 @@ describe("weekly cursus", () => {
     expect(verses[9].latin.startsWith("quoniam tu, Domine")).toBe(true);
   });
 
+  test("Psalm 127 splits the vine and the olive plants", () => {
+    const verses = sliceVerses({ psalm: 127 });
+    expect(verses.map((verse) => verse.n)).toEqual(["1", "2", "3", "4", "5", "6", "7"]);
+    expect(verses[0].latin.startsWith("Beati omnes")).toBe(true);
+    expect(verses[0].latin.includes("Canticum graduum")).toBe(false);
+    expect(verses[0].english.startsWith("Blessed are all")).toBe(true);
+    expect(verses[2].latin.startsWith("Uxor tua")).toBe(true);
+    expect(verses[2].latin.endsWith("domus tuae ;")).toBe(true);
+    expect(verses[2].latin.includes("filii tui")).toBe(false);
+    expect(verses[3].latin.startsWith("filii tui")).toBe(true);
+    expect(verses[3].latin.endsWith("mensae tuae.")).toBe(true);
+    expect(verses[6].latin.startsWith("Et videas filios")).toBe(true);
+    expect(verses[2].english.endsWith("sides of thy house.")).toBe(true);
+    expect(verses[3].english.startsWith("Thy children")).toBe(true);
+  });
+
+  test("Psalm 128 joins the necks of sinners with those who hate Sion", () => {
+    const verses = sliceVerses({ psalm: 128 });
+    expect(verses.map((verse) => verse.n)).toEqual(["1", "2", "3", "4", "5", "6", "7"]);
+    expect(verses[0].latin.startsWith("Saepe expugnaverunt")).toBe(true);
+    expect(verses[0].latin.includes("Canticum graduum")).toBe(false);
+    expect(verses[0].english.startsWith("Often have they fought")).toBe(true);
+    expect(verses[3].latin.startsWith("Dominus iustus concidit")).toBe(true);
+    expect(verses[3].latin).toContain("Confundantur, et convertantur");
+    expect(verses[3].latin.endsWith("oderunt Sion.")).toBe(true);
+    expect(verses[6].latin.startsWith("Et non dixerunt")).toBe(true);
+    expect(verses[6].latin.endsWith("nomine Domini.")).toBe(true);
+  });
+
+  test("Psalm 115 is lined out into its eight Monday Vespers office lines", () => {
+    const verses = sliceVerses({ psalm: 115 });
+    expect(verses.map((verse) => verse.n)).toEqual(["1", "2", "3", "4", "5", "6", "7", "8"]);
+    expect(verses[0].latin.startsWith("Credidi, propter quod locutus sum")).toBe(true);
+    expect(verses[0].latin.includes("Alleluia")).toBe(false);
+    expect(verses[4].latin.startsWith("Vota mea Domino reddam coram")).toBe(true);
+    expect(verses[4].latin).toContain("Pretiosa in conspectu Domini");
+    expect(verses[4].latin.endsWith("sanctorum eius.")).toBe(true);
+    expect(verses[5].latin.startsWith("O Domine, quia ego servus tuus")).toBe(true);
+    expect(verses[5].latin.endsWith("ancillae tuae.")).toBe(true);
+    expect(verses[5].latin.includes("Dirupisti")).toBe(false);
+    expect(verses[6].latin.startsWith("Dirupisti vincula mea")).toBe(true);
+    expect(verses[6].latin.endsWith("invocabo.")).toBe(true);
+    expect(verses[7].latin.startsWith("Vota mea Domino reddam in conspectu")).toBe(true);
+    expect(verses[7].latin.endsWith("Ierusalem.")).toBe(true);
+    expect(verses[5].english.endsWith("thy handmaid.")).toBe(true);
+    expect(verses[6].english.startsWith("Thou hast broken my bonds")).toBe(true);
+  });
+
+  test("Psalm 116 drops Alleluia and keeps its two verses", () => {
+    const verses = sliceVerses({ psalm: 116 });
+    expect(verses.map((verse) => verse.n)).toEqual(["1", "2"]);
+    expect(verses[0].latin.startsWith("Laudate Dominum, omnes gentes")).toBe(true);
+    expect(verses[0].latin.includes("Alleluia")).toBe(false);
+    expect(verses[1].latin.startsWith("Quoniam confirmata est")).toBe(true);
+  });
+
+  test("Psalm 141 is lined out into its ten Friday Vespers office lines", () => {
+    const verses = sliceVerses({ psalm: 141 });
+    expect(verses.map((verse) => verse.n)).toEqual([
+      "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+    ]);
+    expect(verses[0].latin.startsWith("Voce mea ad Dominum clamavi")).toBe(true);
+    expect(verses[0].latin.includes("spelunca")).toBe(false);
+    expect(verses[2].latin.startsWith("in deficiendo")).toBe(true);
+    expect(verses[2].latin.endsWith("semitas meas.")).toBe(true);
+    expect(verses[3].latin.startsWith("In via hac")).toBe(true);
+    expect(verses[3].latin.endsWith("laqueum mihi.")).toBe(true);
+    expect(verses[4].latin.endsWith("cognosceret me :")).toBe(true);
+    expect(verses[5].latin.startsWith("periit fuga a me")).toBe(true);
+    expect(verses[5].latin.endsWith("animam meam.")).toBe(true);
+    expect(verses[7].latin.endsWith("humiliatus sum nimis.")).toBe(true);
+    expect(verses[8].latin.startsWith("Libera me a persequentibus")).toBe(true);
+    expect(verses[9].latin.startsWith("Educ de custodia")).toBe(true);
+    expect(verses[2].english.endsWith("my paths.")).toBe(true);
+    expect(verses[5].english.startsWith("Flight hath failed me")).toBe(true);
+    expect(verses[8].english.startsWith("Deliver me from my persecutors")).toBe(true);
+  });
+
+  test("Psalm 143 is lined into two Friday Vespers halves", () => {
+    const first = sliceVerses({ psalm: 143, from: 1, to: 8 });
+    const second = sliceVerses({ psalm: 143, from: 9, to: 15 });
+    expect(first.map((verse) => verse.n)).toEqual([
+      "1", "2", "3", "4", "5", "6", "7", "8", "9",
+    ]);
+    expect(second.map((verse) => verse.n)).toEqual([
+      "1", "2", "3", "4", "5", "6", "7", "8", "9",
+    ]);
+    expect(first[0].latin.startsWith("Benedictus Dominus Deus meus")).toBe(true);
+    expect(first[0].latin.includes("Goliath")).toBe(false);
+    expect(first[1].latin.endsWith("liberator meus ;")).toBe(true);
+    expect(first[1].english.endsWith("my deliverer:")).toBe(true);
+    expect(first[2].latin.startsWith("protector meus")).toBe(true);
+    expect(first[2].english.startsWith("My protector")).toBe(true);
+    expect(first[8].latin.startsWith("quorum os locutum est")).toBe(true);
+    expect(second[0].latin.startsWith("Deus, canticum novum")).toBe(true);
+    expect(second[1].latin.startsWith("Qui das salutem regibus")).toBe(true);
+    expect(second[1].latin.endsWith("eripe me,")).toBe(true);
+    expect(second[1].english.endsWith("Deliver me,")).toBe(true);
+    expect(second[2].latin.startsWith("et erue me")).toBe(true);
+    expect(second[2].english.startsWith("And rescue me")).toBe(true);
+    expect(second[3].latin.endsWith("iuventute sua ;")).toBe(true);
+    expect(second[4].latin.startsWith("filiae eorum")).toBe(true);
+    expect(second[5].latin.endsWith("ex hoc in illud ;")).toBe(true);
+    expect(second[6].latin.startsWith("oves eorum")).toBe(true);
+    expect(second[6].latin.endsWith("crassae.")).toBe(true);
+    expect(second[6].english.endsWith("Their oxen fat.")).toBe(true);
+    expect(second[7].latin.startsWith("Non est ruina")).toBe(true);
+    expect(second[8].latin.startsWith("Beatum dixerunt")).toBe(true);
+  });
+
+  test("Psalm 144 is lined into Friday and Saturday Vespers", () => {
+    const friday = sliceVerses(hourSlots("fri", "vespers")[3].slices[0]);
+    const saturday = sliceVerses(hourSlots("sat", "vespers")[0].slices[0]);
+    expect(friday.map((verse) => verse.n)).toEqual([
+      "1", "2", "3", "4", "5", "6", "7", "8", "9",
+    ]);
+    expect(saturday.map((verse) => verse.n)).toEqual([
+      "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13",
+    ]);
+    expect(friday[0].latin.startsWith("Exaltabo te, Deus meus rex")).toBe(true);
+    expect(friday[0].latin.includes("Laudatio")).toBe(false);
+    expect(friday[0].english.startsWith("I will extol thee")).toBe(true);
+    expect(friday[0].english.includes("Praise, for David")).toBe(false);
+    expect(friday[8].latin.startsWith("Suavis Dominus universis")).toBe(true);
+    expect(friday[8].latin.endsWith("opera eius.")).toBe(true);
+    expect(saturday[0].latin.startsWith("Confiteantur tibi, Domine")).toBe(true);
+    expect(saturday[2].latin.startsWith("ut notam faciant")).toBe(true);
+    expect(saturday[3].latin.endsWith("generationem.")).toBe(true);
+    expect(saturday[3].english.endsWith("all generations.")).toBe(true);
+    expect(saturday[4].latin.startsWith("Fidelis Dominus")).toBe(true);
+    expect(saturday[4].english.startsWith("The Lord is faithful")).toBe(true);
+    expect(saturday[12].latin.startsWith("Laudationem Domini")).toBe(true);
+  });
+
   test("Songs of Ascents 120–133 drop the Canticum graduum title", () => {
     expect(sliceVerses({ psalm: 120 })[0].latin.startsWith("Levavi oculos")).toBe(true);
     expect(sliceVerses({ psalm: 126 })[0].latin.startsWith("Nisi Dominus")).toBe(true);

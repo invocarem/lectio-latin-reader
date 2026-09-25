@@ -128,8 +128,8 @@ Check a psalm when its Benedictine lining is finished. A title drop alone is not
 - [ ] 112
 - [ ] 113
 - [ ] 114
-- [ ] 115
-- [ ] 116
+- [x] 115
+- [x] 116
 - [ ] 117
 - [ ] 118
 - [x] 119
@@ -140,8 +140,8 @@ Check a psalm when its Benedictine lining is finished. A title drop alone is not
 - [x] 124
 - [x] 125
 - [x] 126
-- [ ] 127
-- [ ] 128
+- [x] 127
+- [x] 128
 - [ ] 129
 - [ ] 130
 - [ ] 131
@@ -154,10 +154,10 @@ Check a psalm when its Benedictine lining is finished. A title drop alone is not
 - [ ] 138
 - [ ] 139
 - [ ] 140
-- [ ] 141
+- [x] 141
 - [ ] 142
-- [ ] 143
-- [ ] 144
+- [x] 143
+- [x] 144
 - [ ] 145
 - [ ] 146
 - [ ] 147
@@ -508,6 +508,96 @@ The last psalm of Lauds. Drop *Alleluia.* from Gallican 1. Gallican 5 joins Gall
 | 4 | Gallican 4 |
 | 5 | Gallican 5, then Gallican 6 through *Dominum !* |
 
+### Psalmus 115
+
+Monday Vespers, in one slot with Psalm 116. Drop *Alleluia.* from Gallican 1. Gallican 5 joins Gallican 6. Gallican 7 splits after *ancillae tuae*, and *Dirupisti* joins Gallican 8. Gallican 9 joins Gallican 10.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Alleluia.* |
+| 2 | Gallican 2 |
+| 3 | Gallican 3 |
+| 4 | Gallican 4 |
+| 5 | Gallican 5, then Gallican 6 |
+| 6 | Gallican 7 through *ancillae tuae.* |
+| 7 | *Dirupisti vincula mea* to the end of Gallican 7, then Gallican 8 |
+| 8 | Gallican 9, then Gallican 10 |
+
+### Psalmus 116
+
+Sung with Psalm 115 at Monday Vespers. Gallican verse numbers stay. Drop *Alleluia.* from verse 1, so it begins *Laudate Dominum, omnes gentes*.
+
+### Psalmus 141
+
+Friday Vespers, the first psalm of the hour. Gallican 1 is the title *Intellectus David, cum esset in spelunca, oratio.* and is dropped. Gallican 4 splits after *semitas meas*, Gallican 5 after *cognosceret me*, and Gallican 7 after *nimis*.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 2 |
+| 2 | Gallican 3 |
+| 3 | Gallican 4 through *semitas meas.* |
+| 4 | *In via hac* to the end of Gallican 4 |
+| 5 | Gallican 5 through *cognosceret me :* |
+| 6 | *periit fuga a me* to the end of Gallican 5 |
+| 7 | Gallican 6 |
+| 8 | Gallican 7 through *humiliatus sum nimis.* |
+| 9 | *Libera me* to the end of Gallican 7 |
+| 10 | Gallican 8 |
+
+### Psalmus 143
+
+Friday Vespers, the second and third psalms of the hour. One map covers both halves. The cursus cuts after Gallican 8, and each half is numbered from 1. Gallican 1 drops the title *Psalmus David. Adversus Goliath.* Gallican 2 splits after *liberator meus*. The second half joins *eripe me* to Gallican 10, then splits Gallican 12 after *iuventute sua*, Gallican 13 after *in illud*, and Gallican 14 after *crassae*.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop the title |
+| 2 | Gallican 2 through *liberator meus ;* |
+| 3 | *protector meus* to the end of Gallican 2 |
+| 4 | Gallican 3 |
+| 5 | Gallican 4 |
+| 6 | Gallican 5 |
+| 7 | Gallican 6 |
+| 8 | Gallican 7 |
+| 9 | Gallican 8 |
+| 1 | Gallican 9 |
+| 2 | Gallican 10, then Gallican 11 through *eripe me,* |
+| 3 | *et erue me* to the end of Gallican 11 |
+| 4 | Gallican 12 through *iuventute sua ;* |
+| 5 | *filiae eorum* to the end of Gallican 12 |
+| 6 | Gallican 13 through *ex hoc in illud ;* |
+| 7 | *oves eorum* to the end of Gallican 13, then Gallican 14 through *crassae.* |
+| 8 | *Non est ruina* to the end of Gallican 14 |
+| 9 | Gallican 15 |
+
+### Psalmus 144
+
+Friday Vespers ends with the first half. Saturday Vespers opens with the second. The cursus cuts after Gallican 9, and each half is numbered from 1. Gallican 1 drops the title *Laudatio ipsi David.* Gallican 13 splits after *generationem*.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop the title |
+| 2 | Gallican 2 |
+| 3 | Gallican 3 |
+| 4 | Gallican 4 |
+| 5 | Gallican 5 |
+| 6 | Gallican 6 |
+| 7 | Gallican 7 |
+| 8 | Gallican 8 |
+| 9 | Gallican 9 |
+| 1 | Gallican 10 |
+| 2 | Gallican 11 |
+| 3 | Gallican 12 |
+| 4 | Gallican 13 through *generationem.* |
+| 5 | *Fidelis Dominus* to the end of Gallican 13 |
+| 6 | Gallican 14 |
+| 7 | Gallican 15 |
+| 8 | Gallican 16 |
+| 9 | Gallican 17 |
+| 10 | Gallican 18 |
+| 11 | Gallican 19 |
+| 12 | Gallican 20 |
+| 13 | Gallican 21 |
+
 ### Psalmus 119
 
 | Office line | Gallican verses | Latin |
@@ -576,11 +666,39 @@ The last psalm of Lauds. Drop *Alleluia.* from Gallican 1. Gallican 5 joins Gall
 | 5 | Gallican 4, *Sicut sagittae* |
 | 6 | Gallican 5, *Beatus vir* |
 
-### Psalmi 120–121, 127–132
+### Psalmus 127
+
+Tuesday through Saturday None. Drop *Canticum graduum.* Gallican 3 splits after *domus tuae*.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Canticum graduum.* |
+| 2 | Gallican 2 |
+| 3 | Gallican 3 through *domus tuae ;* |
+| 4 | *filii tui* to the end of Gallican 3 |
+| 5 | Gallican 4 |
+| 6 | Gallican 5 |
+| 7 | Gallican 6 |
+
+### Psalmus 128
+
+The last psalm of Monday Vespers. Drop *Canticum graduum.* Gallican 4 joins Gallican 5.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Canticum graduum.* |
+| 2 | Gallican 2 |
+| 3 | Gallican 3 |
+| 4 | Gallican 4, then Gallican 5 |
+| 5 | Gallican 6 |
+| 6 | Gallican 7 |
+| 7 | Gallican 8 |
+
+### Psalmi 120–121, 129–132
 
 Each keeps its Gallican verse numbers. The Office drops the title from the Latin of verse 1.
 
-- 120, 121, 127–129, 131: drop *Canticum graduum.*
+- 120, 121, 129, 131: drop *Canticum graduum.*
 - 130 and 132: drop *Canticum graduum David.*
 
 *David* belongs to the title, so it goes with it. The verse then begins at *Domine, non est* and *Ecce quam bonum*.
@@ -598,4 +716,4 @@ Shown at Compline. Splits Gallican verse 1: line 1 drops *Canticum graduum.* and
 
 ## Not entered
 
-Every other psalm, 2–11, 20–49, 51–65, 67–74, 76–90, 92–118, and 134–147. The Office still shows those in Gallican verses.
+Every other psalm, 2–11, 20–49, 51–65, 67–74, 76–90, 92–114, 117–118, 134–140, 142, and 145–147. The Office still shows those in Gallican verses.

@@ -70,8 +70,8 @@ Verse 1 of Psalms 9 and 17 is the title and is not a sung half.
 | Tuesday | 129, 130, 131, 132 |
 | Wednesday | 134, 135, 136, 137 |
 | Thursday | 138 verses 1–12; 138 verses 13–24; 139; 140 |
-| Friday | 141; 143 verses 1–8; 143 verses 9–15; 144 verses 1–11 |
-| Saturday | 144 verses 12–21; 145; 146; 147 |
+| Friday | 141; 143 verses 1–8; 143 verses 9–15; 144 verses 1–9 |
+| Saturday | 144 verses 10–21; 145; 146; 147 |
 
 ### Vigils (custom under chapter 18)
 

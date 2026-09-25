@@ -724,6 +724,208 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
     },
     { pieces: [{ verse: 6, latinFrom: "Exsultabit cor meum", englishFrom: "My heart shall rejoice" }] },
   ],
+  115: [
+    { pieces: [{ verse: 1, dropLatinPrefix: "Alleluia. " }] },
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }, { verse: 6 }] },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinThrough: "ancillae tuae.",
+          englishThrough: "thy handmaid.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 7, latinFrom: "Dirupisti vincula mea", englishFrom: "Thou hast broken my bonds" },
+        { verse: 8 },
+      ],
+    },
+    { pieces: [{ verse: 9 }, { verse: 10 }] },
+  ],
+  116: dropTitle("Alleluia. "),
+  141: [
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    {
+      pieces: [
+        {
+          verse: 4,
+          latinThrough: "semitas meas.",
+          englishThrough: "my paths.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 4, latinFrom: "In via hac", englishFrom: "In this way wherein I walked" },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 5,
+          latinThrough: "cognosceret me :",
+          englishThrough: "would know me.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 5, latinFrom: "periit fuga a me", englishFrom: "Flight hath failed me" },
+      ],
+    },
+    { pieces: [{ verse: 6 }] },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinThrough: "humiliatus sum nimis.",
+          englishThrough: "very low.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 7, latinFrom: "Libera me", englishFrom: "Deliver me from my persecutors" },
+      ],
+    },
+    { pieces: [{ verse: 8 }] },
+  ],
+  143: [
+    {
+      pieces: [
+        { verse: 1, dropLatinPrefix: "Psalmus David. Adversus Goliath. " },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 2,
+          latinThrough: "liberator meus ;",
+          englishThrough: "my deliverer:",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 2, latinFrom: "protector meus", englishFrom: "My protector" },
+      ],
+    },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    {
+      pieces: [
+        { verse: 10 },
+        { verse: 11, latinThrough: "eripe me,", englishThrough: "Deliver me," },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 11, latinFrom: "et erue me", englishFrom: "And rescue me" },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 12,
+          latinThrough: "iuventute sua ;",
+          englishThrough: "in their youth:",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 12,
+          latinFrom: "filiae eorum",
+          englishFrom: "Their daughters decked out",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 13,
+          latinThrough: "ex hoc in illud ;",
+          englishThrough: "into that.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 13, latinFrom: "oves eorum", englishFrom: "Their sheep fruitful" },
+        { verse: 14, latinThrough: "crassae.", englishThrough: "Their oxen fat." },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 14,
+          latinFrom: "Non est ruina",
+          englishFrom: "There is no breach of wall",
+        },
+      ],
+    },
+    { pieces: [{ verse: 15 }] },
+  ],
+  144: [
+    {
+      pieces: [
+        {
+          verse: 1,
+          dropLatinPrefix: "Laudatio ipsi David. ",
+          englishFrom: "I will extol thee",
+        },
+      ],
+    },
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    {
+      pieces: [
+        {
+          verse: 13,
+          latinThrough: "generationem.",
+          englishThrough: "all generations.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 13,
+          latinFrom: "Fidelis Dominus",
+          englishFrom: "The Lord is faithful",
+        },
+      ],
+    },
+    { pieces: [{ verse: 14 }] },
+    { pieces: [{ verse: 15 }] },
+    { pieces: [{ verse: 16 }] },
+    { pieces: [{ verse: 17 }] },
+    { pieces: [{ verse: 18 }] },
+    { pieces: [{ verse: 19 }] },
+    { pieces: [{ verse: 20 }] },
+    { pieces: [{ verse: 21 }] },
+  ],
   119: [
     { sources: [1], dropLatinPrefix: GRADUAL },
     { sources: [2] },
@@ -923,8 +1125,52 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
     { pieces: [{ verse: 4 }] },
     { pieces: [{ verse: 5 }] },
   ],
-  127: dropTitle(GRADUAL),
-  128: dropTitle(GRADUAL),
+  127: [
+    {
+      pieces: [
+        {
+          verse: 1,
+          dropLatinPrefix: GRADUAL,
+          englishFrom: "Blessed are all",
+        },
+      ],
+    },
+    { pieces: [{ verse: 2 }] },
+    {
+      pieces: [
+        {
+          verse: 3,
+          latinThrough: "domus tuae ;",
+          englishThrough: "sides of thy house.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 3, latinFrom: "filii tui", englishFrom: "Thy children" },
+      ],
+    },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+  ],
+  128: [
+    {
+      pieces: [
+        {
+          verse: 1,
+          dropLatinPrefix: GRADUAL,
+          englishFrom: "Often have they fought",
+        },
+      ],
+    },
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }, { verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+  ],
   129: dropTitle(GRADUAL),
   130: dropTitle("Canticum graduum David. "),
   131: dropTitle(GRADUAL),
