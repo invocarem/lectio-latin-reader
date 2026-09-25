@@ -63,7 +63,7 @@ Check a psalm when its Benedictine lining is finished. A title drop alone is not
 - [ ] 47
 - [ ] 48
 - [ ] 49
-- [ ] 50
+- [x] 50
 - [ ] 51
 - [ ] 52
 - [ ] 53
@@ -79,7 +79,7 @@ Check a psalm when its Benedictine lining is finished. A title drop alone is not
 - [ ] 63
 - [ ] 64
 - [ ] 65
-- [ ] 66
+- [x] 66
 - [ ] 67
 - [ ] 68
 - [ ] 69
@@ -88,7 +88,7 @@ Check a psalm when its Benedictine lining is finished. A title drop alone is not
 - [ ] 72
 - [ ] 73
 - [ ] 74
-- [ ] 75
+- [x] 75
 - [ ] 76
 - [ ] 77
 - [ ] 78
@@ -104,7 +104,7 @@ Check a psalm when its Benedictine lining is finished. A title drop alone is not
 - [ ] 88
 - [ ] 89
 - [ ] 90
-- [ ] 91
+- [x] 91
 - [ ] 92
 - [ ] 93
 - [ ] 94
@@ -161,9 +161,9 @@ Check a psalm when its Benedictine lining is finished. A title drop alone is not
 - [ ] 145
 - [ ] 146
 - [ ] 147
-- [ ] 148
-- [ ] 149
-- [ ] 150
+- [x] 148
+- [x] 149
+- [x] 150
 
 ## Entered
 
@@ -378,6 +378,136 @@ Shown whole at Saturday Prime, the last psalm of that hour. Gallican 1 is the ti
 | 9 | Gallican 9 |
 | 10 | Gallican 10 |
 
+### Psalmus 50
+
+Said every day at Lauds. Gallican 1–2 are the title and are dropped, so line 1 begins *Miserere mei, Deus*. Gallican 3 splits after *misericordiam tuam*. Gallican 4–21 stay whole, which makes twenty office lines.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 3 through *misericordiam tuam ;* |
+| 2 | *et secundum multitudinem* to the end of Gallican 3 |
+| 3 | Gallican 4 |
+| 4 | Gallican 5 |
+| 5 | Gallican 6 |
+| 6 | Gallican 7 |
+| 7 | Gallican 8 |
+| 8 | Gallican 9 |
+| 9 | Gallican 10 |
+| 10 | Gallican 11 |
+| 11 | Gallican 12 |
+| 12 | Gallican 13 |
+| 13 | Gallican 14 |
+| 14 | Gallican 15 |
+| 15 | Gallican 16 |
+| 16 | Gallican 17 |
+| 17 | Gallican 18 |
+| 18 | Gallican 19 |
+| 19 | Gallican 20 |
+| 20 | Gallican 21 |
+
+### Psalmus 66
+
+Said every day at Lauds, the first psalm of the hour. Gallican 1 is the title *In finem, in hymnis. Psalmus cantici David.* and is dropped. The eight stored verses become six office lines: Gallican 6 joins Gallican 7 through *fructum suum*, and the rest of Gallican 7 joins Gallican 8.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 2 |
+| 2 | Gallican 3 |
+| 3 | Gallican 4 |
+| 4 | Gallican 5 |
+| 5 | Gallican 6, then Gallican 7 through *fructum suum :* |
+| 6 | *benedicat nos Deus* to the end of Gallican 7, then Gallican 8 |
+
+### Psalmus 75
+
+Friday Lauds. Gallican 1 is the title *In finem, in laudibus. Psalmus Asaph, canticum ad Assyrios.* and is dropped. Gallican 5 joins Gallican 6 through *corde.* Gallican 12 splits after *munera*, and *terribili* joins Gallican 13.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 2 |
+| 2 | Gallican 3 |
+| 3 | Gallican 4 |
+| 4 | Gallican 5, then Gallican 6 through *corde.* |
+| 5 | *Dormierunt somnum suum* to the end of Gallican 6 |
+| 6 | Gallican 7 |
+| 7 | Gallican 8 |
+| 8 | Gallican 9 |
+| 9 | Gallican 10 |
+| 10 | Gallican 11 |
+| 11 | Gallican 12 through *affertis munera :* |
+| 12 | *terribili* to the end of Gallican 12, then Gallican 13 |
+
+### Psalmus 91
+
+Friday Lauds. Gallican 1 is the title *Psalmus cantici, in die sabbati.* and is dropped. Gallican 8 splits after *iniquitatem*, and *ut intereant* joins Gallican 9. Gallican 15 joins Gallican 16 through *ut annuntient*.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 2 |
+| 2 | Gallican 3 |
+| 3 | Gallican 4 |
+| 4 | Gallican 5 |
+| 5 | Gallican 6 |
+| 6 | Gallican 7 |
+| 7 | Gallican 8 through *operantur iniquitatem,* |
+| 8 | *ut intereant* to the end of Gallican 8, then Gallican 9 |
+| 9 | Gallican 10 |
+| 10 | Gallican 11 |
+| 11 | Gallican 12 |
+| 12 | Gallican 13 |
+| 13 | Gallican 14 |
+| 14 | Gallican 15, then Gallican 16 through *ut annuntient* |
+| 15 | *quoniam rectus* to the end of Gallican 16 |
+
+### Psalmus 148
+
+Said every day at Lauds, with Psalms 149 and 150. Drop *Alleluia.* from Gallican 1. Gallican 4 joins Gallican 5 through *laudent nomen Domini.* Gallican 12 joins Gallican 13. Gallican 14 splits after *populi sui*, and the closing *Alleluia.* is left off the last line.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Alleluia.* |
+| 2 | Gallican 2 |
+| 3 | Gallican 3 |
+| 4 | Gallican 4, then Gallican 5 through *laudent nomen Domini.* |
+| 5 | *Quia ipse dixit* to the end of Gallican 5 |
+| 6 | Gallican 6 |
+| 7 | Gallican 7 |
+| 8 | Gallican 8 |
+| 9 | Gallican 9 |
+| 10 | Gallican 10 |
+| 11 | Gallican 11 |
+| 12 | Gallican 12, then Gallican 13 |
+| 13 | Gallican 14 through *populi sui.* |
+| 14 | *Hymnus omnibus sanctis* through *appropinquanti sibi.* |
+
+### Psalmus 149
+
+Said every day at Lauds, after Psalm 148. Drop *Alleluia.* from Gallican 1, and leave the closing *Alleluia.* off Gallican 9. The nine stored verses stay whole apart from those two cuts.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Alleluia.* |
+| 2 | Gallican 2 |
+| 3 | Gallican 3 |
+| 4 | Gallican 4 |
+| 5 | Gallican 5 |
+| 6 | Gallican 6 |
+| 7 | Gallican 7 |
+| 8 | Gallican 8 |
+| 9 | Gallican 9 through *sanctis eius.* |
+
+### Psalmus 150
+
+The last psalm of Lauds. Drop *Alleluia.* from Gallican 1. Gallican 5 joins Gallican 6 through *laudet Dominum*, and the closing *Alleluia.* is left off.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Alleluia.* |
+| 2 | Gallican 2 |
+| 3 | Gallican 3 |
+| 4 | Gallican 4 |
+| 5 | Gallican 5, then Gallican 6 through *Dominum !* |
+
 ### Psalmus 119
 
 | Office line | Gallican verses | Latin |
@@ -468,4 +598,4 @@ Shown at Compline. Splits Gallican verse 1: line 1 drops *Canticum graduum.* and
 
 ## Not entered
 
-Every other psalm, 2–11, 20–118, and 134–150. The Office still shows those in Gallican verses.
+Every other psalm, 2–11, 20–49, 51–65, 67–74, 76–90, 92–118, and 134–147. The Office still shows those in Gallican verses.

@@ -472,6 +472,231 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
     { pieces: [{ verse: 9 }] },
     { pieces: [{ verse: 10 }] },
   ],
+  50: [
+    {
+      pieces: [
+        {
+          verse: 3,
+          latinThrough: "misericordiam tuam ;",
+          englishThrough: "thy great mercy.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 3,
+          latinFrom: "et secundum multitudinem",
+          englishFrom: "And according to the multitude",
+        },
+      ],
+    },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    { pieces: [{ verse: 13 }] },
+    { pieces: [{ verse: 14 }] },
+    { pieces: [{ verse: 15 }] },
+    { pieces: [{ verse: 16 }] },
+    { pieces: [{ verse: 17 }] },
+    { pieces: [{ verse: 18 }] },
+    { pieces: [{ verse: 19 }] },
+    { pieces: [{ verse: 20 }] },
+    { pieces: [{ verse: 21 }] },
+  ],
+  66: [
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    {
+      pieces: [
+        { verse: 6 },
+        {
+          verse: 7,
+          latinThrough: "fructum suum :",
+          englishThrough: "her fruit.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 7, latinFrom: "benedicat nos Deus", englishFrom: "May God, our God bless us" },
+        { verse: 8 },
+      ],
+    },
+  ],
+  75: [
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    {
+      pieces: [
+        { verse: 5 },
+        {
+          verse: 6,
+          latinThrough: "corde.",
+          englishThrough: "were troubled.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 6, latinFrom: "Dormierunt somnum suum", englishFrom: "They have slept their sleep" },
+      ],
+    },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    {
+      pieces: [
+        {
+          verse: 12,
+          latinThrough: "affertis munera :",
+          englishThrough: "bring presents.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 12, latinFrom: "terribili,", englishFrom: "To him that is terrible" },
+        { verse: 13 },
+      ],
+    },
+  ],
+  91: [
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    {
+      pieces: [
+        {
+          verse: 8,
+          latinThrough: "operantur iniquitatem,",
+          englishThrough: "shall appear:",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 8, latinFrom: "ut intereant", englishFrom: "That they may perish" },
+        { verse: 9 },
+      ],
+    },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    { pieces: [{ verse: 13 }] },
+    { pieces: [{ verse: 14 }] },
+    {
+      pieces: [
+        { verse: 15 },
+        {
+          verse: 16,
+          latinThrough: "ut annuntient",
+          englishThrough: "That they may shew,",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 16, latinFrom: "quoniam rectus", englishFrom: "That the Lord our God is righteous" },
+      ],
+    },
+  ],
+  148: [
+    { pieces: [{ verse: 1, dropLatinPrefix: "Alleluia. " }] },
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    {
+      pieces: [
+        { verse: 4 },
+        {
+          verse: 5,
+          latinThrough: "laudent nomen Domini.",
+          englishThrough: "Praise the name of the Lord.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 5, latinFrom: "Quia ipse dixit", englishFrom: "For he spoke" },
+      ],
+    },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }, { verse: 13 }] },
+    {
+      pieces: [
+        {
+          verse: 14,
+          latinThrough: "populi sui.",
+          englishThrough: "horn of his people.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 14,
+          latinFrom: "Hymnus omnibus sanctis",
+          latinThrough: "appropinquanti sibi.",
+          englishFrom: "A hymn to all his saints",
+          englishThrough: "approaching to him.",
+        },
+      ],
+    },
+  ],
+  149: [
+    { pieces: [{ verse: 1, dropLatinPrefix: "Alleluia. " }] },
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    {
+      pieces: [
+        {
+          verse: 9,
+          latinThrough: "sanctis eius.",
+          englishThrough: "his saints.",
+        },
+      ],
+    },
+  ],
+  150: [
+    { pieces: [{ verse: 1, dropLatinPrefix: "Alleluia. " }] },
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    {
+      pieces: [
+        { verse: 5 },
+        {
+          verse: 6,
+          latinThrough: "Dominum !",
+          englishThrough: "praise the Lord.",
+        },
+      ],
+    },
+  ],
   12: [
     { pieces: [{ verse: 1, dropLatinPrefix: "In finem. Psalmus David. " }] },
     { pieces: [{ verse: 2 }] },

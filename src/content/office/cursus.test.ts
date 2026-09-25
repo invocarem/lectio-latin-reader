@@ -202,6 +202,130 @@ describe("weekly cursus", () => {
     expect(verses[6].english.startsWith("He will hear him")).toBe(true);
   });
 
+  test("Psalm 66 is lined out into its six Lauds office lines", () => {
+    const verses = sliceVerses({ psalm: 66 });
+    expect(verses.map((verse) => verse.n)).toEqual(["1", "2", "3", "4", "5", "6"]);
+    expect(verses[0].latin.startsWith("Deus misereatur nostri")).toBe(true);
+    expect(verses[0].latin.includes("In finem")).toBe(false);
+    expect(verses[4].latin.startsWith("Confiteantur tibi populi")).toBe(true);
+    expect(verses[4].latin.endsWith("fructum suum :")).toBe(true);
+    expect(verses[4].latin.includes("benedicat nos Deus")).toBe(false);
+    expect(verses[5].latin.startsWith("benedicat nos Deus, Deus noster")).toBe(true);
+    expect(verses[5].latin).toContain("Benedicat nos Deus, et metuant eum");
+    expect(verses[5].latin.endsWith("fines terrae.")).toBe(true);
+    expect(verses[4].english.endsWith("her fruit.")).toBe(true);
+    expect(verses[5].english.startsWith("May God, our God bless us")).toBe(true);
+    expect(verses[5].english).toContain("all the ends of the earth fear him.");
+  });
+
+  test("Psalm 50 is lined out into its twenty Lauds office lines", () => {
+    const verses = sliceVerses({ psalm: 50 });
+    expect(verses.map((verse) => verse.n)).toEqual(
+      Array.from({ length: 20 }, (_, i) => String(i + 1)),
+    );
+    expect(verses[0].latin.startsWith("Miserere mei, Deus")).toBe(true);
+    expect(verses[0].latin.endsWith("misericordiam tuam ;")).toBe(true);
+    expect(verses[0].latin.includes("Nathan")).toBe(false);
+    expect(verses[1].latin.startsWith("et secundum multitudinem")).toBe(true);
+    expect(verses[1].latin.endsWith("iniquitatem meam.")).toBe(true);
+    expect(verses[14].latin.startsWith("Libera me de sanguinibus")).toBe(true);
+    expect(verses[15].latin.startsWith("Domine, labia mea aperies")).toBe(true);
+    expect(verses[19].latin.startsWith("Tunc acceptabis sacrificium")).toBe(true);
+    expect(verses[0].english.endsWith("thy great mercy.")).toBe(true);
+    expect(verses[1].english.startsWith("And according to the multitude")).toBe(true);
+  });
+
+  test("Psalm 75 is lined out into its twelve Friday Lauds office lines", () => {
+    const verses = sliceVerses({ psalm: 75 });
+    expect(verses.map((verse) => verse.n)).toEqual(
+      ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"],
+    );
+    expect(verses[0].latin.startsWith("Notus in Iudaea Deus")).toBe(true);
+    expect(verses[0].latin.includes("In finem")).toBe(false);
+    expect(verses[3].latin.startsWith("Illuminans tu mirabiliter")).toBe(true);
+    expect(verses[3].latin.endsWith("corde.")).toBe(true);
+    expect(verses[3].latin.includes("Dormierunt")).toBe(false);
+    expect(verses[4].latin.startsWith("Dormierunt somnum suum")).toBe(true);
+    expect(verses[4].latin.endsWith("manibus suis.")).toBe(true);
+    expect(verses[7].latin.startsWith("De caelo auditum fecisti")).toBe(true);
+    expect(verses[10].latin.startsWith("Vovete et reddite")).toBe(true);
+    expect(verses[10].latin.endsWith("affertis munera :")).toBe(true);
+    expect(verses[11].latin.startsWith("terribili,")).toBe(true);
+    expect(verses[11].latin.endsWith("reges terrae.")).toBe(true);
+    expect(verses[3].english.endsWith("were troubled.")).toBe(true);
+    expect(verses[4].english.startsWith("They have slept their sleep")).toBe(true);
+    expect(verses[11].english.startsWith("To him that is terrible")).toBe(true);
+  });
+
+  test("Psalm 91 is lined out into its fifteen Friday Lauds office lines", () => {
+    const verses = sliceVerses({ psalm: 91 });
+    expect(verses.map((verse) => verse.n)).toEqual(
+      ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"],
+    );
+    expect(verses[0].latin.startsWith("Bonum est confiteri Domino")).toBe(true);
+    expect(verses[0].latin.includes("sabbati")).toBe(false);
+    expect(verses[6].latin.startsWith("Cum exorti fuerint")).toBe(true);
+    expect(verses[6].latin.endsWith("operantur iniquitatem,")).toBe(true);
+    expect(verses[6].latin.includes("intereant")).toBe(false);
+    expect(verses[7].latin.startsWith("ut intereant")).toBe(true);
+    expect(verses[7].latin.endsWith("Domine.")).toBe(true);
+    expect(verses[13].latin.startsWith("Adhuc multiplicabuntur")).toBe(true);
+    expect(verses[13].latin.endsWith("ut annuntient")).toBe(true);
+    expect(verses[14].latin.startsWith("quoniam rectus Dominus")).toBe(true);
+    expect(verses[14].latin.endsWith("iniquitas in eo.")).toBe(true);
+    expect(verses[6].english.endsWith("shall appear:")).toBe(true);
+    expect(verses[7].english.startsWith("That they may perish")).toBe(true);
+    expect(verses[13].english.endsWith("That they may shew,")).toBe(true);
+    expect(verses[14].english.startsWith("That the Lord our God is righteous")).toBe(true);
+  });
+
+  test("Psalm 148 is lined out into its fourteen Lauds office lines", () => {
+    const verses = sliceVerses({ psalm: 148 });
+    expect(verses.map((verse) => verse.n)).toEqual(
+      ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14"],
+    );
+    expect(verses[0].latin.startsWith("Laudate Dominum de caelis")).toBe(true);
+    expect(verses[0].latin.includes("Alleluia")).toBe(false);
+    expect(verses[3].latin.startsWith("Laudate eum, caeli caelorum")).toBe(true);
+    expect(verses[3].latin.endsWith("laudent nomen Domini.")).toBe(true);
+    expect(verses[3].latin.includes("Quia ipse")).toBe(false);
+    expect(verses[4].latin.startsWith("Quia ipse dixit")).toBe(true);
+    expect(verses[11].latin.startsWith("iuvenes et virgines")).toBe(true);
+    expect(verses[11].latin.endsWith("eius solius.")).toBe(true);
+    expect(verses[12].latin.startsWith("Confessio eius")).toBe(true);
+    expect(verses[12].latin.endsWith("populi sui.")).toBe(true);
+    expect(verses[13].latin).toBe(
+      "Hymnus omnibus sanctis eius ; filiis Israël, populo appropinquanti sibi.",
+    );
+    expect(verses[13].latin.includes("Alleluia")).toBe(false);
+    expect(verses[3].english.endsWith("Praise the name of the Lord.")).toBe(true);
+    expect(verses[4].english.startsWith("For he spoke")).toBe(true);
+    expect(verses[13].english.startsWith("A hymn to all his saints")).toBe(true);
+    expect(verses[13].english.endsWith("approaching to him.")).toBe(true);
+  });
+
+  test("Psalms 149 and 150 close Lauds without the Alleluia frame", () => {
+    const oneFortyNine = sliceVerses({ psalm: 149 });
+    const oneFifty = sliceVerses({ psalm: 150 });
+    expect(oneFortyNine.map((verse) => verse.n)).toEqual([
+      "1", "2", "3", "4", "5", "6", "7", "8", "9",
+    ]);
+    expect(oneFortyNine[0].latin.startsWith("Cantate Domino canticum novum")).toBe(true);
+    expect(oneFortyNine[0].latin.includes("Alleluia")).toBe(false);
+    expect(oneFortyNine[6].latin.startsWith("ad faciendam vindictam")).toBe(true);
+    expect(oneFortyNine[8].latin.startsWith("ut faciant in eis")).toBe(true);
+    expect(oneFortyNine[8].latin.endsWith("sanctis eius.")).toBe(true);
+    expect(oneFortyNine[8].latin.includes("Alleluia")).toBe(false);
+    expect(oneFortyNine[8].english.endsWith("his saints.")).toBe(true);
+    expect(oneFifty.map((verse) => verse.n)).toEqual(["1", "2", "3", "4", "5"]);
+    expect(oneFifty[0].latin.startsWith("Laudate Dominum in sanctis eius")).toBe(true);
+    expect(oneFifty[0].latin.includes("Alleluia")).toBe(false);
+    expect(oneFifty[4].latin.startsWith("Laudate eum in cymbalis")).toBe(true);
+    expect(oneFifty[4].latin.endsWith("laudet Dominum !")).toBe(true);
+    expect(oneFifty[4].latin.includes("Alleluia")).toBe(false);
+    expect(oneFifty[4].english.endsWith("praise the Lord.")).toBe(true);
+  });
+
   test("Psalm 13 drops its title", () => {
     expect(sliceVerses({ psalm: 13 })[0].latin.startsWith("Dixit insipiens")).toBe(true);
   });
