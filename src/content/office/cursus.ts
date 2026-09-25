@@ -70,6 +70,8 @@ const HALF = {
   72: [cut(72, 1, 14), cut(72, 15, 28)],
   73: [cut(73, 1, 12), cut(73, 13, 23)],
   77: [cut(77, 1, 36), cut(77, 37, 72)],
+  103: [cut(103, 1, 24), cut(103, 25, 35)],
+  104: [cut(104, 1, 22), cut(104, 23, 45)],
   138: [cut(138, 1, 12), cut(138, 13, 24)],
   143: [cut(143, 1, 8), cut(143, 9, 15)],
   144: [cut(144, 1, 9), cut(144, 10, 21)],
@@ -149,7 +151,7 @@ const CURSUS: Record<Weekday, Record<OfficeHour, OfficeSlot[]>> = {
   sat: {
     vigils: vigils(
       [97, 98, 99, 100, 101, 102].map((psalm) => custom(whole(psalm))),
-      [103, 104, 105, 106, 107, 108].map((psalm) => custom(whole(psalm))),
+      [custom(HALF[103][0]), custom(HALF[103][1]), custom(HALF[104][0]), custom(HALF[104][1]), ...[105, 106, 107, 108].map((psalm) => custom(whole(psalm)))],
     ),
     lauds: lauds([142]),
     prime: [slot(cut(17, 26, 51)), slot(whole(18)), slot(whole(19))],

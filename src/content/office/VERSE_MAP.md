@@ -116,8 +116,8 @@ Check a psalm when its Benedictine lining is finished. A title drop alone is not
 - [ ] 100
 - [ ] 101
 - [x] 102
-- [ ] 103
-- [ ] 104
+- [x] 103
+- [x] 104
 - [ ] 105
 - [ ] 106
 - [ ] 107
@@ -1109,6 +1109,118 @@ Second psalm of Saturday Matins, and the praise that follows the previous night'
 | 21 | Gallican 21 |
 | 22 | Gallican 22 |
 
+### Psalmus 103
+
+Saturday Matins (Vigils), the first psalm of the second nocturn, and the longest of the day; the Office divides it. Gallican 1 drops the title *Ipsi David.*. The first three Gallican verses are re-lined into four office lines: *Benedic… veheménter.* ends line 1, *Confessionem et decorem… vestiménto.* joins the rest of Gallican 1 with the head of Gallican 2, *Extendens cælum… superióra ejus.* is next, and *qui ponis nubem…* (Gallican 3) closes the run. Gallican 14 splits at *herbam servituti hominum*, Gallican 15 splits at *ut exhilaret*, Gallican 17 splits at *passeres nidificabunt*, catching the head of 16 and the tail of 17, and Gallican 25–26 re-line the opening of the second half (see below).
+
+The cursus splits the psalm at the divisio into *Psalmus 103 · 1* (Gallican 1–24) and *Psalmus 103 · 2* (Gallican 25–35). Each half is numbered from 1.
+
+#### Psalmus 103 · 1 — Gallican 1–24
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Ipsi David.*, through *magnificatus es vehementer.* |
+| 2 | *Confessionem et decorem* to the end of Gallican 1, then Gallican 2 through *sicut vestimento.* |
+| 3 | *Extendens caelum* to the end of Gallican 2, then Gallican 3 through *superiora eius* |
+| 4 | *qui ponis nubem* to the end of Gallican 3 |
+| 5 | Gallican 4 |
+| 6 | Gallican 5 |
+| 7 | Gallican 6 |
+| 8 | Gallican 7 |
+| 9 | Gallican 8 |
+| 10 | Gallican 9 |
+| 11 | Gallican 10 |
+| 12 | Gallican 11 |
+| 13 | Gallican 12 |
+| 14 | Gallican 13 |
+| 15 | Gallican 14 through *herbam servituti hominum* |
+| 16 | *ut educas* to the end of Gallican 14, then Gallican 15 through *laetificet cor hominis* |
+| 17 | *ut exhilaret* to the end of Gallican 15 |
+| 18 | Gallican 16, then Gallican 17 through *passeres nidificabunt* |
+| 19 | *herodii* to the end of Gallican 17, then Gallican 18 |
+| 20 | Gallican 19 |
+| 21 | Gallican 20 |
+| 22 | Gallican 21 |
+| 23 | Gallican 22 |
+| 24 | Gallican 23 |
+| 25 | Gallican 24 |
+
+#### Psalmus 103 · 2 — Gallican 25–35
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 25 through *quorum non est numerus* |
+| 2 | *animalia* to the end of Gallican 25, then Gallican 26 through *naves pertransibunt* |
+| 3 | *draco iste* to the end of Gallican 26, then Gallican 27 |
+| 4 | Gallican 28 |
+| 5 | Gallican 29 |
+| 6 | Gallican 30 |
+| 7 | Gallican 31 |
+| 8 | Gallican 32 |
+| 9 | Gallican 33 |
+| 10 | Gallican 34 |
+| 11 | Gallican 35 |
+
+### Psalmus 104
+
+Saturday Matins (Vigils), the second psalm of the second nocturn, and also divided by the Office. Gallican 1 drops *Alleluia.*. Only Gallican 18–20 are re-lined: line 18 runs *Humiliaverunt… donec veniret verbum eius.* (Gallican 18 with the head of 19), and line 19 runs *Eloquium Domini… dimisit eum.* (the tail of 19 with all of 20). Gallican 2–17 and 21–45 stay whole.
+
+The cursus splits the psalm at the divisio into *Psalmus 104 · 1* (Gallican 1–22) and *Psalmus 104 · 2* (Gallican 23–45). Each half is numbered from 1.
+
+#### Psalmus 104 · 1 — Gallican 1–22
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Alleluia.* |
+| 2 | Gallican 2 |
+| 3 | Gallican 3 |
+| 4 | Gallican 4 |
+| 5 | Gallican 5 |
+| 6 | Gallican 6 |
+| 7 | Gallican 7 |
+| 8 | Gallican 8 |
+| 9 | Gallican 9 |
+| 10 | Gallican 10 |
+| 11 | Gallican 11 |
+| 12 | Gallican 12 |
+| 13 | Gallican 13 |
+| 14 | Gallican 14 |
+| 15 | Gallican 15 |
+| 16 | Gallican 16 |
+| 17 | Gallican 17 |
+| 18 | Gallican 18, then Gallican 19 through *donec veniret verbum eius.* |
+| 19 | *Eloquium Domini* to the end of Gallican 19, then Gallican 20 |
+| 20 | Gallican 21 |
+| 21 | Gallican 22 |
+
+#### Psalmus 104 · 2 — Gallican 23–45
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 23 |
+| 2 | Gallican 24 |
+| 3 | Gallican 25 |
+| 4 | Gallican 26 |
+| 5 | Gallican 27 |
+| 6 | Gallican 28 |
+| 7 | Gallican 29 |
+| 8 | Gallican 30 |
+| 9 | Gallican 31 |
+| 10 | Gallican 32 |
+| 11 | Gallican 33 |
+| 12 | Gallican 34 |
+| 13 | Gallican 35 |
+| 14 | Gallican 36 |
+| 15 | Gallican 37 |
+| 16 | Gallican 38 |
+| 17 | Gallican 39 |
+| 18 | Gallican 40 |
+| 19 | Gallican 41 |
+| 20 | Gallican 42 |
+| 21 | Gallican 43 |
+| 22 | Gallican 44 |
+| 23 | Gallican 45 |
+
 ## Not entered
 
-Every other psalm, 2, 5, 20–41, 43–49, 51–55, 57–65, 67–74, 76–79, 81–90, 94–101, 103–114, 117–118, 138–140, 142, and 145–147. The Office still shows those in Gallican verses.
+Every other psalm, 2, 5, 20–41, 43–49, 51–55, 57–65, 67–74, 76–79, 81–90, 94–101, 105–114, 117–118, 138–140, 142, and 145–147. The Office still shows those in Gallican verses.

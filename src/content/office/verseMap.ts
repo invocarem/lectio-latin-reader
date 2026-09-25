@@ -2032,4 +2032,191 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
     { pieces: [{ verse: 21 }] },
     { pieces: [{ verse: 22 }] },
   ],
+  103: [
+    {
+      pieces: [
+        {
+          verse: 1,
+          dropLatinPrefix: "Ipsi David. ",
+          englishFrom: "Bless the Lord",
+          latinThrough: "magnificatus es vehementer.",
+          englishThrough: "thou art exceedingly great.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 1, latinFrom: "Confessionem et decorem", englishFrom: "Thou hast put on" },
+        {
+          verse: 2,
+          latinThrough: "sicut vestimento",
+          englishThrough: "as with a garment.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 2, latinFrom: "Extendens caelum", englishFrom: "Who stretchest out" },
+        {
+          verse: 3,
+          latinThrough: "superiora eius",
+          englishThrough: "with water.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 3, latinFrom: "qui ponis nubem", englishFrom: "Who makest the clouds" },
+      ],
+    },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    { pieces: [{ verse: 13 }] },
+    {
+      pieces: [
+        {
+          verse: 14,
+          latinThrough: "herbam servituti hominum",
+          englishThrough: "and herb for the service of men.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 14, latinFrom: "ut educas", englishFrom: "That thou mayst bring" },
+        {
+          verse: 15,
+          latinThrough: "laetificet cor hominis",
+          englishThrough: "to cheer the heart of man.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 15, latinFrom: "ut exhilaret", englishFrom: "That he may make" },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 16 },
+        {
+          verse: 17,
+          latinThrough: "nidificabunt",
+          englishThrough: "make their nests.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 17, latinFrom: "herodii", englishFrom: "The highest of them" },
+        { verse: 18 },
+      ],
+    },
+    { pieces: [{ verse: 19 }] },
+    { pieces: [{ verse: 20 }] },
+    { pieces: [{ verse: 21 }] },
+    { pieces: [{ verse: 22 }] },
+    { pieces: [{ verse: 23 }] },
+    { pieces: [{ verse: 24 }] },
+    {
+      pieces: [
+        {
+          verse: 25,
+          latinThrough: "quorum non est numerus",
+          englishThrough: "without number:",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 25, latinFrom: "animalia", englishFrom: "Creatures little and great" },
+        {
+          verse: 26,
+          latinThrough: "naves pertransibunt",
+          englishThrough: "the ships shall go.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 26, latinFrom: "draco iste", englishFrom: "This sea dragon" },
+        { verse: 27 },
+      ],
+    },
+    { pieces: [{ verse: 28 }] },
+    { pieces: [{ verse: 29 }] },
+    { pieces: [{ verse: 30 }] },
+    { pieces: [{ verse: 31 }] },
+    { pieces: [{ verse: 32 }] },
+    { pieces: [{ verse: 33 }] },
+    { pieces: [{ verse: 34 }] },
+    { pieces: [{ verse: 35 }] },
+  ],
+  104: [
+    { pieces: [{ verse: 1, dropLatinPrefix: "Alleluia. " }] },
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    { pieces: [{ verse: 13 }] },
+    { pieces: [{ verse: 14 }] },
+    { pieces: [{ verse: 15 }] },
+    { pieces: [{ verse: 16 }] },
+    { pieces: [{ verse: 17 }] },
+    {
+      pieces: [
+        { verse: 18 },
+        {
+          verse: 19,
+          latinThrough: "veniret verbum eius",
+          englishThrough: "Until his word came.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 19, latinFrom: "Eloquium Domini", englishFrom: "The word of the Lord" },
+        { verse: 20 },
+      ],
+    },
+    { pieces: [{ verse: 21 }] },
+    { pieces: [{ verse: 22 }] },
+    { pieces: [{ verse: 23 }] },
+    { pieces: [{ verse: 24 }] },
+    { pieces: [{ verse: 25 }] },
+    { pieces: [{ verse: 26 }] },
+    { pieces: [{ verse: 27 }] },
+    { pieces: [{ verse: 28 }] },
+    { pieces: [{ verse: 29 }] },
+    { pieces: [{ verse: 30 }] },
+    { pieces: [{ verse: 31 }] },
+    { pieces: [{ verse: 32 }] },
+    { pieces: [{ verse: 33 }] },
+    { pieces: [{ verse: 34 }] },
+    { pieces: [{ verse: 35 }] },
+    { pieces: [{ verse: 36 }] },
+    { pieces: [{ verse: 37 }] },
+    { pieces: [{ verse: 38 }] },
+    { pieces: [{ verse: 39 }] },
+    { pieces: [{ verse: 40 }] },
+    { pieces: [{ verse: 41 }] },
+    { pieces: [{ verse: 42 }] },
+    { pieces: [{ verse: 43 }] },
+    { pieces: [{ verse: 44 }] },
+    { pieces: [{ verse: 45 }] },
+  ],
 };

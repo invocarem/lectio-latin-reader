@@ -653,6 +653,68 @@ describe("weekly cursus", () => {
     expect(verses[17].english.startsWith("And are mindful")).toBe(true);
   });
 
+  test("Psalm 103 is lined out in its two Saturday Matins halves", () => {
+    const first = sliceVerses({ psalm: 103, from: 1, to: 24 });
+    const second = sliceVerses({ psalm: 103, from: 25, to: 35 });
+    expect(first.map((verse) => verse.n)).toEqual([
+      "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25",
+    ]);
+    expect(second.map((verse) => verse.n)).toEqual([
+      "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11",
+    ]);
+    // first half: title drop and the v1–v3 re-lining
+    expect(first[0].latin.startsWith("Benedic, anima mea, Domino")).toBe(true);
+    expect(first[0].latin.includes("Ipsi David")).toBe(false);
+    expect(first[1].latin.startsWith("Confessionem et decorem")).toBe(true);
+    expect(first[1].latin.endsWith("sicut vestimento")).toBe(true);
+    expect(first[3].latin.startsWith("qui ponis nubem")).toBe(true);
+    // divisio boundary: part 1 ends with the Quam magnificata verse, part 2 begins with Hoc mare
+    expect(first[24].latin.startsWith("Quam magnificata sunt opera tua")).toBe(true);
+    expect(second[0].latin.startsWith("Hoc mare magnum")).toBe(true);
+    expect(second[0].latin.endsWith("quorum non est numerus")).toBe(true);
+    expect(second[1].latin.startsWith("animalia pusilla cum magnis")).toBe(true);
+    expect(second[1].latin.endsWith("naves pertransibunt")).toBe(true);
+    expect(second[2].latin.startsWith("draco iste")).toBe(true);
+    expect(second[10].latin.startsWith("Deficiant peccatores")).toBe(true);
+    expect(second[0].english.startsWith("So is this great sea")).toBe(true);
+    // the cursus splits psalm 103 at Saturday Vigils
+    const satVigils = hourSlots("sat", "vigils");
+    const slices = satVigils.flatMap((slot) => slot.slices.map((s) => [s.psalm, s.from, s.to]));
+    expect(slices).toContainEqual([103, 1, 24]);
+    expect(slices).toContainEqual([103, 25, 35]);
+  });
+
+  test("Psalm 104 is lined out in its two Saturday Matins halves", () => {
+    const first = sliceVerses({ psalm: 104, from: 1, to: 22 });
+    const second = sliceVerses({ psalm: 104, from: 23, to: 45 });
+    expect(first.map((verse) => verse.n)).toEqual([
+      "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21",
+    ]);
+    expect(second.map((verse) => verse.n)).toEqual([
+      "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23",
+    ]);
+    // Alleluia dropped from line 1
+    expect(first[0].latin.startsWith("Confitemini Domino")).toBe(true);
+    expect(first[0].latin.includes("Alleluia")).toBe(false);
+    // re-lining of Gallican 18–20
+    expect(first[17].latin.startsWith("Humiliaverunt")).toBe(true);
+    expect(first[17].latin.endsWith("veniret verbum eius")).toBe(true);
+    expect(first[17].latin.includes("Eloquium Domini")).toBe(false);
+    expect(first[18].latin.startsWith("Eloquium Domini")).toBe(true);
+    expect(first[18].latin.endsWith("dimisit eum.")).toBe(true);
+    // divisio boundary
+    expect(first[20].latin.startsWith("ut erudiret principes")).toBe(true);
+    expect(second[0].latin.startsWith("Et intravit Israël")).toBe(true);
+    expect(second[22].latin.startsWith("ut custodiant iustificationes")).toBe(true);
+    expect(second[0].english.startsWith("And Israel went into Egypt")).toBe(true);
+    expect(first[17].english.endsWith("Until his word came.")).toBe(true);
+    // the cursus splits psalm 104 at Saturday Vigils
+    const satVigils = hourSlots("sat", "vigils");
+    const slices = satVigils.flatMap((slot) => slot.slices.map((s) => [s.psalm, s.from, s.to]));
+    expect(slices).toContainEqual([104, 1, 22]);
+    expect(slices).toContainEqual([104, 23, 45]);
+  });
+
   test("Psalm 4 drops the title verse and splits Gallican verse 2", () => {    const verses = sliceVerses({ psalm: 4 });
     expect(verses.map((verse) => verse.n)).toEqual(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]);
     expect(verses[0].latin.startsWith("Cum invocarem")).toBe(true);
