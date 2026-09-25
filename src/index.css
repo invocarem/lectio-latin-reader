@@ -728,12 +728,61 @@ a {
   padding: 0.35rem 0.5rem;
 }
 
+.office-card {
+  width: min(32rem, 100%);
+}
+
+.office-card section + section {
+  margin-top: 1.75rem;
+}
+
 .office-psalm {
-  margin: 1.2rem 0 0.6rem;
-  font-size: 1rem;
+  margin: 0 0 0.85rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--rule);
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.65rem;
   font-weight: 600;
+  font-style: italic;
+  line-height: 1.15;
+}
+
+.office-verse {
+  display: grid;
+  grid-template-columns: 1.75rem 1fr;
+  column-gap: 0.65rem;
+  row-gap: 0.12rem;
 }
 
 .office-verse + .office-verse {
-  margin-top: 0.85rem;
+  margin-top: 0.7rem;
+}
+
+.office-verse-n {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: baseline;
+  text-align: right;
+  font-variant-numeric: oldstyle-nums;
+  font-size: 0.78rem;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+.office-latin {
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+  font-family: "Source Serif 4", "EB Garamond", serif;
+  font-size: 1.15rem;
+  line-height: 1.45;
+}
+
+.office-english {
+  grid-column: 2;
+  grid-row: 2;
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  line-height: 1.4;
 }

@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { hourSlots } from "../content/office/cursus";
+import { hourSlots, type OfficeSlot } from "../content/office/cursus";
 import { sliceLabel, sliceVerses } from "../content/office/resolve";
 import {
   OFFICE_HOURS,
@@ -50,6 +50,12 @@ const TIME_LABEL: Record<OfficeTime, string> = {
   lent: "Lent",
 };
 
+function progressLabel(slot: OfficeSlot | undefined, index: number, total: number): string {
+  if (!slot || total === 0) return "0 / 0";
+  const name = slot.slices.map((slice) => sliceLabel(slice)).join(" · ");
+  return `${name} · ${index + 1} / ${total}`;
+}
+
 export function Office({ work, onHome }: OfficeProps) {
   const opened = useMemo(() => officeNow(new Date()), []);
   const [weekday, setWeekday] = useState<Weekday>(opened.weekday);
@@ -91,7 +97,7 @@ export function Office({ work, onHome }: OfficeProps) {
 
       <div className="lectio-layout">
         <div className="lectio-stage">
-          <article className="lectio-card">
+          <article className="office-card">
             <p className="lectio-kicker">
               {WEEKDAY_LABEL[weekday]} · {HOUR_LABEL[hour]} · {SEASON_LABEL[opened.season]} ·{" "}
               {TIME_LABEL[opened.time]}
@@ -131,7 +137,8 @@ export function Office({ work, onHome }: OfficeProps) {
                   <h2 className="office-psalm">{sliceLabel(slice)}</h2>
                   {verses.map((verse) => (
                     <div key={verse.n} className="office-verse">
-                      <div className="lectio-latin" lang="la">
+                      <span className="office-verse-n">{verse.n}</span>
+                      <div className="office-latin" lang="la">
                         <LatinText
                           text={verse.latin}
                           unitId={`${slice.psalm}:${verse.n}`}
@@ -139,7 +146,7 @@ export function Office({ work, onHome }: OfficeProps) {
                         />
                       </div>
                       {showEnglish ? (
-                        <p className="lectio-english" lang="en">
+                        <p className="office-english" lang="en">
                           {verse.english}
                         </p>
                       ) : null}
@@ -157,7 +164,7 @@ export function Office({ work, onHome }: OfficeProps) {
           Previous
         </button>
         <span className="lectio-progress">
-          {slots.length === 0 ? "0 / 0" : `${safeIndex + 1} / ${slots.length}`}
+          {progressLabel(current, safeIndex, slots.length)}
         </span>
         <button
           type="button"
