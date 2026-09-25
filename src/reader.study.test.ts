@@ -4,6 +4,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { Reader } from "./components/Reader";
 import { cantica } from "./content/cantica";
 import { gradibus } from "./content/gradibus";
+import { psalter } from "./content/psalter";
 
 function markup(
   work: typeof cantica,
@@ -46,6 +47,20 @@ describe("study reader mount", () => {
     expect(articleCount(html)).toBe(sermon2.length * 2);
     expect(html).toContain('data-unit="cantica:2:');
     expect(html).not.toContain('data-unit="cantica:1:');
+  });
+
+  test("psalter mounts one psalm with its Clementine page open", () => {
+    const units = psalter.study?.units ?? [];
+    const psalm16 = units.filter((unit) => unit.caput === 16);
+    const verse13 = psalm16.find((unit) => unit.section === 13);
+    expect(verse13?.facsimile).toBe("psalter/p-344.png");
+    const html = markup(psalter, verse13?.id ?? psalm16[0].id);
+    expect(articleCount(html)).toBe(psalm16.length * 2);
+    expect(html).toContain('data-unit="psalter:16:');
+    expect(html).not.toContain('data-unit="psalter:17:');
+    expect(html).toContain("/facsimiles/psalter/p-344.png");
+    expect(html).toContain(">p. 344<");
+    expect(html).toContain("facsimile-viewport");
   });
 
   test("de gradibus still mounts the whole treatise with the plate open", () => {

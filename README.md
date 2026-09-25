@@ -82,7 +82,7 @@ The treatise is split into 82 source units: retractatio, preface, twenty-two cha
 
 | Path | Role |
 | --- | --- |
-| [`public/facsimiles/`](public/facsimiles/) | Per-work PL plates: [`gradibus/`](public/facsimiles/gradibus/) (`pl-939-940.png` retractatio, `pl-941-942.png` treatise) and [`songs/`](public/facsimiles/songs/) (PL 183 sermons) |
+| [`public/facsimiles/`](public/facsimiles/) | Per-work plates: [`gradibus/`](public/facsimiles/gradibus/) (`pl-939-940.png` retractatio, `pl-941-942.png` treatise), [`songs/`](public/facsimiles/songs/) (PL 183 sermons), and [`psalter/`](public/facsimiles/psalter/) (Vercellone 1861 Clementine, pp. 340–387) |
 | [`src/content/gradibus/`](src/content/gradibus/) | The *De gradibus* work: `de-gradibus.json` (aligned Latin, English, plate references, lectio `chunks`), `latin-units.json` (source), `lexicon/` (Bernard word list) |
 | [`src/content/canticum/`](src/content/canticum/) | The Song of Songs: `latin.md` + `scaffold.ts`/`work.ts`, `renderings/douay.json`, `lexicon/` |
 | [`src/content/cantica/`](src/content/cantica/) | Bernard's *Sermones in Cantica Canticorum*: `latin.md` + `scaffold.ts`/`work.ts`, `renderings/close.json`, `columns.json` (PL 183 plate map), `lexicon/` |
