@@ -84,7 +84,8 @@ function joinLine(line: OfficeLine, stored: Map<number, StoredVerse>, officeNumb
 
 /**
  * Verses of a Gallican slice, lined out for the Office when this psalm
- * has an entry in VERSE_MAP. The Latin stays in the psalter chapter.
+ * has an entry in VERSE_MAP. Lines outside the slice are dropped, and the
+ * lines that remain are numbered from 1. The Latin stays in the psalter chapter.
  */
 export function sliceVerses(slice: PsalmSlice): OfficeVerse[] {
   const from = slice.from ?? 1;
@@ -109,11 +110,11 @@ function lineOut(stored: Map<number, StoredVerse>, map: VerseMapEntry | undefine
   if (!map) return asStored(stored);
   if (!Array.isArray(map)) return asStored(stored, map.dropLatinPrefix);
   const lines: OfficeVerse[] = [];
-  map.forEach((line, index) => {
+  for (const line of map) {
     const verses = line.pieces ? line.pieces.map((piece) => piece.verse) : line.sources ?? [];
-    if (!verses.every((n) => stored.has(n))) return;
-    lines.push(joinLine(line, stored, index + 1));
-  });
+    if (!verses.every((n) => stored.has(n))) continue;
+    lines.push(joinLine(line, stored, lines.length + 1));
+  }
   return lines;
 }
 

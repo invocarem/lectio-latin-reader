@@ -265,6 +265,213 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
     },
     { pieces: [{ verse: 15 }] },
   ],
+  17: [
+    {
+      pieces: [
+        { verse: 2 },
+        {
+          verse: 3,
+          latinThrough: "et liberator meus.",
+          englishThrough: "and my deliverer.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 3,
+          latinFrom: "Deus meus adiutor meus",
+          latinThrough: "et sperabo in eum ;",
+          englishFrom: "My God is my helper",
+          englishThrough: "will I put my trust.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 3, latinFrom: "protector meus", englishFrom: "My protector" },
+      ],
+    },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinThrough: "clamavi :",
+          englishThrough: "cried to my God:",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 7, latinFrom: "et exaudivit", englishFrom: "And he heard" },
+      ],
+    },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    { pieces: [{ verse: 13 }] },
+    { pieces: [{ verse: 14 }] },
+    { pieces: [{ verse: 15 }] },
+    {
+      pieces: [
+        {
+          verse: 16,
+          latinThrough: "fundamenta orbis terrarum,",
+          englishThrough: "were discovered:",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 16, latinFrom: "ab increpatione tua", englishFrom: "At thy rebuke" },
+      ],
+    },
+    { pieces: [{ verse: 17 }] },
+    { pieces: [{ verse: 18 }] },
+    { pieces: [{ verse: 19 }] },
+    { pieces: [{ verse: 20 }] },
+    { pieces: [{ verse: 21 }] },
+    { pieces: [{ verse: 22 }] },
+    { pieces: [{ verse: 23 }] },
+    { pieces: [{ verse: 24 }] },
+    { pieces: [{ verse: 25 }] },
+    { pieces: [{ verse: 26 }] },
+    { pieces: [{ verse: 27 }] },
+    { pieces: [{ verse: 28 }] },
+    { pieces: [{ verse: 29 }] },
+    { pieces: [{ verse: 30 }] },
+    { pieces: [{ verse: 31 }] },
+    { pieces: [{ verse: 32 }] },
+    { pieces: [{ verse: 33 }] },
+    { pieces: [{ verse: 34 }] },
+    { pieces: [{ verse: 35 }] },
+    {
+      pieces: [
+        {
+          verse: 36,
+          latinThrough: "suscepit me,",
+          englishThrough: "held me up:",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 36,
+          latinFrom: "et disciplina tua correxit",
+          englishFrom: "And thy discipline hath corrected",
+        },
+      ],
+    },
+    { pieces: [{ verse: 37 }] },
+    { pieces: [{ verse: 38 }] },
+    { pieces: [{ verse: 39 }] },
+    { pieces: [{ verse: 40 }] },
+    { pieces: [{ verse: 41 }] },
+    { pieces: [{ verse: 42 }] },
+    { pieces: [{ verse: 43 }] },
+    { pieces: [{ verse: 44 }] },
+    { pieces: [{ verse: 45 }] },
+    { pieces: [{ verse: 46 }] },
+    { pieces: [{ verse: 47 }] },
+    { pieces: [{ verse: 48 }] },
+    { pieces: [{ verse: 49 }] },
+    { pieces: [{ verse: 50 }] },
+    { pieces: [{ verse: 51 }] },
+  ],
+  18: [
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    {
+      pieces: [
+        {
+          verse: 6,
+          latinThrough: "de thalamo suo.",
+          englishThrough: "coming out of his bridechamber,",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 6, latinFrom: "Exsultavit ut gigas", englishFrom: "Hath rejoiced" },
+        {
+          verse: 7,
+          latinThrough: "egressio eius.",
+          englishThrough: "end of heaven,",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 7, latinFrom: "Et occursus eius", englishFrom: "And his circuit" },
+      ],
+    },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    {
+      pieces: [
+        { verse: 13 },
+        {
+          verse: 14,
+          latinThrough: "parce servo tuo.",
+          englishThrough: "spare thy servant.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 14, latinFrom: "Si mei non fuerint", englishFrom: "If they shall have no dominion" },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 15,
+          latinThrough: "in conspectu tuo semper.",
+          englishThrough: "in thy sight.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 15, latinFrom: "Domine, adiutor meus", englishFrom: "O Lord, my helper" },
+      ],
+    },
+  ],
+  19: [
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinThrough: "christum suum.",
+          englishThrough: "saved his anointed.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 7, latinFrom: "Exaudiet illum", englishFrom: "He will hear him" },
+      ],
+    },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+  ],
   12: [
     { pieces: [{ verse: 1, dropLatinPrefix: "In finem. Psalmus David. " }] },
     { pieces: [{ verse: 2 }] },

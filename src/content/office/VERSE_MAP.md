@@ -30,9 +30,9 @@ Check a psalm when its Benedictine lining is finished. A title drop alone is not
 - [x] 14
 - [x] 15
 - [x] 16
-- [ ] 17
-- [ ] 18
-- [ ] 19
+- [x] 17
+- [x] 18
+- [x] 19
 - [ ] 20
 - [ ] 21
 - [ ] 22
@@ -277,6 +277,107 @@ The office lines split the fifteen stored Gallican verses into seventeen office 
 | 16 | *Saturati sunt* to the end of Gallican 14 |
 | 17 | Gallican 15 |
 
+### Psalmus 17
+
+One map for the whole psalm. Friday Prime keeps Gallican 2–25 and Saturday Prime keeps Gallican 26–51; each half numbers the lines it keeps from 1. Gallican 1 is the title and stays outside both slices. Gallican 3 splits into three lines, Gallican 7 and 16 each split in two, and Gallican 36 splits after *suscepit me*.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 2, then Gallican 3 through *et liberator meus.* |
+| 2 | *Deus meus adiutor meus* through *et sperabo in eum ;* |
+| 3 | *protector meus* to the end of Gallican 3 |
+| 4 | Gallican 4 |
+| 5 | Gallican 5 |
+| 6 | Gallican 6 |
+| 7 | Gallican 7 through *clamavi :* |
+| 8 | *et exaudivit* to the end of Gallican 7 |
+| 9 | Gallican 8 |
+| 10 | Gallican 9 |
+| 11 | Gallican 10 |
+| 12 | Gallican 11 |
+| 13 | Gallican 12 |
+| 14 | Gallican 13 |
+| 15 | Gallican 14 |
+| 16 | Gallican 15 |
+| 17 | Gallican 16 through *fundamenta orbis terrarum,* |
+| 18 | *ab increpatione tua* to the end of Gallican 16 |
+| 19 | Gallican 17 |
+| 20 | Gallican 18 |
+| 21 | Gallican 19 |
+| 22 | Gallican 20 |
+| 23 | Gallican 21 |
+| 24 | Gallican 22 |
+| 25 | Gallican 23 |
+| 26 | Gallican 24 |
+| 27 | Gallican 25 |
+| 28 | Gallican 26. Saturday Prime line 1, *Cum sancto sanctus eris* |
+| 29 | Gallican 27 |
+| 30 | Gallican 28 |
+| 31 | Gallican 29 |
+| 32 | Gallican 30 |
+| 33 | Gallican 31 |
+| 34 | Gallican 32 |
+| 35 | Gallican 33 |
+| 36 | Gallican 34 |
+| 37 | Gallican 35 |
+| 38 | Gallican 36 through *suscepit me,* |
+| 39 | *et disciplina tua correxit* to the end of Gallican 36 |
+| 40 | Gallican 37 |
+| 41 | Gallican 38 |
+| 42 | Gallican 39 |
+| 43 | Gallican 40 |
+| 44 | Gallican 41 |
+| 45 | Gallican 42 |
+| 46 | Gallican 43 |
+| 47 | Gallican 44 |
+| 48 | Gallican 45 |
+| 49 | Gallican 46 |
+| 50 | Gallican 47 |
+| 51 | Gallican 48 |
+| 52 | Gallican 49 |
+| 53 | Gallican 50 |
+| 54 | Gallican 51 |
+
+### Psalmus 18
+
+Shown whole at Saturday Prime. Gallican 1 is the title *In finem. Psalmus David.* and is dropped. Gallican 6 splits at *Exsultavit*, and that second half joins the opening of Gallican 7 through *egressio eius.* Gallican 13 joins Gallican 14 through *parce servo tuo.* Gallican 15 splits at *Domine, adiutor meus*.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 2 |
+| 2 | Gallican 3 |
+| 3 | Gallican 4 |
+| 4 | Gallican 5 |
+| 5 | Gallican 6 through *de thalamo suo.* |
+| 6 | *Exsultavit ut gigas* to the end of Gallican 6, then Gallican 7 through *egressio eius.* |
+| 7 | *Et occursus eius* to the end of Gallican 7 |
+| 8 | Gallican 8 |
+| 9 | Gallican 9 |
+| 10 | Gallican 10 |
+| 11 | Gallican 11 |
+| 12 | Gallican 12 |
+| 13 | Gallican 13, then Gallican 14 through *parce servo tuo.* |
+| 14 | *Si mei non fuerint* to the end of Gallican 14 |
+| 15 | Gallican 15 through *in conspectu tuo semper.* |
+| 16 | *Domine, adiutor meus* to the end of Gallican 15 |
+
+### Psalmus 19
+
+Shown whole at Saturday Prime, the last psalm of that hour. Gallican 1 is the title *In finem. Psalmus David.* and is dropped. Gallican 7 splits after *christum suum.*
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 2 |
+| 2 | Gallican 3 |
+| 3 | Gallican 4 |
+| 4 | Gallican 5 |
+| 5 | Gallican 6 |
+| 6 | Gallican 7 through *christum suum.* |
+| 7 | *Exaudiet illum* to the end of Gallican 7 |
+| 8 | Gallican 8 |
+| 9 | Gallican 9 |
+| 10 | Gallican 10 |
+
 ### Psalmus 119
 
 | Office line | Gallican verses | Latin |
@@ -367,4 +468,4 @@ Shown at Compline. Splits Gallican verse 1: line 1 drops *Canticum graduum.* and
 
 ## Not entered
 
-Every other psalm, 2–11, 17–118, and 134–150. The Office still shows those in Gallican verses.
+Every other psalm, 2–11, 20–118, and 134–150. The Office still shows those in Gallican verses.
