@@ -18,7 +18,7 @@ The Rule’s text in `src/content/rule/latin.md` (chapters 8–18) is the author
 
 ## Boundary
 
-- One weekly psalm cursus. Tuesday Prime is always Psalms 7, 8, and Psalm 9 verses 2–21.
+- One weekly psalm cursus. Tuesday Prime is always Psalms 7, 8, and Psalm 9 verses 2–19.
 - Winter (kalends of November to Easter) and summer (Easter to the kalends of November) change only ferial Vigils lessons: three lessons from the book in winter, one short Old Testament lesson by heart in summer (chapters 9–10). Sunday Vigils stay the same (chapter 11).
 - Alleluia follows chapter 15: Easter to Pentecost; Pentecost to the beginning of Lent; Sundays outside Lent. Lent does not replace the psalms.
 - A solemnity uses the Sunday order (chapter 14). Only psalms, antiphons, and lessons may be proper. No feast ranks, octaves, or commemorations.
@@ -45,8 +45,8 @@ Psalm numbers are Gallican, as in `latin.md`. A letter means the psalm is split.
 | Day | Prime |
 | --- | --- |
 | Monday | 1; 2; 6 |
-| Tuesday | 7; 8; 9 verses 2–21 |
-| Wednesday | 9 verses 22–39; 10; 11 |
+| Tuesday | 7; 8; 9 verses 2–19 |
+| Wednesday | 9 verses 20–39; 10; 11 |
 | Thursday | 12; 13; 14 |
 | Friday | 15; 16; 17 verses 2–25 |
 | Saturday | 17 verses 26–51; 18; 19 |
@@ -125,7 +125,7 @@ After section 4 the office matches what the Rule describes. Sections 5 and 6 fil
 - [x] Clock, as specified above: 10:19 on 24 Sep 2026 opens Thursday Terce, summer, after Pentecost.
 - [x] `ReaderMode` includes `"office"`. Home shows Office on the psalter only. `App` and `resolveSession` open it. Other works cannot request it. The reader opens on that clock.
 - [x] Cursus table in `src/content/office/`, psalm slices only, ranges resolved from the Gallican chapters.
-- [x] Prime cuts: Psalm 9 at 2–21 and 22–39; Psalm 17 at 2–25 and 26–51; Psalm 118 in sections of eight verses.
+- [x] Prime cuts: Psalm 9 at 2–19 and 20–39; Psalm 17 at 2–25 and 26–51; Psalm 118 in sections of eight verses.
 - [x] Vespers: 115 with 116; 138, 143, and 144 each in two ranges taken from `latin.md`.
 - [x] Vigils table above, marked as custom.
 - [x] Office reader: choose weekday and hour, walk the slices one at a time.
