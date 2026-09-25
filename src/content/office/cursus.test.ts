@@ -626,6 +626,33 @@ describe("weekly cursus", () => {
     expect(verses[2].english.startsWith("For thy mercy")).toBe(true);
   });
 
+  test("Psalm 102 drops its title and joins Gallican 13–15 and 17–18", () => {
+    const verses = sliceVerses({ psalm: 102 });
+    expect(verses.map((verse) => verse.n)).toEqual([
+      "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22",
+    ]);
+    expect(verses[0].latin.startsWith("Benedic, anima mea, Domino")).toBe(true);
+    expect(verses[0].latin.includes("Ipsi David")).toBe(false);
+    expect(verses[0].english.startsWith("Bless the Lord")).toBe(true);
+    // line 13 = Gallican 13 + head of 14
+    expect(verses[12].latin.startsWith("Quomodo miseretur pater")).toBe(true);
+    expect(verses[12].latin.endsWith("figmentum nostrum")).toBe(true);
+    expect(verses[12].latin.includes("recordatus est")).toBe(false);
+    // line 14 = tail of 14 + Gallican 15
+    expect(verses[13].latin.startsWith("recordatus est quoniam pulvis")).toBe(true);
+    expect(verses[13].latin.endsWith("sic efflorebit :")).toBe(true);
+    // line 16/17/18 split of 17 and 18
+    expect(verses[15].latin.startsWith("Misericordia autem Domini")).toBe(true);
+    expect(verses[15].latin.endsWith("super timentes eum.")).toBe(true);
+    expect(verses[16].latin.startsWith("Et iustitia illius")).toBe(true);
+    expect(verses[16].latin.endsWith("testamentum eius")).toBe(true);
+    expect(verses[17].latin.startsWith("et memores sunt mandatorum")).toBe(true);
+    expect(verses[17].latin.endsWith("ad faciendum ea.")).toBe(true);
+    expect(verses[21].latin.startsWith("Benedicite Domino, omnia opera")).toBe(true);
+    expect(verses[16].english.startsWith("And his justice")).toBe(true);
+    expect(verses[17].english.startsWith("And are mindful")).toBe(true);
+  });
+
   test("Psalm 4 drops the title verse and splits Gallican verse 2", () => {    const verses = sliceVerses({ psalm: 4 });
     expect(verses.map((verse) => verse.n)).toEqual(["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]);
     expect(verses[0].latin.startsWith("Cum invocarem")).toBe(true);

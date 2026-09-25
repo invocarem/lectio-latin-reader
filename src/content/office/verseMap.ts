@@ -1973,4 +1973,63 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
     { pieces: [{ verse: 7 }] },
     { pieces: [{ verse: 8 }] },
   ],
+  102: [
+    { pieces: [{ verse: 1, dropLatinPrefix: "Ipsi David. ", englishFrom: "Bless the Lord" }] },
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    {
+      pieces: [
+        { verse: 13 },
+        {
+          verse: 14,
+          latinThrough: "figmentum nostrum",
+          englishThrough: "For he knoweth our frame.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 14, latinFrom: "recordatus est", englishFrom: "He remembereth that we are dust" },
+        { verse: 15 },
+      ],
+    },
+    { pieces: [{ verse: 16 }] },
+    {
+      pieces: [
+        {
+          verse: 17,
+          latinThrough: "super timentes eum.",
+          englishThrough: "upon them that fear him:",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 17, latinFrom: "Et iustitia illius", englishFrom: "And his justice" },
+        {
+          verse: 18,
+          latinThrough: "testamentum eius",
+          englishThrough: "keep his covenant,",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 18, latinFrom: "et memores sunt mandatorum", englishFrom: "And are mindful" },
+      ],
+    },
+    { pieces: [{ verse: 19 }] },
+    { pieces: [{ verse: 20 }] },
+    { pieces: [{ verse: 21 }] },
+    { pieces: [{ verse: 22 }] },
+  ],
 };

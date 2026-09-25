@@ -115,7 +115,7 @@ Check a psalm when its Benedictine lining is finished. A title drop alone is not
 - [ ] 99
 - [ ] 100
 - [ ] 101
-- [ ] 102
+- [x] 102
 - [ ] 103
 - [ ] 104
 - [ ] 105
@@ -1080,6 +1080,35 @@ Wednesday Vespers, the fourth and last psalm of the hour. Gallican 1 drops the t
 | 8 | Gallican 7 |
 | 9 | Gallican 8 |
 
+### Psalmus 102
+
+Second psalm of Saturday Matins, and the praise that follows the previous night's penitential psalm. Gallican 1 drops the title *Ipsi David.* from its start. The Benedictine re-lining runs from Gallican 13 through 18: Gallican 13 joins Gallican 14 through *figmentum nostrum*; the rest of 14 (*recordatus est… pulvis sumus*) joins Gallican 15; Gallican 17 splits at *super timentes eum.*, its second half — *Et iustitia illius…* — joins Gallican 18 through *testamentum eius*, and the rest of 18 (*et memores sunt mandatorum…*) is the last of that run. Gallican 2–12, 16, and 19–22 stay whole. Twenty-two office lines.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Ipsi David.* |
+| 2 | Gallican 2 |
+| 3 | Gallican 3 |
+| 4 | Gallican 4 |
+| 5 | Gallican 5 |
+| 6 | Gallican 6 |
+| 7 | Gallican 7 |
+| 8 | Gallican 8 |
+| 9 | Gallican 9 |
+| 10 | Gallican 10 |
+| 11 | Gallican 11 |
+| 12 | Gallican 12 |
+| 13 | Gallican 13, then Gallican 14 through *figmentum nostrum* |
+| 14 | *recordatus est* to the end of Gallican 14, then Gallican 15 |
+| 15 | Gallican 16 |
+| 16 | Gallican 17 through *super timentes eum.* |
+| 17 | *Et iustitia illius* to the end of Gallican 17, then Gallican 18 through *testamentum eius* |
+| 18 | *et memores sunt mandatorum* to the end of Gallican 18 |
+| 19 | Gallican 19 |
+| 20 | Gallican 20 |
+| 21 | Gallican 21 |
+| 22 | Gallican 22 |
+
 ## Not entered
 
-Every other psalm, 2, 5, 20–41, 43–49, 51–55, 57–65, 67–74, 76–79, 81–90, 94–114, 117–118, 138–140, 142, and 145–147. The Office still shows those in Gallican verses.
+Every other psalm, 2, 5, 20–41, 43–49, 51–55, 57–65, 67–74, 76–79, 81–90, 94–101, 103–114, 117–118, 138–140, 142, and 145–147. The Office still shows those in Gallican verses.
