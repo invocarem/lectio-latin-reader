@@ -269,7 +269,7 @@ export function Reader({ work, focusId, onFocus, onHome }: ReaderProps) {
             <header>
               <span className="facsimile-title">
                 <span>Plate</span>
-                <span>cols. {plateLabel(current)}</span>
+                <span>{plateCaption(current)}</span>
               </span>
               <span
                 className="facsimile-zoom"
@@ -317,7 +317,7 @@ export function Reader({ work, focusId, onFocus, onHome }: ReaderProps) {
                 <img
                   ref={zoomImgRef}
                   src={`/facsimiles/${current.facsimile}`}
-                  alt={`Patrologia Latina plate ${current.facsimile}`}
+                  alt={plateCaption(current)}
                   draggable={false}
                   style={{ width: `${zoom * 100}%` }}
                 />
@@ -383,10 +383,12 @@ function shortTitle(title: string): string {
     .replace(/^Praefatio.*/, "Praefatio");
 }
 
-function plateLabel(unit: Unit): string {
-  const match = unit.facsimile?.match(/pl-(\d+)-(\d+)/);
-  if (match) return `${match[1]}–${match[2]}`;
-  return String(unit.column);
+function plateCaption(unit: Unit): string {
+  const columns = unit.facsimile?.match(/pl-(\d+)-(\d+)/);
+  if (columns) return `cols. ${columns[1]}–${columns[2]}`;
+  const page = unit.facsimile?.match(/p-(\d+)\.png$/);
+  if (page) return `p. ${page[1]}`;
+  return `cols. ${unit.column}`;
 }
 
 function chapterKey(
