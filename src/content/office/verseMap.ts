@@ -360,7 +360,65 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
     { pieces: [{ verse: 9 }] },
   ],
   90: dropTitle("Laus cantici David. "),
-  13: dropTitle("In finem. Psalmus David. "),
+  13: [
+    {
+      pieces: [
+        {
+          verse: 1,
+          dropLatinPrefix: "In finem. Psalmus David. ",
+          latinThrough: "Non est Deus.",
+          englishFrom: "The fool hath said",
+          englishThrough: "There is no God.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 1, latinFrom: "Corrupti sunt", englishFrom: "They are corrupt" },
+      ],
+    },
+    { pieces: [{ verse: 2 }] },
+    {
+      pieces: [
+        {
+          verse: 3,
+          latinThrough: "non est usque ad unum.",
+          englishThrough: "no not one.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 3,
+          latinFrom: "Sepulchrum patens",
+          latinThrough: "sub labiis eorum,",
+          englishFrom: "Their throat",
+          englishThrough: "under their lips.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 3,
+          latinFrom: "quorum os",
+          latinThrough: "ad effundendum sanguinem.",
+          englishFrom: "Their mouth",
+          englishThrough: "to shed blood.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 3, latinFrom: "Contritio et infelicitas", englishFrom: "Destruction" },
+      ],
+    },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+  ],
   14: [
     {
       pieces: [
@@ -733,6 +791,674 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
     { pieces: [{ verse: 8 }] },
     { pieces: [{ verse: 9 }] },
     { pieces: [{ verse: 10 }] },
+  ],
+  20: [
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    { pieces: [{ verse: 13 }] },
+    { pieces: [{ verse: 14 }] },
+  ],
+  21: [
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    {
+      pieces: [
+        { verse: 11 },
+        {
+          verse: 12,
+          latinThrough: "ne discesseris a me,",
+          englishThrough: "Depart not from me.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 12,
+          latinFrom: "quoniam tribulatio proxima est",
+          englishFrom: "For tribulation is very near",
+        },
+      ],
+    },
+    { pieces: [{ verse: 13 }] },
+    { pieces: [{ verse: 14 }] },
+    {
+      pieces: [
+        {
+          verse: 15,
+          latinThrough: "omnia ossa mea :",
+          englishThrough: "all my bones are scattered.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 15,
+          latinFrom: "factum est cor meum",
+          englishFrom: "My heart is become like wax",
+        },
+      ],
+    },
+    { pieces: [{ verse: 16 }] },
+    {
+      pieces: [
+        {
+          verse: 17,
+          latinThrough: "obsedit me.",
+          englishThrough: "hath besieged me.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 17,
+          latinFrom: "Foderunt manus meas",
+          englishFrom: "They have dug my hands and feet.",
+        },
+        {
+          verse: 18,
+          latinThrough: "dinumeraverunt omnia ossa mea.",
+          englishThrough: "numbered all my bones.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 18,
+          latinFrom: "Ipsi vero consideraverunt",
+          englishFrom: "And they have looked and stared upon me.",
+        },
+        { verse: 19 },
+      ],
+    },
+    { pieces: [{ verse: 20 }] },
+    { pieces: [{ verse: 21 }] },
+    { pieces: [{ verse: 22 }] },
+    { pieces: [{ verse: 23 }] },
+    { pieces: [{ verse: 24 }] },
+    {
+      pieces: [
+        {
+          verse: 25,
+          latinThrough: "deprecationem pauperis,",
+          englishThrough: "the poor man.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 25,
+          latinFrom: "nec avertit faciem suam",
+          englishFrom: "Neither hath he turned away",
+        },
+      ],
+    },
+    { pieces: [{ verse: 26 }] },
+    { pieces: [{ verse: 27 }] },
+    {
+      pieces: [
+        {
+          verse: 28,
+          latinThrough: "universi fines terrae ;",
+          englishThrough: "converted to the Lord:",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 28,
+          latinFrom: "et adorabunt in conspectu eius",
+          englishFrom: "And all the kindreds",
+        },
+      ],
+    },
+    { pieces: [{ verse: 29 }] },
+    { pieces: [{ verse: 30 }] },
+    { pieces: [{ verse: 31 }] },
+    { pieces: [{ verse: 32 }] },
+  ],
+  22: [
+    {
+      pieces: [
+        {
+          verse: 1,
+          dropLatinPrefix: "Psalmus David. ",
+          latinThrough: "et nihil mihi deerit :",
+          englishFrom: "The Lord ruleth me",
+          englishThrough: "I shall want nothing.",
+        },
+        {
+          verse: 2,
+          latinThrough: "ibi me collocavit.",
+          englishFrom: "He hath set me in a place of pasture",
+          englishThrough: "a place of pasture.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 2,
+          latinFrom: "Super aquam refectionis",
+          latinThrough: "educavit me ;",
+          englishFrom: "He hath brought me up",
+          englishThrough: "on the water of refreshment:",
+        },
+        {
+          verse: 3,
+          latinThrough: "animam meam convertit.",
+          englishThrough: "He hath converted my soul.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 3,
+          latinFrom: "Deduxit me super semitas iustitiae",
+          englishFrom: "He hath led me",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 4,
+          latinThrough: "quoniam tu mecum es.",
+          englishThrough: "for thou art with me.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 4, latinFrom: "Virga tua", englishFrom: "Thy rod" },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 5,
+          latinThrough: "qui tribulant me ;",
+          englishThrough: "them that afflict me.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 5,
+          latinFrom: "impinguasti in oleo caput meum",
+          englishFrom: "Thou hast anointed my head with oil",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 6,
+          latinThrough: "omnibus diebus vitae meae ;",
+          englishThrough: "all the days of my life.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 6, latinFrom: "et ut inhabitem", englishFrom: "And that I may dwell" },
+      ],
+    },
+  ],
+  25: dropTitle("In finem. Psalmus David. "),
+  26: dropTitle("Psalmus David, priusquam liniretur. "),
+  27: [
+    {
+      pieces: [
+        {
+          verse: 1,
+          dropLatinPrefix: "Psalmus ipsi David. ",
+          englishFrom: "Unto thee will I cry",
+        },
+      ],
+    },
+    { pieces: [{ verse: 2 }] },
+    {
+      pieces: [
+        { verse: 3, latinThrough: "ne perdas me ;", englishThrough: "destroy me not:" },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 3, latinFrom: "qui loquuntur pacem", englishFrom: "Who speak peace" },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 4,
+          latinThrough: "adinventionum ipsorum.",
+          englishThrough: "their inventions.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 4,
+          latinFrom: "Secundum opera manuum eorum",
+          englishFrom: "According to the works of their hands",
+        },
+      ],
+    },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    {
+      pieces: [
+        { verse: 7, latinThrough: "adiutus sum :", englishThrough: "I have been helped." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 7, latinFrom: "et refloruit caro mea", englishFrom: "And my flesh" },
+      ],
+    },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+  ],
+  28: [
+    {
+      pieces: [
+        {
+          verse: 1,
+          dropLatinPrefix: "Psalmus David, in consummatione tabernaculi. ",
+          englishFrom: "Bring to the Lord",
+        },
+      ],
+    },
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }, { verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+  ],
+  29: [
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    {
+      pieces: [
+        {
+          verse: 6,
+          latinThrough: "in voluntate eius :",
+          englishThrough: "in his good will.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 6,
+          latinFrom: "ad vesperum demorabitur",
+          englishFrom: "In the evening weeping",
+        },
+      ],
+    },
+    { pieces: [{ verse: 7 }] },
+    {
+      pieces: [
+        {
+          verse: 8,
+          latinThrough: "decori meo virtutem ;",
+          englishThrough: "to my beauty.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 8,
+          latinFrom: "avertisti faciem tuam",
+          englishFrom: "Thou turnedst away thy face",
+        },
+      ],
+    },
+    { pieces: [{ verse: 9 }] },
+    {
+      pieces: [
+        {
+          verse: 10,
+          latinThrough: "in corruptionem ?",
+          englishThrough: "to corruption?",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 10,
+          latinFrom: "numquid confitebitur",
+          englishFrom: "Shall dust confess",
+        },
+      ],
+    },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    { pieces: [{ verse: 13 }] },
+  ],
+  30: [
+    { pieces: [{ verse: 2 }] },
+    {
+      pieces: [
+        {
+          verse: 3,
+          latinThrough: "accelera ut eruas me.",
+          englishThrough: "make haste to deliver me.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 3,
+          latinFrom: "Esto mihi in Deum protectorem",
+          englishFrom: "Be thou unto me a God",
+        },
+      ],
+    },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinThrough: "supervacue ;",
+          englishThrough: "to no purpose.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinFrom: "ego autem in Domino speravi.",
+          englishFrom: "But I have hoped in the Lord:",
+        },
+        {
+          verse: 8,
+          latinThrough: "in misericordia tua,",
+          englishThrough: "in thy mercy.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 8,
+          latinFrom: "quoniam respexisti humilitatem meam",
+          englishFrom: "For thou hast regarded my humility",
+        },
+      ],
+    },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    {
+      pieces: [
+        {
+          verse: 11,
+          latinThrough: "in gemitibus.",
+          englishThrough: "in sighs.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 11,
+          latinFrom: "Infirmata est in paupertate",
+          englishFrom: "My strength is weakened",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 12,
+          latinThrough: "et timor notis meis ;",
+          englishThrough: "and a fear to my acquaintance.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 12,
+          latinFrom: "qui videbant me foras fugerunt a me.",
+          englishFrom: "They that saw me without fled from me.",
+        },
+        {
+          verse: 13,
+          latinThrough: "tamquam mortuus a corde ;",
+          englishThrough: "from the heart.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 13,
+          latinFrom: "factus sum tamquam vas perditum",
+          englishFrom: "I am become as a vessel that is destroyed.",
+        },
+        {
+          verse: 14,
+          latinThrough: "in circuitu.",
+          englishThrough: "round about.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 14,
+          latinFrom: "In eo dum convenirent",
+          englishFrom: "While they assembled together against me",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 15 },
+        {
+          verse: 16,
+          latinThrough: "sortes meae :",
+          englishThrough: "in thy hands.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 16,
+          latinFrom: "eripe me de manu",
+          englishFrom: "Deliver me out of the hands",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 17 },
+        {
+          verse: 18,
+          latinThrough: "quoniam invocavi te.",
+          englishThrough: "I have called upon thee.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 18,
+          latinFrom: "Erubescant impii",
+          englishFrom: "Let the wicked be ashamed",
+        },
+        {
+          verse: 19,
+          latinThrough: "labia dolosa,",
+          englishThrough: "be made dumb.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 19,
+          latinFrom: "quae loquuntur adversus iustum",
+          englishFrom: "Which speak iniquity",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 20,
+          latinThrough: "timentibus te ;",
+          englishThrough: "that fear thee!",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 20,
+          latinFrom: "perfecisti eis qui sperant",
+          englishFrom: "Which thou hast wrought",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 21,
+          latinThrough: "conturbatione hominum ;",
+          englishThrough: "disturbance of men.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 21,
+          latinFrom: "proteges eos in tabernaculo",
+          englishFrom: "Thou shalt protect them",
+        },
+      ],
+    },
+    { pieces: [{ verse: 22 }] },
+    {
+      pieces: [
+        {
+          verse: 23,
+          latinThrough: "oculorum tuorum :",
+          englishThrough: "before thy eyes.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 23,
+          latinFrom: "ideo exaudisti vocem",
+          englishFrom: "Therefore thou hast heard",
+        },
+      ],
+    },
+    { pieces: [{ verse: 24 }] },
+    { pieces: [{ verse: 25 }] },
+  ],
+  31: [
+    {
+      pieces: [
+        {
+          verse: 1,
+          dropLatinPrefix: "Ipsi David intellectus. ",
+          englishFrom: "Blessed are they",
+        },
+      ],
+    },
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    {
+      pieces: [
+        {
+          verse: 5,
+          latinThrough: "non abscondi.",
+          englishThrough: "not concealed.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 5, latinFrom: "Dixi :", englishFrom: "I said I will confess" },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 6,
+          latinThrough: "in tempore opportuno.",
+          englishThrough: "a seasonable time.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 6, latinFrom: "Verumtamen", englishFrom: "And yet" },
+      ],
+    },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    {
+      pieces: [
+        {
+          verse: 9,
+          latinThrough: "non est intellectus.",
+          englishThrough: "no understanding.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 9, latinFrom: "In camo et freno", englishFrom: "With bit and bridle" },
+      ],
+    },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
   ],
   42: [
     {

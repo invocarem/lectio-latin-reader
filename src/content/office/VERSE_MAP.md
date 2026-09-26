@@ -26,25 +26,25 @@ Check a psalm when its Benedictine lining is finished. A title drop alone is not
 - [x] 10
 - [x] 11
 - [x] 12
-- [ ] 13
+- [x] 13
 - [x] 14
 - [x] 15
 - [x] 16
 - [x] 17
 - [x] 18
 - [x] 19
-- [ ] 20
-- [ ] 21
-- [ ] 22
+- [x] 20
+- [x] 21
+- [x] 22
 - [ ] 23
 - [ ] 24
-- [ ] 25
-- [ ] 26
-- [ ] 27
-- [ ] 28
-- [ ] 29
-- [ ] 30
-- [ ] 31
+- [x] 25
+- [x] 26
+- [x] 27
+- [x] 28
+- [x] 29
+- [x] 30
+- [x] 31
 - [ ] 32
 - [ ] 33
 - [ ] 34
@@ -351,7 +351,21 @@ An Office line may take part of a Gallican verse. `latinThrough` ends a slice, i
 
 ### Psalmus 13
 
-Gallican verse numbers stay. Drop *In finem. Psalmus David.* Verse 1 begins *Dixit insipiens*.
+Said as the second psalm of Thursday Prime. Drop *In finem. Psalmus David.* from the Latin of the first line. The seven stored Gallican verses make eleven Office lines: Gallican 1 splits at *Non est Deus.* (the Benedictine point keeps *Dixit insípiens… Non est Deus.* as one line), and Gallican 3 splits after *non est usque ad unum.*, after *sub labiis eorum,*, and after *ad effundendum sanguinem.* (the Benedictine points line out the verses quoted in Romans 3:13-18 each as their own line). Verses 2, 4, 5, 6 and 7 stay whole.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *In finem. Psalmus David.*, through *Non est Deus.* |
+| 2 | *Corrupti sunt* to the end of Gallican 1 |
+| 3 | Gallican 2 |
+| 4 | Gallican 3 through *non est usque ad unum.* |
+| 5 | *Sepulchrum patens* through *sub labiis eorum,* |
+| 6 | *Quorum os* through *ad effundendum sanguinem.* |
+| 7 | *Contritio et infelicitas* to the end of Gallican 3 |
+| 8 | Gallican 4 |
+| 9 | Gallican 5 |
+| 10 | Gallican 6 |
+| 11 | Gallican 7 |
 
 ### Psalmus 90
 
@@ -513,6 +527,223 @@ Shown whole at Saturday Prime, the last psalm of that hour. Gallican 1 is the ti
 | 8 | Gallican 8 |
 | 9 | Gallican 9 |
 | 10 | Gallican 10 |
+
+### Psalmus 20
+
+The first psalm of Sunday Matins (Vigils), after Psalms 3 and 94. Gallican verse 1 is the title *In finem. Psalmus David.* and is dropped, so line 1 begins *Domine, in virtute tua*. The thirteen content Gallican verses (2–14) each stay whole.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 2 |
+| 2 | Gallican 3 |
+| 3 | Gallican 4 |
+| 4 | Gallican 5 |
+| 5 | Gallican 6 |
+| 6 | Gallican 7 |
+| 7 | Gallican 8 |
+| 8 | Gallican 9 |
+| 9 | Gallican 10 |
+| 10 | Gallican 11 |
+| 11 | Gallican 12 |
+| 12 | Gallican 13 |
+| 13 | Gallican 14 |
+
+### Psalmus 21
+
+The second psalm of Sunday Matins (Vigils). Gallican verse 1 is the title *In finem, pro susceptione matutina. Psalmus David.* and is dropped, so line 1 begins *Deus, Deus meus*. The thirty-one content Gallican verses (2–32) make thirty-four office lines. Gallican 12 splits after *ne discesseris a me*, and that opening joins Gallican 11. Gallican 15 splits after *ossa mea*. Gallican 17 splits after *obsedit me*, and *Foderunt manus meas* joins Gallican 18 through *ossa mea*; *Ipsi vero consideraverunt* then joins Gallican 19. Gallican 25 splits after *pauperis*, and Gallican 28 splits after *fines terrae*. The other verses stay whole.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 2 |
+| 2 | Gallican 3 |
+| 3 | Gallican 4 |
+| 4 | Gallican 5 |
+| 5 | Gallican 6 |
+| 6 | Gallican 7 |
+| 7 | Gallican 8 |
+| 8 | Gallican 9 |
+| 9 | Gallican 10 |
+| 10 | Gallican 11, then Gallican 12 through *ne discesseris a me,* |
+| 11 | *quoniam tribulatio proxima est* to the end of Gallican 12 |
+| 12 | Gallican 13 |
+| 13 | Gallican 14 |
+| 14 | Gallican 15 through *omnia ossa mea :* |
+| 15 | *factum est cor meum* to the end of Gallican 15 |
+| 16 | Gallican 16 |
+| 17 | Gallican 17 through *obsedit me.* |
+| 18 | *Foderunt manus meas* to the end of Gallican 17, then Gallican 18 through *dinumeraverunt omnia ossa mea.* |
+| 19 | *Ipsi vero consideraverunt* to the end of Gallican 18, then Gallican 19 |
+| 20 | Gallican 20 |
+| 21 | Gallican 21 |
+| 22 | Gallican 22 |
+| 23 | Gallican 23 |
+| 24 | Gallican 24 |
+| 25 | Gallican 25 through *deprecationem pauperis,* |
+| 26 | *nec avertit faciem suam* to the end of Gallican 25 |
+| 27 | Gallican 26 |
+| 28 | Gallican 27 |
+| 29 | Gallican 28 through *universi fines terrae ;* |
+| 30 | *et adorabunt in conspectu eius* to the end of Gallican 28 |
+| 31 | Gallican 29 |
+| 32 | Gallican 30 |
+| 33 | Gallican 31 |
+| 34 | Gallican 32 |
+
+### Psalmus 22
+
+Said whole at Sunday Matins (Vigils), the third psalm of the hour. Drop *Psalmus David.* from the Latin (and *A psalm for David.* from the English) of the first line. The six stored Gallican verses make nine Office lines: the Benedictine points keep *Dominus regit me… ibi me collocavit.*, *Super aquam refectionis… animam meam convertit.*, and *Deduxit me… propter nomen suum.* as one line each, so Gallican 2 joins Gallican 3, and Gallican 1 joins the start of Gallican 2; later Gallican 4 splits after *quoniam tu mecum es.*, Gallican 5 splits after *qui tribulant me ;*, and Gallican 6 splits after *omnibus diebus vitae meae ;*.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1 (drop *Psalmus David.*) through *et nihil mihi deerit :*, then Gallican 2 through *ibi me collocavit.* |
+| 2 | Gallican 2 from *Super aquam refectionis* to the end, then Gallican 3 through *animam meam convertit.* |
+| 3 | *Deduxit me super semitas iustitiae* to the end of Gallican 3 |
+| 4 | Gallican 4 through *quoniam tu mecum es.* |
+| 5 | *Virga tua* to the end of Gallican 4 |
+| 6 | Gallican 5 through *qui tribulant me ;* |
+| 7 | *impinguasti in oleo caput meum* to the end of Gallican 5 |
+| 8 | Gallican 6 through *omnibus diebus vitae meae ;* |
+| 9 | *et ut inhabitem* to the end of Gallican 6 |
+
+### Psalmus 25
+
+Said on Sunday Matins in the Benedictine Office. Gallican verse numbers stay. Drop *In finem. Psalmus David.* from verse 1, so line 1 begins *Iudica me, Domine*. The twelve Gallican verses make twelve office lines; no verses join or split.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *In finem. Psalmus David.* |
+| 2 | Gallican 2 |
+| 3 | Gallican 3 |
+| 4 | Gallican 4 |
+| 5 | Gallican 5 |
+| 6 | Gallican 6 |
+| 7 | Gallican 7 |
+| 8 | Gallican 8 |
+| 9 | Gallican 9 |
+| 10 | Gallican 10 |
+| 11 | Gallican 11 |
+| 12 | Gallican 12 |
+
+### Psalmus 26
+
+Said on Sunday Matins in the Benedictine Office. Gallican verse numbers stay. Drop *Psalmus David, priusquam liniretur.* from verse 1, so line 1 begins *Dominus illuminatio mea*. The fourteen stored Gallican verses make fourteen office lines; no verses join or split.
+
+### Psalmus 27
+
+Said on Sunday Matins in the Benedictine Office. Gallican 1 drops the title *Psalmus ipsi David.* The nine stored Gallican verses make twelve office lines: Gallican 3 splits at *ne perdas me :*, Gallican 4 splits after *adinventionum ipsorum.*, and Gallican 7 splits at *adiutus sum :*. Verses 2, 5, 6, 8, and 9 stay whole.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Psalmus ipsi David.* |
+| 2 | Gallican 2 |
+| 3 | Gallican 3 through *ne perdas me :* |
+| 4 | *qui loquuntur pacem* to the end of Gallican 3 |
+| 5 | Gallican 4 through *adinventionum ipsorum.* |
+| 6 | *Secundum opera manuum eorum* to the end of Gallican 4 |
+| 7 | Gallican 5 |
+| 8 | Gallican 6 |
+| 9 | Gallican 7 through *adiutus sum :* |
+| 10 | *et refloruit caro mea* to the end of Gallican 7 |
+| 11 | Gallican 8 |
+| 12 | Gallican 9 |
+
+### Psalmus 28
+
+Said on Sunday Matins in the Benedictine Office. Gallican 1 drops the title *Psalmus David, in consummatione tabernaculi.* The eleven stored Gallican verses make ten office lines: Gallican 7 joins Gallican 8 (the point keeps *Vox Domini intercidentis flammam ignis… Cades* as one line, since Gallican 7 is only a half-verse). Every other verse stays whole.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop the title |
+| 2 | Gallican 2 |
+| 3 | Gallican 3 |
+| 4 | Gallican 4 |
+| 5 | Gallican 5 |
+| 6 | Gallican 6 |
+| 7 | Gallican 7, then Gallican 8 |
+| 8 | Gallican 9 |
+| 9 | Gallican 10 |
+| 10 | Gallican 11 |
+
+### Psalmus 29
+
+The fourth psalm of Sunday Matins (Vigils), second nocturn. Gallican verse 1 is the title *Psalmus cantici, in dedicatione domus David.* and is dropped, so line 1 begins *Exaltabo te, Domine*. The twelve content Gallican verses (2–13) make fifteen office lines. Gallican 6 splits after *voluntate eius*, Gallican 8 after *virtutem*, and Gallican 10 after *corruptionem*. Verses 2, 3, 4, 5, 7, 9, 11, 12, and 13 stay whole.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 2 |
+| 2 | Gallican 3 |
+| 3 | Gallican 4 |
+| 4 | Gallican 5 |
+| 5 | Gallican 6 through *in voluntate eius :* |
+| 6 | *ad vesperum demorabitur* to the end of Gallican 6 |
+| 7 | Gallican 7 |
+| 8 | Gallican 8 through *decori meo virtutem ;* |
+| 9 | *avertisti faciem tuam* to the end of Gallican 8 |
+| 10 | Gallican 9 |
+| 11 | Gallican 10 through *in corruptionem ?* |
+| 12 | *numquid confitebitur* to the end of Gallican 10 |
+| 13 | Gallican 11 |
+| 14 | Gallican 12 |
+| 15 | Gallican 13 |
+
+### Psalmus 30
+
+The fifth psalm of Sunday Matins (Vigils), second nocturn. Gallican verse 1 is the title *In finem. Psalmus David, pro extasi.* and is dropped, so line 1 begins *In te, Domine, speravi*. The twenty-four content Gallican verses (2–25) make thirty-one office lines. Gallican 3 splits after *eruas me*. Gallican 7 splits after *supervacue*, and *ego autem in Domino speravi* joins Gallican 8 through *misericordia tua*. Gallican 11 splits after *gemitibus*. Gallican 12 splits after *notis meis*, and *qui videbant me* joins Gallican 13 through *a corde*; *factus sum tamquam vas perditum* then joins Gallican 14 through *in circuitu*. Gallican 16 splits after *sortes meae*, and that opening joins Gallican 15. Gallican 18 splits after *invocavi te*, and that opening joins Gallican 17; *Erubescant impii* then joins Gallican 19 through *labia dolosa*. Gallican 20 splits after *timentibus te*, Gallican 21 after *hominum*, and Gallican 23 after *oculorum tuorum*. Gallican 2, 4, 5, 6, 9, 10, 22, 24, and 25 stay whole.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 2 |
+| 2 | Gallican 3 through *accelera ut eruas me.* |
+| 3 | *Esto mihi in Deum protectorem* to the end of Gallican 3 |
+| 4 | Gallican 4 |
+| 5 | Gallican 5 |
+| 6 | Gallican 6 |
+| 7 | Gallican 7 through *supervacue ;* |
+| 8 | *ego autem in Domino speravi* to the end of Gallican 7, then Gallican 8 through *in misericordia tua,* |
+| 9 | *quoniam respexisti humilitatem meam* to the end of Gallican 8 |
+| 10 | Gallican 9 |
+| 11 | Gallican 10 |
+| 12 | Gallican 11 through *in gemitibus.* |
+| 13 | *Infirmata est in paupertate* to the end of Gallican 11 |
+| 14 | Gallican 12 through *et timor notis meis ;* |
+| 15 | *qui videbant me* to the end of Gallican 12, then Gallican 13 through *tamquam mortuus a corde ;* |
+| 16 | *factus sum tamquam vas perditum* to the end of Gallican 13, then Gallican 14 through *in circuitu.* |
+| 17 | *In eo dum convenirent* to the end of Gallican 14 |
+| 18 | Gallican 15, then Gallican 16 through *sortes meae :* |
+| 19 | *eripe me de manu* to the end of Gallican 16 |
+| 20 | Gallican 17, then Gallican 18 through *quoniam invocavi te.* |
+| 21 | *Erubescant impii* to the end of Gallican 18, then Gallican 19 through *labia dolosa,* |
+| 22 | *quae loquuntur adversus iustum* to the end of Gallican 19 |
+| 23 | Gallican 20 through *timentibus te ;* |
+| 24 | *perfecisti eis* to the end of Gallican 20 |
+| 25 | Gallican 21 through *conturbatione hominum ;* |
+| 26 | *proteges eos in tabernaculo* to the end of Gallican 21 |
+| 27 | Gallican 22 |
+| 28 | Gallican 23 through *oculorum tuorum :* |
+| 29 | *ideo exaudisti vocem* to the end of Gallican 23 |
+| 30 | Gallican 24 |
+| 31 | Gallican 25 |
+
+### Psalmus 31
+
+The last psalm of Sunday Matins in the Benedictine Office (a penitential psalm). Gallican 1 drops the title *Ipsi David intellectus.* The eleven stored Gallican verses make fourteen office lines: Gallican 5 splits at *non abscondi.*, Gallican 6 splits after *in tempore opportuno.*, and Gallican 9 splits after *non est intellectus.*. Verses 2, 3, 4, 7, 8, 10, and 11 stay whole.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Ipsi David intellectus.* |
+| 2 | Gallican 2 |
+| 3 | Gallican 3 |
+| 4 | Gallican 4 |
+| 5 | Gallican 5 through *non abscondi.* |
+| 6 | *Dixi :* to the end of Gallican 5 |
+| 7 | Gallican 6 through *in tempore opportuno.* |
+| 8 | *Verumtamen* to the end of Gallican 6 |
+| 9 | Gallican 7 |
+| 10 | Gallican 8 |
+| 11 | Gallican 9 through *non est intellectus.* |
+| 12 | *In camo et freno* to the end of Gallican 9 |
+| 13 | Gallican 10 |
+| 14 | Gallican 11 |
 
 ### Psalmus 42
 
@@ -1223,4 +1454,4 @@ The cursus splits the psalm at the divisio into *Psalmus 104 · 1* (Gallican 1�
 
 ## Not entered
 
-Every other psalm, 2, 5, 20–41, 43–49, 51–55, 57–65, 67–74, 76–79, 81–90, 94–101, 105–114, 117–118, 138–140, 142, and 145–147. The Office still shows those in Gallican verses.
+Every other psalm, 2, 5, 23–24, 32–41, 43–49, 51–55, 57–65, 67–74, 76–79, 81–90, 94–101, 105–114, 117–118, 138–140, 142, and 145–147. The Office still shows those in Gallican verses.

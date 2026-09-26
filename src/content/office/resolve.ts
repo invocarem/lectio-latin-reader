@@ -17,6 +17,55 @@ for (const part of source.parts) {
 
 type StoredVerse = { latin: string; english: string };
 
+/** Section names of Psalm 118, in order. Section 1 (verses 1–8) is Aleph. */
+const PSALM_118_LETTERS = [
+  "Aleph",
+  "Beth",
+  "Ghimel",
+  "Daleth",
+  "He",
+  "Vau",
+  "Zain",
+  "Heth",
+  "Teth",
+  "Iod",
+  "Caph",
+  "Lamed",
+  "Mem",
+  "Nun",
+  "Samech",
+  "Ain",
+  "Phe",
+  "Sade",
+  "Coph",
+  "Res",
+  "Sin",
+  "Tau",
+] as const;
+
+/**
+ * Douay prints the next section's name at the end of the verse before it,
+ * and its spellings are not the Latin tags (Ghimel / GIMEL, Iod / JOD).
+ */
+const PSALM_118_ENGLISH_LETTER = / (?:BETH|GIMEL|DALETH|HE|VAU|ZAIN|HETH|TETH|JOD|CAPH|LAMED|MEM|NUN|SAMECH|AIN|PHE|SADE|COPH|RES|SIN|TAU)\.$/;
+
+function psalm118Letter(from: number): string | undefined {
+  const index = (from - 1) / 8;
+  if (!Number.isInteger(index)) return undefined;
+  return PSALM_118_LETTERS[index];
+}
+
+/** Office display only. The stored Gallican text and Douay stay as they are. */
+function officePsalm118(latin: string, english: string): { latin: string; english: string } {
+  let shown = latin.replace(/<[A-Za-z]+>/, "");
+  // Aleph's opening Alleluia is the psalm title, not the chapter 15 Alleluia.
+  if (shown.startsWith("Alleluia. ")) shown = shown.slice("Alleluia. ".length);
+  return {
+    latin: shown,
+    english: english.replace(PSALM_118_ENGLISH_LETTER, ""),
+  };
+}
+
 function versesInRange(psalm: number, from: number, to: number): Map<number, StoredVerse> {
   const chapter = byNumber.get(psalm);
   const verses = new Map<number, StoredVerse>();
@@ -25,10 +74,10 @@ function versesInRange(psalm: number, from: number, to: number): Map<number, Sto
     const n = Number(paragraph.n);
     if (!Number.isFinite(n) || n < from || n > to) continue;
     const segment = paragraph.segments[0];
-    verses.set(n, {
-      latin: segment?.latin ?? "",
-      english: segment?.translations.douay ?? "",
-    });
+    let latin = segment?.latin ?? "";
+    let english = segment?.translations.douay ?? "";
+    if (psalm === 118) ({ latin, english } = officePsalm118(latin, english));
+    verses.set(n, { latin, english });
   }
   return verses;
 }
@@ -120,5 +169,7 @@ function lineOut(stored: Map<number, StoredVerse>, map: VerseMapEntry | undefine
 
 export function sliceLabel(slice: PsalmSlice): string {
   if (slice.from == null || slice.to == null) return `Psalmus ${slice.psalm}`;
-  return `Psalmus ${slice.psalm} · ${slice.from}–${slice.to}`;
+  const range = `${slice.from}–${slice.to}`;
+  const letter = slice.psalm === 118 ? psalm118Letter(slice.from) : undefined;
+  return letter ? `Psalmus 118 · ${letter} · ${range}` : `Psalmus ${slice.psalm} · ${range}`;
 }
