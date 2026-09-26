@@ -107,7 +107,10 @@ function pieceText(piece: OfficePiece, stored: Map<number, StoredVerse>): { lati
   }
   return {
     latin: cutText(latin, piece.latinFrom, piece.latinThrough),
-    english: cutText(verse.english, piece.englishFrom, piece.englishThrough),
+    english:
+      piece.englishThrough === ""
+        ? ""
+        : cutText(verse.english, piece.englishFrom, piece.englishThrough),
   };
 }
 

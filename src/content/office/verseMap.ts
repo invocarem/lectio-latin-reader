@@ -14,6 +14,7 @@ export type OfficePiece = {
   latinFrom?: string;
   latinThrough?: string;
   englishFrom?: string;
+  /** `""` contributes no English, when Douay already ended on the previous line. */
   englishThrough?: string;
 };
 
@@ -94,6 +95,97 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
     { pieces: [{ verse: 8 }] },
     { pieces: [{ verse: 9 }] },
     { pieces: [{ verse: 10 }] },
+  ],
+  5: [
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinThrough: "loquuntur mendacium.",
+          englishThrough: "speak a lie.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinFrom: "Virum sanguinum",
+          englishFrom: "The bloody and the deceitful man",
+        },
+        {
+          verse: 8,
+          latinThrough: "misericordiae tuae",
+          englishThrough: "multitude of thy mercy,",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 8,
+          latinFrom: "introibo in domum tuam",
+          englishFrom: "I will come into thy house;",
+        },
+      ],
+    },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    {
+      pieces: [
+        {
+          verse: 11,
+          latinThrough: "iudica illos, Deus.",
+          englishThrough: "judge them, O God.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 11,
+          latinFrom: "Decidant a cogitationibus",
+          englishFrom: "Let them fall from their devices:",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 12,
+          latinThrough: "habitabis in eis.",
+          englishThrough: "dwell in them.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 12,
+          latinFrom: "Et gloriabuntur",
+          englishFrom: "And all they that love thy name shall glory in thee.",
+        },
+        {
+          verse: 13,
+          latinThrough: "benedices iusto.",
+          englishThrough: "bless the just.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 13,
+          latinFrom: "Domine, ut scuto",
+          englishFrom: "O Lord, thou hast crowned us,",
+        },
+      ],
+    },
   ],
   6: [
     { pieces: [{ verse: 2 }] },
@@ -1626,6 +1718,146 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
       ],
     },
   ],
+  68: [
+    { pieces: [{ verse: 2 }] },
+    {
+      pieces: [
+        {
+          verse: 3,
+          latinThrough: "non est substantia.",
+          englishThrough: "no sure standing.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 3,
+          latinFrom: "Veni in altitudinem",
+          englishFrom: "I am come into the depth",
+        },
+      ],
+    },
+    { pieces: [{ verse: 4 }] },
+    {
+      pieces: [
+        {
+          verse: 5,
+          latinThrough: "oderunt me gratis.",
+          englishThrough: "without cause.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 5,
+          latinFrom: "Confortati sunt",
+          englishFrom: "My enemies are grown strong",
+        },
+      ],
+    },
+    { pieces: [{ verse: 6 }] },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinThrough: "Domine virtutum ;",
+          englishThrough: "the Lord of hosts.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinFrom: "non confundantur",
+          englishFrom: "Let them not be confounded",
+        },
+      ],
+    },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    { pieces: [{ verse: 13 }] },
+    {
+      pieces: [
+        {
+          verse: 14,
+          latinThrough: "beneplaciti, Deus.",
+          englishThrough: "O God.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 14,
+          latinFrom: "In multitudine misericordiae",
+          englishFrom: "In the multitude of thy mercy",
+        },
+      ],
+    },
+    { pieces: [{ verse: 15 }] },
+    { pieces: [{ verse: 16 }] },
+    { pieces: [{ verse: 17 }] },
+    { pieces: [{ verse: 18 }] },
+    { pieces: [{ verse: 19 }] },
+    { pieces: [{ verse: 20 }] },
+    {
+      pieces: [
+        {
+          verse: 21,
+          latinThrough: "et miseriam :",
+          englishThrough: "reproach and misery.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 21,
+          latinFrom: "et sustinui qui simul",
+          englishFrom: "And I looked for one",
+        },
+      ],
+    },
+    { pieces: [{ verse: 22 }] },
+    { pieces: [{ verse: 23 }] },
+    { pieces: [{ verse: 24 }] },
+    { pieces: [{ verse: 25 }] },
+    { pieces: [{ verse: 26 }] },
+    { pieces: [{ verse: 27 }] },
+    { pieces: [{ verse: 28 }] },
+    { pieces: [{ verse: 29 }] },
+    { pieces: [{ verse: 30 }] },
+    { pieces: [{ verse: 31 }] },
+    { pieces: [{ verse: 32 }] },
+    { pieces: [{ verse: 33 }] },
+    { pieces: [{ verse: 34 }] },
+    { pieces: [{ verse: 35 }] },
+    {
+      pieces: [
+        {
+          verse: 36,
+          latinThrough: "civitates Iuda,",
+          englishThrough: "shall be built up.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 36,
+          latinFrom: "et inhabitabunt ibi",
+          englishFrom: "And they shall dwell there,",
+        },
+      ],
+    },
+    { pieces: [{ verse: 37 }] },
+  ],
   75: [
     { pieces: [{ verse: 2 }] },
     { pieces: [{ verse: 3 }] },
@@ -1665,6 +1897,60 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
         { verse: 13 },
       ],
     },
+  ],
+  76: [
+    { pieces: [{ verse: 2 }] },
+    {
+      pieces: [
+        { verse: 3, latinThrough: "et non sum deceptus.", englishThrough: "and I was not deceived." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 3, latinFrom: "Renuit consolari anima mea", englishFrom: "My soul refused to be comforted" },
+        { verse: 4 },
+      ],
+    },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    { pieces: [{ verse: 13 }] },
+    {
+      pieces: [
+        { verse: 14 },
+        { verse: 15, latinThrough: "mirabilia :", englishThrough: "dost wonders." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 15, latinFrom: "notam fecisti in populis virtutem tuam", englishFrom: "Thou hast made thy power known" },
+        { verse: 16 },
+      ],
+    },
+    { pieces: [{ verse: 17 }] },
+    {
+      pieces: [
+        { verse: 18, latinThrough: "vocem dederunt nubes.", englishThrough: "the clouds sent out a sound." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 18, latinFrom: "Etenim sagittae tuae transeunt", englishFrom: "For thy arrows pass" },
+        { verse: 19, latinThrough: "vox tonitrui tui in rota.", englishThrough: "thy thunder in a wheel." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 19, latinFrom: "Illuxerunt coruscationes", englishFrom: "Thy lightnings enlightened the world" },
+      ],
+    },
+    { pieces: [{ verse: 20 }] },
+    { pieces: [{ verse: 21 }] },
   ],
   80: [
     { pieces: [{ verse: 2 }] },
@@ -1782,6 +2068,407 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
     { pieces: [{ verse: 5 }] },
   ],
   93: dropTitle("Psalmus ipsi David, quarta sabbati. "),
+  94: dropTitle("Laus cantici ipsi David. "),
+  95: [
+    {
+      pieces: [
+        {
+          verse: 1,
+          dropLatinPrefix: "Canticum ipsi David, quando domus aedificabatur post captivitatem. ",
+          englishFrom: "Sing ye to the Lord a new canticle:",
+        },
+      ],
+    },
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    {
+      pieces: [
+        { verse: 7 },
+        { verse: 8, latinThrough: "gloriam nomini eius.", englishThrough: "glory unto his name." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 8, latinFrom: "Tollite hostias", englishFrom: "Bring up sacrifices," },
+        { verse: 9, latinThrough: "atrio sancto eius.", englishThrough: "in his holy court." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 9, latinFrom: "Commoveatur a facie", englishFrom: "Let all the earth be moved" },
+        { verse: 10, latinThrough: "Dominus regnavit.", englishThrough: "the Lord hath reigned." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 10, latinFrom: "Etenim correxit", englishFrom: "For he hath corrected the world," },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 11 },
+        { verse: 12, latinThrough: "quae in eis sunt.", englishThrough: "shall be joyful." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 12, latinFrom: "Tunc exsultabunt", englishFrom: "Then shall all the trees" },
+        { verse: 13, latinThrough: "iudicare terram.", englishThrough: "to judge the earth." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 13, latinFrom: "Iudicabit orbem", englishFrom: "He shall judge the world" },
+      ],
+    },
+  ],
+  96: [
+    {
+      pieces: [
+        {
+          verse: 1,
+          dropLatinPrefix: "Huic David, quando terra eius restituta est. ",
+          englishFrom: "The Lord hath reigned,",
+        },
+      ],
+    },
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinThrough: "simulacris suis.",
+          englishThrough: "in their idols.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinFrom: "Adorate eum omnes angeli eius.",
+          englishFrom: "Adore him, all you his angels:",
+        },
+        { verse: 8, latinThrough: "laetata est Sion,", englishThrough: "and was glad." },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 8,
+          latinFrom: "et exsultaverunt filiae Iudae",
+          englishFrom: "And the daughters of Juda rejoiced,",
+        },
+      ],
+    },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+  ],
+  97: [
+    {
+      pieces: [
+        {
+          verse: 1,
+          dropLatinPrefix: "Psalmus ipsi David. ",
+          latinThrough: "quia mirabilia fecit.",
+          englishFrom: "Sing ye to the Lord a new canticle:",
+          englishThrough: "wonderful things.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 1,
+          latinFrom: "Salvavit sibi dextera",
+          englishFrom: "His right hand hath wrought",
+        },
+      ],
+    },
+    { pieces: [{ verse: 2 }] },
+    {
+      pieces: [
+        {
+          verse: 3,
+          latinThrough: "domui Israël.",
+          englishThrough: "house of Israel.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 3,
+          latinFrom: "Viderunt omnes",
+          englishFrom: "All the ends of the earth",
+        },
+      ],
+    },
+    { pieces: [{ verse: 4 }] },
+    {
+      pieces: [
+        { verse: 5 },
+        { verse: 6, latinThrough: "tubae corneae.", englishThrough: "sound of cornet." },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 6,
+          latinFrom: "Iubilate in conspectu",
+          englishFrom: "Make a joyful noise before the Lord our king:",
+        },
+        { verse: 7 },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 8 },
+        { verse: 9, latinThrough: "iudicare terram.", englishThrough: "to judge the earth." },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 9,
+          latinFrom: "Iudicabit orbem",
+          englishFrom: "He shall judge the world",
+        },
+      ],
+    },
+  ],
+  98: [
+    {
+      pieces: [
+        {
+          verse: 1,
+          dropLatinPrefix: "Psalmus ipsi David. ",
+          englishFrom: "The Lord hath reigned,",
+        },
+      ],
+    },
+    { pieces: [{ verse: 2 }] },
+    {
+      pieces: [
+        { verse: 3 },
+        { verse: 4, latinThrough: "iudicium diligit.", englishThrough: "loveth judgment." },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 4,
+          latinFrom: "Tu parasti directiones",
+          englishFrom: "Thou hast prepared directions:",
+        },
+      ],
+    },
+    { pieces: [{ verse: 5 }] },
+    {
+      pieces: [
+        {
+          verse: 6,
+          latinThrough: "nomen eius :",
+          englishThrough: "upon his name.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 6,
+          latinFrom: "invocabant Dominum",
+          englishFrom: "They called upon the Lord,",
+        },
+        { verse: 7, latinThrough: "loquebatur ad eos.", englishThrough: "pillar of the cloud." },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinFrom: "Custodiebant",
+          englishFrom: "They kept his testimonies,",
+        },
+      ],
+    },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+  ],
+  99: [
+    {
+      pieces: [
+        { verse: 2, latinThrough: "in laetitia.", englishThrough: "with gladness." },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 2,
+          latinFrom: "Introite in conspectu eius",
+          englishFrom: "Come in before his presence",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 3,
+          latinThrough: "non ipsi nos :",
+          englishThrough: "not we ourselves.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 3, latinFrom: "populus eius", englishFrom: "We are his people" },
+        { verse: 4, latinThrough: "confitemini illi.", englishThrough: "give glory to him." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 4, latinFrom: "Laudate nomen eius", englishFrom: "Praise ye his name:" },
+        { verse: 5 },
+      ],
+    },
+  ],
+  100: [
+    {
+      pieces: [
+        {
+          verse: 1,
+          dropLatinPrefix: "Psalmus ipsi David. ",
+          latinThrough: "Domine ;",
+          englishFrom: "Mercy and judgment",
+          englishThrough: "O Lord:",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 1, latinFrom: "psallam,", englishFrom: "I will sing," },
+        { verse: 2, latinThrough: "ad me ?", englishThrough: "come to me." },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 2,
+          latinFrom: "Perambulabam",
+          englishFrom: "I walked in the innocence",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 3,
+          latinThrough: "praevaricationes odivi ;",
+          englishThrough: "workers of iniquities.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 3, latinFrom: "non adhaesit mihi", englishThrough: "" },
+        { verse: 4 },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 5,
+          latinThrough: "hunc persequebar :",
+          englishThrough: "him did I persecute.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 5,
+          latinFrom: "superbo oculo",
+          englishFrom: "With him that had a proud eye,",
+        },
+      ],
+    },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+  ],
+  101: [
+    { pieces: [{ verse: 2 }] },
+    {
+      pieces: [
+        {
+          verse: 3,
+          latinThrough: "aurem tuam ;",
+          englishThrough: "incline thy ear to me.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 3,
+          latinFrom: "in quacumque die invocavero te",
+          englishFrom: "In what day soever I shall call upon thee,",
+        },
+      ],
+    },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    { pieces: [{ verse: 13 }] },
+    { pieces: [{ verse: 14 }] },
+    { pieces: [{ verse: 15 }] },
+    { pieces: [{ verse: 16 }] },
+    { pieces: [{ verse: 17 }] },
+    { pieces: [{ verse: 18 }] },
+    { pieces: [{ verse: 19 }] },
+    { pieces: [{ verse: 20 }] },
+    { pieces: [{ verse: 21 }] },
+    { pieces: [{ verse: 22 }] },
+    { pieces: [{ verse: 23 }] },
+    { pieces: [{ verse: 24 }] },
+    { pieces: [{ verse: 25 }] },
+    { pieces: [{ verse: 26 }] },
+    {
+      pieces: [
+        {
+          verse: 27,
+          latinThrough: "vestimentum veterascent.",
+          englishThrough: "like a garment:",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 27,
+          latinFrom: "Et sicut opertorium",
+          englishFrom: "And as a vesture thou shalt change them,",
+        },
+        { verse: 28 },
+      ],
+    },
+    { pieces: [{ verse: 29 }] },
+  ],
   148: [
     { pieces: [{ verse: 1, dropLatinPrefix: "Alleluia. " }] },
     { pieces: [{ verse: 2 }] },
