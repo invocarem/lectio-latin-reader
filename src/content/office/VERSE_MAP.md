@@ -118,23 +118,23 @@ Check a psalm when its Benedictine lining is finished. A title drop alone is not
 - [x] 102
 - [x] 103
 - [x] 104
-- [ ] 105
-- [ ] 106
-- [ ] 107
-- [ ] 108
-- [ ] 109
-- [ ] 110
-- [ ] 111
-- [ ] 112
-- [ ] 113
-- [ ] 114
+- [x] 105
+- [x] 106
+- [x] 107
+- [x] 108
+- [x] 109
+- [x] 110
+- [x] 111
+- [x] 112
+- [x] 113
+- [x] 114
 - [x] 115
 - [x] 116
-- [ ] 117
-- [ ] 118
+- [x] 117
+- [x] 118
 - [x] 119
-- [ ] 120
-- [ ] 121
+- [x] 120
+- [x] 121
 - [x] 122
 - [x] 123
 - [x] 124
@@ -151,9 +151,9 @@ Check a psalm when its Benedictine lining is finished. A title drop alone is not
 - [x] 135
 - [x] 136
 - [x] 137
-- [ ] 138
-- [ ] 139
-- [ ] 140
+- [x] 138
+- [x] 139
+- [x] 140
 - [x] 141
 - [ ] 142
 - [x] 143
@@ -1201,7 +1201,11 @@ The last psalm of Tuesday Vespers. Drop *Canticum graduum David.* Gallican 2 spl
 
 ### Psalmi 120–121
 
-Each keeps its Gallican verse numbers. The Office drops *Canticum graduum.* from the Latin of verse 1.
+Terce on Tuesday through Saturday, after Psalm 119. Each drops *Canticum graduum.* from Gallican 1. Kate numbers eight lines for 120 and nine for 121, and each Gallican verse stays one of those lines.
+
+### Psalmus 118
+
+Sunday and Monday Prime, Terce, Sext, and None, in the twenty-two sections of eight verses already cut by the cursus. Gallican 1 drops *Alleluia.*, and each Hebrew letter tag (Aleph, Beth, and the rest) is kept in the section title and taken out of the verse. Kate’s pointed stanzas number eight lines to a letter, one Gallican verse each, so this psalm is not re-lined beyond that.
 
 ### Psalmus 133
 
@@ -1310,6 +1314,85 @@ Wednesday Vespers, the fourth and last psalm of the hour. Gallican 1 drops the t
 | 7 | Gallican 6 |
 | 8 | Gallican 7 |
 | 9 | Gallican 8 |
+
+### Psalmus 138
+
+Thursday Vespers, the first psalm of the hour, divided in two and counted as *Psalmus 138 · 1* and *Psalmus 138 · 2*, following the Psallam Domino (Kate Edwards) order. The Rule (Capitulum 18 §3) directs that Psalms 138, 143, and 144 be divided because otherwise three psalms are missing; the cut is after Gallican 10, and each half is numbered from 1.
+
+**Psalmus 138 · 1** has **nine** office lines from Gallican verses 1–10: the title *In finem, psalmus David.* is dropped, and Gallican 1 (*Domine, probasti me*) joins Gallican 2 (*tu cognovisti sessionem…*), so line 1 runs *Domine, probasti me… resurrectionem meam.* Gallican 3–10 stay whole.
+
+**Psalmus 138 · 2** has **fourteen** office lines: Gallican 11–24 all stay whole.
+
+#### Psalmus 138 · 1 — Gallican 1–10 (9 office lines)
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *In finem, psalmus David.*, then Gallican 2 |
+| 2 | Gallican 3 |
+| 3 | Gallican 4 |
+| 4 | Gallican 5 |
+| 5 | Gallican 6 |
+| 6 | Gallican 7 |
+| 7 | Gallican 8 |
+| 8 | Gallican 9 |
+| 9 | Gallican 10 |
+
+#### Psalmus 138 · 2 — Gallican 11–24 (14 office lines)
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 11 |
+| 2 | Gallican 12 |
+| 3 | Gallican 13 |
+| 4 | Gallican 14 |
+| 5 | Gallican 15 |
+| 6 | Gallican 16 |
+| 7 | Gallican 17 |
+| 8 | Gallican 18 |
+| 9 | Gallican 19 |
+| 10 | Gallican 20 |
+| 11 | Gallican 21 |
+| 12 | Gallican 22 |
+| 13 | Gallican 23 |
+| 14 | Gallican 24 |
+
+### Psalmus 139
+
+Thursday Vespers, the third psalm of the hour, sung whole. Gallican 1 is the title *In finem. Psalmus David.* and is dropped, so line 1 begins *Eripe me, Domine*. The thirteen content Gallican verses (2–14) each stay whole.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 2 |
+| 2 | Gallican 3 |
+| 3 | Gallican 4 |
+| 4 | Gallican 5 |
+| 5 | Gallican 6 |
+| 6 | Gallican 7 |
+| 7 | Gallican 8 |
+| 8 | Gallican 9 |
+| 9 | Gallican 10 |
+| 10 | Gallican 11 |
+| 11 | Gallican 12 |
+| 12 | Gallican 13 |
+| 13 | Gallican 14 |
+
+### Psalmus 140
+
+Thursday Vespers, the fourth and last psalm of the hour, sung whole. Following the Psallam Domino (Kate Edwards) psalmody, Gallican 1 drops the title *Psalmus David.*, and the psalm is lined into **eleven** office lines. Gallican 4 splits after *in peccatis ;*; Gallican 5 splits after *caput meum.*, and its tail (*Quoniam adhuc…*) joins Gallican 6 through *iudices eorum.*; Gallican 6's tail (*Audient verba mea…*) joins Gallican 7 through *super terram,*; and Gallican 7's tail (*dissipata sunt ossa…*) joins Gallican 8. Gallican 2, 3, 9, and 10 stay whole.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Psalmus David.* |
+| 2 | Gallican 2 |
+| 3 | Gallican 3 |
+| 4 | Gallican 4 through *in peccatis ;* |
+| 5 | *cum hominibus operantibus iniquitatem* to the end of Gallican 4 |
+| 6 | Gallican 5 through *caput meum.* |
+| 7 | *Quoniam adhuc* to the end of Gallican 5, then Gallican 6 through *iudices eorum.* |
+| 8 | *Audient verba mea* to the end of Gallican 6, then Gallican 7 through *super terram,* |
+| 9 | *dissipata sunt ossa nostra* to the end of Gallican 7, then Gallican 8 |
+| 10 | Gallican 9 |
+| 11 | Gallican 10 |
 
 ### Psalmus 102
 
@@ -1452,6 +1535,161 @@ The cursus splits the psalm at the divisio into *Psalmus 104 · 1* (Gallican 1�
 | 22 | Gallican 44 |
 | 23 | Gallican 45 |
 
+### Psalmus 105
+
+Saturday Matins (Vigils). Gallican 1 drops *Alleluia.*. The cursus splits the psalm at the divisio into *Psalmus 105 · 1–31* and *Psalmus 105 · 32–48*. Each half is numbered from 1. The first half is the thirty-one office lines below; the second half is the sixteen that follow.
+
+Gallican 7, 23, 24, 33, 38, 43, and 47 are split. Gallican 21–22, the tail of 23 with the head of 24, the tail of 24 with 25, 32 with the head of 33, the tail of 33 with 34, 35–36, the tail of 38 with 39, and 42 with the head of 43 are joined. The other verses stay whole.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Alleluia.* |
+| 2–6 | Gallican 2–6 |
+| 7 | Gallican 7 through *misericordiae tuae.* |
+| 8 | Gallican 7 from *Et irritaverunt* |
+| 9–21 | Gallican 8–20 |
+| 22 | Gallican 21–22 |
+| 23 | Gallican 23 through *in conspectu eius* |
+| 24 | Gallican 23 from *ut averteret*, plus Gallican 24 through *terram desiderabilem* |
+| 25 | Gallican 24 from *non crediderunt*, plus Gallican 25 |
+| 26–31 | Gallican 26–31 |
+| 32 | Gallican 32, plus Gallican 33 through *spiritum eius* |
+| 33 | Gallican 33 from *et distinxit*, plus Gallican 34 |
+| 34 | Gallican 35–36 |
+| 35 | Gallican 37 |
+| 36 | Gallican 38 through *sculptilibus Chanaan* |
+| 37 | Gallican 38 from *Et infecta est terra*, plus Gallican 39 |
+| 38–39 | Gallican 40–41 |
+| 40 | Gallican 42, plus Gallican 43 through *saepe liberavit eos* |
+| 41 | Gallican 43 from *Ipsi autem* |
+| 42–44 | Gallican 44–46 |
+| 45 | Gallican 47 through *de nationibus* |
+| 46 | Gallican 47 from *ut confiteamur* |
+| 47 | Gallican 48 |
+
+### Psalmus 106
+
+Saturday Matins (Vigils), the next psalm after 105, and also divided. Gallican 1 drops *Alleluia.*. Each of the forty-three Gallican verses stays one office line. The cursus splits at the traditional divisio, before *Dixit, et stetit*, into *Psalmus 106 · 1–24* and *Psalmus 106 · 25–43*. Each half is numbered from 1.
+
+### Psalmus 107
+
+Saturday Matins (Vigils), after the second half of Psalm 106. Gallican verse 1 is the title *Canticum Psalmi, ipsi David.* and is dropped, so line 1 begins *Paratum cor meum*. Fourteen office lines.
+
+| Office line | Latin |
+| --- | --- |
+| 1–4 | Gallican 2–5 |
+| 5 | Gallican 6, plus Gallican 7 through *dilecti tui* |
+| 6 | Gallican 7 from *Salvum fac*, plus Gallican 8 through *in sancto suo* |
+| 7 | Gallican 8 from *Exsultabo* |
+| 8 | Gallican 9 through *capitis mei* |
+| 9 | Gallican 9 from *Iuda rex meus*, plus Gallican 10 through *spei meae* |
+| 10 | Gallican 10 from *in Idumaeam* |
+| 11–14 | Gallican 11–14 |
+
+### Psalmus 108
+
+Saturday Matins (Vigils), the last psalm of the second nocturn. Gallican verse 1 is the title *In finem. Psalmus David.* and is dropped, so line 1 begins *Deus, laudem meam*. Thirty office lines. Gallican 15–16 are one line. Gallican 18 splits after *elongabitur ab eo*. The other verses stay whole.
+
+| Office line | Latin |
+| --- | --- |
+| 1–13 | Gallican 2–14 |
+| 14 | Gallican 15–16 |
+| 15 | Gallican 17 |
+| 16 | Gallican 18 through *elongabitur ab eo* |
+| 17 | Gallican 18 from *Et induit maledictionem* |
+| 18–30 | Gallican 19–31 |
+
+### Psalmus 109
+
+The first psalm of Sunday Vespers. Gallican 1 drops *Psalmus David.* and splits after *Sede a dextris meis*. Eight office lines.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Psalmus David.*, through *Sede a dextris meis* |
+| 2 | Gallican 1 from *donec ponam inimicos tuos* |
+| 3–8 | Gallican 2–7 |
+
+### Psalmus 110
+
+The second psalm of Sunday Vespers. Gallican 1 drops *Alleluia.*. Ten office lines. Gallican 4 joins the head of 5; the tail of 5 joins 6; Gallican 9 splits after *testamentum suum*, and its tail joins the head of 10.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Alleluia.* |
+| 2–3 | Gallican 2–3 |
+| 4 | Gallican 4, plus Gallican 5 through *timentibus se* |
+| 5 | Gallican 5 from *memor erit*, plus Gallican 6 |
+| 6–7 | Gallican 7–8 |
+| 8 | Gallican 9 through *testamentum suum* |
+| 9 | Gallican 9 from *Sanctum et terribile*, plus Gallican 10 through *timor Domini* |
+| 10 | Gallican 10 from *intellectus bonus* |
+
+### Psalmus 111
+
+The third psalm of Sunday Vespers. Gallican 1 drops *Alleluia, reversionis Aggaei et Zachariae.*. Nine office lines. Gallican 5–6 are one line. Gallican 7 splits after *non timebit*, and its tail joins Gallican 8.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop the title |
+| 2–4 | Gallican 2–4 |
+| 5 | Gallican 5–6 |
+| 6 | Gallican 7 through *non timebit* |
+| 7 | Gallican 7 from *Paratum cor eius*, plus Gallican 8 |
+| 8–9 | Gallican 9–10 |
+
+### Psalmus 112
+
+The last psalm of Sunday Vespers. Gallican 1 drops *Alleluia.*. Eight office lines. Gallican 5–6 are one line. The other verses stay whole.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Alleluia.* |
+| 2–4 | Gallican 2–4 |
+| 5 | Gallican 5–6 |
+| 6–8 | Gallican 7–9 |
+
+### Psalmus 113
+
+The first psalm of Monday Vespers. Gallican 1 drops *Alleluia.*. Twenty-seven office lines. Gallican 20 splits after *benedixit nobis*. The other verses stay whole, so office lines 22–27 are Gallican 21–26.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Alleluia.* |
+| 2–19 | Gallican 2–19 |
+| 20 | Gallican 20 through *benedixit nobis* |
+| 21 | Gallican 20 from *Benedixit domui Israël* |
+| 22–27 | Gallican 21–26 |
+
+### Psalmus 114
+
+The second psalm of Monday Vespers. Gallican 1 drops *Alleluia.*. Nine office lines. Gallican 3 splits after *invenerunt me*; its tail joins Gallican 4 through *invocavi*; the rest of Gallican 4 joins Gallican 5.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Alleluia.* |
+| 2 | Gallican 2 |
+| 3 | Gallican 3 through *invenerunt me* |
+| 4 | Gallican 3 from *Tribulationem*, plus Gallican 4 through *invocavi* |
+| 5 | Gallican 4 from *o Domine*, plus Gallican 5 |
+| 6–9 | Gallican 6–9 |
+
+### Psalmus 117
+
+Sunday Lauds, after Psalms 66 and 50. Gallican 1 drops *Alleluia.*. Twenty-nine office lines. Gallican 1–18 and 21–24 and 29 stay whole. Gallican 19–20 are one line. Gallican 26 splits after *nomine Domini*, and its head joins 25. The tail of 26 joins Gallican 27 through *illuxit nobis*; *Constituite diem solemnem* is the next line. Gallican 28 splits after *exaltabo te*.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Alleluia.* |
+| 2–18 | Gallican 2–18 |
+| 19 | Gallican 19–20 |
+| 20–23 | Gallican 21–24 |
+| 24 | Gallican 25, plus Gallican 26 through *nomine Domini* |
+| 25 | Gallican 26 from *benediximus vobis*, plus Gallican 27 through *illuxit nobis* |
+| 26 | Gallican 27 from *Constituite diem solemnem* |
+| 27 | Gallican 28 through *exaltabo te* |
+| 28 | Gallican 28 from *Confitebor tibi quoniam exaudisti me* |
+| 29 | Gallican 29 |
+
 ## Not entered
 
-Every other psalm, 2, 5, 23–24, 32–41, 43–49, 51–55, 57–65, 67–74, 76–79, 81–90, 94–101, 105–114, 117–118, 138–140, 142, and 145–147. The Office still shows those in Gallican verses.
+Every other psalm, 2, 5, 23–24, 32–41, 43–49, 51–55, 57–65, 67–74, 76–79, 81–90, 94–101, 142, and 145–147. The Office still shows those in Gallican verses.

@@ -169,6 +169,7 @@ function lineOut(stored: Map<number, StoredVerse>, map: VerseMapEntry | undefine
 
 export function sliceLabel(slice: PsalmSlice): string {
   if (slice.from == null || slice.to == null) return `Psalmus ${slice.psalm}`;
+  if (slice.part != null) return `Psalmus ${slice.psalm} · ${slice.part}`;
   const range = `${slice.from}–${slice.to}`;
   const letter = slice.psalm === 118 ? psalm118Letter(slice.from) : undefined;
   return letter ? `Psalmus 118 · ${letter} · ${range}` : `Psalmus ${slice.psalm} · ${range}`;

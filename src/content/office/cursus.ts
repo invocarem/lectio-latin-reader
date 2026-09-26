@@ -6,6 +6,8 @@ export type PsalmSlice = {
   psalm: number;
   from?: number;
   to?: number;
+  /** Display label override when a psalm is sung in parts, e.g. 138/1. */
+  part?: number;
 };
 
 /** One step in an hour. Joined psalms (115 with 116) share a slot. */
@@ -17,6 +19,12 @@ export type OfficeSlot = {
 
 const whole = (psalm: number): PsalmSlice => ({ psalm });
 const cut = (psalm: number, from: number, to: number): PsalmSlice => ({ psalm, from, to });
+const part = (psalm: number, n: number, from: number, to: number): PsalmSlice => ({
+  psalm,
+  from,
+  to,
+  part: n,
+});
 
 /** Psalm 118, one section of eight verses. Section 1 is verses 1–8. */
 function p118(section: number): PsalmSlice {
@@ -58,7 +66,8 @@ function vigils(first: OfficeSlot[], second: OfficeSlot[]): OfficeSlot[] {
  * Even splits of the longer vigils and vespers psalms, taken from the
  * verse counts in latin.md. The first half keeps the extra verse when the
  * count is odd. Psalms 9 and 17 are the Rule's Prime cuts, not these halves.
- * Psalm 144 follows the Vespers division after verse 9.
+ * Psalm 144 follows the Vespers division after verse 9. Psalms 103–106
+ * follow the Benedictine divisio (105 after verse 31, 106 after verse 24).
  */
 const HALF = {
   32: [cut(32, 1, 11), cut(32, 12, 22)],
@@ -72,7 +81,9 @@ const HALF = {
   77: [cut(77, 1, 36), cut(77, 37, 72)],
   103: [cut(103, 1, 24), cut(103, 25, 35)],
   104: [cut(104, 1, 22), cut(104, 23, 45)],
-  138: [cut(138, 1, 12), cut(138, 13, 24)],
+  105: [cut(105, 1, 31), cut(105, 32, 48)],
+  106: [cut(106, 1, 24), cut(106, 25, 43)],
+  138: [part(138, 1, 1, 10), part(138, 2, 11, 24)],
   143: [cut(143, 1, 8), cut(143, 9, 15)],
   144: [cut(144, 1, 9), cut(144, 10, 21)],
 } as const;
@@ -151,7 +162,18 @@ const CURSUS: Record<Weekday, Record<OfficeHour, OfficeSlot[]>> = {
   sat: {
     vigils: vigils(
       [97, 98, 99, 100, 101, 102].map((psalm) => custom(whole(psalm))),
-      [custom(HALF[103][0]), custom(HALF[103][1]), custom(HALF[104][0]), custom(HALF[104][1]), ...[105, 106, 107, 108].map((psalm) => custom(whole(psalm)))],
+      [
+        custom(HALF[103][0]),
+        custom(HALF[103][1]),
+        custom(HALF[104][0]),
+        custom(HALF[104][1]),
+        custom(HALF[105][0]),
+        custom(HALF[105][1]),
+        custom(HALF[106][0]),
+        custom(HALF[106][1]),
+        custom(whole(107)),
+        custom(whole(108)),
+      ],
     ),
     lauds: lauds([142]),
     prime: [slot(cut(17, 26, 51)), slot(whole(18)), slot(whole(19))],
