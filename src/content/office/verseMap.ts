@@ -12,6 +12,7 @@ export type OfficePiece = {
   verse: number;
   dropLatinPrefix?: string;
   latinFrom?: string;
+  /** `""` contributes no Latin, when this verse's English belongs here and its Latin was already taken. */
   latinThrough?: string;
   englishFrom?: string;
   /** `""` contributes no English, when Douay already ended on the previous line. */
@@ -1552,6 +1553,1101 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
     { pieces: [{ verse: 10 }] },
     { pieces: [{ verse: 11 }] },
   ],
+  32: [
+    {
+      pieces: [
+        {
+          verse: 1,
+          dropLatinPrefix: "Psalmus David. ",
+          englishFrom: "Rejoice in the Lord",
+        },
+      ],
+    },
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    { pieces: [{ verse: 13 }] },
+    { pieces: [{ verse: 14 }] },
+    { pieces: [{ verse: 15 }] },
+    { pieces: [{ verse: 16 }] },
+    { pieces: [{ verse: 17 }] },
+    { pieces: [{ verse: 18 }] },
+    { pieces: [{ verse: 19 }] },
+    { pieces: [{ verse: 20 }] },
+    { pieces: [{ verse: 21 }] },
+    { pieces: [{ verse: 22 }] },
+  ],
+  33: [
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    { pieces: [{ verse: 13 }] },
+    { pieces: [{ verse: 14 }] },
+    { pieces: [{ verse: 15 }] },
+    { pieces: [{ verse: 16 }] },
+    { pieces: [{ verse: 17 }] },
+    { pieces: [{ verse: 18 }] },
+    { pieces: [{ verse: 19 }] },
+    { pieces: [{ verse: 20 }] },
+    { pieces: [{ verse: 21 }] },
+    { pieces: [{ verse: 22 }] },
+    { pieces: [{ verse: 23 }] },
+  ],
+  34: [
+    {
+      pieces: [
+        {
+          verse: 1,
+          dropLatinPrefix: "Ipsi David. ",
+          englishFrom: "Judge thou, O Lord,",
+        },
+      ],
+    },
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    {
+      pieces: [
+        {
+          verse: 4,
+          latinThrough: "animam meam ;",
+          englishThrough: "my soul.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 4,
+          latinFrom: "avertantur retrorsum",
+          englishFrom: "Let them be turned back",
+        },
+      ],
+    },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    {
+      pieces: [
+        {
+          verse: 10,
+          latinThrough: "quis similis tibi ?",
+          englishThrough: "like to thee?",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 10,
+          latinFrom: "eripiens inopem",
+          englishFrom: "Who deliverest the poor",
+        },
+      ],
+    },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    {
+      pieces: [
+        {
+          verse: 13,
+          latinThrough: "induebar cilicio ;",
+          englishThrough: "haircloth.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 13,
+          latinFrom: "humiliabam in ieiunio",
+          englishFrom: "I humbled my soul",
+        },
+      ],
+    },
+    { pieces: [{ verse: 14 }] },
+    { pieces: [{ verse: 15 }] },
+    { pieces: [{ verse: 16 }] },
+    { pieces: [{ verse: 17 }] },
+    { pieces: [{ verse: 18 }] },
+    { pieces: [{ verse: 19 }] },
+    { pieces: [{ verse: 20 }] },
+    { pieces: [{ verse: 21 }] },
+    { pieces: [{ verse: 22 }] },
+    { pieces: [{ verse: 23 }] },
+    { pieces: [{ verse: 24 }] },
+    { pieces: [{ verse: 25 }] },
+    {
+      pieces: [
+        {
+          verse: 26,
+          latinThrough: "malis meis ;",
+          englishThrough: "my evils.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 26,
+          latinFrom: "induantur confusione",
+          englishFrom: "Let them be clothed with confusion",
+        },
+      ],
+    },
+    { pieces: [{ verse: 27 }] },
+    { pieces: [{ verse: 28 }] },
+  ],
+  35: [
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinThrough: "abyssus multa.",
+          englishThrough: "a great deep.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinFrom: "Homines et iumenta salvabis, Domine,",
+          englishFrom: "Men and beasts thou wilt preserve, O Lord:",
+        },
+        {
+          verse: 8,
+          latinThrough: "misericordiam tuam, Deus.",
+          englishThrough: "O God!",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 8,
+          latinFrom: "Filii autem hominum",
+          englishFrom: "But the children of men",
+        },
+      ],
+    },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    { pieces: [{ verse: 13 }] },
+  ],
+  36: [
+    {
+      pieces: [
+        {
+          verse: 1,
+          dropLatinPrefix: "Psalmus ipsi David. ",
+        },
+      ],
+    },
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    {
+      pieces: [
+        { verse: 6 },
+        {
+          verse: 7,
+          latinThrough: "et ora eum.",
+          englishThrough: "pray to him.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinFrom: "Noli aemulari in eo",
+          englishFrom: "Envy not the man",
+        },
+      ],
+    },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    { pieces: [{ verse: 13 }] },
+    {
+      pieces: [
+        {
+          verse: 14,
+          latinThrough: "arcum suum :",
+          englishThrough: "their bow.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 14,
+          latinFrom: "ut deiiciant",
+          englishFrom: "To cast down the poor",
+        },
+      ],
+    },
+    { pieces: [{ verse: 15 }] },
+    { pieces: [{ verse: 16 }] },
+    { pieces: [{ verse: 17 }] },
+    { pieces: [{ verse: 18 }] },
+    {
+      pieces: [
+        { verse: 19 },
+        {
+          verse: 20,
+          latinThrough: "quia peccatores peribunt.",
+          englishThrough: "shall perish.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 20,
+          latinFrom: "Inimici vero",
+          englishFrom: "And the enemies of the Lord,",
+        },
+      ],
+    },
+    { pieces: [{ verse: 21 }] },
+    { pieces: [{ verse: 22 }] },
+    { pieces: [{ verse: 23 }] },
+    { pieces: [{ verse: 24 }] },
+    { pieces: [{ verse: 25 }] },
+    { pieces: [{ verse: 26 }] },
+    { pieces: [{ verse: 27 }] },
+    {
+      pieces: [
+        {
+          verse: 28,
+          latinThrough: "in aeternum conservabuntur.",
+          englishThrough: "for ever.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 28,
+          latinFrom: "Iniusti punientur",
+          englishFrom: "The unjust shall be punished,",
+        },
+      ],
+    },
+    { pieces: [{ verse: 29 }] },
+    { pieces: [{ verse: 30 }] },
+    { pieces: [{ verse: 31 }] },
+    { pieces: [{ verse: 32 }] },
+    { pieces: [{ verse: 33 }] },
+    { pieces: [{ verse: 34 }] },
+    { pieces: [{ verse: 35 }] },
+    { pieces: [{ verse: 36 }] },
+    { pieces: [{ verse: 37 }] },
+    { pieces: [{ verse: 38 }] },
+    { pieces: [{ verse: 39 }] },
+    { pieces: [{ verse: 40 }] },
+  ],
+  37: [
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    {
+      pieces: [
+        {
+          verse: 12,
+          latinThrough: "appropinquaverunt, et steterunt ;",
+          englishThrough: "stood against me.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 12,
+          latinFrom: "et qui iuxta me erant",
+          englishFrom: "And they that were near me stood afar off:",
+        },
+        {
+          verse: 13,
+          latinThrough: "",
+          englishThrough: "used violence.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 13,
+          latinFrom: "Et qui inquirebant",
+          englishFrom: "And they that sought evils to me",
+        },
+      ],
+    },
+    { pieces: [{ verse: 14 }] },
+    { pieces: [{ verse: 15 }] },
+    { pieces: [{ verse: 16 }] },
+    { pieces: [{ verse: 17 }] },
+    { pieces: [{ verse: 18 }] },
+    { pieces: [{ verse: 19 }] },
+    { pieces: [{ verse: 20 }] },
+    { pieces: [{ verse: 21 }] },
+    { pieces: [{ verse: 22 }] },
+    { pieces: [{ verse: 23 }] },
+  ],
+  38: [
+    {
+      pieces: [
+        {
+          verse: 2,
+          latinThrough: "in lingua mea.",
+          englishThrough: "with my tongue.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 2,
+          latinFrom: "Posui ori meo",
+          englishFrom: "I have set a guard to my mouth",
+        },
+      ],
+    },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    {
+      pieces: [
+        {
+          verse: 5,
+          latinThrough: "finem meum,",
+          englishThrough: "know my end.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 5,
+          latinFrom: "et numerum dierum meorum",
+          englishFrom: "And what is the number of my days:",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 6,
+          latinThrough: "ante te.",
+          englishThrough: "before thee.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 6,
+          latinFrom: "Verumtamen universa",
+          englishFrom: "And indeed all things are vanity:",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinThrough: "conturbatur :",
+          englishThrough: "in vain.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinFrom: "thesaurizat",
+          englishFrom: "He storeth up:",
+        },
+      ],
+    },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    {
+      pieces: [
+        { verse: 10 },
+        {
+          verse: 11,
+          englishThrough: "from me.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 11,
+          latinThrough: "",
+          englishFrom: "The strength of thy hand hath made me faint in rebukes:",
+        },
+        {
+          verse: 12,
+          latinThrough: "corripuisti hominem.",
+          englishThrough: "for iniquity.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 12,
+          latinFrom: "Et tabescere fecisti",
+          englishFrom: "And thou hast made his soul",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 13,
+          latinThrough: "lacrimas meas.",
+          englishThrough: "to my tears.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 13,
+          latinFrom: "Ne sileas",
+          englishFrom: "Be no silent:",
+        },
+      ],
+    },
+    { pieces: [{ verse: 14 }] },
+  ],
+  40: [
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinThrough: "iniquitatem sibi.",
+          englishThrough: "to itself.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinFrom: "Egrediebatur foras",
+          englishFrom: "He went out and spoke to the same purpose.",
+        },
+        {
+          verse: 8,
+          latinThrough: "In idipsum",
+          englishThrough: "",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 8,
+          latinFrom: "adversum me susurrabant",
+          englishFrom: "All my enemies whispered together",
+        },
+      ],
+    },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    { pieces: [{ verse: 13 }] },
+    { pieces: [{ verse: 14 }] },
+  ],
+  41: [
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    {
+      pieces: [
+        {
+          verse: 5,
+          latinThrough: "domum Dei,",
+          englishThrough: "house of God:",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 5,
+          latinFrom: "in voce exsultationis",
+          englishFrom: "With the voice of joy",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 6,
+          latinThrough: "conturbas me ?",
+          englishThrough: "trouble me?",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 6,
+          latinFrom: "Spera in Deo",
+          englishFrom: "Hope in God",
+        },
+        {
+          verse: 7,
+          latinThrough: "et Deus meus.",
+          englishThrough: "And my God.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinFrom: "Ad meipsum",
+          englishFrom: "My soul is troubled within my self:",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 8,
+          latinThrough: "cataractarum tuarum ;",
+          englishThrough: "flood-gates.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 8,
+          latinFrom: "omnia excelsa tua",
+          englishFrom: "All thy heights",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 9,
+          latinThrough: "canticum eius ;",
+          englishThrough: "in the night.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 9,
+          latinFrom: "apud me oratio",
+          englishFrom: "With me is prayer",
+        },
+        {
+          verse: 10,
+          latinThrough: "Susceptor meus es",
+          englishThrough: "my support.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 10,
+          latinFrom: "quare oblitus es mei",
+          englishFrom: "Why hast thou forgotten me?",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 11,
+          latinThrough: "inimici mei,",
+          englishThrough: "reproached me;",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 11,
+          latinFrom: "dum dicunt mihi",
+          englishFrom: "Whilst they say to me",
+        },
+        {
+          verse: 12,
+          latinThrough: "conturbas me ?",
+          englishThrough: "disquiet me?",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 12,
+          latinFrom: "Spera in Deo",
+          englishFrom: "Hope thou in God",
+        },
+      ],
+    },
+  ],
+  43: [
+    {
+      pieces: [
+        {
+          verse: 2,
+          latinThrough: "annuntiaverunt nobis,",
+          englishThrough: "declared to us,",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 2,
+          latinFrom: "opus quod operatus",
+          englishFrom: "The work thou hast wrought",
+        },
+      ],
+    },
+    { pieces: [{ verse: 3 }] },
+    {
+      pieces: [
+        {
+          verse: 4,
+          latinThrough: "non salvavit eos",
+          englishThrough: "save them.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 4,
+          latinFrom: "sed dextera tua",
+          englishFrom: "But thy right hand",
+        },
+      ],
+    },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    { pieces: [{ verse: 13 }] },
+    { pieces: [{ verse: 14 }] },
+    { pieces: [{ verse: 15 }] },
+    { pieces: [{ verse: 16 }] },
+    { pieces: [{ verse: 17 }] },
+    { pieces: [{ verse: 18 }] },
+    { pieces: [{ verse: 19 }] },
+    { pieces: [{ verse: 20 }] },
+    { pieces: [{ verse: 21 }] },
+    {
+      pieces: [
+        {
+          verse: 22,
+          latinThrough: "abscondita cordis.",
+          englishThrough: "of the heart.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 22,
+          latinFrom: "Quoniam propter te",
+          englishFrom: "Because for thy sake",
+        },
+      ],
+    },
+    { pieces: [{ verse: 23 }] },
+    { pieces: [{ verse: 24 }] },
+    { pieces: [{ verse: 25 }] },
+    { pieces: [{ verse: 26 }] },
+  ],
+  44: [
+    {
+      pieces: [
+        {
+          verse: 2,
+          latinThrough: "opera mea regi.",
+          englishThrough: "to the king:",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 2,
+          latinFrom: "Lingua mea",
+          englishFrom: "My tongue is the pen",
+        },
+      ],
+    },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    {
+      pieces: [
+        {
+          verse: 5,
+          latinThrough: "et regna,",
+          englishThrough: "and reign.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 5,
+          latinFrom: "propter veritatem",
+          englishFrom: "Because of truth",
+        },
+      ],
+    },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    {
+      pieces: [
+        { verse: 9 },
+        {
+          verse: 10,
+          latinThrough: "in honore tuo.",
+          englishThrough: "in thy glory.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 10,
+          latinFrom: "Astitit regina",
+          englishFrom: "The queen stood",
+        },
+      ],
+    },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    { pieces: [{ verse: 13 }] },
+    {
+      pieces: [
+        { verse: 14 },
+        {
+          verse: 15,
+          latinThrough: "circumamicta varietatibus.",
+          englishThrough: "with varieties.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 15,
+          latinFrom: "Adducentur regi",
+          englishFrom: "After her shall virgins",
+        },
+      ],
+    },
+    { pieces: [{ verse: 16 }] },
+    { pieces: [{ verse: 17 }] },
+    {
+      pieces: [
+        {
+          verse: 18,
+          latinThrough: "generationem",
+          englishThrough: "all generations.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 18,
+          latinFrom: "propterea populi",
+          englishFrom: "Therefore shall people praise",
+        },
+      ],
+    },
+  ],
+  45: [
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    {
+      pieces: [
+        { verse: 9 },
+        {
+          verse: 10,
+          latinThrough: "finem terrae.",
+          englishThrough: "of the earth.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 10,
+          latinFrom: "Arcum conteret",
+          englishFrom: "He shall destroy the bow,",
+        },
+      ],
+    },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+  ],
+  46: [
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+  ],
+  47: [
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    {
+      pieces: [
+        { verse: 6 },
+        {
+          verse: 7,
+          latinThrough: "apprehendit eos",
+          englishThrough: "took hold of them.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinFrom: "ibi dolores",
+          englishFrom: "There were pains",
+        },
+        { verse: 8 },
+      ],
+    },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    { pieces: [{ verse: 13 }] },
+    { pieces: [{ verse: 14 }] },
+    { pieces: [{ verse: 15 }] },
+  ],
+  48: [
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    {
+      pieces: [
+        { verse: 9 },
+        { verse: 10 },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 11,
+          latinThrough: "stultus peribunt.",
+          englishThrough: "perish together:",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 11,
+          latinFrom: "Et relinquent alienis",
+          englishFrom: "And they shall leave their riches",
+        },
+        {
+          verse: 12,
+          latinThrough: "in aeternum ;",
+          englishThrough: "for ever.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 12,
+          latinFrom: "tabernacula eorum",
+          englishFrom: "Their dwelling places",
+        },
+      ],
+    },
+    { pieces: [{ verse: 13 }] },
+    { pieces: [{ verse: 14 }] },
+    {
+      pieces: [
+        {
+          verse: 15,
+          latinThrough: "mors depascet eos.",
+          englishThrough: "feed upon them.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 15,
+          latinFrom: "Et dominabuntur",
+          englishFrom: "And the just shall have dominion",
+        },
+      ],
+    },
+    { pieces: [{ verse: 16 }] },
+    { pieces: [{ verse: 17 }] },
+    { pieces: [{ verse: 18 }] },
+    { pieces: [{ verse: 19 }] },
+    { pieces: [{ verse: 20 }] },
+    { pieces: [{ verse: 21 }] },
+  ],
+  49: [
+    {
+      pieces: [
+        {
+          verse: 1,
+          dropLatinPrefix: "Psalmus Asaph. ",
+          latinThrough: "vocavit terram",
+          englishFrom: "The God of gods",
+          englishThrough: "the earth.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 1,
+          latinFrom: "a solis ortu",
+          englishFrom: "From the rising of the sun",
+        },
+        { verse: 2 },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 3,
+          latinThrough: "non silebit.",
+          englishThrough: "keep silence.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 3,
+          latinFrom: "Ignis in conspectu",
+          englishFrom: "A fire shall burn",
+        },
+      ],
+    },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    { pieces: [{ verse: 13 }] },
+    { pieces: [{ verse: 14 }] },
+    { pieces: [{ verse: 15 }] },
+    { pieces: [{ verse: 16 }] },
+    { pieces: [{ verse: 17 }] },
+    { pieces: [{ verse: 18 }] },
+    { pieces: [{ verse: 19 }] },
+    {
+      pieces: [
+        { verse: 20 },
+        {
+          verse: 21,
+          latinThrough: "et tacui.",
+          englishThrough: "I was silent.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 21,
+          latinFrom: "Existimasti",
+          englishFrom: "Thou thoughtest unjustly",
+        },
+      ],
+    },
+    { pieces: [{ verse: 22 }] },
+    { pieces: [{ verse: 23 }] },
+  ],
   42: [
     {
       pieces: [
@@ -1951,6 +3047,153 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
     },
     { pieces: [{ verse: 20 }] },
     { pieces: [{ verse: 21 }] },
+  ],
+  77: [
+    { pieces: [{ verse: 1, dropLatinPrefix: "Intellectus Asaph. ", englishFrom: "Attend, O my people" }] },
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    {
+      pieces: [
+        { verse: 4, latinThrough: "in generatione altera,", englishThrough: "in another generation." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 4, latinFrom: "narrantes laudes Domini", englishFrom: "Declaring the praises" },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 5, latinThrough: "et legem posuit in Israël,", englishThrough: "and made a law in Israel." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 5, latinFrom: "quanta mandavit patribus nostris", englishFrom: "How great things" },
+        { verse: 6, latinThrough: "generatio altera :", englishThrough: "That another generation might know them." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 6, latinFrom: "filii qui nascentur", englishFrom: "The children that should be born" },
+      ],
+    },
+    { pieces: [{ verse: 7 }] },
+    {
+      pieces: [
+        { verse: 8, latinThrough: "generatio prava et exasperans ;", englishThrough: "a perverse and exasperating generation." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 8, latinFrom: "generatio quae non direxit cor suum", englishFrom: "A generation that set not their heart aright" },
+      ],
+    },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    { pieces: [{ verse: 13 }] },
+    { pieces: [{ verse: 14 }] },
+    { pieces: [{ verse: 15 }] },
+    { pieces: [{ verse: 16 }] },
+    { pieces: [{ verse: 17 }] },
+    { pieces: [{ verse: 18 }] },
+    { pieces: [{ verse: 19 }] },
+    {
+      pieces: [
+        { verse: 20, latinThrough: "et torrentes inundaverunt.", englishThrough: "the streams overflowed." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 20, latinFrom: "Numquid et panem", englishFrom: "Can he also give bread" },
+      ],
+    },
+    { pieces: [{ verse: 21 }] },
+    { pieces: [{ verse: 22 }] },
+    { pieces: [{ verse: 23 }] },
+    { pieces: [{ verse: 24 }] },
+    { pieces: [{ verse: 25 }] },
+    { pieces: [{ verse: 26 }] },
+    { pieces: [{ verse: 27 }] },
+    { pieces: [{ verse: 28 }] },
+    {
+      pieces: [
+        { verse: 29 },
+        { verse: 30, latinThrough: "a desiderio suo.", englishThrough: "that which they craved." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 30, latinFrom: "Adhuc escae", englishFrom: "As yet their meat" },
+        { verse: 31, latinThrough: "super eos :", englishFrom: "And the wrath of God", englishThrough: "came upon them." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 31, latinFrom: "et occidit pingues", englishFrom: "And he slew the fat ones" },
+      ],
+    },
+    { pieces: [{ verse: 32 }] },
+    { pieces: [{ verse: 33 }] },
+    { pieces: [{ verse: 34 }] },
+    { pieces: [{ verse: 35 }] },
+    { pieces: [{ verse: 36 }] },
+    { pieces: [{ verse: 37 }] },
+    {
+      pieces: [
+        { verse: 38, latinThrough: "et non disperdet eos.", englishThrough: "and will not destroy them." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 38, latinFrom: "Et abundavit", englishFrom: "And many a time" },
+      ],
+    },
+    { pieces: [{ verse: 39 }] },
+    { pieces: [{ verse: 40 }] },
+    { pieces: [{ verse: 41 }] },
+    { pieces: [{ verse: 42 }] },
+    { pieces: [{ verse: 43 }] },
+    { pieces: [{ verse: 44 }] },
+    { pieces: [{ verse: 45 }] },
+    { pieces: [{ verse: 46 }] },
+    { pieces: [{ verse: 47 }] },
+    { pieces: [{ verse: 48 }] },
+    { pieces: [{ verse: 49 }] },
+    { pieces: [{ verse: 50 }] },
+    { pieces: [{ verse: 51 }] },
+    { pieces: [{ verse: 52 }] },
+    { pieces: [{ verse: 53 }] },
+    {
+      pieces: [
+        { verse: 54, latinThrough: "quem acquisivit dextera eius ;", englishThrough: "the mountain which his right hand had purchased." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 54, latinFrom: "et eiecit a facie eorum gentes", englishFrom: "And he cast out the Gentiles" },
+      ],
+    },
+    { pieces: [{ verse: 55 }] },
+    { pieces: [{ verse: 56 }] },
+    { pieces: [{ verse: 57 }] },
+    { pieces: [{ verse: 58 }] },
+    { pieces: [{ verse: 59 }] },
+    { pieces: [{ verse: 60 }] },
+    { pieces: [{ verse: 61 }] },
+    { pieces: [{ verse: 62 }] },
+    { pieces: [{ verse: 63 }] },
+    { pieces: [{ verse: 64 }] },
+    { pieces: [{ verse: 65 }] },
+    { pieces: [{ verse: 66 }] },
+    { pieces: [{ verse: 67 }] },
+    { pieces: [{ verse: 68 }] },
+    { pieces: [{ verse: 69 }] },
+    { pieces: [{ verse: 70 }] },
+    { pieces: [{ verse: 71 }] },
+    { pieces: [{ verse: 72 }] },
   ],
   80: [
     { pieces: [{ verse: 2 }] },

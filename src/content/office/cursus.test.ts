@@ -258,6 +258,189 @@ describe("weekly cursus", () => {
     expect(verses[5].english.startsWith("Hope in God")).toBe(true);
   });
 
+  test("Psalms 32 to 49, except 39 and 42, follow Kate's Benedictine lines", () => {
+    const lengths = (psalm: number, from?: number, to?: number) =>
+      sliceVerses({ psalm, from, to }).length;
+    expect(lengths(32, 1, 11)).toBe(11);
+    expect(lengths(32, 12, 22)).toBe(11);
+    expect(lengths(33)).toBe(22);
+    expect(lengths(34)).toBe(32);
+    expect(lengths(35)).toBe(13);
+    expect(lengths(36, 1, 26)).toBe(27);
+    expect(lengths(36, 27, 40)).toBe(15);
+    expect(lengths(37)).toBe(23);
+    expect(lengths(38)).toBe(18);
+    expect(lengths(40)).toBe(14);
+    expect(lengths(41)).toBe(16);
+    expect(lengths(43, 1, 13)).toBe(14);
+    expect(lengths(43, 14, 26)).toBe(14);
+    expect(lengths(44)).toBe(20);
+    expect(lengths(45)).toBe(11);
+    expect(lengths(46)).toBe(9);
+    expect(lengths(47)).toBe(13);
+    expect(lengths(48)).toBe(21);
+    expect(lengths(49)).toBe(24);
+
+    const thirtyTwo = sliceVerses({ psalm: 32, from: 1, to: 11 });
+    expect(thirtyTwo[0].latin.startsWith("Exsultate, iusti")).toBe(true);
+    expect(thirtyTwo[0].latin.includes("Psalmus David")).toBe(false);
+    expect(thirtyTwo[0].english.startsWith("Rejoice in the Lord")).toBe(true);
+    expect(sliceVerses({ psalm: 32, from: 12, to: 22 })[0].latin.startsWith("Beata gens")).toBe(true);
+
+    const thirtyThree = sliceVerses({ psalm: 33 });
+    expect(thirtyThree[0].latin.startsWith("Benedicam Dominum")).toBe(true);
+    expect(thirtyThree[0].latin.includes("Achimelech")).toBe(false);
+    expect(thirtyThree[19].latin.startsWith("Custodit Dominus")).toBe(true);
+
+    const thirtyFour = sliceVerses({ psalm: 34 });
+    expect(thirtyFour[0].latin.startsWith("Iudica, Domine")).toBe(true);
+    expect(thirtyFour[0].english.startsWith("Judge thou, O Lord,")).toBe(true);
+    expect(thirtyFour[3].latin.endsWith("animam meam ;")).toBe(true);
+    expect(thirtyFour[4].latin.startsWith("avertantur retrorsum")).toBe(true);
+    expect(thirtyFour[14].latin.endsWith("cilicio ;")).toBe(true);
+    expect(thirtyFour[15].latin.startsWith("humiliabam in ieiunio")).toBe(true);
+    expect(thirtyFour[31].latin.endsWith("laudem tuam.")).toBe(true);
+
+    const thirtyFive = sliceVerses({ psalm: 35 });
+    expect(thirtyFive[0].latin.startsWith("Dixit iniustus")).toBe(true);
+    expect(thirtyFive[0].latin.includes("In finem")).toBe(false);
+    expect(thirtyFive[5].latin.endsWith("abyssus multa.")).toBe(true);
+    expect(thirtyFive[6].latin.startsWith("Homines et iumenta")).toBe(true);
+    expect(thirtyFive[6].latin.endsWith("misericordiam tuam, Deus.")).toBe(true);
+    expect(thirtyFive[6].english.endsWith("O God!")).toBe(true);
+    expect(thirtyFive[7].latin.startsWith("Filii autem hominum")).toBe(true);
+
+    const thirtySixA = sliceVerses({ psalm: 36, from: 1, to: 26 });
+    const thirtySixB = sliceVerses({ psalm: 36, from: 27, to: 40 });
+    expect(sliceLabel({ psalm: 36, from: 1, to: 26 })).toBe("Psalmus 36 · 1–26");
+    expect(sliceLabel({ psalm: 36, from: 27, to: 40 })).toBe("Psalmus 36 · 27–40");
+    expect(thirtySixA[0].latin.startsWith("Noli aemulari")).toBe(true);
+    expect(thirtySixA[0].latin.includes("Psalmus ipsi David")).toBe(false);
+    expect(thirtySixA[5].latin.endsWith("et ora eum.")).toBe(true);
+    expect(thirtySixA[19].latin.endsWith("quia peccatores peribunt.")).toBe(true);
+    expect(thirtySixA[26].latin.startsWith("Tota die miseretur")).toBe(true);
+    expect(thirtySixB[0].latin.startsWith("Declina a malo")).toBe(true);
+    expect(thirtySixB[1].latin.endsWith("conservabuntur.")).toBe(true);
+    expect(thirtySixB[2].latin.startsWith("Iniusti punientur")).toBe(true);
+
+    const thirtySeven = sliceVerses({ psalm: 37 });
+    expect(thirtySeven[0].latin.startsWith("Domine, ne in furore")).toBe(true);
+    expect(thirtySeven[0].latin.includes("sabbato")).toBe(false);
+    expect(thirtySeven[10].latin.endsWith("et steterunt ;")).toBe(true);
+    expect(thirtySeven[10].english.endsWith("stood against me.")).toBe(true);
+    expect(thirtySeven[11].latin.startsWith("et qui iuxta me erant")).toBe(true);
+    expect(thirtySeven[11].latin.endsWith("animam meam.")).toBe(true);
+    expect(thirtySeven[11].english).toContain("used violence.");
+    expect(thirtySeven[12].latin.startsWith("Et qui inquirebant")).toBe(true);
+    expect(thirtySeven[12].english.startsWith("And they that sought evils to me")).toBe(true);
+
+    const thirtyEight = sliceVerses({ psalm: 38 });
+    expect(thirtyEight[0].latin.endsWith("in lingua mea.")).toBe(true);
+    expect(thirtyEight[0].latin.includes("Idithun")).toBe(false);
+    expect(thirtyEight[12].latin.endsWith("plagas tuas.")).toBe(true);
+    expect(thirtyEight[12].english.endsWith("from me.")).toBe(true);
+    expect(thirtyEight[13].latin.startsWith("A fortitudine")).toBe(true);
+    expect(thirtyEight[13].latin.endsWith("corripuisti hominem.")).toBe(true);
+    expect(thirtyEight[13].english.startsWith("The strength of thy hand")).toBe(true);
+    expect(thirtyEight[14].latin.startsWith("Et tabescere fecisti")).toBe(true);
+    expect(thirtyEight[17].latin.startsWith("Remitte mihi")).toBe(true);
+
+    const forty = sliceVerses({ psalm: 40 });
+    expect(forty[0].latin.startsWith("Beatus qui intelligit")).toBe(true);
+    expect(forty[5].latin.endsWith("iniquitatem sibi.")).toBe(true);
+    expect(forty[6].latin.startsWith("Egrediebatur foras")).toBe(true);
+    expect(forty[6].latin.endsWith("in idipsum.")).toBe(false);
+    expect(forty[6].latin.endsWith("In idipsum")).toBe(true);
+    expect(forty[6].english.endsWith("the same purpose.")).toBe(true);
+    expect(forty[7].latin.startsWith("adversum me susurrabant")).toBe(true);
+
+    const fortyOne = sliceVerses({ psalm: 41 });
+    expect(fortyOne[0].latin.includes("filiis Core")).toBe(false);
+    expect(fortyOne[3].latin.endsWith("domum Dei,")).toBe(true);
+    expect(fortyOne[6].latin.endsWith("et Deus meus.")).toBe(true);
+    expect(fortyOne[11].latin.endsWith("Susceptor meus es")).toBe(true);
+    expect(fortyOne[14].latin.startsWith("dum dicunt mihi")).toBe(true);
+    expect(fortyOne[15].latin.startsWith("Spera in Deo")).toBe(true);
+
+    const fortyThreeA = sliceVerses({ psalm: 43, from: 1, to: 13 });
+    const fortyThreeB = sliceVerses({ psalm: 43, from: 14, to: 26 });
+    expect(fortyThreeA[0].latin.startsWith("Deus, auribus nostris")).toBe(true);
+    expect(fortyThreeA[13].latin.startsWith("Vendidisti populum")).toBe(true);
+    expect(fortyThreeB[0].latin.startsWith("Posuisti nos opprobrium")).toBe(true);
+    expect(fortyThreeB[8].latin.endsWith("abscondita cordis.")).toBe(true);
+    expect(fortyThreeB[9].latin.startsWith("Quoniam propter te")).toBe(true);
+
+    const fortyFour = sliceVerses({ psalm: 44 });
+    expect(fortyFour[0].latin.endsWith("opera mea regi.")).toBe(true);
+    expect(fortyFour[0].latin.includes("Canticum pro dilecto")).toBe(false);
+    expect(fortyFour[9].latin.endsWith("in honore tuo.")).toBe(true);
+    expect(fortyFour[14].latin.endsWith("circumamicta varietatibus.")).toBe(true);
+    expect(fortyFour[19].latin.startsWith("propterea populi")).toBe(true);
+
+    const fortyFive = sliceVerses({ psalm: 45 });
+    expect(fortyFive[7].latin.endsWith("finem terrae.")).toBe(true);
+    expect(fortyFive[8].latin.startsWith("Arcum conteret")).toBe(true);
+
+    const fortySix = sliceVerses({ psalm: 46 });
+    expect(fortySix[0].latin.startsWith("Omnes gentes")).toBe(true);
+    expect(fortySix[1].latin.startsWith("quoniam Dominus excelsus")).toBe(true);
+
+    const fortySeven = sliceVerses({ psalm: 47 });
+    expect(fortySeven[4].latin.endsWith("apprehendit eos")).toBe(true);
+    expect(fortySeven[5].latin.startsWith("ibi dolores")).toBe(true);
+    expect(fortySeven[5].latin.endsWith("naves Tharsis.")).toBe(true);
+
+    const fortyEight = sliceVerses({ psalm: 48 });
+    expect(fortyEight[7].latin.endsWith("in finem.")).toBe(true);
+    expect(fortyEight[8].latin.endsWith("stultus peribunt.")).toBe(true);
+    expect(fortyEight[9].latin.endsWith("in aeternum ;")).toBe(true);
+    expect(fortyEight[10].latin.startsWith("tabernacula eorum")).toBe(true);
+    expect(fortyEight[13].latin.endsWith("mors depascet eos.")).toBe(true);
+
+    const fortyNine = sliceVerses({ psalm: 49 });
+    expect(fortyNine[0].latin.startsWith("Deus deorum Dominus")).toBe(true);
+    expect(fortyNine[0].latin.includes("Psalmus Asaph")).toBe(false);
+    expect(fortyNine[0].english.startsWith("The God of gods")).toBe(true);
+    expect(fortyNine[1].latin.startsWith("a solis ortu")).toBe(true);
+    expect(fortyNine[1].latin).toContain("Ex Sion species");
+    expect(fortyNine[20].latin.endsWith("et tacui.")).toBe(true);
+    expect(fortyNine[21].latin.startsWith("Existimasti")).toBe(true);
+
+    const monday = hourSlots("mon", "vigils").flatMap((slot) => slot.slices);
+    expect(monday.map((slice) => [slice.psalm, slice.from, slice.to])).toEqual(
+      expect.arrayContaining([
+        [36, 1, 26],
+        [36, 27, 40],
+      ]),
+    );
+    expect(hourSlots("mon", "lauds")[3].slices[0]).toEqual({ psalm: 35 });
+    const tuesday = hourSlots("tue", "vigils").flatMap((slot) => slot.slices.map((slice) => slice.psalm));
+    expect(tuesday.slice(2, 10)).toEqual([43, 43, 44, 45, 46, 47, 48, 49]);
+
+    for (const verses of [
+      thirtyTwo,
+      thirtyThree,
+      thirtyFour,
+      thirtyFive,
+      thirtySixA,
+      thirtySixB,
+      thirtySeven,
+      thirtyEight,
+      forty,
+      fortyOne,
+      fortyThreeA,
+      fortyThreeB,
+      fortyFour,
+      fortyFive,
+      fortySix,
+      fortySeven,
+      fortyEight,
+      fortyNine,
+    ]) {
+      expect(verses.every((verse) => verse.latin.length > 0 && verse.english.length > 0)).toBe(true);
+    }
+  });
+
   test("Psalm 50 is lined out into its twenty Lauds office lines", () => {
     const verses = sliceVerses({ psalm: 50 });
     expect(verses.map((verse) => verse.n)).toEqual(
@@ -318,6 +501,37 @@ describe("weekly cursus", () => {
     expect(verses[19].latin.endsWith("in manu Moysi et Aaron.")).toBe(true);
     expect(verses[2].english.startsWith("My soul refused to be comforted")).toBe(true);
     expect(verses[13].english.startsWith("Thou hast made thy power known")).toBe(true);
+  });
+
+  test("Psalm 77 splits into two thirty-nine-line parts at Kate's 39/40 break", () => {
+    const first = sliceVerses({ psalm: 77, from: 1, to: 35 });
+    const second = sliceVerses({ psalm: 77, from: 36, to: 72 });
+    // Each part is numbered from 1 and has thirty-nine office lines.
+    expect(first).toHaveLength(39);
+    expect(first.map((verse) => verse.n)).toEqual(Array.from({ length: 39 }, (_, i) => String(i + 1)));
+    expect(second).toHaveLength(39);
+    expect(second.map((verse) => verse.n)).toEqual(Array.from({ length: 39 }, (_, i) => String(i + 1)));
+    // Title dropped from line 1, which opens the psalm proper.
+    expect(first[0].latin.startsWith("Attendite, popule meus, legem meam")).toBe(true);
+    expect(first[0].latin.includes("Intellectus")).toBe(false);
+    // The break: part 1 ends and part 2 opens on the following half-verse.
+    expect(first[38].latin.startsWith("Et rememorati sunt quia Deus adiutor")).toBe(true);
+    expect(second[0].latin.startsWith("Et dilexerunt eum in ore suo")).toBe(true);
+    // Re-lining: v4 split into two lines, v5/v6 bridged, v8 split in two.
+    expect(first[3].latin.endsWith("in generatione altera,")).toBe(true);
+    expect(first[4].latin.startsWith("narrantes laudes Domini")).toBe(true);
+    expect(first[5].latin.endsWith("et legem posuit in Israël,")).toBe(true);
+    expect(first[6].latin.startsWith("quanta mandavit patribus nostris")).toBe(true);
+    expect(first[10].latin.startsWith("generatio quae non direxit cor suum")).toBe(true);
+    // v20, v29-/v30-/v31 bridge, v38, and v54 splits land where the pointer puts them.
+    expect(first[22].latin.endsWith("et torrentes inundaverunt.")).toBe(true);
+    expect(first[23].latin.startsWith("Numquid et panem")).toBe(true);
+    expect(second[2].latin.endsWith("et non disperdet eos.")).toBe(true);
+    expect(second[3].latin.startsWith("Et abundavit")).toBe(true);
+    expect(second[19].latin.endsWith("quem acquisivit dextera eius ;")).toBe(true);
+    expect(second[20].latin.startsWith("et eiecit a facie eorum gentes")).toBe(true);
+    // The psalm closes with the final verse of part 2.
+    expect(second[38].latin.endsWith("deduxit eos.")).toBe(true);
   });
 
   test("Psalm 80 is lined into its fifteen Friday Vigils office lines", () => {

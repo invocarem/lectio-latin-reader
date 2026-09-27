@@ -80,7 +80,7 @@ Every night opens with Psalm 3 and Psalm 94, then the further psalms of the two 
 | Day | First six | Second six |
 | --- | --- | --- |
 | Sunday | 20, 21, 22, 23, 24, 25 | 26, 27, 28, 29, 30, 31 |
-| Monday | 32 verses 1–11; 32 verses 12–22; 33; 34; 36 verses 1–20; 36 verses 21–40 | 37; 38; 39 verses 1–9; 39 verses 10–18; 40; 41 |
+| Monday | 32 verses 1–11; 32 verses 12–22; 33; 34; 36 verses 1–26; 36 verses 27–40 | 37; 38; 39 verses 1–9; 39 verses 10–18; 40; 41 |
 | Tuesday | 43 verses 1–13; 43 verses 14–26; 44; 45; 46; 47 | 48; 49; 51; 52; 53; 54 |
 | Wednesday | 55; 57; 58; 59; 60; 61 | 65; 67 verses 1–18; 67 verses 19–36; 68 verses 1–19; 68 verses 20–37; 69 |
 | Thursday | 70; 71; 72 verses 1–14; 72 verses 15–28; 73 verses 1–12; 73 verses 13–23 | 74; 76; 77 verses 1–36; 77 verses 37–72; 78; 79 |

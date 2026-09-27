@@ -66,19 +66,20 @@ function vigils(first: OfficeSlot[], second: OfficeSlot[]): OfficeSlot[] {
  * Even splits of the longer vigils and vespers psalms, taken from the
  * verse counts in latin.md. The first half keeps the extra verse when the
  * count is odd. Psalms 9 and 17 are the Rule's Prime cuts, not these halves.
- * Psalm 144 follows the Vespers division after verse 9. Psalms 103–106
- * follow the Benedictine divisio (105 after verse 31, 106 after verse 24).
+ * Psalm 144 follows the Vespers division after verse 9. Psalm 36 follows
+ * the Benedictine divisio after verse 26. Psalms 103–106 follow the
+ * Benedictine divisio (105 after verse 31, 106 after verse 24).
  */
 const HALF = {
   32: [cut(32, 1, 11), cut(32, 12, 22)],
-  36: [cut(36, 1, 20), cut(36, 21, 40)],
+  36: [cut(36, 1, 26), cut(36, 27, 40)],
   39: [cut(39, 1, 9), cut(39, 10, 18)],
   43: [cut(43, 1, 13), cut(43, 14, 26)],
   67: [cut(67, 1, 18), cut(67, 19, 36)],
   68: [cut(68, 1, 19), cut(68, 20, 37)],
   72: [cut(72, 1, 14), cut(72, 15, 28)],
   73: [cut(73, 1, 12), cut(73, 13, 23)],
-  77: [cut(77, 1, 36), cut(77, 37, 72)],
+  77: [cut(77, 1, 35), cut(77, 36, 72)],
   103: [cut(103, 1, 24), cut(103, 25, 35)],
   104: [cut(104, 1, 22), cut(104, 23, 45)],
   105: [cut(105, 1, 31), cut(105, 32, 48)],
