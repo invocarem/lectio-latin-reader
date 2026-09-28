@@ -22,10 +22,10 @@ describe("weekly cursus", () => {
     const wed = hourSlots("wed", "prime")[0].slices[0];
     const fri = hourSlots("fri", "prime")[2].slices[0];
     const sat = hourSlots("sat", "prime")[0].slices[0];
-    expect(tue).toEqual({ psalm: 9, from: 2, to: 19 });
-    expect(wed).toEqual({ psalm: 9, from: 20, to: 39 });
-    expect(fri).toEqual({ psalm: 17, from: 2, to: 25 });
-    expect(sat).toEqual({ psalm: 17, from: 26, to: 51 });
+    expect(tue).toEqual({ psalm: 9, from: 2, to: 19, part: 1 });
+    expect(wed).toEqual({ psalm: 9, from: 20, to: 39, part: 2 });
+    expect(fri).toEqual({ psalm: 17, from: 2, to: 25, part: 1 });
+    expect(sat).toEqual({ psalm: 17, from: 26, to: 51, part: 2 });
   });
 
   test("Monday Vespers joins Psalms 115 and 116 in one slot", () => {
@@ -2004,8 +2004,8 @@ describe("weekly cursus", () => {
     expect(second[15].latin.startsWith("Benedictus Dominus")).toBe(true);
     expect(second[0].english.endsWith("his spirit.")).toBe(true);
     const sat = hourSlots("sat", "vigils").flatMap((slot) => slot.slices);
-    expect(sat).toContainEqual({ psalm: 105, from: 1, to: 31 });
-    expect(sat).toContainEqual({ psalm: 105, from: 32, to: 48 });
+    expect(sat).toContainEqual({ psalm: 105, from: 1, to: 31, part: 1 });
+    expect(sat).toContainEqual({ psalm: 105, from: 32, to: 48, part: 2 });
   });
 
   test("Psalm 106 keeps each Gallican verse and divides before Dixit, et stetit", () => {
@@ -2019,8 +2019,8 @@ describe("weekly cursus", () => {
     expect(second[0].latin.startsWith("Dixit, et stetit spiritus procellae")).toBe(true);
     expect(second[18].latin.startsWith("Quis sapiens")).toBe(true);
     const sat = hourSlots("sat", "vigils").flatMap((slot) => slot.slices);
-    expect(sat).toContainEqual({ psalm: 106, from: 1, to: 24 });
-    expect(sat).toContainEqual({ psalm: 106, from: 25, to: 43 });
+    expect(sat).toContainEqual({ psalm: 106, from: 1, to: 24, part: 1 });
+    expect(sat).toContainEqual({ psalm: 106, from: 25, to: 43, part: 2 });
   });
 
   test("Psalm 107 drops the title and joins the Gallican verses into fourteen lines", () => {
@@ -2772,6 +2772,8 @@ describe("weekly cursus", () => {
   test("Psalm 9 is lined into Tuesday and Wednesday Prime", () => {
     const tuesday = sliceVerses(hourSlots("tue", "prime")[2].slices[0]);
     const wednesday = sliceVerses(hourSlots("wed", "prime")[0].slices[0]);
+    expect(sliceLabel(hourSlots("tue", "prime")[2].slices[0])).toBe("Psalmus 9 · 1");
+    expect(sliceLabel(hourSlots("wed", "prime")[0].slices[0])).toBe("Psalmus 9 · 2");
     expect(tuesday).toHaveLength(19);
     expect(wednesday).toHaveLength(23);
     expect(tuesday[0].n).toBe("1");
