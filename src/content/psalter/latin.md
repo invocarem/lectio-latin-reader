@@ -370,7 +370,7 @@
 
 6. Quoniam Dominus in generatione iusta est : consilium inopis confudistis, quoniam Dominus spes eius est.
 
-7. Quis dabit ex Sion salutare Israël ? Cum averterit Dominus captivitatem plebis suae, exsultabit Iacob, et laetabitur Israël.
+7. Quis dabit ex Sion salutare Israel ? Cum averterit Dominus captivitatem plebis suae, exsultabit Iacob, et laetabitur Israel.
 
 ---
 
@@ -650,7 +650,7 @@
 
 3. Deus meus, clamabo per diem, et non exaudies ; et nocte, et non ad insipientiam mihi.
 
-4. Tu autem in sancto habitas, laus Israël.
+4. Tu autem in sancto habitas, laus Israel.
 
 5. In te speraverunt patres nostri ; speraverunt, et liberasti eos.
 
@@ -692,7 +692,7 @@
 
 24. Qui timetis Dominum, laudate eum ; universum semen Iacob, glorificate eum.
 
-25. Timeat eum omne semen Israël, quoniam non sprevit, neque despexit deprecationem pauperis, nec avertit faciem suam a me : et cum clamarem ad eum, exaudivit me.
+25. Timeat eum omne semen Israel, quoniam non sprevit, neque despexit deprecationem pauperis, nec avertit faciem suam a me : et cum clamarem ad eum, exaudivit me.
 
 26. Apud te laus mea in ecclesia magna ; vota mea reddam in conspectu timentium eum.
 
@@ -794,7 +794,7 @@
 
 21. Innocentes et recti adhaeserunt mihi, quia sustinui te.
 
-22. Libera, Deus, Israël ex omnibus tribulationibus suis.
+22. Libera, Deus, Israel ex omnibus tribulationibus suis.
 
 ---
 
@@ -1438,7 +1438,7 @@
 
 13. Me autem propter innocentiam suscepisti ; et confirmasti me in conspectu tuo in aeternum.
 
-14. Benedictus Dominus Deus Israël a saeculo et usque in saeculum. Fiat, fiat.
+14. Benedictus Dominus Deus Israel a saeculo et usque in saeculum. Fiat, fiat.
 
 ---
 
@@ -1726,7 +1726,7 @@
 
 6. Et annuntiabunt caeli iustitiam eius, quoniam Deus iudex est.
 
-7. Audi, populus meus, et loquar ; Israël, et testificabor tibi : Deus, Deus tuus ego sum.
+7. Audi, populus meus, et loquar ; Israel, et testificabor tibi : Deus, Deus tuus ego sum.
 
 8. Non in sacrificiis tuis arguam te ; holocausta autem tua in conspectu meo sunt semper.
 
@@ -1848,7 +1848,7 @@
 
 6. Deum non invocaverunt ; illic trepidaverunt timore, ubi non erat timor. Quoniam Deus dissipavit ossa eorum qui hominibus placent : confusi sunt, quoniam Deus sprevit eos.
 
-7. Quis dabit ex Sion salutare Israël ? cum converterit Deus captivitatem plebis suae, exsultabit Iacob, et laetabitur Israël.
+7. Quis dabit ex Sion salutare Israel ? cum converterit Deus captivitatem plebis suae, exsultabit Iacob, et laetabitur Israel.
 
 ---
 
@@ -2024,7 +2024,7 @@
 
 5. Neque iniquitas mea, neque peccatum meum, Domine ; sine iniquitate cucurri, et direxi.
 
-6. Exsurge in occursum meum, et vide : et tu, Domine Deus virtutum, Deus Israël, intende ad visitandas omnes gentes : non miserearis omnibus qui operantur iniquitatem.
+6. Exsurge in occursum meum, et vide : et tu, Domine Deus virtutum, Deus Israel, intende ad visitandas omnes gentes : non miserearis omnibus qui operantur iniquitatem.
 
 7. Convertentur ad vesperam, et famem patientur ut canes : et circuibunt civitatem.
 
@@ -2304,7 +2304,7 @@
 
 8. Deus, cum egredereris in conspectu populi tui, cum pertransires in deserto,
 
-9. terra mota est, etenim caeli distillaverunt, a facie Dei Sinai, a facie Dei Israël.
+9. terra mota est, etenim caeli distillaverunt, a facie Dei Sinai, a facie Dei Israel.
 
 10. Pluviam voluntariam segregabis, Deus, haereditati tuae ; et infirmata est, tu vero perfecisti eam.
 
@@ -2340,7 +2340,7 @@
 
 26. Praevenerunt principes coniuncti psallentibus, in medio iuvencularum tympanistriarum.
 
-27. In ecclesiis benedicite Deo Domino de fontibus Israël.
+27. In ecclesiis benedicite Deo Domino de fontibus Israel.
 
 28. Ibi Beniamin adolescentulus, in mentis excessu ; principes Iuda, duces eorum ; principes Zabulon, principes Nephthali.
 
@@ -2356,9 +2356,9 @@
 
 34. Qui ascendit super caelum caeli, ad orientem : ecce dabit voci suae vocem virtutis.
 
-35. Date gloriam Deo super Israël ; magnificentia eius et virtus eius in nubibus.
+35. Date gloriam Deo super Israel ; magnificentia eius et virtus eius in nubibus.
 
-36. Mirabilis Deus in sanctis suis ; Deus Israël ipse dabit virtutem et fortitudinem plebi suae. Benedictus Deus !
+36. Mirabilis Deus in sanctis suis ; Deus Israel ipse dabit virtutem et fortitudinem plebi suae. Benedictus Deus !
 
 ---
 
@@ -2376,7 +2376,7 @@
 
 6. Deus, tu scis insipientiam meam ; et delicta mea a te non sunt abscondita.
 
-7. Non erubescant in me qui exspectant te, Domine, Domine virtutum ; non confundantur super me qui quaerunt te, Deus Israël.
+7. Non erubescant in me qui exspectant te, Domine, Domine virtutum ; non confundantur super me qui quaerunt te, Deus Israel.
 
 8. Quoniam propter te sustinui opprobrium ; operuit confusio faciem meam.
 
@@ -2500,7 +2500,7 @@
 
 21. Multiplicasti magnificentiam tuam ; et conversus consolatus es me.
 
-22. Nam et ego confitebor tibi in vasis psalmi veritatem tuam, Deus ; psallam tibi in cithara, sanctus Israël.
+22. Nam et ego confitebor tibi in vasis psalmi veritatem tuam, Deus ; psallam tibi in cithara, sanctus Israel.
 
 23. Exsultabunt labia mea cum cantavero tibi ; et anima mea quam redemisti.
 
@@ -2544,7 +2544,7 @@
 
 17. Sit nomen eius benedictum in saecula ; ante solem permanet nomen eius. Et benedicentur in ipso omnes tribus terrae ; omnes gentes magnificabunt eum.
 
-18. Benedictus Dominus Deus Israël, qui facit mirabilia solus.
+18. Benedictus Dominus Deus Israel, qui facit mirabilia solus.
 
 19. Et benedictum nomen maiestatis eius in aeternum, et replebitur maiestate eius omnis terra. Fiat, fiat.
 
@@ -2554,7 +2554,7 @@
 
 ## Psalmus 72
 
-1. Psalmus Asaph. Quam bonus Israël Deus, his qui recto sunt corde !
+1. Psalmus Asaph. Quam bonus Israel Deus, his qui recto sunt corde !
 
 2. Mei autem pene moti sunt pedes, pene effusi sunt gressus mei :
 
@@ -2692,7 +2692,7 @@
 
 1. In finem, in laudibus. Psalmus Asaph, canticum ad Assyrios.
 
-2. Notus in Iudaea Deus ; in Israël magnum nomen eius.
+2. Notus in Iudaea Deus ; in Israel magnum nomen eius.
 
 3. Et factus est in pace locus eius, et habitatio eius in Sion.
 
@@ -2774,7 +2774,7 @@
 
 4. Non sunt occultata a filiis eorum in generatione altera, narrantes laudes Domini et virtutes eius, et mirabilia eius quae fecit.
 
-5. Et suscitavit testimonium in Iacob, et legem posuit in Israël, quanta mandavit patribus nostris nota facere ea filiis suis :
+5. Et suscitavit testimonium in Iacob, et legem posuit in Israel, quanta mandavit patribus nostris nota facere ea filiis suis :
 
 6. ut cognoscat generatio altera : filii qui nascentur et exsurgent, et narrabunt filiis suis,
 
@@ -2806,7 +2806,7 @@
 
 20. quoniam percussit petram, et fluxerunt aquae, et torrentes inundaverunt. Numquid et panem poterit dare, aut parare mensam populo suo ?
 
-21. Ideo audivit Dominus et distulit ; et ignis accensus est in Iacob, et ira ascendit in Israël :
+21. Ideo audivit Dominus et distulit ; et ignis accensus est in Iacob, et ira ascendit in Israel :
 
 22. quia non crediderunt in Deo, nec speraverunt in salutari eius.
 
@@ -2826,7 +2826,7 @@
 
 30. non sunt fraudati a desiderio suo. Adhuc escae eorum erant in ore ipsorum,
 
-31. et ira Dei ascendit super eos : et occidit pingues eorum, et electos Israël impedivit.
+31. et ira Dei ascendit super eos : et occidit pingues eorum, et electos Israel impedivit.
 
 32. In omnibus his peccaverunt adhuc, et non crediderunt in mirabilibus eius.
 
@@ -2846,7 +2846,7 @@
 
 40. Quoties exacerbaverunt eum in deserto ; in iram concitaverunt eum in inaquoso ?
 
-41. Et conversi sunt, et tentaverunt Deum, et sanctum Israël exacerbaverunt.
+41. Et conversi sunt, et tentaverunt Deum, et sanctum Israel exacerbaverunt.
 
 42. Non sunt recordati manus eius, die qua redemit eos de manu tribulantis :
 
@@ -2874,7 +2874,7 @@
 
 54. Et induxit eos in montem sanctificationis suae, montem quem acquisivit dextera eius ; et eiecit a facie eorum gentes, et sorte divisit eis terram in funiculo distributionis ;
 
-55. et habitare fecit in tabernaculis eorum tribus Israël.
+55. et habitare fecit in tabernaculis eorum tribus Israel.
 
 56. Et tentaverunt, et exacerbaverunt Deum excelsum, et testimonia eius non custodierunt.
 
@@ -2882,7 +2882,7 @@
 
 58. In iram concitaverunt eum in collibus suis, et in sculptilibus suis ad aemulationem eum provocaverunt.
 
-59. Audivit Deus, et sprevit, et ad nihilum redegit valde Israël.
+59. Audivit Deus, et sprevit, et ad nihilum redegit valde Israel.
 
 60. Et repulit tabernaculum Silo, tabernaculum suum, ubi habitavit in hominibus.
 
@@ -2906,7 +2906,7 @@
 
 70. Et elegit David, servum suum, et sustulit eum de gregibus ovium ; de post foetantes accepit eum :
 
-71. pascere Iacob servum suum, et Israël haereditatem suam.
+71. pascere Iacob servum suum, et Israel haereditatem suam.
 
 72. Et pavit eos in innocentia cordis sui, et in intellectibus manuum suarum deduxit eos.
 
@@ -2946,7 +2946,7 @@
 
 1. In finem, pro iis qui commutabuntur. Testimonium Asaph, psalmus.
 
-2. Qui regis Israël, intende ; qui deducis velut ovem Ioseph. Qui sedes super cherubim, manifestare
+2. Qui regis Israel, intende ; qui deducis velut ovem Ioseph. Qui sedes super cherubim, manifestare
 
 3. coram Ephraim, Beniamin, et Manasse. Excita potentiam tuam, et veni, ut salvos facias nos.
 
@@ -2996,7 +2996,7 @@
 
 4. Buccinate in neomenia tuba, in insigni die solemnitatis vestrae :
 
-5. quia praeceptum in Israël est, et iudicium Deo Iacob.
+5. quia praeceptum in Israel est, et iudicium Deo Iacob.
 
 6. Testimonium in Ioseph posuit illud, cum exiret de terra Aegypti ; linguam quam non noverat, audivit.
 
@@ -3004,17 +3004,17 @@
 
 8. In tribulatione invocasti me, et liberavi te. Exaudivi te in abscondito tempestatis ; probavi te apud aquam contradictionis.
 
-9. Audi, populus meus, et contestabor te. Israël, si audieris me,
+9. Audi, populus meus, et contestabor te. Israel, si audieris me,
 
 10. non erit in te deus recens, neque adorabis deum alienum.
 
 11. Ego enim sum Dominus Deus tuus, qui eduxi te de terra Aegypti. Dilata os tuum, et implebo illud.
 
-12. Et non audivit populus meus vocem meam, et Israël non intendit mihi.
+12. Et non audivit populus meus vocem meam, et Israel non intendit mihi.
 
 13. Et dimisi eos secundum desideria cordis eorum ; ibunt in adinventionibus suis.
 
-14. Si populus meus audisset me, Israël si in viis meis ambulasset,
+14. Si populus meus audisset me, Israel si in viis meis ambulasset,
 
 15. pro nihilo forsitan inimicos eorum humiliassem, et super tribulantes eos misissem manum meam.
 
@@ -3054,7 +3054,7 @@
 
 4. Super populum tuum malignaverunt consilium, et cogitaverunt adversus sanctos tuos.
 
-5. Dixerunt : Venite, et disperdamus eos de gente, et non memoretur nomen Israël ultra.
+5. Dixerunt : Venite, et disperdamus eos de gente, et non memoretur nomen Israel ultra.
 
 6. Quoniam cogitaverunt unanimiter ; simul adversum te testamentum disposuerunt :
 
@@ -3284,7 +3284,7 @@
 
 18. Quoniam gloria virtutis eorum tu es, et in beneplacito tuo exaltabitur cornu nostrum.
 
-19. Quia Domini est assumptio nostra, et sancti Israël regis nostri.
+19. Quia Domini est assumptio nostra, et sancti Israel regis nostri.
 
 20. Tunc locutus es in visione sanctis tuis, et dixisti : Posui adiutorium in potente, et exaltavi electum de plebe mea.
 
@@ -3620,7 +3620,7 @@
 
 2. Notum fecit Dominus salutare suum ; in conspectu gentium revelavit iustitiam suam.
 
-3. Recordatus est misericordiae suae, et veritatis suae domui Israël. Viderunt omnes termini terrae salutare Dei nostri.
+3. Recordatus est misericordiae suae, et veritatis suae domui Israel. Viderunt omnes termini terrae salutare Dei nostri.
 
 4. Iubilate Deo, omnis terra ; cantate, et exsultate, et psallite.
 
@@ -3768,7 +3768,7 @@
 
 6. faciens misericordias Dominus, et iudicium omnibus iniuriam patientibus.
 
-7. Notas fecit vias suas Moysi ; filiis Israël voluntates suas.
+7. Notas fecit vias suas Moysi ; filiis Israel voluntates suas.
 
 8. Miserator et misericors Dominus : longanimis, et multum misericors.
 
@@ -3896,7 +3896,7 @@
 
 9. quod disposuit ad Abraham, et iuramenti sui ad Isaac :
 
-10. et statuit illud Iacob in praeceptum, et Israël in testamentum aeternum,
+10. et statuit illud Iacob in praeceptum, et Israel in testamentum aeternum,
 
 11. dicens : Tibi dabo terram Chanaan, funiculum haereditatis vestrae :
 
@@ -3922,7 +3922,7 @@
 
 22. ut erudiret principes eius sicut semetipsum, et senes eius prudentiam doceret.
 
-23. Et intravit Israël in Aegyptum, et Iacob accola fuit in terra Cham.
+23. Et intravit Israel in Aegyptum, et Iacob accola fuit in terra Cham.
 
 24. Et auxit populum suum vehementer, et firmavit eum super inimicos eius.
 
@@ -4066,7 +4066,7 @@
 
 47. Salvos nos fac, Domine Deus noster, et congrega nos de nationibus : ut confiteamur nomini sancto tuo, et gloriemur in laude tua.
 
-48. Benedictus Dominus Deus Israël, a saeculo et usque in saeculum ; et dicet omnis populus : Fiat, fiat.
+48. Benedictus Dominus Deus Israel, a saeculo et usque in saeculum ; et dicet omnis populus : Fiat, fiat.
 
 ---
 
@@ -4348,9 +4348,9 @@
 
 ## Psalmus 113
 
-1. Alleluia. In exitu Israël de Aegypto, domus Iacob de populo barbaro,
+1. Alleluia. In exitu Israel de Aegypto, domus Iacob de populo barbaro,
 
-2. facta est Iudaea sanctificatio eius ; Israël potestas eius.
+2. facta est Iudaea sanctificatio eius ; Israel potestas eius.
 
 3. Mare vidit, et fugit ; Iordanis conversus est retrorsum.
 
@@ -4380,13 +4380,13 @@
 
 16. Similes illis fiant qui faciunt ea, et omnes qui confidunt in eis.
 
-17. Domus Israël speravit in Domino ; adiutor eorum et protector eorum est.
+17. Domus Israel speravit in Domino ; adiutor eorum et protector eorum est.
 
 18. Domus Aaron speravit in Domino ; adiutor eorum et protector eorum est.
 
 19. Qui timent Dominum speraverunt in Domino ; adiutor eorum et protector eorum est.
 
-20. Dominus memor fuit nostri, et benedixit nobis. Benedixit domui Israël ; benedixit domui Aaron.
+20. Dominus memor fuit nostri, et benedixit nobis. Benedixit domui Israel ; benedixit domui Aaron.
 
 21. Benedixit omnibus qui timent Dominum, pusillis cum maioribus.
 
@@ -4460,7 +4460,7 @@
 
 1. Alleluia. Confitemini Domino, quoniam bonus, quoniam in saeculum misericordia eius.
 
-2. Dicat nunc Israël : Quoniam bonus, quoniam in saeculum misericordia eius.
+2. Dicat nunc Israel : Quoniam bonus, quoniam in saeculum misericordia eius.
 
 3. Dicat nunc domus Aaron : Quoniam in saeculum misericordia eius.
 
@@ -4900,7 +4900,7 @@
 
 3. Non det in commotionem pedem tuum, neque dormitet qui custodit te.
 
-4. Ecce non dormitabit neque dormiet qui custodit Israël.
+4. Ecce non dormitabit neque dormiet qui custodit Israel.
 
 5. Dominus custodit te ; Dominus protectio tua super manum dexteram tuam.
 
@@ -4920,7 +4920,7 @@
 
 3. Ierusalem, quae aedificatur ut civitas, cuius participatio eius in idipsum.
 
-4. Illuc enim ascenderunt tribus, tribus Domini : testimonium Israël, ad confitendum nomini Domini.
+4. Illuc enim ascenderunt tribus, tribus Domini : testimonium Israel, ad confitendum nomini Domini.
 
 5. Quia illic sederunt sedes in iudicio, sedes super domum David.
 
@@ -4948,7 +4948,7 @@
 
 ## Psalmus 123
 
-1. Canticum graduum. Nisi quia Dominus erat in nobis, dicat nunc Israël,
+1. Canticum graduum. Nisi quia Dominus erat in nobis, dicat nunc Israel,
 
 2. nisi quia Dominus erat in nobis : cum exsurgerent homines in nos,
 
@@ -4976,7 +4976,7 @@
 
 4. benefac, Domine, bonis, et rectis corde.
 
-5. Declinantes autem in obligationes, adducet Dominus cum operantibus iniquitatem. Pax super Israël !
+5. Declinantes autem in obligationes, adducet Dominus cum operantibus iniquitatem. Pax super Israel !
 
 ---
 
@@ -5022,13 +5022,13 @@
 
 5. Benedicat tibi Dominus ex Sion, et videas bona Ierusalem omnibus diebus vitae tuae.
 
-6. Et videas filios filiorum tuorum : pacem super Israël.
+6. Et videas filios filiorum tuorum : pacem super Israel.
 
 ---
 
 ## Psalmus 128
 
-1. Canticum graduum. Saepe expugnaverunt me a iuventute mea, dicat nunc Israël ;
+1. Canticum graduum. Saepe expugnaverunt me a iuventute mea, dicat nunc Israel ;
 
 2. saepe expugnaverunt me a iuventute mea : etenim non potuerunt mihi.
 
@@ -5058,11 +5058,11 @@
 
 5. speravit anima mea in Domino.
 
-6. A custodia matutina usque ad noctem, speret Israël in Domino.
+6. A custodia matutina usque ad noctem, speret Israel in Domino.
 
 7. Quia apud Dominum misericordia, et copiosa apud eum redemptio.
 
-8. Et ipse redimet Israël ex omnibus iniquitatibus eius.
+8. Et ipse redimet Israel ex omnibus iniquitatibus eius.
 
 ---
 
@@ -5072,7 +5072,7 @@
 
 2. Si non humiliter sentiebam, sed exaltavi animam meam : sicut ablactatus est super matre sua, ita retributio in anima mea.
 
-3. Speret Israël in Domino, ex hoc nunc et usque in saeculum.
+3. Speret Israel in Domino, ex hoc nunc et usque in saeculum.
 
 ---
 
@@ -5144,7 +5144,7 @@
 
 3. Laudate Dominum, quia bonus Dominus ; psallite nomini eius, quoniam suave.
 
-4. Quoniam Iacob elegit sibi Dominus ; Israël in possessionem sibi.
+4. Quoniam Iacob elegit sibi Dominus ; Israel in possessionem sibi.
 
 5. Quia ego cognovi quod magnus est Dominus, et Deus noster prae omnibus diis.
 
@@ -5160,7 +5160,7 @@
 
 11. Sehon, regem Amorrhaeorum, et Og, regem Basan, et omnia regna Chanaan :
 
-12. et dedit terram eorum haereditatem, haereditatem Israël populo suo.
+12. et dedit terram eorum haereditatem, haereditatem Israel populo suo.
 
 13. Domine, nomen tuum in aeternum ; Domine, memoriale tuum in generationem et generationem.
 
@@ -5174,7 +5174,7 @@
 
 18. Similes illis fiant qui faciunt ea, et omnes qui confidunt in eis.
 
-19. Domus Israël, benedicite Domino ; domus Aaron, benedicite Domino.
+19. Domus Israel, benedicite Domino ; domus Aaron, benedicite Domino.
 
 20. Domus Levi, benedicite Domino ; qui timetis Dominum, benedicite Domino.
 
@@ -5204,13 +5204,13 @@
 
 10. Qui percussit Aegyptum cum primogenitis eorum, quoniam in aeternum misericordia eius.
 
-11. Qui eduxit Israël de medio eorum, quoniam in aeternum misericordia eius,
+11. Qui eduxit Israel de medio eorum, quoniam in aeternum misericordia eius,
 
 12. in manu potenti et brachio excelso, quoniam in aeternum misericordia eius.
 
 13. Qui divisit mare Rubrum in divisiones, quoniam in aeternum misericordia eius ;
 
-14. et eduxit Israël per medium eius, quoniam in aeternum misericordia eius ;
+14. et eduxit Israel per medium eius, quoniam in aeternum misericordia eius ;
 
 15. et excussit Pharaonem et virtutem eius in mari Rubro, quoniam in aeternum misericordia eius.
 
@@ -5226,7 +5226,7 @@
 
 21. et dedit terram eorum haereditatem, quoniam in aeternum misericordia eius ;
 
-22. haereditatem Israël, servo suo, quoniam in aeternum misericordia eius.
+22. haereditatem Israel, servo suo, quoniam in aeternum misericordia eius.
 
 23. Quia in humilitate nostra memor fuit nostri, quoniam in aeternum misericordia eius ;
 
@@ -5544,7 +5544,7 @@
 
 1. Alleluia. Laudate Dominum, quoniam bonus est psalmus ; Deo nostro sit iucunda, decoraque laudatio.
 
-2. Aedificans Ierusalem Dominus, dispersiones Israëlis congregabit :
+2. Aedificans Ierusalem Dominus, dispersiones Israelis congregabit :
 
 3. qui sanat contritos corde, et alligat contritiones eorum ;
 
@@ -5582,7 +5582,7 @@
 
 7. Emittet verbum suum, et liquefaciet ea ; flabit spiritus eius, et fluent aquae.
 
-8. Qui annuntiat verbum suum Iacob, iustitias et iudicia sua Israël.
+8. Qui annuntiat verbum suum Iacob, iustitias et iudicia sua Israel.
 
 9. Non fecit taliter omni nationi, et iudicia sua non manifestavit eis. Alleluia.
 
@@ -5616,7 +5616,7 @@
 
 13. quia exaltatum est nomen eius solius.
 
-14. Confessio eius super caelum et terram ; et exaltavit cornu populi sui. Hymnus omnibus sanctis eius ; filiis Israël, populo appropinquanti sibi. Alleluia.
+14. Confessio eius super caelum et terram ; et exaltavit cornu populi sui. Hymnus omnibus sanctis eius ; filiis Israel, populo appropinquanti sibi. Alleluia.
 
 ---
 
@@ -5624,7 +5624,7 @@
 
 1. Alleluia. Cantate Domino canticum novum ; laus eius in ecclesia sanctorum.
 
-2. Laetetur Israël in eo qui fecit eum, et filii Sion exsultent in rege suo.
+2. Laetetur Israel in eo qui fecit eum, et filii Sion exsultent in rege suo.
 
 3. Laudent nomen eius in choro ; in tympano et psalterio psallant ei.
 

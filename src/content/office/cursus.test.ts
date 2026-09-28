@@ -1215,6 +1215,39 @@ describe("weekly cursus", () => {
     expect(saturday).toContainEqual({ psalm: 142 });
   });
 
+  test("Psalm 23 is lined out for Sunday Matins with the title dropped", () => {
+    const verses = sliceVerses({ psalm: 23 });
+    expect(verses.map((verse) => verse.n)).toEqual([
+      "1", "2", "3", "4", "5", "6", "7", "8", "9", "10",
+    ]);
+    expect(verses[0].latin.startsWith("Domini est terra")).toBe(true);
+    expect(verses[0].latin.includes("Prima sabbati")).toBe(false);
+    expect(verses[9].latin.startsWith("Quis est iste rex gloriae")).toBe(true);
+    expect(verses[9].latin.endsWith("ipse est rex gloriae.")).toBe(true);
+    expect(verses.every((verse) => verse.latin.length > 0 && verse.english.length > 0)).toBe(true);
+    const sunday = hourSlots("sun", "vigils").flatMap((slot) => slot.slices);
+    expect(sunday).toContainEqual({ psalm: 23 });
+  });
+
+  test("Psalm 24 is lined into its twenty-three Sunday Matins office lines", () => {
+    const verses = sliceVerses({ psalm: 24 });
+    expect(verses).toHaveLength(23);
+    expect(verses[0].latin.startsWith("Ad te, Domine, levavi animam meam")).toBe(true);
+    expect(verses[0].latin.includes("In finem")).toBe(false);
+    expect(verses[0].english.startsWith("To thee, O Lord, have I lifted up my soul")).toBe(true);
+    expect(verses[0].english.endsWith("let me not be ashamed.")).toBe(true);
+    expect(verses[2].latin.endsWith("supervacue")).toBe(true);
+    expect(verses[3].latin.startsWith("Vias tuas, Domine")).toBe(true);
+    expect(verses[6].latin.endsWith("ne memineris")).toBe(true);
+    expect(verses[7].latin.startsWith("Secundum misericordiam tuam")).toBe(true);
+    expect(verses[22].latin.startsWith("Libera, Deus, Isra")).toBe(true);
+    expect(verses[22].latin.endsWith("tribulationibus suis.")).toBe(true);
+    expect(verses[22].english.endsWith("from all his tribulations.")).toBe(true);
+    expect(verses.every((verse) => verse.latin.length > 0 && verse.english.length > 0)).toBe(true);
+    const sunday = hourSlots("sun", "vigils").flatMap((slot) => slot.slices);
+    expect(sunday).toContainEqual({ psalm: 24 });
+  });
+
   test("Psalm 89 is lined into its nineteen Thursday Lauds office lines", () => {
     const verses = sliceVerses({ psalm: 89 });
     expect(verses.map((verse) => verse.n)).toEqual([

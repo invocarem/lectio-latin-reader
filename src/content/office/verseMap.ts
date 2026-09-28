@@ -1121,6 +1121,73 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
       ],
     },
   ],
+  23: dropTitle("Prima sabbati. Psalmus David. "),
+  24: [
+    {
+      pieces: [
+        {
+          verse: 1,
+          dropLatinPrefix: "In finem. Psalmus David. ",
+          englishFrom: "To thee, O Lord, have I lifted up my soul",
+        },
+        { verse: 2 },
+      ],
+    },
+    { pieces: [{ verse: 3 }] },
+    {
+      pieces: [
+        {
+          verse: 4,
+          latinThrough: "supervacue",
+          englishThrough: "without cause.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 4,
+          latinFrom: "Vias tuas, Domine",
+          englishFrom: "Shew, O Lord, thy ways to me",
+        },
+      ],
+    },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinThrough: "ne memineris",
+          englishThrough: "do not remember.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinFrom: "Secundum misericordiam tuam",
+          englishFrom: "According to thy mercy",
+        },
+      ],
+    },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    { pieces: [{ verse: 13 }] },
+    { pieces: [{ verse: 14 }] },
+    { pieces: [{ verse: 15 }] },
+    { pieces: [{ verse: 16 }] },
+    { pieces: [{ verse: 17 }] },
+    { pieces: [{ verse: 18 }] },
+    { pieces: [{ verse: 19 }] },
+    { pieces: [{ verse: 20 }] },
+    { pieces: [{ verse: 21 }] },
+    { pieces: [{ verse: 22 }] },
+  ],
   25: dropTitle("In finem. Psalmus David. "),
   26: dropTitle("Psalmus David, priusquam liniretur. "),
   27: [

@@ -36,8 +36,8 @@ Check a psalm when its Benedictine lining is finished. A title drop alone is not
 - [x] 20
 - [x] 21
 - [x] 22
-- [ ] 23
-- [ ] 24
+- [x] 23
+- [x] 24
 - [x] 25
 - [x] 26
 - [x] 27
@@ -621,6 +621,31 @@ Said whole at Sunday Matins (Vigils), the third psalm of the hour. Drop *Psalmus
 | 7 | *impinguasti in oleo caput meum* to the end of Gallican 5 |
 | 8 | Gallican 6 through *omnibus diebus vitae meae ;* |
 | 9 | *et ut inhabitem* to the end of Gallican 6 |
+
+### Psalmus 23
+
+Said on Sunday Matins in the Benedictine Office (first nocturn). Gallican verse numbers stay. Drop *Prima sabbati. Psalmus David.* from verse 1, so line 1 begins *Domini est terra*. The ten Gallican verses make ten office lines; no verses join or split.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Prima sabbati. Psalmus David.* |
+| 2–10 | Gallican 2–10 |
+
+### Psalmus 24
+
+Said on Sunday Matins in the Benedictine Office (first nocturn). Twenty-three office lines, matching Kate's 23 versicles. Gallican 1 opens with the title *In finem. Psalmus David.*, which is dropped from the Latin and the English, and Gallican 1 joins Gallican 2. Gallican 4 splits after *supervacue*, and Gallican 7 splits after *ne memineris*. The other verses stay whole.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop the title *In finem. Psalmus David.*, then Gallican 2 |
+| 2 | Gallican 3 |
+| 3 | Gallican 4 through *supervacue* |
+| 4 | *Vias tuas, Domine* to the end of Gallican 4 |
+| 5 | Gallican 5 |
+| 6 | Gallican 6 |
+| 7 | Gallican 7 through *ne memineris* |
+| 8 | *Secundum misericordiam tuam* to the end of Gallican 7 |
+| 9–23 | Gallican 8–22 |
 
 ### Psalmus 25
 
@@ -2411,4 +2436,4 @@ Sunday Lauds, after Psalms 66 and 50. Gallican 1 drops *Alleluia.*. Twenty-nine 
 
 ## Not entered
 
-Every other psalm, 2, 23–24, 39, 76–79, and 145–147. The Office still shows those in Gallican verses.
+Every other psalm, 2, 39, 76–79, and 145–147. The Office still shows those in Gallican verses.
