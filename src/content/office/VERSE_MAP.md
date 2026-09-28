@@ -64,42 +64,42 @@ Check a psalm when its Benedictine lining is finished. A title drop alone is not
 - [x] 48
 - [x] 49
 - [x] 50
-- [ ] 51
-- [ ] 52
-- [ ] 53
-- [ ] 54
-- [ ] 55
+- [x] 51
+- [x] 52
+- [x] 53
+- [x] 54
+- [x] 55
 - [x] 56
-- [ ] 57
-- [ ] 58
-- [ ] 59
-- [ ] 60
-- [ ] 61
-- [ ] 62
-- [ ] 63
-- [ ] 64
-- [ ] 65
+- [x] 57
+- [x] 58
+- [x] 59
+- [x] 60
+- [x] 61
+- [x] 62
+- [x] 63
+- [x] 64
+- [x] 65
 - [x] 66
 - [ ] 67
 - [x] 68
-- [ ] 69
-- [ ] 70
-- [ ] 71
-- [ ] 72
-- [ ] 73
-- [ ] 74
+- [x] 69
+- [x] 70
+- [x] 71
+- [x] 72
+- [x] 73
+- [x] 74
 - [x] 75
 - [x] 76
 - [x] 77
-- [ ] 78
-- [ ] 79
+- [x] 78
+- [x] 79
 - [x] 80
-- [ ] 81
-- [ ] 82
-- [ ] 83
-- [ ] 84
-- [ ] 85
-- [ ] 86
+- [x] 81
+- [x] 82
+- [x] 83
+- [x] 84
+- [x] 85
+- [x] 86
 - [ ] 87
 - [ ] 88
 - [ ] 89
@@ -894,6 +894,26 @@ Said every day at Lauds. Gallican 1–2 are the title and are dropped, so line 1
 | 19 | Gallican 20 |
 | 20 | Gallican 21 |
 
+### Psalmus 51
+
+Tuesday Vigils. Gallican 1–2 are the title and are left out. Nine office lines. Gallican 3–7, 10, and 11 stay whole. Gallican 8 joins Gallican 9 through *adiutorem suum*.
+
+### Psalmus 52
+
+Tuesday Vigils. Gallican 1 drops the title *In finem, pro Maëleth intelligentiae David.* Eight office lines. Gallican 6 splits after *ubi non erat timor.*
+
+### Psalmus 53
+
+Tuesday Vigils. Gallican 1–2 are the title and are left out. Gallican 3–9 stay whole: seven office lines.
+
+### Psalmus 54
+
+Tuesday Vigils. Gallican 1 is the title and is left out. Twenty-seven office lines. Gallican 2 joins the opening of Gallican 3, through *exaudi me.* Gallican 11 joins Gallican 12 through *et iniustitia.* Gallican 13, 16, 20, and 24 are split. The tail of Gallican 20 joins Gallican 21 through *in retribuendo.* The tail of Gallican 21 joins Gallican 22 through *appropinquavit cor illius.*
+
+### Psalmus 55
+
+Wednesday Vigils. Gallican 1 is the title and is left out. Thirteen office lines. Gallican 7 splits after *observabunt*, and its tail joins Gallican 8. Gallican 9 splits after *in conspectu tuo*, and its tail joins Gallican 10 through *retrorsum.* The English *O God* at the start of the next line is the end of Douay 8.
+
 ### Psalmus 56
 
 The second variable psalm of Tuesday Lauds. Gallican 1 is the title *In finem, ne disperdas. David in tituli inscriptionem, cum fugeret a facie Saul in speluncam.* and is dropped. Gallican 2 splits after *anima mea*. Gallican 4 splits after *conculcantes me*, and *Misit Deus misericordiam* joins Gallican 5 through *Dormivi conturbatus*. Gallican 7 splits after *animam meam*.
@@ -914,6 +934,42 @@ The second variable psalm of Tuesday Lauds. Gallican 1 is the title *In finem, n
 | 12 | Gallican 10 |
 | 13 | Gallican 11 |
 | 14 | Gallican 12 |
+
+### Psalmus 57
+
+Wednesday Vigils. Gallican 1 is the title and is left out. Gallican 2–12 stay whole: eleven office lines.
+
+### Psalmus 58
+
+Wednesday Vigils. Gallican 1 is the title and is left out. Twenty office lines. Gallican 6 splits after *Deus Israël*. Gallican 10 joins Gallican 11. Gallican 12 splits after *populi mei*. Gallican 13 splits after *superbia sua*, and its tail joins Gallican 14 through *non erunt*. Gallican 17 splits after *misericordiam tuam*.
+
+### Psalmus 59
+
+Wednesday Vigils. Gallican 1–2 are the title and are left out. Thirteen office lines. Gallican 6 splits after *facie arcus*, and its tail joins Gallican 7. Gallican 9 splits after *capitis mei*, and *Iuda rex meus* joins Gallican 10 through *spei meae*.
+
+### Psalmus 60
+
+Wednesday Vigils. Gallican 1 is the title and is left out. Eight office lines. Gallican 3 splits after *exaltasti me*, and *Deduxisti me* joins Gallican 4.
+
+### Psalmus 61
+
+Wednesday Vigils. Gallican 1 is the title and is left out. Eleven office lines. Gallican 2–11 stay whole, and Gallican 12 joins Gallican 13.
+
+### Psalmus 62
+
+The second variable psalm of Sunday Lauds. Gallican 1 is the title and is left out. Ten office lines. Gallican 2 splits after *de luce vigilo*. Gallican 7 joins Gallican 8 through *adiutor meus*. The rest of Gallican 8 joins Gallican 9. Gallican 10 joins Gallican 11.
+
+### Psalmus 63
+
+The first variable psalm of Wednesday Lauds. Gallican 1 is the title and is left out. Eleven office lines. Gallican 4 joins Gallican 5. Gallican 6 splits after *sermonem nequam*. Gallican 7 splits after *scrutinio*, and its tail joins Gallican 8 through *exaltabitur Deus*. The rest of Gallican 8 joins Gallican 9 through *linguae eorum*. The rest of Gallican 9 joins Gallican 10 through *omnis homo*.
+
+### Psalmus 64
+
+The second variable psalm of Wednesday Lauds. Gallican 1 is the title and is left out. Fourteen office lines. Gallican 5 splits after *atriis tuis*, and its tail joins Gallican 6 through *in aequitate*. Gallican 7 joins Gallican 8 through *fluctuum eius*, and the rest of Gallican 8 joins Gallican 9. Gallican 10 splits after *locupletare eam*.
+
+### Psalmus 65
+
+Wednesday Vigils. The title *In finem. Canticum psalmi resurrectionis.* is dropped from Gallican 1, and the rest of that verse joins Gallican 2. Nineteen office lines. Gallican 11 joins Gallican 12 through *capita nostra*. Gallican 13 joins Gallican 14 through *labia mea*.
 
 ### Psalmus 66
 
@@ -956,6 +1012,30 @@ Gallican 3, 5, 7, 14, 21, and 36 are split. The other verses stay whole.
 | 40 | Gallican 36 through *civitates Iuda* |
 | 41 | Gallican 36 from *et inhabitabunt ibi* |
 | 42 | Gallican 37 |
+
+### Psalmus 69
+
+Wednesday Vigils. Gallican 1 is the title and is left out. Seven office lines. Gallican 4 splits after *mihi mala*. Gallican 6 splits after *adiuva me*.
+
+### Psalmus 70
+
+Thursday Vigils. The title is dropped from Gallican 1, and the rest joins Gallican 2 through *eripe me*. Twenty-six office lines. The tail of Gallican 2 is its own line. Gallican 3 splits after *salvum me facias*. Gallican 6 splits after *protector meus*, and its tail joins Gallican 7. Gallican 15 splits after *salutare tuum*, and its tail joins Gallican 16. Gallican 18 splits after *ne derelinquas me* and again after *ventura est*, and *potentiam tuam* joins Gallican 19.
+
+### Psalmus 71
+
+Thursday Vigils. Gallican 1 is the title and is left out. Gallican 20, *Defecerunt laudes David*, is left out. Twenty office lines. Gallican 2 splits after *filio regis*. Gallican 17 splits after *permanet nomen eius*.
+
+### Psalmus 72
+
+Thursday Vigils, in two parts. The title *Psalmus Asaph.* is dropped from Gallican 1. Twenty-eight office lines. The cursus splits after Gallican 14, into *Psalmus 72 · 1–14* and *Psalmus 72 · 15–28*. Gallican 21 joins Gallican 22. Gallican 28 splits after *spem meam*.
+
+### Psalmus 73
+
+Thursday Vigils, in two parts. The title *Intellectus Asaph.* is dropped from Gallican 1. Twenty-four office lines. The cursus splits after Gallican 12, into *Psalmus 73 · 1–12* (thirteen lines) and *Psalmus 73 · 13–23* (eleven lines). Gallican 2 splits after *ab initio*. Gallican 4 splits after *solemnitatis tuae*, and *posuerunt signa* joins Gallican 5 through *super summum*. The rest of Gallican 5 joins Gallican 6.
+
+### Psalmus 74
+
+Thursday Vigils. Gallican 1 is the title and is left out. Ten office lines. Gallican 2 splits after *nomen tuum*, and its tail joins Gallican 3. Gallican 7 joins Gallican 8 through *iudex est*. The rest of Gallican 8 joins Gallican 9 through *plenus misto*.
 
 ### Psalmus 75
 
@@ -1017,6 +1097,39 @@ Thursday Matins (Vigils), sung in two parts. The sitting is cut at Kate's break:
 
 All the other stored Gallican verses stay one office line each.
 
+### Psalmus 78
+
+Fifteen office lines in the Common of Several Martyrs (and Thursday Matins I, 6 in the RB cursus). Gallican 1 opens the psalm with its title *Psalmus Asaph.*, which is dropped (and *A psalm for Asaph.* from the English), so line 1 begins *Deus, venerunt gentes*. Gallican 1–9 and 12 each stay one whole office line. Gallican 10 splits after *coram oculis nostris*; its tail *ultio sanguinis servorum tuorum qui effusus est* joins Gallican 11 through *gemitus compeditorum*, and Gallican 11's tail opens the next line. Gallican 13 splits after *in saeculum*.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1 |
+| 2 | Gallican 2 |
+| 3 | Gallican 3 |
+| 4 | Gallican 4 |
+| 5 | Gallican 5 |
+| 6 | Gallican 6 |
+| 7 | Gallican 7 |
+| 8 | Gallican 8 |
+| 9 | Gallican 9 |
+| 10 | Gallican 10 through *oculis nostris* |
+| 11 | Gallican 10 from *ultio sanguinis* to the end, then Gallican 11 through *gemitus compeditorum* |
+| 12 | Gallican 11 from *secundum magnitudinem* to the end |
+| 13 | Gallican 12 |
+| 14 | Gallican 13 through *in saeculum* |
+| 15 | Gallican 13 from *in generationem* to the end |
+
+### Psalmus 79
+
+Twenty office lines, opening the second nocturn of Thursday Matins (Thursday Matins II, 1 in the RB cursus). Gallican 1 is the title *In finem, pro iis qui commutabuntur. Testimonium Asaph, psalmus.* and is dropped. Gallican 2 splits after *velut ovem Ioseph*: lines 1 and 2 share it, with line 2's tail joining Gallican 3 through *et Manasse*; Gallican 3's tail opens line 3. Gallican 4–20 each stay one whole office line.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 2 through *velut ovem Ioseph* |
+| 2 | Gallican 2 from *Qui sedes* to the end, then Gallican 3 through *et Manasse* |
+| 3 | Gallican 3 from *Excita potentiam* to the end |
+| 4–20 | Gallican 4–20 |
+
 ### Psalmus 80
 
 Friday Vigils, the first of the twelve. Gallican 1 is the title *In finem, pro torcularibus. Psalmus ipsi Asaph.* and is dropped. Gallican 9 joins Gallican 10.
@@ -1038,6 +1151,101 @@ Friday Vigils, the first of the twelve. Gallican 1 is the title *In finem, pro t
 | 13 | Gallican 15 |
 | 14 | Gallican 16 |
 | 15 | Gallican 17 |
+
+### Psalmus 81
+
+Eight office lines at Thursday Matins. Gallican 1 opens the psalm with its title *Psalmus Asaph.*, which is dropped (and *A psalm for Asaph.* from the English), so line 1 begins *Deus stetit in synagoga deorum*. Gallican 1–8 each stay one whole office line.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1 (title *Psalmus Asaph.* dropped) |
+| 2 | Gallican 2 |
+| 3 | Gallican 3 |
+| 4 | Gallican 4 |
+| 5 | Gallican 5 |
+| 6 | Gallican 6 |
+| 7 | Gallican 7 |
+| 8 | Gallican 8 |
+
+### Psalmus 82
+
+Seventeen office lines at Thursday Matins. Gallican 1 is the title *Canticum Psalmi Asaph.* and is dropped, so line 1 opens with *Deus, quis similis erit tibi?*. Gallican 2–5, 9–11, and 14–19 each stay one whole office line. Gallican 6 joins Gallican 7 through *Ismahelitae*; Gallican 7's tail (*Moab et Agareni*) joins Gallican 8. Gallican 12 splits after *et Salmana*: its tail (*omnes principes eorum*) joins Gallican 13.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 2 |
+| 2 | Gallican 3 |
+| 3 | Gallican 4 |
+| 4 | Gallican 5 |
+| 5 | Gallican 6, then Gallican 7 through *Ismahelitae* |
+| 6 | Gallican 7 from *Moab* to the end, then Gallican 8 |
+| 7 | Gallican 9 |
+| 8 | Gallican 10 |
+| 9 | Gallican 11 |
+| 10 | Gallican 12 through *et Salmana* |
+| 11 | Gallican 12 from *omnes principes eorum* to the end, then Gallican 13 |
+| 12 | Gallican 14 |
+| 13 | Gallican 15 |
+| 14 | Gallican 16 |
+| 15 | Gallican 17 |
+| 16 | Gallican 18 |
+| 17 | Gallican 19 |
+
+### Psalmus 83
+
+Thirteen office lines at Thursday Matins (2nd nocturn). Gallican 1 is the title *In finem, pro torcularibus filiis Core. Psalmus.* and is dropped, so line 1 opens with *Quam dilecta tabernacula tua*. Gallican 2 joins Gallican 3 through *in atria Domini*, whose tail (*cor meum…*) opens line 2. Gallican 4 splits after *pullos suos*: its tail (*altaria tua…*) opens line 4. Gallican 6 joins Gallican 7. Gallican 5, 8–10, 12, and 13 each stay one whole office line. Gallican 11 splits after *super millia*.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 2, then Gallican 3 through *in atria Domini* |
+| 2 | Gallican 3 from *cor meum* to the end |
+| 3 | Gallican 4 through *pullos suos* |
+| 4 | Gallican 4 from *altaria tua* to the end |
+| 5 | Gallican 5 |
+| 6 | Gallican 6, then Gallican 7 |
+| 7 | Gallican 8 |
+| 8 | Gallican 9 |
+| 9 | Gallican 10 |
+| 10 | Gallican 11 through *super millia* |
+| 11 | Gallican 11 from *elegi abiectus* to the end |
+| 12 | Gallican 12 |
+| 13 | Gallican 13 |
+
+### Psalmus 84
+
+Fourteen office lines for Tenebrae/Lauds (from the *Psallam Domino* "Tenebrae/25 — Psalm 84" post); the cursus places it at Thursday Matins. Gallican 1 is the title *In finem, filiis Core. Psalmus.* and is dropped, so line 1 opens with *Benedixisti, Domine, terram tuam*. Gallican 2–8 and 10–14 each stay one whole office line. Gallican 9 splits after *pacem in plebem suam*: its tail (*et super sanctos suos…*) opens line 9. The Tenebrae *Gloria Patri* / *Sicut erat* doxology is appended by the office, not by this map.
+
+| Office line | Latin |
+| --- | --- |
+| 1–7 | Gallican 2–8 |
+| 8 | Gallican 9 through *pacem in plebem suam* |
+| 9 | Gallican 9 from *et super sanctos suos* to the end |
+| 10–14 | Gallican 10–14 |
+
+### Psalmus 85
+
+Sixteen office lines at Friday Matins. Gallican 1 opens the psalm with its title *Oratio ipsi David.*, which is dropped (and *A prayer for David himself.* from the English), so line 1 begins *Inclina, Domine, aurem tuam*. Gallican 3 joins Gallican 4; everything else stays one whole office line.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1 (title *Oratio ipsi David.* dropped) |
+| 2 | Gallican 2 |
+| 3 | Gallican 3, then Gallican 4 |
+| 4–16 | Gallican 5–17 |
+
+### Psalmus 86
+
+Seven office lines at Friday Matins. Gallican 1 opens the psalm with its title *Filiis Core. Psalmus cantici.*, which is dropped (and *For the sons of Core, a psalm of a canticle.* from the English), and joins Gallican 2, so line 1 begins *Fundamenta eius in montibus sanctis*. Gallican 4 splits after *scientium me*: line 3 is its first half and line 4 opens with its tail (*ecce alienigenae…*). Gallican 3, 5, 6, and 7 each stay one whole office line. The Tenebrae *Gloria Patri* doxology is appended by the office, not by this map.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1 (title dropped), then Gallican 2 |
+| 2 | Gallican 3 |
+| 3 | Gallican 4 through *scientium me* |
+| 4 | Gallican 4 from *ecce alienigenae* to the end |
+| 5 | Gallican 5 |
+| 6 | Gallican 6 |
+| 7 | Gallican 7 |
 
 ### Psalmus 91
 
@@ -1978,4 +2186,4 @@ Sunday Lauds, after Psalms 66 and 50. Gallican 1 drops *Alleluia.*. Twenty-nine 
 
 ## Not entered
 
-Every other psalm, 2, 23–24, 39, 51–55, 57–65, 67, 69–74, 76–79, 81–90, 142, and 145–147. The Office still shows those in Gallican verses.
+Every other psalm, 2, 23–24, 39, 67, 76–79, 81–90, 142, and 145–147. The Office still shows those in Gallican verses.
