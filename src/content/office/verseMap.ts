@@ -3758,6 +3758,197 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
       ],
     },
   ],
+  67: [
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    {
+      pieces: [
+        {
+          verse: 5,
+          latinThrough: "Dominus nomen illi",
+          englishThrough: "the Lord is his name.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 5,
+          latinFrom: "exsultate in conspectu eius",
+          englishFrom: "Rejoice ye before him",
+        },
+        {
+          verse: 6,
+          latinThrough: "iudicis viduarum",
+          englishThrough: "and the judge of widows.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 6,
+          latinFrom: "Deus in loco sancto suo",
+          englishFrom: "God in his holy place",
+        },
+        {
+          verse: 7,
+          latinThrough: "in domo",
+          englishThrough: "to dwell in a house:",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinFrom: "qui educit vinctos",
+          englishFrom: "Who bringeth out them that were bound in strength",
+        },
+      ],
+    },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    { pieces: [{ verse: 13 }] },
+    { pieces: [{ verse: 14 }] },
+    {
+      pieces: [
+        { verse: 15 },
+        {
+          verse: 16,
+          latinThrough: "mons pinguis",
+          englishThrough: "is a fat mountain.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 16,
+          latinFrom: "mons coagulatus",
+          englishFrom: "A curdled mountain",
+        },
+        {
+          verse: 17,
+          latinThrough: "montes coagulatos",
+          englishThrough: "ye curdled mountains?",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 17,
+          latinFrom: "mons in quo beneplacitum",
+          englishFrom: "A mountain in which God is well pleased to dwell",
+        },
+      ],
+    },
+    { pieces: [{ verse: 18 }] },
+    {
+      pieces: [
+        {
+          verse: 19,
+          latinThrough: "accepisti dona in hominibus",
+          englishThrough: "thou hast received gifts in men.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 19,
+          latinFrom: "etenim non credentes",
+          englishFrom: "Yea for those also that do not believe",
+        },
+      ],
+    },
+    { pieces: [{ verse: 20 }] },
+    { pieces: [{ verse: 21 }] },
+    { pieces: [{ verse: 22 }] },
+    { pieces: [{ verse: 23 }] },
+    { pieces: [{ verse: 24 }] },
+    { pieces: [{ verse: 25 }] },
+    { pieces: [{ verse: 26 }] },
+    { pieces: [{ verse: 27 }] },
+    {
+      pieces: [
+        {
+          verse: 28,
+          latinThrough: "in mentis excessu",
+          englishThrough: "in ecstasy of mind.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 28,
+          latinFrom: "principes Iuda",
+          englishFrom: "The princes of Juda are their leaders",
+        },
+      ],
+    },
+    { pieces: [{ verse: 29 }] },
+    { pieces: [{ verse: 30 }] },
+    {
+      pieces: [
+        {
+          verse: 31,
+          latinThrough: "probati sunt argento",
+          englishThrough: "who are tried with silver.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 31,
+          latinFrom: "Dissipa gentes",
+          englishFrom: "Scatter thou the nations",
+        },
+        { verse: 32 },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 33,
+          latinThrough: "psallite Domino",
+          englishThrough: "sing ye to the Lord:",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 33,
+          latinFrom: "psallite Deo",
+          englishFrom: "Sing ye to God,",
+        },
+        {
+          verse: 34,
+          latinThrough: "ad orientem",
+          englishThrough: "to the east.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 34,
+          latinFrom: "ecce dabit",
+          englishFrom: "Behold he will give to his voice the voice of power",
+        },
+        { verse: 35 },
+      ],
+    },
+    { pieces: [{ verse: 36 }] },
+  ],
   68: [
     { pieces: [{ verse: 2 }] },
     {
@@ -5743,6 +5934,122 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
       ],
     },
     { pieces: [{ verse: 8 }] },
+  ],
+  142: [
+    {
+      pieces: [
+        {
+          verse: 1,
+          dropLatinPrefix: "Psalmus David, quando persequebatur eum Absalom filius eius. ",
+          englishFrom: "Hear, O Lord, my prayer",
+        },
+      ],
+    },
+    { pieces: [{ verse: 2 }] },
+    {
+      pieces: [
+        {
+          verse: 3,
+          latinThrough: "humiliavit in terra vitam meam",
+          englishThrough: "he hath brought down my life to the earth.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 3,
+          latinFrom: "collocavit me in obscuris",
+          englishFrom: "He hath made me to dwell in darkness",
+        },
+        { verse: 4 },
+      ],
+    },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinThrough: "defecit spiritus meus",
+          englishThrough: "my spirit hath fainted away.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinFrom: "Non avertas faciem tuam",
+          englishFrom: "Turn not away thy face",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 8,
+          latinThrough: "quia in te speravi",
+          englishThrough: "for in thee have I hoped.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 8,
+          latinFrom: "Notam fac mihi viam",
+          englishFrom: "Make the way known to me",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 9 },
+        {
+          verse: 10,
+          latinThrough: "quia Deus meus es tu",
+          englishThrough: "for thou art my God.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 10,
+          latinFrom: "Spiritus tuus bonus",
+          englishFrom: "Thy good spirit shall lead me into the right land",
+        },
+        {
+          verse: 11,
+          latinThrough: "in aequitate tua",
+          englishThrough: "in thy justice.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 11,
+          latinFrom: "educes de tribulatione animam meam",
+          englishFrom: "Thou wilt bring my soul out of trouble",
+        },
+        {
+          verse: 12,
+          latinThrough: "disperdes inimicos meos",
+          englishThrough: "thou wilt destroy my enemies.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 12,
+          latinFrom: "et perdes omnes",
+          englishFrom: "And thou wilt cut off all them that afflict my soul",
+        },
+      ],
+    },
   ],
   143: [
     {

@@ -66,14 +66,14 @@ function vigils(first: OfficeSlot[], second: OfficeSlot[]): OfficeSlot[] {
  * Benedictine divisio of the longer vigils and vespers psalms, from Kate
  * Edwards' Matins table and the Vespers cuts. Psalms 9 and 17 are the
  * Rule's Prime cuts, not these halves. Vigils breaks: 36 after 26, 67 after
- * 18, 68 after 19, 77 after 35, 88 after 19, 103 after 24, 104 after 22,
+ * 19, 68 after 19, 77 after 35, 88 after 19, 103 after 24, 104 after 22,
  * 105 after 31, 106 after 24. Psalm 144 follows the Vespers division after
  * verse 9.
  */
 const HALF = {
   36: [cut(36, 1, 26), cut(36, 27, 40)],
-  67: [cut(67, 1, 18), cut(67, 19, 36)],
-  68: [cut(68, 1, 19), cut(68, 20, 37)],
+  67: [part(67, 1, 1, 19), part(67, 2, 20, 36)],
+  68: [part(68, 1, 1, 19), part(68, 2, 20, 37)],
   77: [cut(77, 1, 35), cut(77, 36, 72)],
   88: [part(88, 1, 1, 19), part(88, 2, 20, 53)],
   103: [cut(103, 1, 24), cut(103, 25, 35)],

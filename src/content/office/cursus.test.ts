@@ -1144,6 +1144,77 @@ describe("weekly cursus", () => {
     expect(friday).toContainEqual({ psalm: 88, from: 20, to: 53, part: 2 });
   });
 
+  test("Psalm 67 is lined in Kate's two Wednesday Matins parts", () => {
+    const whole = sliceVerses({ psalm: 67 });
+    const first = sliceVerses({ psalm: 67, from: 1, to: 19 });
+    const second = sliceVerses({ psalm: 67, from: 20, to: 36 });
+    expect(whole).toHaveLength(38);
+    expect(first).toHaveLength(20);
+    expect(second).toHaveLength(18);
+    expect(first[0].latin.startsWith("Exsurgat Deus")).toBe(true);
+    expect(first[0].latin.endsWith("a facie eius.")).toBe(true);
+    expect(first[0].latin.includes("In finem")).toBe(false);
+    expect(first[0].english).toBe("Let God arise, and let his enemies be scattered: and let them that hate him flee from before his face.");
+    expect(first[3].latin.startsWith("Cantate Deo")).toBe(true);
+    expect(first[3].latin.endsWith("Dominus nomen illi")).toBe(true);
+    expect(first[3].english.endsWith("the Lord is his name.")).toBe(true);
+    expect(first[4].latin.startsWith("exsultate in conspectu eius")).toBe(true);
+    expect(first[4].latin.endsWith("iudicis viduarum")).toBe(true);
+    expect(first[5].latin.startsWith("Deus in loco sancto suo")).toBe(true);
+    expect(first[5].latin.endsWith("in domo")).toBe(true);
+    expect(first[18].latin.startsWith("Ascendisti in altum")).toBe(true);
+    expect(first[18].latin.endsWith("accepisti dona in hominibus")).toBe(true);
+    expect(first[18].english.endsWith("thou hast received gifts in men.")).toBe(true);
+    expect(first[19].latin.startsWith("etenim non credentes")).toBe(true);
+    expect(first[19].latin.endsWith("Dominum Deum.")).toBe(true);
+    expect(second[0].latin.startsWith("Benedictus Dominus die quotidie")).toBe(true);
+    expect(second[8].latin.startsWith("Ibi Beniamin adolescentulus")).toBe(true);
+    expect(second[8].latin.endsWith("in mentis excessu")).toBe(true);
+    expect(second[16].latin.startsWith("ecce dabit voci suae")).toBe(true);
+    expect(second[16].latin.endsWith("in nubibus.")).toBe(true);
+    expect(second[16].english.endsWith("his power is in the clouds.")).toBe(true);
+    expect(second[17].latin.startsWith("Mirabilis Deus")).toBe(true);
+    expect(second[17].latin.endsWith("Benedictus Deus !")).toBe(true);
+    expect(first.every((verse) => verse.latin.length > 0 && verse.english.length > 0)).toBe(true);
+    expect(second.every((verse) => verse.latin.length > 0 && verse.english.length > 0)).toBe(true);
+    expect(sliceLabel({ psalm: 67, from: 1, to: 19, part: 1 })).toBe("Psalmus 67 · 1");
+    expect(sliceLabel({ psalm: 67, from: 20, to: 36, part: 2 })).toBe("Psalmus 67 · 2");
+    const wednesday = hourSlots("wed", "vigils").flatMap((slot) => slot.slices);
+    expect(wednesday).toContainEqual({ psalm: 67, from: 1, to: 19, part: 1 });
+    expect(wednesday).toContainEqual({ psalm: 67, from: 20, to: 36, part: 2 });
+  });
+
+  test("Psalm 142 is lined into its fourteen Saturday Lauds office lines", () => {
+    const verses = sliceVerses({ psalm: 142 });
+    expect(verses.map((verse) => verse.n)).toEqual([
+      "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14",
+    ]);
+    expect(verses[0].latin.startsWith("Domine, exaudi orationem meam")).toBe(true);
+    expect(verses[0].latin.includes("Psalmus David")).toBe(false);
+    expect(verses[0].english.startsWith("Hear, O Lord, my prayer")).toBe(true);
+    expect(verses[0].english.includes("Absalom")).toBe(false);
+    expect(verses[2].latin.startsWith("Quia persecutus est")).toBe(true);
+    expect(verses[2].latin.endsWith("humiliavit in terra vitam meam")).toBe(true);
+    expect(verses[2].english.endsWith("he hath brought down my life to the earth.")).toBe(true);
+    expect(verses[3].latin.startsWith("collocavit me in obscuris")).toBe(true);
+    expect(verses[3].latin.endsWith("turbatum est cor meum.")).toBe(true);
+    expect(verses[6].latin.startsWith("Velociter exaudi me, Domine")).toBe(true);
+    expect(verses[6].latin.endsWith("defecit spiritus meus")).toBe(true);
+    expect(verses[7].latin.startsWith("Non avertas faciem tuam")).toBe(true);
+    expect(verses[7].latin.endsWith("descendentibus in lacum.")).toBe(true);
+    expect(verses[10].latin.endsWith("quia Deus meus es tu")).toBe(true);
+    expect(verses[11].latin.startsWith("Spiritus tuus bonus")).toBe(true);
+    expect(verses[11].latin.endsWith("in aequitate tua")).toBe(true);
+    expect(verses[12].latin.startsWith("educes de tribulatione")).toBe(true);
+    expect(verses[12].latin.endsWith("disperdes inimicos meos")).toBe(true);
+    expect(verses[13].latin.startsWith("et perdes omnes")).toBe(true);
+    expect(verses[13].latin.endsWith("quoniam ego servus tuus sum.")).toBe(true);
+    expect(verses[13].english.endsWith("for I am thy servant.")).toBe(true);
+    expect(verses.every((verse) => verse.latin.length > 0 && verse.english.length > 0)).toBe(true);
+    const saturday = hourSlots("sat", "lauds").flatMap((slot) => slot.slices);
+    expect(saturday).toContainEqual({ psalm: 142 });
+  });
+
   test("Psalm 89 is lined into its nineteen Thursday Lauds office lines", () => {
     const verses = sliceVerses({ psalm: 89 });
     expect(verses.map((verse) => verse.n)).toEqual([
@@ -1869,11 +1940,11 @@ describe("weekly cursus", () => {
     expect(second[18].latin.startsWith("et inhabitabunt ibi")).toBe(true);
     expect(second[18].english.startsWith("And they shall dwell there,")).toBe(true);
     expect(second[19].latin.startsWith("Et semen servorum eius")).toBe(true);
-    expect(sliceLabel({ psalm: 68, from: 1, to: 19 })).toBe("Psalmus 68 · 1–19");
-    expect(sliceLabel({ psalm: 68, from: 20, to: 37 })).toBe("Psalmus 68 · 20–37");
+    expect(sliceLabel({ psalm: 68, from: 1, to: 19, part: 1 })).toBe("Psalmus 68 · 1");
+    expect(sliceLabel({ psalm: 68, from: 20, to: 37, part: 2 })).toBe("Psalmus 68 · 2");
     const wednesday = hourSlots("wed", "vigils").flatMap((slot) => slot.slices);
-    expect(wednesday).toContainEqual({ psalm: 68, from: 1, to: 19 });
-    expect(wednesday).toContainEqual({ psalm: 68, from: 20, to: 37 });
+    expect(wednesday).toContainEqual({ psalm: 68, from: 1, to: 19, part: 1 });
+    expect(wednesday).toContainEqual({ psalm: 68, from: 20, to: 37, part: 2 });
   });
 
   test("Psalm 105 is lined out in its two Saturday Matins halves", () => {
