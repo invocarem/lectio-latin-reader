@@ -261,7 +261,7 @@ describe("weekly cursus", () => {
     expect(verses[5].english.startsWith("Hope in God")).toBe(true);
   });
 
-  test("Psalms 32 to 49, except 39 and 42, follow Kate's Benedictine lines", () => {
+  test("Psalms 32 to 49, except 42, follow Kate's Benedictine lines", () => {
     const lengths = (psalm: number, from?: number, to?: number) =>
       sliceVerses({ psalm, from, to }).length;
     expect(lengths(32, 1, 11)).toBe(11);
@@ -273,6 +273,7 @@ describe("weekly cursus", () => {
     expect(lengths(36, 27, 40)).toBe(15);
     expect(lengths(37)).toBe(23);
     expect(lengths(38)).toBe(18);
+    expect(lengths(39)).toBe(24);
     expect(lengths(40)).toBe(14);
     expect(lengths(41)).toBe(16);
     expect(lengths(43, 1, 13)).toBe(14);
@@ -347,6 +348,22 @@ describe("weekly cursus", () => {
     expect(thirtyEight[13].english.startsWith("The strength of thy hand")).toBe(true);
     expect(thirtyEight[14].latin.startsWith("Et tabescere fecisti")).toBe(true);
     expect(thirtyEight[17].latin.startsWith("Remitte mihi")).toBe(true);
+
+    const thirtyNine = sliceVerses({ psalm: 39 });
+    expect(thirtyNine[0].latin.startsWith("Exspectans exspectavi Dominum")).toBe(true);
+    expect(thirtyNine[0].latin.includes("In finem")).toBe(false);
+    expect(thirtyNine[1].latin.endsWith("de luto faecis.")).toBe(true);
+    expect(thirtyNine[2].latin.startsWith("Et statuit super petram")).toBe(true);
+    expect(thirtyNine[9].latin.startsWith("Holocaustum et pro peccato")).toBe(true);
+    expect(thirtyNine[9].latin.endsWith("Ecce venio.")).toBe(true);
+    expect(thirtyNine[10].latin.startsWith("In capite libri")).toBe(true);
+    expect(thirtyNine[10].latin.endsWith("medio cordis mei.")).toBe(true);
+    expect(thirtyNine[18].latin.startsWith("Confundantur et revereantur")).toBe(true);
+    expect(thirtyNine[18].latin.endsWith("ut auferant eam")).toBe(true);
+    expect(thirtyNine[19].latin.startsWith("convertantur retrorsum")).toBe(true);
+    expect(thirtyNine[23].latin.startsWith("Adiutor meus et protector meus")).toBe(true);
+    expect(thirtyNine[23].latin.endsWith("ne tardaveris.")).toBe(true);
+    expect(thirtyNine.every((verse) => verse.latin.length > 0 && verse.english.length > 0)).toBe(true);
 
     const forty = sliceVerses({ psalm: 40 });
     expect(forty[0].latin.startsWith("Beatus qui intelligit")).toBe(true);
@@ -2632,5 +2649,59 @@ describe("weekly cursus", () => {
     expect(wednesday[17].latin.endsWith("manus tuas.")).toBe(true);
     expect(wednesday[18].latin.startsWith("Tibi derelictus est pauper")).toBe(true);
     expect(wednesday[22].latin.startsWith("iudicare pupillo")).toBe(true);
+  });
+
+  test("Psalm 145 (146) is lined out into Kate's nine Benedictine office lines", () => {
+    const verses = sliceVerses({ psalm: 145 });
+    expect(verses.map((verse) => verse.n)).toEqual([
+      "1", "2", "3", "4", "5", "6", "7", "8", "9",
+    ]);
+    expect(verses[0].latin.startsWith("Lauda, anima mea")).toBe(true);
+    expect(verses[0].latin.endsWith("quamdiu fuero.")).toBe(true);
+    expect(verses[0].latin.includes("Alleluia")).toBe(false);
+    expect(verses[1].latin.startsWith("Nolite confidere")).toBe(true);
+    expect(verses[1].latin.endsWith("in quibus non est salus.")).toBe(true);
+    expect(verses[3].latin.startsWith("Beatus cuius Deus Iacob")).toBe(true);
+    expect(verses[3].latin.endsWith("quae in eis sunt.")).toBe(true);
+    expect(verses[4].latin.startsWith("Qui custodit veritatem")).toBe(true);
+    expect(verses[4].latin.endsWith("dat escam esurientibus.")).toBe(true);
+    expect(verses[5].latin.startsWith("Dominus solvit compeditos")).toBe(true);
+    expect(verses[5].latin.endsWith("Dominus illuminat caecos.")).toBe(true);
+    expect(verses[6].latin.startsWith("Dominus erigit elisos")).toBe(true);
+    expect(verses[6].latin.endsWith("Dominus diligit iustos.")).toBe(true);
+    expect(verses[7].latin.startsWith("Dominus custodit advenas")).toBe(true);
+    expect(verses[8].latin.startsWith("Regnabit Dominus in saecula")).toBe(true);
+    expect(verses[8].latin.endsWith("in generationem et generationem.")).toBe(true);
+    expect(verses[8].english.endsWith("unto generation and generation.")).toBe(true);
+  });
+
+  test("Psalm 146 (147a) is lined out into its twelve Benedictine office lines", () => {
+    const verses = sliceVerses({ psalm: 146 });
+    expect(verses).toHaveLength(12);
+    expect(verses[0].latin.startsWith("Laudate Dominum, quoniam bonus")).toBe(true);
+    expect(verses[0].latin.includes("Alleluia")).toBe(false);
+    expect(verses[0].latin.endsWith("decoraque laudatio.")).toBe(true);
+    expect(verses[0].english.startsWith("Praise ye the Lord")).toBe(true);
+    expect(verses[7].latin.startsWith("Qui operit caelum nubibus")).toBe(true);
+    expect(verses[7].latin.endsWith("pluviam ;")).toBe(true);
+    expect(verses[7].english.endsWith("prepareth rain for the earth.")).toBe(true);
+    expect(verses[8].latin.startsWith("qui producit in montibus")).toBe(true);
+    expect(verses[8].latin.endsWith("servituti hominum ;")).toBe(true);
+    expect(verses[8].english.startsWith("Who maketh grass")).toBe(true);
+    expect(verses[11].latin.startsWith("Beneplacitum est Domino")).toBe(true);
+    expect(verses[11].latin.endsWith("super misericordia eius.")).toBe(true);
+  });
+
+  test("Psalm 147 is lined out into its nine Benedictine office lines", () => {
+    const verses = sliceVerses({ psalm: 147 });
+    expect(verses).toHaveLength(9);
+    expect(verses[0].latin.startsWith("Lauda, Ierusalem, Dominum")).toBe(true);
+    expect(verses[0].latin.includes("Alleluia")).toBe(false);
+    expect(verses[0].english.startsWith("Praise the Lord, O Jerusalem")).toBe(true);
+    expect(verses[8].latin.startsWith("Non fecit taliter omni nationi")).toBe(true);
+    expect(verses[8].latin.endsWith("non manifestavit eis.")).toBe(true);
+    expect(verses[8].latin.includes("Alleluia")).toBe(false);
+    expect(verses[8].english.endsWith("made manifest to them.")).toBe(true);
+    expect(verses[8].english.includes("Alleluia")).toBe(false);
   });
 });

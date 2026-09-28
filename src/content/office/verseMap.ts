@@ -2059,6 +2059,138 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
     },
     { pieces: [{ verse: 14 }] },
   ],
+  39: [
+    { pieces: [{ verse: 2 }] },
+    {
+      pieces: [
+        {
+          verse: 3,
+          latinThrough: "de luto faecis.",
+          englishThrough: "mire of dregs.",
+        },
+      ],
+    },
+    {
+      pieces: [{ verse: 3, latinFrom: "Et statuit", englishFrom: "And he set my feet" }],
+    },
+    {
+      pieces: [
+        {
+          verse: 4,
+          latinThrough: "carmen Deo nostro.",
+          englishThrough: "to our God.",
+        },
+      ],
+    },
+    {
+      pieces: [{ verse: 4, latinFrom: "Videbunt multi", englishFrom: "Many shall see" }],
+    },
+    { pieces: [{ verse: 5 }] },
+    {
+      pieces: [
+        {
+          verse: 6,
+          latinThrough: "similis sit tibi.",
+          englishThrough: "like to thee.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 6, latinFrom: "Annuntiavi et locutus sum", englishFrom: "I have declared" },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinThrough: "perfecisti mihi.",
+          englishThrough: "ears for me.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 7, latinFrom: "Holocaustum", englishFrom: "Burnt offering" },
+        { verse: 8, latinThrough: "Ecce venio.", englishThrough: "Behold I come." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 8, latinFrom: "In capite libri", englishFrom: "In the head of the book" },
+        { verse: 9 },
+      ],
+    },
+    { pieces: [{ verse: 10 }] },
+    {
+      pieces: [
+        {
+          verse: 11,
+          latinThrough: "salutare tuum dixi",
+          englishThrough: "thy salvation.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 11,
+          latinFrom: "non abscondi misericordiam",
+          englishFrom: "I have not concealed",
+        },
+      ],
+    },
+    { pieces: [{ verse: 12 }] },
+    {
+      pieces: [
+        {
+          verse: 13,
+          latinThrough: "ut viderem.",
+          englishThrough: "able to see.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 13, latinFrom: "Multiplicatae sunt", englishFrom: "They are multiplied" },
+      ],
+    },
+    { pieces: [{ verse: 14 }] },
+    {
+      pieces: [
+        {
+          verse: 15,
+          latinThrough: "ut auferant eam",
+          englishThrough: "take it away.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 15,
+          latinFrom: "convertantur retrorsum",
+          englishFrom: "Let them be turned backward",
+        },
+      ],
+    },
+    { pieces: [{ verse: 16 }] },
+    { pieces: [{ verse: 17 }] },
+    {
+      pieces: [
+        {
+          verse: 18,
+          latinThrough: "sollicitus est mei.",
+          englishThrough: "careful for me.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 18, latinFrom: "Adiutor meus", englishFrom: "Thou art my helper" },
+      ],
+    },
+  ],
   40: [
     { pieces: [{ verse: 2 }] },
     { pieces: [{ verse: 3 }] },
@@ -5647,6 +5779,108 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
     { pieces: [{ verse: 19 }] },
     { pieces: [{ verse: 20 }] },
     { pieces: [{ verse: 21 }] },
+  ],
+  145: [
+    { pieces: [{ verse: 2, latinThrough: "quamdiu fuero.", englishThrough: "as long as I shall be." }] },
+    {
+      pieces: [
+        { verse: 2, latinFrom: "Nolite confidere", englishFrom: "Put not your trust" },
+        { verse: 3 },
+      ],
+    },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }, { verse: 6 }] },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinThrough: "dat escam esurientibus.",
+          englishThrough: "who giveth food to the hungry.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 7,
+          latinFrom: "Dominus solvit compeditos",
+          englishFrom: "The Lord looseth them that are fettered",
+        },
+        {
+          verse: 8,
+          latinThrough: "Dominus illuminat caecos.",
+          englishThrough: "The Lord enlighteneth the blind.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 8,
+          latinFrom: "Dominus erigit elisos",
+          englishFrom: "The Lord lifteth up",
+        },
+      ],
+    },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+  ],
+  146: [
+    {
+      pieces: [
+        {
+          verse: 1,
+          dropLatinPrefix: "Alleluia. ",
+          englishFrom: "Praise ye the Lord",
+        },
+      ],
+    },
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    {
+      pieces: [
+        {
+          verse: 8,
+          latinThrough: "pluviam ;",
+          englishThrough: "prepareth rain for the earth.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 8,
+          latinFrom: "qui producit",
+          englishFrom: "Who maketh grass",
+        },
+      ],
+    },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+  ],
+  147: [
+    { pieces: [{ verse: 1, dropLatinPrefix: "Alleluia. " }] },
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    { pieces: [{ verse: 5 }] },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    {
+      pieces: [
+        {
+          verse: 9,
+          latinThrough: "non manifestavit eis.",
+          englishThrough: "made manifest to them.",
+        },
+      ],
+    },
   ],
   119: [
     { sources: [1], dropLatinPrefix: GRADUAL },

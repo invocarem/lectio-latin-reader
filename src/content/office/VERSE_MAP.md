@@ -52,7 +52,7 @@ Check a psalm when its Benedictine lining is finished. A title drop alone is not
 - [x] 36
 - [x] 37
 - [x] 38
-- [ ] 39
+- [x] 39
 - [x] 40
 - [x] 41
 - [x] 42
@@ -158,9 +158,9 @@ Check a psalm when its Benedictine lining is finished. A title drop alone is not
 - [ ] 142
 - [x] 143
 - [x] 144
-- [ ] 145
-- [ ] 146
-- [ ] 147
+- [x] 145
+- [x] 146
+- [x] 147
 - [x] 148
 - [x] 149
 - [x] 150
@@ -816,7 +816,34 @@ Monday Vigils. Gallican 1 is the title only, and is left out. Eighteen office li
 
 ### Psalmus 39
 
-Not entered. The Ps 39 notes on the blog paste Psalm 40 (*Beatus qui intelligit*), and no pointed text of *Exspectans exspectavi* is posted. It is said whole at Monday Vigils, and the Office still shows Gallican verses.
+Twenty-four office lines at Monday Vigils. The [Tenebrae note](https://psallamdomino.blogspot.com/2013/03/tenebrae19-psalm-39-rock-that-is-christ.html) pastes Psalm 40 (*Beatus qui intelligit*). These lines are the breviary division of *Exspectans exspectavi*, the division that note assumes when it says verses 19 onward repeat Psalm 69: line 19 is *Confundantur et revereantur*. Gallican 1, the title *In finem. Psalmus ipsi David.*, is dropped. Gallican 3, 4, 6, 11, 13, 15, and 18 each split in two. *Holocaustum* joins Gallican 8 through *Ecce venio*. The rest of Gallican 8 joins Gallican 9. Gallican 2, 5, 10, 12, 14, 16, and 17 stay whole.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 2 |
+| 2 | Gallican 3 through *de luto faecis* |
+| 3 | Gallican 3 from *Et statuit* |
+| 4 | Gallican 4 through *carmen Deo nostro* |
+| 5 | Gallican 4 from *Videbunt multi* |
+| 6 | Gallican 5 |
+| 7 | Gallican 6 through *similis sit tibi* |
+| 8 | Gallican 6 from *Annuntiavi et locutus sum* |
+| 9 | Gallican 7 through *perfecisti mihi* |
+| 10 | Gallican 7 from *Holocaustum*, then Gallican 8 through *Ecce venio* |
+| 11 | Gallican 8 from *In capite libri*, then Gallican 9 |
+| 12 | Gallican 10 |
+| 13 | Gallican 11 through *salutare tuum dixi* |
+| 14 | Gallican 11 from *non abscondi misericordiam* |
+| 15 | Gallican 12 |
+| 16 | Gallican 13 through *ut viderem* |
+| 17 | Gallican 13 from *Multiplicatae sunt* |
+| 18 | Gallican 14 |
+| 19 | Gallican 15 through *ut auferant eam* |
+| 20 | Gallican 15 from *convertantur retrorsum* |
+| 21 | Gallican 16 |
+| 22 | Gallican 17 |
+| 23 | Gallican 18 through *sollicitus est mei* |
+| 24 | Gallican 18 from *Adiutor meus* |
 
 ### Psalmus 40
 
@@ -1582,6 +1609,57 @@ Friday Vespers ends with the first half. Saturday Vespers opens with the second.
 | 11 | Gallican 19 |
 | 12 | Gallican 20 |
 | 13 | Gallican 21 |
+
+### Psalmus 145
+
+Said at Saturday Vespers. Gallican verse 1 is the title *Alleluia, Aggaei et Zachariae.* and is dropped. The Gallican ten content verses are re-lined into nine Office lines: line 1 takes the head of Gallican 2 through *quamdiu fuero*; the tail of Gallican 2 (from *Nolite confidere*) joins Gallican 3; Gallican 5 joins Gallican 6; Gallican 7 splits after *dat escam esurientibus*, then its tail (from *Dominus solvit compeditos*) joins the head of Gallican 8 through *Dominus illuminat caecos*; the rest of Gallican 8 is its own line.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 2 through *quamdiu fuero.* |
+| 2 | *Nolite confidere* to the end of Gallican 2, then Gallican 3 |
+| 3 | Gallican 4 |
+| 4 | Gallican 5, then Gallican 6 |
+| 5 | Gallican 7 through *dat escam esurientibus.* |
+| 6 | *Dominus solvit compeditos* to the end of Gallican 7, then Gallican 8 through *Dominus illuminat caecos.* |
+| 7 | *Dominus erigit elisos* to the end of Gallican 8 |
+| 8 | Gallican 9 |
+| 9 | Gallican 10 |
+
+### Psalmus 146
+
+Said at Saturday Vespers. Gallican verse 1 holds the title *Alleluia.* with the first line, so its Latin drops the leading *Alleluia.* Gallican verse 8 splits after *pluviam*: the head (*Qui operit caelum nubibus*… *parat terrae pluviam*) and its tail (*qui producit in montibus foenum*… *servituti hominum*) each get their own line. The remaining Gallican verses stay whole, which makes twelve Office lines.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Alleluia.* |
+| 2 | Gallican 2 |
+| 3 | Gallican 3 |
+| 4 | Gallican 4 |
+| 5 | Gallican 5 |
+| 6 | Gallican 6 |
+| 7 | Gallican 7 |
+| 8 | Gallican 8 through *pluviam ;* |
+| 9 | *qui producit* to the end of Gallican 8 |
+| 10 | Gallican 9 |
+| 11 | Gallican 10 |
+| 12 | Gallican 11 |
+
+### Psalmus 147
+
+Said at Saturday Vespers. The Gallican verses already match the Benedictine lining, so each stays whole: nine Office lines. Gallican verse 1 drops the title *Alleluia.* from its head, and the closing *Alleluia.* on Gallican verse 9 is left off.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Alleluia.* |
+| 2 | Gallican 2 |
+| 3 | Gallican 3 |
+| 4 | Gallican 4 |
+| 5 | Gallican 5 |
+| 6 | Gallican 6 |
+| 7 | Gallican 7 |
+| 8 | Gallican 8 |
+| 9 | Gallican 9 through *non manifestavit eis.* |
 
 ### Psalmus 119
 
