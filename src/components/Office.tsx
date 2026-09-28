@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { hourSlots, type OfficeSlot } from "../content/office/cursus";
 import { sliceLabel, sliceVerses } from "../content/office/resolve";
 import {
@@ -11,7 +11,14 @@ import {
   type Weekday,
 } from "../content/office/when";
 import type { ReaderWork } from "../types";
+import { DictPopup } from "./DictPopup";
 import { LatinText } from "./LatinText";
+
+type DictState = {
+  word: string;
+  rect: DOMRect;
+  tokenKey: string;
+};
 
 type OfficeProps = {
   work: ReaderWork;
@@ -62,17 +69,21 @@ export function Office({ work, onHome }: OfficeProps) {
   const [hour, setHour] = useState<OfficeHour>(opened.hour);
   const [index, setIndex] = useState(0);
   const [showEnglish, setShowEnglish] = useState(true);
+  const [dict, setDict] = useState<DictState | null>(null);
+  const closeDict = useCallback(() => setDict(null), []);
 
   const slots = hourSlots(weekday, hour);
   const safeIndex = Math.min(index, Math.max(slots.length - 1, 0));
   const current = slots[safeIndex];
 
   function chooseDay(next: Weekday) {
+    closeDict();
     setWeekday(next);
     setIndex(0);
   }
 
   function chooseHour(next: OfficeHour) {
+    closeDict();
     setHour(next);
     setIndex(0);
   }
@@ -142,7 +153,14 @@ export function Office({ work, onHome }: OfficeProps) {
                         <LatinText
                           text={verse.latin}
                           unitId={`${slice.psalm}:${verse.n}`}
-                          onWord={() => {}}
+                          activeToken={dict?.tokenKey}
+                          onWord={(word, el, tokenKey) => {
+                            setDict({
+                              word,
+                              rect: el.getBoundingClientRect(),
+                              tokenKey,
+                            });
+                          }}
                         />
                       </div>
                       {showEnglish ? (
@@ -160,7 +178,14 @@ export function Office({ work, onHome }: OfficeProps) {
       </div>
 
       <nav className="lectio-nav" aria-label="Office psalms">
-        <button type="button" disabled={safeIndex <= 0} onClick={() => setIndex(safeIndex - 1)}>
+        <button
+          type="button"
+          disabled={safeIndex <= 0}
+          onClick={() => {
+            closeDict();
+            setIndex(safeIndex - 1);
+          }}
+        >
           Previous
         </button>
         <span className="lectio-progress">
@@ -169,11 +194,23 @@ export function Office({ work, onHome }: OfficeProps) {
         <button
           type="button"
           disabled={safeIndex >= slots.length - 1}
-          onClick={() => setIndex(safeIndex + 1)}
+          onClick={() => {
+            closeDict();
+            setIndex(safeIndex + 1);
+          }}
         >
           Next
         </button>
       </nav>
+
+      {dict ? (
+        <DictPopup
+          word={dict.word}
+          anchor={dict.rect}
+          workId={work.id}
+          onClose={closeDict}
+        />
+      ) : null}
     </div>
   );
 }
