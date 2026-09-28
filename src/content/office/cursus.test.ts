@@ -1041,6 +1041,47 @@ describe("weekly cursus", () => {
     expect(verses[6].latin.startsWith("Sicut laetantium omnium")).toBe(true);
   });
 
+  test("Psalm 87 is lined into its nineteen Thursday Lauds office lines", () => {
+    const verses = sliceVerses({ psalm: 87 });
+    expect(verses).toHaveLength(19);
+    expect(verses.map((verse) => verse.n)).toEqual(
+      Array.from({ length: 19 }, (_, i) => String(i + 1)),
+    );
+    // Gallican 1 is the title, dropped; line 1 opens with Gallican 2.
+    expect(verses[0].latin.startsWith("Domine, Deus salutis meae")).toBe(true);
+    expect(verses[0].latin.includes("Canticum Psalmi")).toBe(false);
+    expect(verses[0].english.startsWith("O Lord, the God of my salvation")).toBe(true);
+    // Gallican 5 joins Gallican 6 through "inter mortuos liber".
+    expect(verses[3].latin.startsWith("Aestimatus sum cum descendentibus")).toBe(true);
+    expect(verses[3].latin.endsWith("inter mortuos liber")).toBe(true);
+    expect(verses[3].latin.includes("sicut vulnerati")).toBe(false);
+    expect(verses[3].english.endsWith("Free among the dead.")).toBe(true);
+    expect(verses[4].latin.startsWith("sicut vulnerati dormientes")).toBe(true);
+    expect(verses[4].latin.endsWith("de manu tua repulsi sunt.")).toBe(true);
+    expect(verses[4].english.startsWith("Like the slain")).toBe(true);
+    // Gallican 9 splits after "abominationem sibi"; its tail joins Gallican 10 through "prae inopia".
+    expect(verses[7].latin.startsWith("Longe fecisti notos meos a me")).toBe(true);
+    expect(verses[7].latin.endsWith("abominationem sibi.")).toBe(true);
+    expect(verses[7].latin.includes("Traditus sum")).toBe(false);
+    expect(verses[7].english.endsWith("to themselves.")).toBe(true);
+    expect(verses[8].latin.startsWith("Traditus sum, et non egrediebar")).toBe(true);
+    expect(verses[8].latin.endsWith("prae inopia.")).toBe(true);
+    expect(verses[8].latin.includes("Clamavi ad te")).toBe(false);
+    expect(verses[8].english.startsWith("I was delivered up")).toBe(true);
+    expect(verses[8].english.endsWith("through poverty.")).toBe(true);
+    // Gallican 10 breaks after "prae inopia"; "Clamavi ad te" is its own line.
+    expect(verses[9].latin.startsWith("Clamavi ad te, Domine, tota die")).toBe(true);
+    expect(verses[9].latin.endsWith("expandi ad te manus meas.")).toBe(true);
+    expect(verses[9].english.startsWith("All the day I cried to thee")).toBe(true);
+    expect(verses[9].english.endsWith("my hands to thee.")).toBe(true);
+    // Whole-verse lines.
+    expect(verses[5].latin.startsWith("Posuerunt me in lacu inferiori")).toBe(true);
+    expect(verses[15].latin.startsWith("Pauper sum ego")).toBe(true);
+    expect(verses[18].latin.startsWith("Elongasti a me amicum et proximum")).toBe(true);
+    expect(verses[18].latin.endsWith("notos meos a miseria.")).toBe(true);
+    expect(verses.every((verse) => verse.latin.length > 0 && verse.english.length > 0)).toBe(true);
+  });
+
   test("Psalm 88 is lined in Kate's two Friday Matins parts", () => {
     const whole = sliceVerses({ psalm: 88 });
     const first = sliceVerses({ psalm: 88, from: 1, to: 19 });

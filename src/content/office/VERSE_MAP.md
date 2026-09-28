@@ -100,7 +100,7 @@ Check a psalm when its Benedictine lining is finished. A title drop alone is not
 - [x] 84
 - [x] 85
 - [x] 86
-- [ ] 87
+- [x] 87
 - [x] 88
 - [ ] 89
 - [ ] 90
@@ -1246,6 +1246,24 @@ Seven office lines at Friday Matins. Gallican 1 opens the psalm with its title *
 | 5 | Gallican 5 |
 | 6 | Gallican 6 |
 | 7 | Gallican 7 |
+
+### Psalmus 87
+
+Nineteen office lines at Thursday Lauds. Gallican 1 is the title *Canticum Psalmi, filiis Core, in finem, pro Maheleth ad respondendum. Intellectus Eman Ezrahitae.* and is dropped. Gallican 5 joins Gallican 6 through *inter mortuos liber*. Gallican 9 splits after *abominationem sibi*; *Traditus sum* joins Gallican 10 through *prae inopia*. The rest of Gallican 10, from *Clamavi ad te*, is its own line. The other verses stay whole.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 2 |
+| 2 | Gallican 3 |
+| 3 | Gallican 4 |
+| 4 | Gallican 5, then Gallican 6 through *inter mortuos liber* |
+| 5 | Gallican 6 from *sicut vulnerati* |
+| 6 | Gallican 7 |
+| 7 | Gallican 8 |
+| 8 | Gallican 9 through *abominationem sibi* |
+| 9 | Gallican 9 from *Traditus sum*, then Gallican 10 through *prae inopia* |
+| 10 | Gallican 10 from *Clamavi ad te* |
+| 11–19 | Gallican 11–19 |
 
 ### Psalmus 88
 

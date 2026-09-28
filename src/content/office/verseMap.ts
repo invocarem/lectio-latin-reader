@@ -4650,6 +4650,43 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
     { pieces: [{ verse: 6 }] },
     { pieces: [{ verse: 7 }] },
   ],
+  87: [
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    { pieces: [{ verse: 4 }] },
+    {
+      pieces: [
+        { verse: 5 },
+        { verse: 6, latinThrough: "inter mortuos liber", englishThrough: "Free among the dead." },
+      ],
+    },
+    {
+      pieces: [{ verse: 6, latinFrom: "sicut vulnerati", englishFrom: "Like the slain" }],
+    },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    {
+      pieces: [{ verse: 9, latinThrough: "abominationem sibi.", englishThrough: "to themselves." }],
+    },
+    {
+      pieces: [
+        { verse: 9, latinFrom: "Traditus sum", englishFrom: "I was delivered up" },
+        { verse: 10, latinThrough: "prae inopia.", englishThrough: "through poverty." },
+      ],
+    },
+    {
+      pieces: [{ verse: 10, latinFrom: "Clamavi ad te", englishFrom: "All the day" }],
+    },
+    { pieces: [{ verse: 11 }] },
+    { pieces: [{ verse: 12 }] },
+    { pieces: [{ verse: 13 }] },
+    { pieces: [{ verse: 14 }] },
+    { pieces: [{ verse: 15 }] },
+    { pieces: [{ verse: 16 }] },
+    { pieces: [{ verse: 17 }] },
+    { pieces: [{ verse: 18 }] },
+    { pieces: [{ verse: 19 }] },
+  ],
   88: [
     {
       pieces: [
