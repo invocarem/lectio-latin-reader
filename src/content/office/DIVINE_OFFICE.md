@@ -75,17 +75,17 @@ Verse 1 of Psalms 9 and 17 is the title and is not a sung half.
 
 ### Vigils (custom under chapter 18)
 
-Every night opens with Psalm 3 and Psalm 94, then the further psalms of the two nocturns. Sunday’s twelve are the consequence of the Rule (Vigils always begin at Psalm 20). The ferial distribution, and which psalms are split, are custom: this arrangement uses each remaining psalm once. Sunday through Friday keep twelve further slots. Saturday divides Psalms 103, 104, 105, and 106 at the Benedictine divisio, so that night has sixteen further slots. Replace the whole table if a better one is chosen; do not mix rows from two schemes.
+Every night opens with Psalm 3 and Psalm 94, then the further psalms of the two nocturns. Sunday’s twelve are the consequence of the Rule (Vigils always begin at Psalm 20). The ferial distribution is the Benedictine Matins table in Kate Edwards’ [masterpost](https://psallamdomino.blogspot.com/2014/05/masterpost-matins-in-benedictine-office.html). It is still marked custom, because the Rule does not list those psalms. Each night, Saturday included, has twelve further slots. The divided psalms are 36, 67, 68, 77, 88, 103, 104, 105, and 106, at the breaks in that table.
 
 | Day | First six | Second six |
 | --- | --- | --- |
 | Sunday | 20, 21, 22, 23, 24, 25 | 26, 27, 28, 29, 30, 31 |
-| Monday | 32 verses 1–11; 32 verses 12–22; 33; 34; 36 verses 1–26; 36 verses 27–40 | 37; 38; 39 verses 1–9; 39 verses 10–18; 40; 41 |
-| Tuesday | 43 verses 1–13; 43 verses 14–26; 44; 45; 46; 47 | 48; 49; 51; 52; 53; 54 |
-| Wednesday | 55; 57; 58; 59; 60; 61 | 65; 67 verses 1–18; 67 verses 19–36; 68 verses 1–19; 68 verses 20–37; 69 |
-| Thursday | 70; 71; 72 verses 1–14; 72 verses 15–28; 73 verses 1–12; 73 verses 13–23 | 74; 76; 77 verses 1–36; 77 verses 37–72; 78; 79 |
-| Friday | 80, 81, 82, 83, 84, 85 | 86, 88, 92, 93, 95, 96 |
-| Saturday | 97, 98, 99, 100, 101, 102 | 103 verses 1–24; 103 verses 25–35; 104 verses 1–22; 104 verses 23–45; 105 verses 1–31; 105 verses 32–48; 106 verses 1–24; 106 verses 25–43; 107; 108 |
+| Monday | 32; 33; 34; 36 verses 1–26; 36 verses 27–40; 37 | 38; 39; 40; 41; 43; 44 |
+| Tuesday | 45, 46, 47, 48, 49, 51 | 52, 53, 54, 55, 57, 58 |
+| Wednesday | 59; 60; 61; 65; 67 verses 1–18; 67 verses 19–36 | 68 verses 1–19; 68 verses 20–37; 69; 70; 71; 72 |
+| Thursday | 73; 74; 76; 77 verses 1–35; 77 verses 36–72; 78 | 79, 80, 81, 82, 83, 84 |
+| Friday | 85; 86; 88 verses 1–19; 88 verses 20–53; 92; 93 | 95, 96, 97, 98, 99, 100 |
+| Saturday | 101; 102; 103 verses 1–24; 103 verses 25–35; 104 verses 1–22; 104 verses 23–45 | 105 verses 1–31; 105 verses 32–48; 106 verses 1–24; 106 verses 25–43; 107; 108 |
 
 When this section is implemented, a test must show that Psalms 1–150 each appear in the week (daily psalms may repeat), and that no psalm is lost between the day hours and Vigils.
 

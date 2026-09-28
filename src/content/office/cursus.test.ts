@@ -35,10 +35,13 @@ describe("weekly cursus", () => {
 
   test("ferial Vigils twelves are marked custom; Sunday's twelve are not", () => {
     const sunTwelve = hourSlots("sun", "vigils").slice(2);
-    const monTwelve = hourSlots("mon", "vigils").slice(2);
+    expect(sunTwelve).toHaveLength(12);
     expect(sunTwelve.every((slot) => !slot.custom)).toBe(true);
-    expect(monTwelve).toHaveLength(12);
-    expect(monTwelve.every((slot) => slot.custom)).toBe(true);
+    for (const day of ["mon", "tue", "wed", "thu", "fri", "sat"] as const) {
+      const twelve = hourSlots(day, "vigils").slice(2);
+      expect(twelve).toHaveLength(12);
+      expect(twelve.every((slot) => slot.custom)).toBe(true);
+    }
   });
 
   test("Psalm 119 is lined out for the Office without editing the Gallican text", () => {
@@ -414,8 +417,11 @@ describe("weekly cursus", () => {
       ]),
     );
     expect(hourSlots("mon", "lauds")[3].slices[0]).toEqual({ psalm: 35 });
+    expect(hourSlots("mon", "vigils").slice(2).map((slot) => slot.slices[0].psalm)).toEqual([
+      32, 33, 34, 36, 36, 37, 38, 39, 40, 41, 43, 44,
+    ]);
     const tuesday = hourSlots("tue", "vigils").flatMap((slot) => slot.slices.map((slice) => slice.psalm));
-    expect(tuesday.slice(2, 10)).toEqual([43, 43, 44, 45, 46, 47, 48, 49]);
+    expect(tuesday.slice(2, 8)).toEqual([45, 46, 47, 48, 49, 51]);
 
     for (const verses of [
       thirtyTwo,
@@ -498,8 +504,8 @@ describe("weekly cursus", () => {
     const tuesday = hourSlots("tue", "vigils").flatMap((slot) =>
       slot.slices.map((slice) => slice.psalm),
     );
-    expect(tuesday.slice(10, 14)).toEqual([51, 52, 53, 54]);
-    expect(hourSlots("wed", "vigils")[2].slices[0]).toEqual({ psalm: 55 });
+    expect(tuesday.slice(7, 14)).toEqual([51, 52, 53, 54, 55, 57, 58]);
+    expect(hourSlots("wed", "vigils")[2].slices[0]).toEqual({ psalm: 59 });
 
     for (const verses of [fiftyOne, fiftyTwo, fiftyThree, fiftyFour, fiftyFive]) {
       expect(verses.every((verse) => verse.latin.length > 0 && verse.english.length > 0)).toBe(true);
@@ -600,8 +606,7 @@ describe("weekly cursus", () => {
     const wednesday = hourSlots("wed", "vigils").flatMap((slot) =>
       slot.slices.map((slice) => slice.psalm),
     );
-    expect(wednesday.slice(3, 8)).toEqual([57, 58, 59, 60, 61]);
-    expect(wednesday[8]).toBe(65);
+    expect(wednesday.slice(2, 6)).toEqual([59, 60, 61, 65]);
     const sundayLauds = hourSlots("sun", "lauds").flatMap((slot) =>
       slot.slices.map((slice) => slice.psalm),
     );
@@ -719,11 +724,11 @@ describe("weekly cursus", () => {
     const wednesday = hourSlots("wed", "vigils").flatMap((slot) =>
       slot.slices.map((slice) => slice.psalm),
     );
-    expect(wednesday.at(-1)).toBe(69);
+    expect(wednesday.at(-1)).toBe(72);
     const thursday = hourSlots("thu", "vigils").flatMap((slot) =>
       slot.slices.map((slice) => slice.psalm),
     );
-    expect(thursday.slice(2, 9)).toEqual([70, 71, 72, 72, 73, 73, 74]);
+    expect(thursday.slice(2)).toEqual([73, 74, 76, 77, 77, 78, 79, 80, 81, 82, 83, 84]);
 
     for (const verses of [
       sixtyNine,
@@ -1036,7 +1041,52 @@ describe("weekly cursus", () => {
     expect(verses[6].latin.startsWith("Sicut laetantium omnium")).toBe(true);
   });
 
-  test("Psalm 80 is lined into its fifteen Friday Vigils office lines", () => {
+  test("Psalm 88 is lined in Kate's two Friday Matins parts", () => {
+    const whole = sliceVerses({ psalm: 88 });
+    const first = sliceVerses({ psalm: 88, from: 1, to: 19 });
+    const second = sliceVerses({ psalm: 88, from: 20, to: 53 });
+    expect(whole).toHaveLength(51);
+    expect(first).toHaveLength(18);
+    expect(second).toHaveLength(33);
+    expect(first[0].latin.startsWith("Misericordias Domini")).toBe(true);
+    expect(first[0].latin.endsWith("cantabo ;")).toBe(true);
+    expect(first[0].latin.includes("Intellectus Ethan")).toBe(false);
+    expect(first[0].english).toBe("The mercies of the Lord I will sing for ever.");
+    expect(first[1].latin.startsWith("in generationem")).toBe(true);
+    expect(first[1].english.startsWith("I will shew forth")).toBe(true);
+    expect(first[3].latin.startsWith("Disposui testamentum")).toBe(true);
+    expect(first[3].latin.endsWith("semen tuum,")).toBe(true);
+    expect(first[3].english.endsWith("for ever.")).toBe(true);
+    expect(first[4].latin.startsWith("et aedificabo")).toBe(true);
+    expect(first[4].english.startsWith("And I will build up")).toBe(true);
+    expect(first[11].latin.startsWith("Tui sunt caeli")).toBe(true);
+    expect(first[11].latin.endsWith("tu creasti.")).toBe(true);
+    expect(first[12].latin.startsWith("Thabor et Hermon")).toBe(true);
+    expect(first[12].latin.endsWith("cum potentia.")).toBe(true);
+    expect(first[13].latin.startsWith("Firmetur manus tua")).toBe(true);
+    expect(first[13].latin.endsWith("sedis tuae :")).toBe(true);
+    expect(first[14].latin.startsWith("misericordia et veritas")).toBe(true);
+    expect(first[14].latin.endsWith("iubilationem :")).toBe(true);
+    expect(first[15].latin.startsWith("Domine, in lumine")).toBe(true);
+    expect(first[15].latin.endsWith("exaltabuntur.")).toBe(true);
+    expect(first[17].latin.startsWith("Quia Domini est assumptio nostra")).toBe(true);
+    expect(first[17].latin.endsWith("regis nostri.")).toBe(true);
+    expect(second[0].latin.startsWith("Tunc locutus es")).toBe(true);
+    expect(second[16].latin.startsWith("Semel iuravi")).toBe(true);
+    expect(second[16].latin.endsWith("in aeternum manebit.")).toBe(true);
+    expect(second[16].english.endsWith("for ever.")).toBe(true);
+    expect(second[32].latin.startsWith("Benedictus Dominus")).toBe(true);
+    expect(second[32].latin.endsWith("Fiat, fiat.")).toBe(true);
+    expect(first.every((verse) => verse.latin.length > 0 && verse.english.length > 0)).toBe(true);
+    expect(second.every((verse) => verse.latin.length > 0 && verse.english.length > 0)).toBe(true);
+    expect(sliceLabel({ psalm: 88, from: 1, to: 19, part: 1 })).toBe("Psalmus 88 · 1");
+    expect(sliceLabel({ psalm: 88, from: 20, to: 53, part: 2 })).toBe("Psalmus 88 · 2");
+    const friday = hourSlots("fri", "vigils").flatMap((slot) => slot.slices);
+    expect(friday).toContainEqual({ psalm: 88, from: 1, to: 19, part: 1 });
+    expect(friday).toContainEqual({ psalm: 88, from: 20, to: 53, part: 2 });
+  });
+
+  test("Psalm 80 is lined into its fifteen Thursday Vigils office lines", () => {
     const verses = sliceVerses({ psalm: 80 });
     expect(verses).toHaveLength(15);
     expect(verses[0].latin.startsWith("Exsultate Deo adiutori nostro")).toBe(true);
@@ -1144,11 +1194,11 @@ describe("weekly cursus", () => {
     expect(ninetySix[12].latin.startsWith("Laetamini, iusti")).toBe(true);
     expect(ninetySix[7].english.endsWith("and was glad.")).toBe(true);
     const friday = hourSlots("fri", "vigils");
-    expect(friday[friday.length - 2].slices).toEqual([{ psalm: 95 }]);
-    expect(friday[friday.length - 1].slices).toEqual([{ psalm: 96 }]);
+    expect(friday[8].slices).toEqual([{ psalm: 95 }]);
+    expect(friday[9].slices).toEqual([{ psalm: 96 }]);
   });
 
-  test("Psalms 97 to 101 are lined for Saturday Vigils", () => {
+  test("Psalms 97 to 100 are lined for Friday Vigils, and 101 for Saturday", () => {
     const ninetySeven = sliceVerses({ psalm: 97 });
     const ninetyEight = sliceVerses({ psalm: 98 });
     const ninetyNine = sliceVerses({ psalm: 99 });
@@ -1200,8 +1250,10 @@ describe("weekly cursus", () => {
     expect(oneOhOne[27].latin.endsWith("non deficient.")).toBe(true);
     expect(oneOhOne[27].english.startsWith("And as a vesture")).toBe(true);
     expect(oneOhOne[28].latin.startsWith("Filii servorum tuorum")).toBe(true);
+    const friday = hourSlots("fri", "vigils");
+    expect(friday.slice(10, 14).map((slot) => slot.slices[0].psalm)).toEqual([97, 98, 99, 100]);
     const saturday = hourSlots("sat", "vigils");
-    expect(saturday.slice(2, 7).map((slot) => slot.slices[0].psalm)).toEqual([97, 98, 99, 100, 101]);
+    expect(saturday.slice(2, 4).map((slot) => slot.slices[0].psalm)).toEqual([101, 102]);
   });
 
   test("Psalm 148 is lined out into its fourteen Lauds office lines", () => {

@@ -63,23 +63,19 @@ function vigils(first: OfficeSlot[], second: OfficeSlot[]): OfficeSlot[] {
 }
 
 /**
- * Even splits of the longer vigils and vespers psalms, taken from the
- * verse counts in latin.md. The first half keeps the extra verse when the
- * count is odd. Psalms 9 and 17 are the Rule's Prime cuts, not these halves.
- * Psalm 144 follows the Vespers division after verse 9. Psalm 36 follows
- * the Benedictine divisio after verse 26. Psalms 103–106 follow the
- * Benedictine divisio (105 after verse 31, 106 after verse 24).
+ * Benedictine divisio of the longer vigils and vespers psalms, from Kate
+ * Edwards' Matins table and the Vespers cuts. Psalms 9 and 17 are the
+ * Rule's Prime cuts, not these halves. Vigils breaks: 36 after 26, 67 after
+ * 18, 68 after 19, 77 after 35, 88 after 19, 103 after 24, 104 after 22,
+ * 105 after 31, 106 after 24. Psalm 144 follows the Vespers division after
+ * verse 9.
  */
 const HALF = {
-  32: [cut(32, 1, 11), cut(32, 12, 22)],
   36: [cut(36, 1, 26), cut(36, 27, 40)],
-  39: [cut(39, 1, 9), cut(39, 10, 18)],
-  43: [cut(43, 1, 13), cut(43, 14, 26)],
   67: [cut(67, 1, 18), cut(67, 19, 36)],
   68: [cut(68, 1, 19), cut(68, 20, 37)],
-  72: [cut(72, 1, 14), cut(72, 15, 28)],
-  73: [cut(73, 1, 12), cut(73, 13, 23)],
   77: [cut(77, 1, 35), cut(77, 36, 72)],
+  88: [part(88, 1, 1, 19), part(88, 2, 20, 53)],
   103: [cut(103, 1, 24), cut(103, 25, 35)],
   104: [cut(104, 1, 22), cut(104, 23, 45)],
   105: [cut(105, 1, 31), cut(105, 32, 48)],
@@ -105,8 +101,8 @@ const CURSUS: Record<Weekday, Record<OfficeHour, OfficeSlot[]>> = {
   },
   mon: {
     vigils: vigils(
-      [custom(HALF[32][0]), custom(HALF[32][1]), custom(whole(33)), custom(whole(34)), custom(HALF[36][0]), custom(HALF[36][1])],
-      [custom(whole(37)), custom(whole(38)), custom(HALF[39][0]), custom(HALF[39][1]), custom(whole(40)), custom(whole(41))],
+      [custom(whole(32)), custom(whole(33)), custom(whole(34)), custom(HALF[36][0]), custom(HALF[36][1]), custom(whole(37))],
+      [custom(whole(38)), custom(whole(39)), custom(whole(40)), custom(whole(41)), custom(whole(43)), custom(whole(44))],
     ),
     lauds: lauds([5, 35]),
     prime: [slot(whole(1)), slot(whole(2)), slot(whole(6))],
@@ -118,8 +114,8 @@ const CURSUS: Record<Weekday, Record<OfficeHour, OfficeSlot[]>> = {
   },
   tue: {
     vigils: vigils(
-      [custom(HALF[43][0]), custom(HALF[43][1]), custom(whole(44)), custom(whole(45)), custom(whole(46)), custom(whole(47))],
-      [48, 49, 51, 52, 53, 54].map((psalm) => custom(whole(psalm))),
+      [45, 46, 47, 48, 49, 51].map((psalm) => custom(whole(psalm))),
+      [52, 53, 54, 55, 57, 58].map((psalm) => custom(whole(psalm))),
     ),
     lauds: lauds([42, 56]),
     prime: [slot(whole(7)), slot(whole(8)), slot(cut(9, 2, 19))],
@@ -129,8 +125,8 @@ const CURSUS: Record<Weekday, Record<OfficeHour, OfficeSlot[]>> = {
   },
   wed: {
     vigils: vigils(
-      [55, 57, 58, 59, 60, 61].map((psalm) => custom(whole(psalm))),
-      [custom(whole(65)), custom(HALF[67][0]), custom(HALF[67][1]), custom(HALF[68][0]), custom(HALF[68][1]), custom(whole(69))],
+      [custom(whole(59)), custom(whole(60)), custom(whole(61)), custom(whole(65)), custom(HALF[67][0]), custom(HALF[67][1])],
+      [custom(HALF[68][0]), custom(HALF[68][1]), custom(whole(69)), custom(whole(70)), custom(whole(71)), custom(whole(72))],
     ),
     lauds: lauds([63, 64]),
     prime: [slot(cut(9, 20, 39)), slot(whole(10)), slot(whole(11))],
@@ -140,8 +136,8 @@ const CURSUS: Record<Weekday, Record<OfficeHour, OfficeSlot[]>> = {
   },
   thu: {
     vigils: vigils(
-      [custom(whole(70)), custom(whole(71)), custom(HALF[72][0]), custom(HALF[72][1]), custom(HALF[73][0]), custom(HALF[73][1])],
-      [custom(whole(74)), custom(whole(76)), custom(HALF[77][0]), custom(HALF[77][1]), custom(whole(78)), custom(whole(79))],
+      [custom(whole(73)), custom(whole(74)), custom(whole(76)), custom(HALF[77][0]), custom(HALF[77][1]), custom(whole(78))],
+      [79, 80, 81, 82, 83, 84].map((psalm) => custom(whole(psalm))),
     ),
     lauds: lauds([87, 89]),
     prime: [slot(whole(12)), slot(whole(13)), slot(whole(14))],
@@ -151,8 +147,8 @@ const CURSUS: Record<Weekday, Record<OfficeHour, OfficeSlot[]>> = {
   },
   fri: {
     vigils: vigils(
-      [80, 81, 82, 83, 84, 85].map((psalm) => custom(whole(psalm))),
-      [86, 88, 92, 93, 95, 96].map((psalm) => custom(whole(psalm))),
+      [custom(whole(85)), custom(whole(86)), custom(HALF[88][0]), custom(HALF[88][1]), custom(whole(92)), custom(whole(93))],
+      [95, 96, 97, 98, 99, 100].map((psalm) => custom(whole(psalm))),
     ),
     lauds: lauds([75, 91]),
     prime: [slot(whole(15)), slot(whole(16)), slot(cut(17, 2, 25))],
@@ -162,12 +158,8 @@ const CURSUS: Record<Weekday, Record<OfficeHour, OfficeSlot[]>> = {
   },
   sat: {
     vigils: vigils(
-      [97, 98, 99, 100, 101, 102].map((psalm) => custom(whole(psalm))),
+      [custom(whole(101)), custom(whole(102)), custom(HALF[103][0]), custom(HALF[103][1]), custom(HALF[104][0]), custom(HALF[104][1])],
       [
-        custom(HALF[103][0]),
-        custom(HALF[103][1]),
-        custom(HALF[104][0]),
-        custom(HALF[104][1]),
         custom(HALF[105][0]),
         custom(HALF[105][1]),
         custom(HALF[106][0]),

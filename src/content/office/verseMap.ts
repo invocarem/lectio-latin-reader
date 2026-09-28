@@ -4650,6 +4650,101 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
     { pieces: [{ verse: 6 }] },
     { pieces: [{ verse: 7 }] },
   ],
+  88: [
+    {
+      pieces: [
+        { verse: 2, latinThrough: "cantabo ;", englishThrough: "for ever." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 2, latinFrom: "in generationem", englishFrom: "I will shew forth" },
+      ],
+    },
+    { pieces: [{ verse: 3 }] },
+    {
+      pieces: [
+        { verse: 4 },
+        { verse: 5, latinThrough: "semen tuum,", englishThrough: "for ever." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 5, latinFrom: "et aedificabo", englishFrom: "And I will build up" },
+      ],
+    },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    { pieces: [{ verse: 9 }] },
+    { pieces: [{ verse: 10 }] },
+    { pieces: [{ verse: 11 }] },
+    {
+      pieces: [
+        { verse: 12 },
+        { verse: 13, latinThrough: "tu creasti.", englishThrough: "thou hast created." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 13, latinFrom: "Thabor et Hermon", englishFrom: "Thabor and Hermon" },
+        { verse: 14, latinThrough: "cum potentia.", englishThrough: "with might." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 14, latinFrom: "Firmetur manus tua", englishFrom: "Let thy hand" },
+        { verse: 15, latinThrough: "sedis tuae :", englishThrough: "thy throne." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 15, latinFrom: "misericordia et veritas", englishFrom: "Mercy and truth" },
+        { verse: 16, latinThrough: "iubilationem :", englishThrough: "jubilation." },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 16, latinFrom: "Domine, in lumine", englishFrom: "They shall walk" },
+        { verse: 17 },
+      ],
+    },
+    { pieces: [{ verse: 18 }] },
+    { pieces: [{ verse: 19 }] },
+    { pieces: [{ verse: 20 }] },
+    { pieces: [{ verse: 21 }] },
+    { pieces: [{ verse: 22 }] },
+    { pieces: [{ verse: 23 }] },
+    { pieces: [{ verse: 24 }] },
+    { pieces: [{ verse: 25 }] },
+    { pieces: [{ verse: 26 }] },
+    { pieces: [{ verse: 27 }] },
+    { pieces: [{ verse: 28 }] },
+    { pieces: [{ verse: 29 }] },
+    { pieces: [{ verse: 30 }] },
+    { pieces: [{ verse: 31 }] },
+    { pieces: [{ verse: 32 }] },
+    { pieces: [{ verse: 33 }] },
+    { pieces: [{ verse: 34 }] },
+    { pieces: [{ verse: 35 }] },
+    { pieces: [{ verse: 36 }, { verse: 37 }] },
+    { pieces: [{ verse: 38 }] },
+    { pieces: [{ verse: 39 }] },
+    { pieces: [{ verse: 40 }] },
+    { pieces: [{ verse: 41 }] },
+    { pieces: [{ verse: 42 }] },
+    { pieces: [{ verse: 43 }] },
+    { pieces: [{ verse: 44 }] },
+    { pieces: [{ verse: 45 }] },
+    { pieces: [{ verse: 46 }] },
+    { pieces: [{ verse: 47 }] },
+    { pieces: [{ verse: 48 }] },
+    { pieces: [{ verse: 49 }] },
+    { pieces: [{ verse: 50 }] },
+    { pieces: [{ verse: 51 }] },
+    { pieces: [{ verse: 52 }] },
+    { pieces: [{ verse: 53 }] },
+  ],
   91: [
     { pieces: [{ verse: 2 }] },
     { pieces: [{ verse: 3 }] },
