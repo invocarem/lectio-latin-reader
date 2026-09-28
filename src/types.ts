@@ -35,7 +35,7 @@ export type LectioUnit = Unit & {
   chapterId?: string;
 };
 
-export type ReaderMode = "lectio" | "study" | "office";
+export type ReaderMode = "lectio" | "study" | "office" | "office-lectio";
 
 /** Unique id of a registered library work. */
 export type WorkId =

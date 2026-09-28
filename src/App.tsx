@@ -42,8 +42,14 @@ export default function App() {
 
   const work = workById(workId) ?? defaultWork;
 
-  if (work.officeEnabled && mode === "office") {
-    return <Office work={work} onHome={goHome} />;
+  if (work.officeEnabled && (mode === "office" || mode === "office-lectio")) {
+    return (
+      <Office
+        work={work}
+        reading={mode === "office-lectio" ? "line" : "hour"}
+        onHome={goHome}
+      />
+    );
   }
 
   if (work.studyEnabled && studyEnabled && mode === "study") {

@@ -31,8 +31,9 @@ export function resolveSession(
   requested?: ReaderMode,
 ): { mode: ReaderMode; focusId: string } {
   let mode: ReaderMode = "lectio";
-  if (requested === "office" && work.officeEnabled) mode = "office";
-  else if (requested === "study" && work.studyEnabled && platformStudy) mode = "study";
+  if ((requested === "office" || requested === "office-lectio") && work.officeEnabled) {
+    mode = requested;
+  } else if (requested === "study" && work.studyEnabled && platformStudy) mode = "study";
   const focusId =
     mode === "study"
       ? work.study?.units[0]?.id ?? work.lectio[0].id

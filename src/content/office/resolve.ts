@@ -1,5 +1,6 @@
 import { psalter as source } from "../psalter/work";
-import type { PsalmSlice } from "./cursus";
+import { hourSlots, type PsalmSlice } from "./cursus";
+import type { OfficeHour, Weekday } from "./when";
 import { VERSE_MAP, type OfficeLine, type OfficePiece, type VerseMapEntry } from "./verseMap";
 
 export type OfficeVerse = {
@@ -169,6 +170,36 @@ function lineOut(stored: Map<number, StoredVerse>, map: VerseMapEntry | undefine
     const verses = line.pieces ? line.pieces.map((piece) => piece.verse) : line.sources ?? [];
     if (!verses.every((n) => stored.has(n))) continue;
     lines.push(joinLine(line, stored, lines.length + 1));
+  }
+  return lines;
+}
+
+export type OfficeLineStep = {
+  id: string;
+  label: string;
+  n: string;
+  latin: string;
+  english: string;
+};
+
+/** Office lines of one hour, in cursus order. Each card of office lectio is one step. */
+export function hourLines(weekday: Weekday, hour: OfficeHour): OfficeLineStep[] {
+  const lines: OfficeLineStep[] = [];
+  for (const slot of hourSlots(weekday, hour)) {
+    for (const slice of slot.slices) {
+      const label = sliceLabel(slice);
+      const span = `${slice.psalm}:${slice.from ?? 1}:${slice.to ?? "end"}`;
+      for (const verse of sliceVerses(slice)) {
+        if (!verse.latin) continue;
+        lines.push({
+          id: `${span}:${verse.n}`,
+          label,
+          n: verse.n,
+          latin: verse.latin,
+          english: verse.english,
+        });
+      }
+    }
   }
   return lines;
 }

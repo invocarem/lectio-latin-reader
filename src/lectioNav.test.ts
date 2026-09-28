@@ -83,4 +83,17 @@ describe("resolveSession", () => {
       focusId: "lectio-0",
     });
   });
+
+  test("the psalter can open office lectio", () => {
+    expect(
+      resolveSession({ ...lectioOnlyWork, officeEnabled: true }, false, "office-lectio"),
+    ).toEqual({ mode: "office-lectio", focusId: "lectio-0" });
+  });
+
+  test("a work without the office cannot open office lectio", () => {
+    expect(resolveSession(lectioOnlyWork, true, "office-lectio")).toEqual({
+      mode: "lectio",
+      focusId: "lectio-0",
+    });
+  });
 });
