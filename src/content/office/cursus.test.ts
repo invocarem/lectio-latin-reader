@@ -1144,6 +1144,51 @@ describe("weekly cursus", () => {
     expect(friday).toContainEqual({ psalm: 88, from: 20, to: 53, part: 2 });
   });
 
+  test("Psalm 89 is lined into its nineteen Thursday Lauds office lines", () => {
+    const verses = sliceVerses({ psalm: 89 });
+    expect(verses.map((verse) => verse.n)).toEqual([
+      "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19",
+    ]);
+    expect(verses[0].latin.startsWith("Domine, refugium factus es nobis")).toBe(true);
+    expect(verses[0].latin.includes("Oratio Moysi")).toBe(false);
+    expect(verses[0].english.startsWith("Lord, thou hast been our refuge")).toBe(true);
+    expect(verses[0].english.includes("Moses")).toBe(false);
+    expect(verses[3].latin.startsWith("Quoniam mille anni")).toBe(true);
+    expect(verses[3].latin.endsWith("quae praeteriit :")).toBe(true);
+    expect(verses[3].latin.includes("custodia")).toBe(false);
+    expect(verses[3].english.endsWith("which is past.")).toBe(true);
+    expect(verses[4].latin.startsWith("et custodia in nocte")).toBe(true);
+    expect(verses[4].latin.endsWith("eorum anni erunt.")).toBe(true);
+    expect(verses[4].english.startsWith("And as a watch in the night,")).toBe(true);
+    expect(verses[4].english.endsWith("shall their years be.")).toBe(true);
+    expect(verses[8].latin.startsWith("Quoniam omnes dies nostri")).toBe(true);
+    expect(verses[8].latin.endsWith("defecimus.")).toBe(true);
+    expect(verses[8].latin.includes("aranea")).toBe(false);
+    expect(verses[8].english.endsWith("we have fainted away.")).toBe(true);
+    expect(verses[9].latin.startsWith("Anni nostri sicut aranea")).toBe(true);
+    expect(verses[9].latin.endsWith("septuaginta anni.")).toBe(true);
+    expect(verses[9].english.startsWith("Our years shall be considered as a spider:")).toBe(true);
+    expect(verses[9].english.endsWith("threescore and ten years.")).toBe(true);
+    expect(verses[10].latin.startsWith("Si autem in potentatibus")).toBe(true);
+    expect(verses[10].latin.endsWith("labor et dolor ;")).toBe(true);
+    expect(verses[10].latin.includes("mansuetudo")).toBe(false);
+    expect(verses[10].english.endsWith("labour and sorrow.")).toBe(true);
+    expect(verses[11].latin.startsWith("quoniam supervenit mansuetudo")).toBe(true);
+    expect(verses[11].latin.endsWith("corripiemur.")).toBe(true);
+    expect(verses[11].english.startsWith("For mildness is come upon us:")).toBe(true);
+    expect(verses[12].latin.startsWith("Quis novit potestatem")).toBe(true);
+    expect(verses[12].latin.endsWith("dinumerare ?")).toBe(true);
+    expect(verses[12].latin.includes("Dexteram")).toBe(false);
+    expect(verses[12].english.endsWith("Can number thy wrath?")).toBe(true);
+    expect(verses[13].latin.startsWith("Dexteram tuam sic notam fac")).toBe(true);
+    expect(verses[13].latin.endsWith("in sapientia.")).toBe(true);
+    expect(verses[13].english.startsWith("So make thy right hand known:")).toBe(true);
+    expect(verses[18].latin.startsWith("Et sit splendor Domini")).toBe(true);
+    expect(verses[18].latin.endsWith("opus manuum nostrarum dirige.")).toBe(true);
+    expect(verses.every((verse) => verse.latin.length > 0 && verse.english.length > 0)).toBe(true);
+    expect(hourSlots("thu", "lauds")[3].slices).toEqual([{ psalm: 89 }]);
+  });
+
   test("Psalm 80 is lined into its fifteen Thursday Vigils office lines", () => {
     const verses = sliceVerses({ psalm: 80 });
     expect(verses).toHaveLength(15);

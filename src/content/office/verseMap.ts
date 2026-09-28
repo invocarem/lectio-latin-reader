@@ -4914,6 +4914,100 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
     { pieces: [{ verse: 52 }] },
     { pieces: [{ verse: 53 }] },
   ],
+  89: [
+    {
+      pieces: [
+        {
+          verse: 1,
+          dropLatinPrefix: "Oratio Moysi, hominis Dei. ",
+          englishFrom: "Lord,",
+        },
+      ],
+    },
+    { pieces: [{ verse: 2 }] },
+    { pieces: [{ verse: 3 }] },
+    {
+      pieces: [
+        {
+          verse: 4,
+          latinThrough: "quae praeteriit :",
+          englishThrough: "which is past.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 4, latinFrom: "et custodia in nocte", englishFrom: "And as a watch in the night," },
+        { verse: 5 },
+      ],
+    },
+    { pieces: [{ verse: 6 }] },
+    { pieces: [{ verse: 7 }] },
+    { pieces: [{ verse: 8 }] },
+    {
+      pieces: [
+        {
+          verse: 9,
+          latinThrough: "defecimus.",
+          englishThrough: "we have fainted away.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 9,
+          latinFrom: "Anni nostri sicut aranea meditabuntur",
+          englishFrom: "Our years shall be considered as a spider:",
+        },
+        {
+          verse: 10,
+          latinThrough: "septuaginta anni.",
+          englishThrough: "threescore and ten years.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 10,
+          latinFrom: "Si autem in potentatibus",
+          latinThrough: "labor et dolor ;",
+          englishFrom: "But if in the strong",
+          englishThrough: "labour and sorrow.",
+        },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 10,
+          latinFrom: "quoniam supervenit mansuetudo",
+          englishFrom: "For mildness is come upon us:",
+        },
+      ],
+    },
+    {
+      pieces: [
+        { verse: 11 },
+        { verse: 12, latinThrough: "dinumerare ?", englishThrough: "Can number thy wrath?" },
+      ],
+    },
+    {
+      pieces: [
+        {
+          verse: 12,
+          latinFrom: "Dexteram tuam sic notam fac",
+          englishFrom: "So make thy right hand known:",
+        },
+      ],
+    },
+    { pieces: [{ verse: 13 }] },
+    { pieces: [{ verse: 14 }] },
+    { pieces: [{ verse: 15 }] },
+    { pieces: [{ verse: 16 }] },
+    { pieces: [{ verse: 17 }] },
+  ],
   91: [
     { pieces: [{ verse: 2 }] },
     { pieces: [{ verse: 3 }] },

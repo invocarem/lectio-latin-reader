@@ -102,8 +102,8 @@ Check a psalm when its Benedictine lining is finished. A title drop alone is not
 - [x] 86
 - [x] 87
 - [x] 88
-- [ ] 89
-- [ ] 90
+- [x] 89
+- [x] 90
 - [x] 91
 - [x] 92
 - [x] 93
@@ -1324,6 +1324,26 @@ Gallican 2 splits after *cantabo*. Gallican 4 joins Gallican 5 through *semen tu
 | 17 | Gallican 36, then Gallican 37 |
 | 18–33 | Gallican 38–53 |
 
+### Psalmus 89
+
+Thursday Lauds, after Psalm 87. Nineteen office lines. Drop *Oratio Moysi, hominis Dei.* from Gallican 1. Gallican 4 splits after *quae praeteriit*, and *et custodia in nocte* joins Gallican 5. Gallican 9 splits after *defecimus*, and *Anni nostri* joins Gallican 10 through *septuaginta anni*. The rest of Gallican 10 splits after *labor et dolor*, and *quoniam supervenit* is its own line. Gallican 11 joins Gallican 12 through *dinumerare*, and *Dexteram tuam* is the next line. The other verses stay whole.
+
+| Office line | Latin |
+| --- | --- |
+| 1 | Gallican 1, drop *Oratio Moysi, hominis Dei.* |
+| 2 | Gallican 2 |
+| 3 | Gallican 3 |
+| 4 | Gallican 4 through *quae praeteriit* |
+| 5 | Gallican 4 from *et custodia in nocte*, then Gallican 5 |
+| 6–8 | Gallican 6–8 |
+| 9 | Gallican 9 through *defecimus.* |
+| 10 | Gallican 9 from *Anni nostri*, then Gallican 10 through *septuaginta anni.* |
+| 11 | Gallican 10 from *Si autem* through *labor et dolor* |
+| 12 | Gallican 10 from *quoniam supervenit* |
+| 13 | Gallican 11, then Gallican 12 through *dinumerare* |
+| 14 | Gallican 12 from *Dexteram tuam* |
+| 15–19 | Gallican 13–17 |
+
 ### Psalmus 91
 
 Friday Lauds. Gallican 1 is the title *Psalmus cantici, in die sabbati.* and is dropped. Gallican 8 splits after *iniquitatem*, and *ut intereant* joins Gallican 9. Gallican 15 joins Gallican 16 through *ut annuntient*.
@@ -2314,4 +2334,4 @@ Sunday Lauds, after Psalms 66 and 50. Gallican 1 drops *Alleluia.*. Twenty-nine 
 
 ## Not entered
 
-Every other psalm, 2, 23–24, 39, 67, 76–79, 81–90, 142, and 145–147. The Office still shows those in Gallican verses.
+Every other psalm, 2, 23–24, 39, 67, 76–79, 142, and 145–147. The Office still shows those in Gallican verses.
