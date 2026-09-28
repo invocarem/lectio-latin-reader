@@ -2749,7 +2749,7 @@ describe("weekly cursus", () => {
 
   test("Psalm 118 keeps each Hebrew letter in the section title and out of the verses", () => {
     const he = hourSlots("sun", "terce")[0].slices[0];
-    expect(sliceLabel(he)).toBe("Psalmus 118 · He · 33–40");
+    expect(sliceLabel(he)).toBe("Psalmus 118 · He");
     const verses = sliceVerses(he);
     expect(verses).toHaveLength(8);
     expect(verses[0].latin.startsWith("Legem pone mihi")).toBe(true);
@@ -2763,7 +2763,7 @@ describe("weekly cursus", () => {
     expect(aleph[0].latin.includes("Alleluia")).toBe(false);
 
     const daleth = hourSlots("sun", "prime")[3].slices[0];
-    expect(sliceLabel(daleth)).toBe("Psalmus 118 · Daleth · 25–32");
+    expect(sliceLabel(daleth)).toBe("Psalmus 118 · Daleth");
     const before = sliceVerses(daleth);
     expect(before[7].english.endsWith("when thou didst enlarge my heart.")).toBe(true);
     expect(before[7].english.includes("HE")).toBe(false);

@@ -6,12 +6,12 @@ describe("hourLines", () => {
     const lines = hourLines("mon", "none");
     expect(lines).toHaveLength(24);
     expect(lines[0]).toMatchObject({
-      label: "Psalmus 118 · Res · 153–160",
+      label: "Psalmus 118 · Res",
       n: "153",
     });
     expect(lines[0].latin.startsWith("Vide")).toBe(true);
-    expect(lines[8].label).toBe("Psalmus 118 · Sin · 161–168");
-    expect(lines[23].label).toBe("Psalmus 118 · Tau · 169–176");
+    expect(lines[8].label).toBe("Psalmus 118 · Sin");
+    expect(lines[23].label).toBe("Psalmus 118 · Tau");
     expect(lines[23].n).toBe("176");
   });
 

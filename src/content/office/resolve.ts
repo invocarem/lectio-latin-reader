@@ -207,7 +207,7 @@ export function hourLines(weekday: Weekday, hour: OfficeHour): OfficeLineStep[] 
 export function sliceLabel(slice: PsalmSlice): string {
   if (slice.from == null || slice.to == null) return `Psalmus ${slice.psalm}`;
   if (slice.part != null) return `Psalmus ${slice.psalm} · ${slice.part}`;
-  const range = `${slice.from}–${slice.to}`;
   const letter = slice.psalm === 118 ? psalm118Letter(slice.from) : undefined;
-  return letter ? `Psalmus 118 · ${letter} · ${range}` : `Psalmus ${slice.psalm} · ${range}`;
+  if (letter) return `Psalmus 118 · ${letter}`;
+  return `Psalmus ${slice.psalm} · ${slice.from}–${slice.to}`;
 }
