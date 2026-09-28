@@ -13,7 +13,7 @@ npm install
 npm run dev
 ```
 
-Then open the URL Vite prints (usually `http://localhost:5173`).
+Then open the URL Vite prints (usually `http://localhost:5180`).
 
 ```bash
 npm run build    # production build
