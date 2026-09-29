@@ -1,5 +1,12 @@
 /// <reference types="vitest/globals" />
-import { lectioFocus, resolveSession } from "./lectioNav";
+import { lectioFocus, resolveSession, chapterFocus } from "./lectioNav";
+import type { Chapter } from "./types";
+
+const chapters: Chapter[] = [
+  { id: "ch1", caput: 1, title: "Caput primum", firstUnitId: "u1" },
+  { id: "ch2", caput: 2, title: "Caput secundum", firstUnitId: "u2" },
+  { id: "ch3", caput: 3, title: "Caput tertium", firstUnitId: "u3" },
+];
 
 const units = [{ id: "a" }, { id: "b" }, { id: "c" }];
 
@@ -39,6 +46,34 @@ describe("lectioFocus", () => {
     const focus = lectioFocus(units, "missing");
     expect(focus.current.id).toBe("a");
     expect(focus.index).toBe(0);
+  });
+});
+
+describe("chapterFocus", () => {
+  test("middle chapter has previous and next", () => {
+    const focus = chapterFocus(chapters, "ch2");
+    expect(focus.current?.id).toBe("ch2");
+    expect(focus.prev?.id).toBe("ch1");
+    expect(focus.next?.id).toBe("ch3");
+  });
+
+  test("first chapter cannot go previous", () => {
+    const focus = chapterFocus(chapters, "ch1");
+    expect(focus.prev).toBeNull();
+    expect(focus.next?.id).toBe("ch2");
+  });
+
+  test("last chapter cannot go next", () => {
+    const focus = chapterFocus(chapters, "ch3");
+    expect(focus.prev?.id).toBe("ch2");
+    expect(focus.next).toBeNull();
+  });
+
+  test("unknown chapter id has no neighbours", () => {
+    const focus = chapterFocus(chapters, "missing");
+    expect(focus.current).toBeNull();
+    expect(focus.prev).toBeNull();
+    expect(focus.next).toBeNull();
   });
 });
 

@@ -199,9 +199,9 @@ export function Office({ work, reading, onHome }: OfficeProps) {
     <div className="app-shell lectio-shell">
       <header className="topbar">
         <button className="brand" type="button" onClick={onHome}>
-          <strong>Office</strong>
+          <strong>Cursus</strong>
           <small>
-            {reading === "line" ? "Lectio" : "Divine Office"} · according to the Rule
+            {reading === "line" ? "Lectio" : "Cursus"} · according to the Rule
           </small>
         </button>
         <div className="tools">

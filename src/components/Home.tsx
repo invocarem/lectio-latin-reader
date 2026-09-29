@@ -17,7 +17,7 @@ export function Home({ onOpen, studyEnabled = true }: HomeProps) {
     <main className="home">
       <header className="home-masthead">
         <p className="home-kicker">Lectio</p>
-        <h1>A Latin reader</h1>
+        <h1>Per cancellos</h1>
       </header>
       <div className="home-featured">
         {featured.map((work) => (
@@ -88,10 +88,10 @@ function WorkCard({
 function OfficeCard({ onOpen }: { onOpen: HomeProps["onOpen"] }) {
   return (
     <article className="home-card">
-      <p className="home-kicker">Office</p>
+      <p className="home-kicker">Cursus</p>
       <h2>
-        Officium divinum
-        <span>Benedictine Divine Office</span>
+        Cursus psalmorum
+        <span>Psalms of the hours</span>
       </h2>
       <p className="home-meta">according to the Rule</p>
       <div className="home-actions">
@@ -99,7 +99,7 @@ function OfficeCard({ onOpen }: { onOpen: HomeProps["onOpen"] }) {
           Lectio
         </button>
         <button className="start ghost" type="button" onClick={() => onOpen("psalter", "office")}>
-          Office
+          Cursus
         </button>
       </div>
     </article>

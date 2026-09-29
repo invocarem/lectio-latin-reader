@@ -1,4 +1,18 @@
-import type { ReaderMode } from "./types";
+import type { Chapter, ReaderMode } from "./types";
+
+/** Neighbours of a chapter in the TOC, used to jump to the previous/next chapter. */
+export function chapterFocus(
+  chapters: Chapter[],
+  chapterId: string,
+): { current: Chapter | null; prev: Chapter | null; next: Chapter | null } {
+  const index = chapters.findIndex((chapter) => chapter.id === chapterId);
+  if (index < 0) return { current: null, prev: null, next: null };
+  return {
+    current: chapters[index],
+    prev: index > 0 ? chapters[index - 1] : null,
+    next: index < chapters.length - 1 ? chapters[index + 1] : null,
+  };
+}
 
 export function lectioFocus<T extends { id: string }>(
   units: T[],

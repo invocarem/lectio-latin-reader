@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { lectioFocus } from "../lectioNav";
+import { lectioFocus, chapterFocus } from "../lectioNav";
 import { EDGE_GUARD_PX, isSwipePointer, swipeIntent } from "../swipe";
 import type { LectioUnit, ReaderWork } from "../types";
 import { DictPopup } from "./DictPopup";
@@ -33,6 +33,23 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
     [lectioUnits, focusId],
   );
   const activeChapter = current.chapterId ?? "";
+
+  const { prev: prevChapter, next: nextChapter } = useMemo(
+    () => chapterFocus(chapters, activeChapter),
+    [chapters, activeChapter],
+  );
+
+  const goPrevChapter = useCallback(() => {
+    if (!prevChapter) return;
+    closeDict();
+    onFocus(prevChapter.firstUnitId);
+  }, [prevChapter, closeDict, onFocus]);
+
+  const goNextChapter = useCallback(() => {
+    if (!nextChapter) return;
+    closeDict();
+    onFocus(nextChapter.firstUnitId);
+  }, [nextChapter, closeDict, onFocus]);
 
   const goPrev = useCallback(() => {
     if (!prev) return;
@@ -159,7 +176,29 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
 
         <div className="lectio-stage" ref={stageRef}>
           <article className={`lectio-card${current.kind !== "section" && current.kind !== "retractatio" && current.kind !== "praefatio" ? " heading" : ""}`}>
-            <p className="lectio-kicker">{kicker(current)}</p>
+            <div className="lectio-kicker-row">
+              <p className="lectio-kicker">{kicker(current)}</p>
+              <div className="lectio-chapter-nav">
+                <button
+                  type="button"
+                  disabled={!prevChapter}
+                  onClick={goPrevChapter}
+                  aria-label="Previous chapter"
+                  title="Previous chapter"
+                >
+                  ‹
+                </button>
+                <button
+                  type="button"
+                  disabled={!nextChapter}
+                  onClick={goNextChapter}
+                  aria-label="Next chapter"
+                  title="Next chapter"
+                >
+                  ›
+                </button>
+              </div>
+            </div>
             <div className="lectio-latin" lang="la">
               <LatinText
                 text={current.latin}
