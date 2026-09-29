@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { hourSlots, type OfficeSlot } from "../content/office/cursus";
-import { hourLines, sliceLabel, sliceVerses } from "../content/office/resolve";
+import { hourLines, nextPsalmIndex, prevPsalmIndex, sliceLabel, sliceVerses } from "../content/office/resolve";
 import {
   OFFICE_HOURS,
   WEEKDAYS,
@@ -98,6 +98,27 @@ export function Office({ work, reading, onHome }: OfficeProps) {
     setIndex((at) => Math.min(at + 1, Math.max(total - 1, 0)));
     closeDict();
   }, [closeDict, total]);
+
+  const nextPsalm = useMemo(
+    () => (reading === "line" ? nextPsalmIndex(lines, safeIndex) : -1),
+    [reading, lines, safeIndex],
+  );
+  const prevPsalm = useMemo(
+    () => (reading === "line" ? prevPsalmIndex(lines, safeIndex) : -1),
+    [reading, lines, safeIndex],
+  );
+
+  const goNextPsalm = useCallback(() => {
+    if (nextPsalm < 0) return;
+    setIndex(nextPsalm);
+    closeDict();
+  }, [nextPsalm, closeDict]);
+
+  const goPrevPsalm = useCallback(() => {
+    if (prevPsalm < 0) return;
+    setIndex(prevPsalm);
+    closeDict();
+  }, [prevPsalm, closeDict]);
 
   function chooseDay(next: Weekday) {
     closeDict();
@@ -231,9 +252,29 @@ export function Office({ work, reading, onHome }: OfficeProps) {
             </div>
             {reading === "line" && line ? (
               <>
-                <h2 className="office-psalm">
-                  {line.label} · {line.n}
-                </h2>
+                <div className="office-psalm-row">
+                  <h2 className="office-psalm">
+                    {line.label} · {line.n}
+                  </h2>
+                  <div className="office-psalm-nav">
+                    <button
+                      type="button"
+                      disabled={prevPsalm < 0}
+                      onClick={goPrevPsalm}
+                      aria-label="Previous psalm"
+                    >
+                      ‹
+                    </button>
+                    <button
+                      type="button"
+                      disabled={nextPsalm < 0}
+                      onClick={goNextPsalm}
+                      aria-label="Next psalm"
+                    >
+                      ›
+                    </button>
+                  </div>
+                </div>
                 <div className="lectio-latin" lang="la">
                   <LatinText
                     text={line.latin}

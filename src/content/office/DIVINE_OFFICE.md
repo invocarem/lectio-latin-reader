@@ -1,15 +1,15 @@
 # Divine Office according to the Rule
 
-**Status.** Section 1 is on the `office` branch. Sections 2–6 are not started. Implement one section at a time, and only when that section is the work in hand. Check an item only when that slice is in the app and covered by a test.
+**Status.** Section 1 is merged to `main` and shipped. Sections 2–6 are not started. Implement one section at a time, and only when that section is the work in hand. Check an item only when that slice is in the app and covered by a test.
 
 ## Branch and merge
 
-`main` is what gets shipped. TestFlight builds whatever is on `main`. The office is built on a branch named `office`, cut from current `main`. This plan file may stay on `main`; it does not change the app.
+`main` is what gets shipped. TestFlight builds whatever is on `main`. Section 1 was built on a branch named `office` and merged to `main`; from here on, work directly on `main` in small, focused commits. This plan file may change on `main`; it does not change the app.
 
-Merge `office` back one section at a time. A section merges when that section opens in the app and its test passes. The branch is not held until all six sections are done.
+A section is done when it opens in the app and its test passes, then committed to `main`. The branch is not held until all six sections are done.
 
-- The first merge is section 1: the clock (10:19 on 24 Sep 2026 opens Thursday Terce, summer, after Pentecost), the weekly psalm cursus, and a reader that opens on that hour.
-- Later sections (ordinary, winter and summer, alleluia, solemnities, hymns and collects) each merge the same way, with their own test.
+- Section 1 is merged: the clock (10:19 on 24 Sep 2026 opens Thursday Terce, summer, after Pentecost), the weekly psalm cursus, and a reader that opens on that hour.
+- Later sections (ordinary, winter and summer, alleluia, solemnities, hymns and collects) each land the same way, with their own test.
 - `main` only gains an Office slice someone can open. An unfinished mode does not go into a release.
 
 **Goal.** A third reader mode, only on the psalter, beside Lectio and Study. It presents the Work of God in chapters 8–20 of the Rule (Vigils through Compline), using the Gallican psalms already in `latin.md`. Label it as the office according to the Rule, not as the Roman Liturgy of the Hours.
@@ -129,7 +129,7 @@ After section 4 the office matches what the Rule describes. Sections 5 and 6 fil
 - [x] Vespers: 115 with 116; 138, 143, and 144 each in two ranges taken from `latin.md`.
 - [x] Vigils table above, marked as custom.
 - [x] Office reader: choose weekday and hour, walk the slices one at a time.
-- [ ] Verse map for all 150 psalms, one psalm at a time, in `src/content/office/VERSE_MAP.md`. Psalms 1, 12–14, and 119–133 are entered (12 is relined, including cuts inside a Gallican verse; 13 drops *In finem. Psalmus David.*; 14 drops *Psalmus David.*; 119 is rejoined; 120–133 drop the *Canticum graduum* title). Every other psalm still shows the Gallican verses.
+- [x] Verse map for all 150 psalms, one psalm at a time, in `src/content/office/VERSE_MAP.md`, each tracked as entered in the tracking list at the top of that file. Per-psalm lining notes live there, not here.
 
 ### 2. Ordinary of the hour
 

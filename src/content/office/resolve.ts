@@ -150,21 +150,29 @@ export function sliceVerses(slice: PsalmSlice): OfficeVerse[] {
   return lineOut(stored, VERSE_MAP[slice.psalm]);
 }
 
-function asStored(stored: Map<number, StoredVerse>, dropLatinPrefix?: string): OfficeVerse[] {
+function asStored(
+  stored: Map<number, StoredVerse>,
+  dropLatinPrefix?: string,
+  dropEnglishPrefix?: string,
+): OfficeVerse[] {
   return [...stored.entries()]
     .sort(([a], [b]) => a - b)
     .map(([n, verse]) => {
       let latin = verse.latin;
+      let english = verse.english;
       if (n === 1 && dropLatinPrefix && latin.startsWith(dropLatinPrefix)) {
         latin = latin.slice(dropLatinPrefix.length);
       }
-      return { n: String(n), latin, english: verse.english };
+      if (n === 1 && dropEnglishPrefix && english.startsWith(dropEnglishPrefix)) {
+        english = english.slice(dropEnglishPrefix.length);
+      }
+      return { n: String(n), latin, english };
     });
 }
 
 function lineOut(stored: Map<number, StoredVerse>, map: VerseMapEntry | undefined): OfficeVerse[] {
   if (!map) return asStored(stored);
-  if (!Array.isArray(map)) return asStored(stored, map.dropLatinPrefix);
+  if (!Array.isArray(map)) return asStored(stored, map.dropLatinPrefix, map.dropEnglishPrefix);
   const lines: OfficeVerse[] = [];
   for (const line of map) {
     const verses = line.pieces ? line.pieces.map((piece) => piece.verse) : line.sources ?? [];
@@ -210,4 +218,26 @@ export function sliceLabel(slice: PsalmSlice): string {
   const letter = slice.psalm === 118 ? psalm118Letter(slice.from) : undefined;
   if (letter) return `Psalmus 118 · ${letter}`;
   return `Psalmus ${slice.psalm} · ${slice.from}–${slice.to}`;
+}
+
+/** Index of the first line of the next psalm after `index`, or -1 when it is in the last psalm. */
+export function nextPsalmIndex(lines: OfficeLineStep[], index: number): number {
+  const label = lines[index]?.label;
+  if (label == null) return -1;
+  for (let i = index + 1; i < lines.length; i++) {
+    if (lines[i].label !== label) return i;
+  }
+  return -1;
+}
+
+/** Index of the first line of the psalm before `index`, or -1 when it is in the first psalm. */
+export function prevPsalmIndex(lines: OfficeLineStep[], index: number): number {
+  const label = lines[index]?.label;
+  if (label == null || index <= 0) return -1;
+  let i = index - 1;
+  while (i >= 0 && lines[i].label === label) i--;
+  if (i < 0) return -1;
+  const prevLabel = lines[i].label;
+  while (i >= 0 && lines[i].label === prevLabel) i--;
+  return i + 1;
 }

@@ -386,7 +386,7 @@ Said as the second psalm of Thursday Prime. Drop *In finem. Psalmus David.* from
 
 ### Psalmus 90
 
-Gallican verse numbers stay. Drop the title *Laus cantici David.* from the Latin of verse 1, so it begins *Qui habitat*. Shown at Compline.
+Gallican verse numbers stay. Drop the title *Laus cantici David.* from the Latin (and *The praise of a canticle for David.* from the English) of verse 1, so it begins *Qui habitat*. Shown at Compline.
 
 ### Psalmus 14
 

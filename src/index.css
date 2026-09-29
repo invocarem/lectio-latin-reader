@@ -803,6 +803,48 @@ a {
   line-height: 1.15;
 }
 
+.office-psalm-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 0 0.85rem;
+  padding-bottom: 0.4rem;
+  border-bottom: 1px solid var(--rule);
+}
+
+.office-psalm-row .office-psalm {
+  margin: 0;
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.office-psalm-nav {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.office-psalm-nav button {
+  font: inherit;
+  line-height: 1;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  width: 2rem;
+  height: 2rem;
+  display: grid;
+  place-items: center;
+}
+
+.office-psalm-nav button:disabled {
+  opacity: 0.4;
+}
+
+.office-psalm-nav button:not(:disabled) {
+  cursor: pointer;
+}
+
 .office-verse {
   display: grid;
   grid-template-columns: 1.75rem 1fr;

@@ -31,14 +31,16 @@ export type OfficeLine = {
 /** Drop a Latin title and keep every Gallican verse number. */
 export type TitleDrop = {
   dropLatinPrefix: string;
+  /** English (Douay) title of the same first verse, dropped to match. */
+  dropEnglishPrefix?: string;
 };
 
 export type VerseMapEntry = OfficeLine[] | TitleDrop;
 
 const GRADUAL = "Canticum graduum. ";
 
-function dropTitle(dropLatinPrefix: string): TitleDrop {
-  return { dropLatinPrefix };
+function dropTitle(dropLatinPrefix: string, dropEnglishPrefix?: string): TitleDrop {
+  return { dropLatinPrefix, dropEnglishPrefix };
 }
 
 export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
@@ -452,7 +454,7 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
     { pieces: [{ verse: 8 }] },
     { pieces: [{ verse: 9 }] },
   ],
-  90: dropTitle("Laus cantici David. "),
+  90: dropTitle("Laus cantici David. ", "The praise of a canticle for David. "),
   13: [
     {
       pieces: [
