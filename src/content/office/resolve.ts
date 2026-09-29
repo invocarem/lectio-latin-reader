@@ -1,5 +1,6 @@
 import { psalter as source } from "../psalter/work";
 import { hourSlots, type PsalmSlice } from "./cursus";
+import { normLatin } from "../../latinNorm";
 import type { OfficeHour, Weekday } from "./when";
 import { VERSE_MAP, type OfficeLine, type OfficePiece, type VerseMapEntry } from "./verseMap";
 
@@ -203,7 +204,7 @@ export function hourLines(weekday: Weekday, hour: OfficeHour): OfficeLineStep[] 
           id: `${span}:${verse.n}`,
           label,
           n: verse.n,
-          latin: verse.latin,
+          latin: normLatin(verse.latin),
           english: verse.english,
         });
       }

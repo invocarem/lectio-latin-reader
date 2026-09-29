@@ -1,6 +1,7 @@
 import type { Chapter, LectioUnit, ReaderWork, Unit } from "../../types";
 import pagesFile from "./pages.json";
 import { psalter as source } from "./work";
+import { normLatin } from "../../latinNorm";
 
 /**
  * The Gallican Psalter, adapted from the nested schema (Work → parts →
@@ -64,7 +65,7 @@ function adapt(): ReaderWork {
             caput: null,
             section: verseNo,
             heading: null,
-            latin: segment.latin,
+            latin: normLatin(segment.latin),
             english: segment.translations.douay ?? "",
             column: page,
             facsimile,

@@ -16,14 +16,14 @@ export function Home({ onOpen, studyEnabled = true }: HomeProps) {
   return (
     <main className="home">
       <header className="home-masthead">
-        <p className="home-kicker">Lectio</p>
-        <h1>Per cancellos</h1>
+        <p className="home-kicker">Lectio per cancellos</p>
+        <h1>A Latin reader</h1>
       </header>
       <div className="home-featured">
+        <OfficeCard onOpen={onOpen} />
         {featured.map((work) => (
           <WorkCard key={work.id} work={work} onOpen={onOpen} studyEnabled={studyEnabled} />
         ))}
-        <OfficeCard onOpen={onOpen} />
       </div>
       <details className="home-other">
         <summary className="home-kicker">Other works</summary>

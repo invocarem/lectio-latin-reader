@@ -1,6 +1,6 @@
 # Release 1.0 — Lectio per cancellos
 
-A Latin reader for St Bernard of Clairvaux, with the weekly psalm cursus as the third work. Phase 1 of the cursus is the psalms of the hours. It is not the Divine Office, so this release does not call it that.
+A Latin reader for St Bernard of Clairvaux. The weekly psalm cursus is the first work, because it follows the clock. Phase 1 of the cursus is the psalms of the hours. It is not the Divine Office, so this release does not call it that.
 
 The bundle ID stays `com.invocarem.lectiolatinreader`. The church-window icon stays as it is.
 
@@ -8,17 +8,19 @@ The bundle ID stays `com.invocarem.lectiolatinreader`. The church-window icon st
 
 Three works, in this order on the home screen:
 
-1. *De gradibus humilitatis et superbiae* — the Steps of Humility and Pride
-2. *Sermones in Cantica Canticorum* — Sermons on the Song of Songs
-3. *Cursus psalmorum* — Psalms of the hours, according to the Rule
+1. *Cursus psalmorum* — Psalms of the hours, according to the Rule
+2. *De gradibus humilitatis et superbiae* — the Steps of Humility and Pride
+3. *Sermones in Cantica Canticorum* — Sermons on the Song of Songs
 
 Rule, Confessions, the Psalter, and the Song itself stay under Other works.
 
 ### Why “cursus”
 
-The home card currently says **Officium divinum** / **Benedictine Divine Office**. That names the finished hour: opening, Gloria, Kyrie, Pater, canticle, hymn, collect. Those are later sections. What ships now is the weekly round of psalms, which is a *cursus*.
+The home screen names the app in the small line, **Lectio per cancellos**, and the large line is the English **A Latin reader**.
 
-Use these labels before taking screenshots:
+The card and the reader use **Cursus**, not Officium. Officium would name the finished hour: opening, Gloria, Kyrie, Pater, canticle, hymn, collect. Those are later sections. What ships now is the weekly round of psalms.
+
+Labels already in the app:
 
 | Place | Text |
 | --- | --- |
@@ -47,7 +49,7 @@ The Lectio button stays. It is the reading mode, not the app name.
 
 Description:
 
-> A Latin reader for St Bernard of Clairvaux: the Steps of Humility and Pride, and the Sermons on the Song of Songs. A third reading gives the weekly cursus, the psalms of the hours according to the Rule. Each page is a short Latin lectio, with a close English and a gloss on any word. The name is from the Song of Songs: he looks through the lattices.
+> A Latin reader for St Bernard of Clairvaux. It opens on the weekly cursus, the psalms of the hours according to the Rule, then the Steps of Humility and Pride and the Sermons on the Song of Songs. Each page is a short Latin lectio, with a close English and a gloss on any word. The name is from the Song of Songs: he looks through the lattices.
 
 Keywords (the Latin name will not be what people type):
 
@@ -55,11 +57,10 @@ Keywords (the Latin name will not be what people type):
 
 ## Before the screenshots
 
-1. Retitle the third card and the reader header as in the table above. The card still says “Benedictine Divine Office,” and the reader header still says “Divine Office.”
-2. On the Mac, run `npm run cap:sync`, then archive. Raise the build number. The display name in the project is already **Lectio per cancellos**. The build already on TestFlight still says Lectio and will not pick this up.
-3. The Xcode project includes iPad as well as iPhone. For an iPhone-only release, set the target to iPhone before that archive. If it stays universal, App Store Connect also requires a 13-inch iPad screenshot set.
-4. On the phone or the Simulator, read the name under the icon. If iOS cuts it to “Lectio per…”, shorten only that label to **Cancelli**. Leave the store name as the full phrase.
-5. Screenshots from the 6.7-inch iPhone: the home screen (all three works), one page of the Steps, one sermon page, one cursus page.
+1. On the Mac, run `npm run cap:sync`, then archive. Raise the build number. The display name in the project is already **Lectio per cancellos**. The build already on TestFlight still says Lectio and will not pick this up.
+2. The Xcode project includes iPad as well as iPhone. For an iPhone-only release, set the target to iPhone before that archive. If it stays universal, App Store Connect also requires a 13-inch iPad screenshot set.
+3. On the phone or the Simulator, read the name under the icon. If iOS cuts it to “Lectio per…”, shorten only that label to **Cancelli**. Leave the store name as the full phrase.
+4. Screenshots from the 6.7-inch iPhone: the home screen (all three works), one page of the Steps, one sermon page, one cursus page.
 
 ## Submitting it
 
