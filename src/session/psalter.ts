@@ -127,6 +127,35 @@ export function offeredPlaces(input: {
   return [...todayPlaces, ...earlier, ...later];
 }
 
+/** Where one psalm is read. A daily psalm is today's hour only. */
+export function placesOfPsalm(psalm: number, weekday: Weekday): OfferedPlace[] {
+  const matches = allPlaces().filter((place) => place.slice.psalm === psalm);
+  if (matches.some((place) => isDailyPsalm(place.slice.psalm))) {
+    return matches.filter((place) => place.weekday === weekday);
+  }
+  return matches;
+}
+
+/** The twenty-two letters of Psalm 118, Sunday Prime through Monday None. */
+export function psalm118Places(): OfferedPlace[] {
+  return allPlaces().filter((place) => place.slice.psalm === 118);
+}
+
+/**
+ * Psalms 119–127, one row each. Today's little hour when this day sings
+ * them, otherwise Tuesday.
+ */
+export function ascentPlaces(weekday: Weekday): OfferedPlace[] {
+  const places: OfferedPlace[] = [];
+  for (let psalm = 119; psalm <= 127; psalm++) {
+    const matches = allPlaces().filter((place) => place.slice.psalm === psalm);
+    const today = matches.find((place) => place.weekday === weekday);
+    const place = today ?? matches[0];
+    if (place) places.push(place);
+  }
+  return places;
+}
+
 export function createPsalterCourse(input: {
   weekday: Weekday;
   started: string;

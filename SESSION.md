@@ -1,6 +1,6 @@
 # Session
 
-**Status.** One Session switch opens the cursus panel. The psalter course counts slices, a fortnight splits Vigils, and the panel imports and exports the pass. Highlight and De gradibus are not started. Implement one section at a time, and only when that section is the work in hand. Check an item only when it opens in the app and a test covers it.
+**Status.** One Session switch opens the cursus panel. A Lectio line can be highlighted, and a note on that line is kept in the pass. De gradibus is not started. Implement one section at a time, and only when that section is the work in hand. Check an item only when it opens in the app and a test covers it.
 
 ## Branch
 
@@ -83,7 +83,7 @@ Opening the session resumes at the cursor. The person may choose any other open 
 
 One Session switch sits on every screen. It is not a button on a work card. The pass it opens is the cursus. When the switch is on, a panel lists the open places. When it is off, the panel is hidden.
 
-- The panel shows slices sat with over `total()`. Today's places come first. A missed Vigils stays in that list. A daily psalm stays on its hour, marked once. A mark records the civil date of the first sitting.
+- The panel shows slices sat with over `total()`. Beside the psalm number, a day starts as today and shows that day's card. Inside it, each hour is a line with its count, and only the hour you are in lists its psalms. Choosing Friday shows Friday: in the first week of fourteen days, Vigils is the first six and Lauds is the two psalms proper to Friday. A psalm number narrows the list to that psalm: Psalm 4 is today's Compline. A missed Vigils stays on its own day. A daily psalm stays on today's hour, marked once. A mark records the civil date of the first sitting.
 - Choosing a place opens Lectio on that psalm and turns the switch off. The line number can be highlighted. A note on a highlighted line is shown under the English.
 - Export writes the session file as JSON, and the browser saves it on this computer. Import reads that same file and replaces the open pass.
 
@@ -99,6 +99,6 @@ One Session switch sits on every screen. It is not a button on a work card. The 
 
 - [x] Document, `satWith`, the count of slices over `total()`, and resume at the cursor. Any open place can be chosen on a later civil day, still under its own weekday and hour. One Session switch opens the panel.
 - [x] Fortnight: first six of Vigils with the day hours, then the second six.
-- [ ] Highlight one office line, and a note on that line.
+- [x] Highlight one office line, and a note on that line.
 - [x] Export and import the session file as the same JSON.
 - [ ] De gradibus course: `total` is its lectio units, `next` is the next unit not yet sat with, and the card shows that count.

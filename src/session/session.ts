@@ -20,6 +20,20 @@ export type Sitting = {
   at: string;
 };
 
+export type Highlight = {
+  psalm: number;
+  line: string;
+  part?: SlicePart;
+};
+
+export type Note = {
+  psalm: number;
+  line: string;
+  text: string;
+  at: string;
+  part?: SlicePart;
+};
+
 export type SessionFile = {
   id: string;
   work: "psalter";
@@ -27,8 +41,8 @@ export type SessionFile = {
   started: string;
   cursor: SessionCursor | null;
   satWith: Sitting[];
-  highlights: { psalm: number; line: string }[];
-  notes: { psalm: number; line: string; text: string; at: string }[];
+  highlights: Highlight[];
+  notes: Note[];
 };
 
 export function localDate(date: Date): string {
@@ -59,6 +73,22 @@ export function startSession(today: string, pace: SessionPace = 14): SessionFile
   };
 }
 
+function isHighlight(value: unknown): value is Highlight {
+  if (!value || typeof value !== "object") return false;
+  const mark = value as Highlight;
+  return typeof mark.psalm === "number" && typeof mark.line === "string";
+}
+
+function isNote(value: unknown): value is Note {
+  if (!value || typeof value !== "object") return false;
+  const note = value as Note;
+  return (
+    typeof note.psalm === "number" &&
+    typeof note.line === "string" &&
+    typeof note.text === "string" &&
+    typeof note.at === "string"
+  );
+}
 function isSitting(value: unknown): value is Sitting {
   if (!value || typeof value !== "object") return false;
   const sitting = value as Sitting;
@@ -78,8 +108,8 @@ export function sessionFromJson(raw: string): SessionFile | null {
     return {
       ...session,
       cursor: session.cursor ?? null,
-      highlights: Array.isArray(session.highlights) ? session.highlights : [],
-      notes: Array.isArray(session.notes) ? session.notes : [],
+      highlights: Array.isArray(session.highlights) ? session.highlights.filter(isHighlight) : [],
+      notes: Array.isArray(session.notes) ? session.notes.filter(isNote) : [],
     };
   } catch {
     return null;
@@ -147,4 +177,48 @@ export function sitWith(
   const cursor = cursorFrom(place);
   if (already) return { ...session, cursor };
   return { ...session, cursor, satWith: [...session.satWith, sittingFrom(place, on)] };
+}
+
+function sameLine(a: Highlight, b: Highlight): boolean {
+  return a.psalm === b.psalm && a.line === b.line && (a.part ?? undefined) === (b.part ?? undefined);
+}
+
+function lineMark(mark: Highlight): Highlight {
+  return mark.part == null
+    ? { psalm: mark.psalm, line: mark.line }
+    : { psalm: mark.psalm, line: mark.line, part: mark.part };
+}
+
+/** Mark or clear one office line. A note on that line is kept. */
+export function toggleHighlight(session: SessionFile, mark: Highlight): SessionFile {
+  const has = session.highlights.some((item) => sameLine(item, mark));
+  return {
+    ...session,
+    highlights: has
+      ? session.highlights.filter((item) => !sameLine(item, mark))
+      : [...session.highlights, lineMark(mark)],
+  };
+}
+
+export function lineHighlighted(session: SessionFile, mark: Highlight): boolean {
+  return session.highlights.some((item) => sameLine(item, mark));
+}
+
+export function noteOn(session: SessionFile, mark: Highlight): Note | undefined {
+  return session.notes.find((item) => sameLine(item, mark));
+}
+
+/** Words on a highlighted line. An empty text removes the note. Writing one highlights the line. */
+export function setNote(session: SessionFile, note: Note): SessionFile {
+  const text = note.text.trim();
+  const notes = session.notes.filter((item) => !sameLine(item, note));
+  if (!text) return { ...session, notes };
+  const highlights = lineHighlighted(session, note)
+    ? session.highlights
+    : [...session.highlights, lineMark(note)];
+  return {
+    ...session,
+    highlights,
+    notes: [...notes, { ...lineMark(note), text, at: note.at }],
+  };
 }

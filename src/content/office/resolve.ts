@@ -189,6 +189,9 @@ export type OfficeLineStep = {
   n: string;
   latin: string;
   english: string;
+  psalm: number;
+  /** Half number, or a Psalm 118 letter in lowercase. Absent on a whole psalm. */
+  part?: number | string;
 };
 
 /** Office lines of one hour, in cursus order. Each card of office lectio is one step. */
@@ -198,6 +201,8 @@ export function hourLines(weekday: Weekday, hour: OfficeHour): OfficeLineStep[] 
     for (const slice of slot.slices) {
       const label = sliceLabel(slice);
       const span = `${slice.psalm}:${slice.from ?? 1}:${slice.to ?? "end"}`;
+      const letter = slice.psalm === 118 && slice.from != null ? psalm118Letter(slice.from) : undefined;
+      const part = slice.part ?? (letter ? letter.toLowerCase() : undefined);
       for (const verse of sliceVerses(slice)) {
         if (!verse.latin) continue;
         lines.push({
@@ -206,6 +211,8 @@ export function hourLines(weekday: Weekday, hour: OfficeHour): OfficeLineStep[] 
           n: verse.n,
           latin: normLatin(verse.latin),
           english: verse.english,
+          psalm: slice.psalm,
+          ...(part != null ? { part } : {}),
         });
       }
     }

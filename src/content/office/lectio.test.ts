@@ -8,6 +8,8 @@ describe("hourLines", () => {
     expect(lines[0]).toMatchObject({
       label: "Psalmus 118 · Res",
       n: "153",
+      psalm: 118,
+      part: "res",
     });
     expect(lines[0].latin.startsWith("Vide")).toBe(true);
     expect(lines[8].label).toBe("Psalmus 118 · Sin");

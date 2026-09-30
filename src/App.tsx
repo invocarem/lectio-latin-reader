@@ -94,6 +94,8 @@ export default function App() {
           reading={mode === "office-lectio" ? "line" : "hour"}
           onHome={goHome}
           start={officeAt}
+          session={session}
+          onSession={keepSession}
         />
       );
     } else if (work.studyEnabled && studyEnabled && mode === "study") {

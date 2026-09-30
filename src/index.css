@@ -1046,19 +1046,105 @@ a {
   cursor: default;
 }
 
-.session-block {
-  margin-top: 1.3rem;
+.session-find {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 0.15rem 0 0.4rem;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background: var(--panel);
+  padding: 0.45rem 0;
 }
 
-.session-block h2 {
-  margin: 0 0 0.2rem;
-  font-family: inherit;
-  font-size: 0.78rem;
-  font-weight: 600;
-  font-style: normal;
+.session-find label {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--ink-soft);
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  font-size: 0.72rem;
+}
+
+.session-find input,
+.session-find select {
+  border: 1px solid var(--rule);
+  background: var(--parchment);
+  color: var(--ink);
+  font: inherit;
+  font-size: 1rem;
+  letter-spacing: 0;
+  text-transform: none;
+  padding: 0.28rem 0.45rem;
+}
+
+.session-find input {
+  width: 4.2rem;
+}
+
+.session-find select {
+  cursor: pointer;
+}
+
+.session-miss {
+  margin: 0.2rem 0 0;
   color: var(--ink-soft);
+}
+
+.session-day {
+  margin-top: 0.7rem;
+  border: 1px solid var(--rule);
+  background: var(--parchment);
+  padding: 0.15rem 0.75rem 0.35rem;
+}
+
+.session-day > summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+  align-items: baseline;
+  cursor: pointer;
+  padding: 0.4rem 0;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+
+.session-day > summary span,
+.session-hour > summary span {
+  font-family: "Source Serif 4", "Times New Roman", serif;
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+}
+
+.session-hour {
+  border-top: 1px solid var(--rule);
+}
+
+.session-hour > summary {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+  cursor: pointer;
+  padding: 0.4rem 0;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+}
+
+.session-open small {
+  display: block;
+  color: var(--ink-soft);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .session-list {
@@ -1106,4 +1192,38 @@ a {
 .session-sat[aria-pressed="true"] {
   border-color: var(--cinnabar);
   color: var(--cinnabar);
+}
+
+.office-line-mark {
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+.office-line-marked {
+  margin-top: 0.35rem;
+  padding: 0.55rem 0.8rem 0.2rem;
+  background: color-mix(in srgb, var(--gold) 38%, var(--parchment));
+}
+
+.office-line-marked .lectio-english {
+  border-top-color: color-mix(in srgb, var(--rule) 55%, var(--highlight));
+}
+
+.session-note {
+  display: block;
+  width: 100%;
+  margin-top: 0.9rem;
+  border: 1px solid var(--rule);
+  background: var(--highlight);
+  color: var(--ink);
+  font: inherit;
+  font-size: 1rem;
+  line-height: 1.45;
+  padding: 0.6rem 0.7rem;
+  resize: vertical;
 }

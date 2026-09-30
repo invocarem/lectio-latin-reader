@@ -11,6 +11,16 @@ import {
   type Weekday,
 } from "../content/office/when";
 import { EDGE_GUARD_PX, isSwipePointer, swipeIntent } from "../swipe";
+import {
+  lineHighlighted,
+  localDate,
+  noteOn,
+  setNote,
+  toggleHighlight,
+  type Highlight,
+  type SessionFile,
+} from "../session/session";
+import type { SlicePart } from "../session/slice";
 import type { ReaderWork } from "../types";
 import { DictPopup } from "./DictPopup";
 import { LatinText } from "./LatinText";
@@ -28,6 +38,9 @@ type OfficeProps = {
   onHome: () => void;
   /** When set, the reader opens on this place instead of the clock. */
   start?: { weekday: Weekday; hour: OfficeHour; index: number } | null;
+  /** The open cursus pass. Line highlight and note are stored on it. */
+  session?: SessionFile | null;
+  onSession?: (session: SessionFile) => void;
 };
 
 const WEEKDAY_LABEL: Record<Weekday, string> = {
@@ -62,19 +75,53 @@ const TIME_LABEL: Record<OfficeTime, string> = {
   lent: "Lent",
 };
 
+function lineMarkOf(step: { psalm: number; n: string; part?: number | string }): Highlight {
+  return step.part == null
+    ? { psalm: step.psalm, line: step.n }
+    : { psalm: step.psalm, line: step.n, part: step.part as SlicePart };
+}
+
+function LineNote({ text, onSave }: { text: string; onSave: (text: string) => void }) {
+  const [draft, setDraft] = useState(text);
+  useEffect(() => setDraft(text), [text]);
+  return (
+    <textarea
+      className="session-note"
+      rows={3}
+      value={draft}
+      placeholder="Note"
+      aria-label="Note"
+      onChange={(event) => setDraft(event.target.value)}
+      onBlur={() => {
+        if (draft !== text) onSave(draft);
+      }}
+    />
+  );
+}
+
 function progressLabel(slot: OfficeSlot | undefined, index: number, total: number): string {
   if (!slot || total === 0) return "0 / 0";
   const name = slot.slices.map((slice) => sliceLabel(slice)).join(" · ");
   return `${name} · ${index + 1} / ${total}`;
 }
 
-export function Office({ work, reading, onHome, start }: OfficeProps) {
+export function Office({ work, reading, onHome, start, session, onSession }: OfficeProps) {
   const opened = useMemo(() => officeNow(new Date()), []);
   const [weekday, setWeekday] = useState<Weekday>(start?.weekday ?? opened.weekday);
   const [hour, setHour] = useState<OfficeHour>(start?.hour ?? opened.hour);
   const [index, setIndex] = useState(start?.index ?? 0);
   const [showEnglish, setShowEnglish] = useState(true);
   const [dict, setDict] = useState<DictState | null>(null);
+  const [openedAt, setOpenedAt] = useState(start);
+  if (start !== openedAt) {
+    setOpenedAt(start);
+    if (start) {
+      setWeekday(start.weekday);
+      setHour(start.hour);
+      setIndex(start.index);
+      setDict(null);
+    }
+  }
   const closeDict = useCallback(() => setDict(null), []);
   const stageRef = useRef<HTMLDivElement>(null);
 
@@ -256,7 +303,23 @@ export function Office({ work, reading, onHome, start }: OfficeProps) {
               <>
                 <div className="office-psalm-row">
                   <h2 className="office-psalm">
-                    {line.label} · {line.n}
+                    {line.label}
+                    {session && onSession ? (
+                      <>
+                        {" · "}
+                        <button
+                          type="button"
+                          className="office-line-mark"
+                          aria-pressed={lineHighlighted(session, lineMarkOf(line))}
+                          aria-label={`Highlight line ${line.n}`}
+                          onClick={() => onSession(toggleHighlight(session, lineMarkOf(line)))}
+                        >
+                          {line.n}
+                        </button>
+                      </>
+                    ) : (
+                      <> · {line.n}</>
+                    )}
                   </h2>
                   <div className="office-psalm-nav">
                     <button
@@ -277,24 +340,42 @@ export function Office({ work, reading, onHome, start }: OfficeProps) {
                     </button>
                   </div>
                 </div>
-                <div className="lectio-latin" lang="la">
-                  <LatinText
-                    text={line.latin}
-                    unitId={line.id}
-                    activeToken={dict?.tokenKey}
-                    onWord={(word, el, tokenKey) => {
-                      setDict({
-                        word,
-                        rect: el.getBoundingClientRect(),
-                        tokenKey,
-                      });
-                    }}
-                  />
+                <div
+                  className={
+                    session && onSession && lineHighlighted(session, lineMarkOf(line))
+                      ? "office-line-marked"
+                      : undefined
+                  }
+                >
+                  <div className="lectio-latin" lang="la">
+                    <LatinText
+                      text={line.latin}
+                      unitId={line.id}
+                      activeToken={dict?.tokenKey}
+                      onWord={(word, el, tokenKey) => {
+                        setDict({
+                          word,
+                          rect: el.getBoundingClientRect(),
+                          tokenKey,
+                        });
+                      }}
+                    />
+                  </div>
+                  {showEnglish ? (
+                    <p className="lectio-english" lang="en">
+                      {line.english}
+                    </p>
+                  ) : null}
                 </div>
-                {showEnglish ? (
-                  <p className="lectio-english" lang="en">
-                    {line.english}
-                  </p>
+                {session && onSession && lineHighlighted(session, lineMarkOf(line)) ? (
+                  <LineNote
+                    text={noteOn(session, lineMarkOf(line))?.text ?? ""}
+                    onSave={(text) =>
+                      onSession(
+                        setNote(session, { ...lineMarkOf(line), text, at: localDate(new Date()) }),
+                      )
+                    }
+                  />
                 ) : null}
               </>
             ) : (

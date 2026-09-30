@@ -1,6 +1,10 @@
 /// <reference types="vitest/globals" />
-import { countDone, daysBetween, sessionFromJson, sitWith, startSession } from "./session";
-import { createPsalterCourse, offeredPlaces, psalterSlices, sliceFromCursus } from "./psalter";
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
+import { countDone, daysBetween, noteOn, sessionFromJson, setNote, sitWith, startSession, toggleHighlight } from "./session";
+import { hourLines } from "../content/office/resolve";
+import { ascentPlaces, createPsalterCourse, lectioIndex, offeredPlaces, placesOfPsalm, psalm118Places, psalterSlices, sliceFromCursus } from "./psalter";
+import { SessionView } from "./SessionView";
 import { PSALM_118_LETTERS, sliceId } from "./slice";
 
 describe("slice", () => {
@@ -32,6 +36,63 @@ describe("psalter course", () => {
     expect(ids()).toContain("115");
     expect(ids()).toContain("116");
     expect(ids().filter((id) => id === "4")).toHaveLength(1);
+  });
+
+  test("Psalm 4 opens at the first line of Compline", () => {
+    const place = placesOfPsalm(4, "wed")[0];
+    expect(place).toMatchObject({ weekday: "wed", hour: "compline" });
+    const index = lectioIndex(place);
+    expect(hourLines("wed", "compline")[index]).toMatchObject({ label: "Psalmus 4", psalm: 4 });
+  });
+
+  test("a psalm number finds its place, and a daily psalm is today's hour", () => {
+    const tuesday = placesOfPsalm(4, "tue");
+    expect(tuesday).toHaveLength(1);
+    expect(tuesday[0]).toMatchObject({ weekday: "tue", hour: "compline" });
+    const psalm21 = placesOfPsalm(21, "tue");
+    expect(psalm21.map((place) => place.weekday)).toEqual(["sun"]);
+    expect(psalm21[0].hour).toBe("vigils");
+    const letters = placesOfPsalm(118, "sun").map((place) => place.slice.part);
+    expect(letters[0]).toBe("aleph");
+    expect(letters.at(-1)).toBe("tau");
+    expect(placesOfPsalm(151, "sun")).toEqual([]);
+  });
+
+  test("Friday in the first week is Vigils 6 and Lauds 2", () => {
+    const places = offeredPlaces({
+      weekday: "wed",
+      started: "2026-09-27",
+      today: "2026-09-30",
+      pace: 14,
+      satWith: [],
+    }).filter((place) => place.weekday === "fri");
+    const count = (hour: string) => places.filter((place) => place.hour === hour).length;
+    expect(count("vigils")).toBe(6);
+    expect(count("lauds")).toBe(2);
+    expect(places.some((place) => place.slice.psalm === 118)).toBe(false);
+  });
+
+  test("Wednesday is one day of eight hours", () => {
+    const places = offeredPlaces({
+      weekday: "wed",
+      started: "2026-09-27",
+      today: "2026-09-30",
+      pace: 7,
+      satWith: [],
+    }).filter((place) => place.weekday === "wed");
+    expect(new Set(places.map((place) => place.hour)).size).toBe(8);
+  });
+
+  test("Psalm 118 is twenty-two letters, and the ascent psalms are 119–127", () => {
+    const letters = psalm118Places();
+    expect(letters).toHaveLength(22);
+    expect(letters[0]).toMatchObject({ weekday: "sun", hour: "prime", slice: { part: "aleph" } });
+    expect(letters[21]).toMatchObject({ weekday: "mon", hour: "none", slice: { part: "tau" } });
+    const ascent = ascentPlaces("tue");
+    expect(ascent.map((place) => place.slice.psalm)).toEqual([119, 120, 121, 122, 123, 124, 125, 126, 127]);
+    expect(ascent[0]).toMatchObject({ weekday: "tue", hour: "terce" });
+    expect(ascent[8]).toMatchObject({ weekday: "tue", hour: "none" });
+    expect(ascentPlaces("sun")[0].weekday).toBe("tue");
   });
 
   test("next on Sunday opens Psalm 3, then the next slice not yet sat with", () => {
@@ -150,10 +211,72 @@ describe("session record", () => {
     expect(countDone(session)).toBe(1);
   });
 
+  test("a line highlight keeps a note, and an empty note is removed", () => {
+    const fresh = startSession("2026-09-27");
+    const marked = toggleHighlight(fresh, { psalm: 50, line: "12" });
+    expect(marked.highlights).toEqual([{ psalm: 50, line: "12" }]);
+    const noted = setNote(marked, { psalm: 50, line: "12", text: "miserere", at: "2026-09-28" });
+    expect(noted.notes).toEqual([{ psalm: 50, line: "12", text: "miserere", at: "2026-09-28" }]);
+    const cleared = toggleHighlight(noted, { psalm: 50, line: "12" });
+    expect(cleared.highlights).toEqual([]);
+    expect(cleared.notes).toHaveLength(1);
+    const again = toggleHighlight(cleared, { psalm: 50, line: "12" });
+    expect(noteOn(again, { psalm: 50, line: "12" })?.text).toBe("miserere");
+    expect(setNote(again, { psalm: 50, line: "12", text: "  ", at: "2026-09-29" }).notes).toEqual([]);
+  });
+
+  test("Psalm 118 letters keep separate notes on the same line number", () => {
+    const aleph = setNote(startSession("2026-09-27"), {
+      psalm: 118,
+      part: "aleph",
+      line: "1",
+      text: "beati",
+      at: "2026-09-27",
+    });
+    const both = setNote(aleph, {
+      psalm: 118,
+      part: "beth",
+      line: "1",
+      text: "in quo",
+      at: "2026-09-27",
+    });
+    expect(both.highlights).toHaveLength(2);
+    expect(noteOn(both, { psalm: 118, part: "aleph", line: "1" })?.text).toBe("beati");
+    expect(noteOn(both, { psalm: 118, part: "beth", line: "1" })?.text).toBe("in quo");
+  });
+
   test("a JSON file is the same pass, and other text is refused", () => {
     const session = startSession("2026-09-27", 14);
     expect(sessionFromJson(JSON.stringify(session))).toEqual(session);
     expect(sessionFromJson("not json")).toBeNull();
     expect(sessionFromJson(JSON.stringify({ work: "gradibus" }))).toBeNull();
+  });
+});
+
+describe("session panel", () => {
+  test("today's day is selected, and only that card is shown", () => {
+    const html = renderToStaticMarkup(
+      createElement(SessionView, {
+        session: startSession("2026-09-30", 7),
+        today: new Date(2026, 8, 30, 9),
+        importError: null,
+        onChange: () => {},
+        onOpen: () => {},
+        onExport: () => {},
+        onImport: () => {},
+      }),
+    );
+    expect(html).toContain('aria-label="Day"');
+    expect(html).toContain('<option value="wed" selected="">Wednesday</option>');
+    expect(html).toContain('<option value="fri">Friday</option>');
+    expect(html).not.toContain("Psalm 118");
+    expect(html).not.toContain("Psalms of ascent");
+    const cards = html.split('class="session-day"');
+    expect(cards).toHaveLength(2);
+    expect(cards[1].match(/Wednesday/g)).toHaveLength(1);
+    expect(cards[1]).toContain("<summary>Wednesday");
+    expect(cards[1].match(/session-hour/g)).toHaveLength(8);
+    expect(cards[1]).toContain("Vigils");
+    expect(cards[1]).toContain("Compline");
   });
 });
