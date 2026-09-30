@@ -26,6 +26,8 @@ type OfficeProps = {
   /** `line` is one office line. `hour` is the whole psalm of the hour. */
   reading: "line" | "hour";
   onHome: () => void;
+  /** When set, the reader opens on this place instead of the clock. */
+  start?: { weekday: Weekday; hour: OfficeHour; index: number } | null;
 };
 
 const WEEKDAY_LABEL: Record<Weekday, string> = {
@@ -66,11 +68,11 @@ function progressLabel(slot: OfficeSlot | undefined, index: number, total: numbe
   return `${name} · ${index + 1} / ${total}`;
 }
 
-export function Office({ work, reading, onHome }: OfficeProps) {
+export function Office({ work, reading, onHome, start }: OfficeProps) {
   const opened = useMemo(() => officeNow(new Date()), []);
-  const [weekday, setWeekday] = useState<Weekday>(opened.weekday);
-  const [hour, setHour] = useState<OfficeHour>(opened.hour);
-  const [index, setIndex] = useState(0);
+  const [weekday, setWeekday] = useState<Weekday>(start?.weekday ?? opened.weekday);
+  const [hour, setHour] = useState<OfficeHour>(start?.hour ?? opened.hour);
+  const [index, setIndex] = useState(start?.index ?? 0);
   const [showEnglish, setShowEnglish] = useState(true);
   const [dict, setDict] = useState<DictState | null>(null);
   const closeDict = useCallback(() => setDict(null), []);

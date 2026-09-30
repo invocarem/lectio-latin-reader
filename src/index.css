@@ -50,6 +50,7 @@ a {
 .home-masthead {
   width: min(64rem, 100%);
   margin: 0 auto 1.6rem;
+  padding-right: 6rem;
 }
 
 .home-masthead h1 {
@@ -383,6 +384,7 @@ a {
     max(1.1rem, env(safe-area-inset-right))
     0.7rem
     max(1.1rem, env(safe-area-inset-left));
+  padding-right: calc(6.4rem + env(safe-area-inset-right));
   border-bottom: 1px solid var(--rule);
   background: rgba(251, 246, 234, 0.88);
   backdrop-filter: blur(8px);
@@ -926,4 +928,182 @@ a {
   color: var(--ink-soft);
   font-size: 0.92rem;
   line-height: 1.4;
+}
+
+.session-switch {
+  position: fixed;
+  z-index: 30;
+  top: calc(0.7rem + env(safe-area-inset-top));
+  right: max(0.9rem, env(safe-area-inset-right));
+  appearance: none;
+  border: 1px solid var(--rule);
+  background: var(--panel);
+  color: var(--ink);
+  padding: 0.4rem 0.75rem;
+  cursor: pointer;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+}
+
+.session-switch[aria-pressed="true"] {
+  background: var(--cinnabar);
+  color: #fbf6ea;
+  border-color: var(--cinnabar);
+}
+
+.session-panel {
+  position: fixed;
+  z-index: 25;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(24rem, 100%);
+  overflow: auto;
+  background: var(--panel);
+  border-left: 1px solid var(--rule);
+  box-shadow: var(--shadow);
+  padding:
+    calc(3.4rem + env(safe-area-inset-top))
+    max(1rem, env(safe-area-inset-right))
+    calc(1.4rem + env(safe-area-inset-bottom))
+    1rem;
+}
+
+.session-panel-bar {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.session-count {
+  margin: 0;
+}
+
+.session-count strong {
+  display: block;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+}
+
+.session-count span {
+  color: var(--ink-soft);
+  font-variant-numeric: tabular-nums;
+}
+
+.session-file {
+  display: flex;
+  gap: 0.45rem;
+}
+
+.session-file button,
+.session-import {
+  appearance: none;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink);
+  padding: 0.3rem 0.55rem;
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+}
+
+.session-import input {
+  display: none;
+}
+
+.session-error {
+  margin: 0.7rem 0 0;
+  color: var(--cinnabar);
+}
+
+.session-pace {
+  display: flex;
+  gap: 0.45rem;
+  margin: 0.9rem 0 0.4rem;
+}
+
+.session-pace button {
+  appearance: none;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink-soft);
+  padding: 0.25rem 0.55rem;
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.session-pace button[aria-pressed="true"] {
+  background: var(--cinnabar);
+  color: #fbf6ea;
+  border-color: var(--cinnabar);
+}
+
+.session-pace button:disabled {
+  cursor: default;
+}
+
+.session-block {
+  margin-top: 1.3rem;
+}
+
+.session-block h2 {
+  margin: 0 0 0.2rem;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-style: normal;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.session-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.session-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.session-open {
+  appearance: none;
+  border: 0;
+  background: none;
+  padding: 0;
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+.session-open[aria-current="true"] {
+  color: var(--cinnabar);
+}
+
+.session-sat {
+  appearance: none;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink-soft);
+  padding: 0.25rem 0.55rem;
+  cursor: pointer;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+}
+
+.session-sat[aria-pressed="true"] {
+  border-color: var(--cinnabar);
+  color: var(--cinnabar);
 }
