@@ -4,7 +4,7 @@
 
 ## Branch
 
-This work is on `session`. `main` is what TestFlight ships. Merge when the session view opens and its test passes. An unfinished session does not go into a release.
+This work is on `phase2`. `main` is what TestFlight ships. Merge when the session view opens and its test passes. An unfinished session does not go into a release.
 
 ## Goal
 
@@ -49,7 +49,7 @@ Created when a pass starts. On the phone it stays in local storage. A fixture in
 ```json
 {
   "id": "2026-09-27",
-  "work": "psalter",
+  "work": "cursus",
   "pace": 14,
   "started": "2026-09-27",
   "cursor": { "weekday": "sun", "hour": "vigils", "psalm": 21 },
@@ -63,7 +63,7 @@ Created when a pass starts. On the phone it stays in local storage. A fixture in
 }
 ```
 
-`work` chooses the course. `pace` is 7 or 14 for the psalter; another work may omit it. `started` is the local date the pass began. `cursor` is the step last opened, in the form that work's `next` returns. For the psalter it is the cursus place. In the example, Psalm 21 is Sunday Vigils, and `at` is the Tuesday it was sat with (`started` is Sunday 27 September 2026). Psalm 4 is Compline every day, so its mark has an hour and no weekday; `at` is the first day it was sat with. `satWith` is the progress through the slices. `highlights` mark one office line. `notes` are words on a highlighted line, with the date they were written.
+`work` chooses the course; for the cursus it is `"cursus"` (the same psalms, on the weekly cursus). `pace` is 7 or 14 for the cursus; another work may omit it. `started` is the local date the pass began. `cursor` is the step last opened, in the form that work's `next` returns. For the cursus it is the cursus place. In the example, Psalm 21 is Sunday Vigils, and `at` is the Tuesday it was sat with (`started` is Sunday 27 September 2026). Psalm 4 is Compline every day, so its mark has an hour and no weekday; `at` is the first day it was sat with. `satWith` is the progress through the slices. `highlights` mark one office line. `notes` are words on a highlighted line, with the date they were written.
 
 ## The open places
 
@@ -81,7 +81,7 @@ Opening the session resumes at the cursor. The person may choose any other open 
 
 ## The view
 
-One Session switch sits on every screen. It is not a button on a work card. The pass it opens is the cursus. When the switch is on, a panel lists the open places. When it is off, the panel is hidden.
+One Session switch sits on the office (cursus) screen. It is not a button on a work card. The pass it opens is the cursus. When the switch is on, a panel lists the open places. When it is off, the panel is hidden.
 
 - The panel shows slices sat with over `total()`. Today's places come first. A missed Vigils stays in that list. A daily psalm stays on its hour, marked once. A mark records the civil date of the first sitting.
 - Choosing a place opens Lectio on that psalm and turns the switch off. The line number can be highlighted. A note on a highlighted line is shown under the English.
@@ -90,7 +90,7 @@ One Session switch sits on every screen. It is not a button on a work card. The 
 ## Where the code goes
 
 - `src/session/` — the slice, the session document, the course interface, and the session view. The view calls `total` and `next`. It is not a reader component.
-- `src/session/psalter.ts` — the psalter course. `total` counts distinct slices. `next` walks the cursus.
+- `src/session/cursus.ts` — the psalter course on the weekly cursus. `total` counts distinct slices. `next` walks the cursus.
 - A course beside De gradibus, when that section is in hand. `total` is its lectio length. `next` walks `gradibus.lectio`.
 - Local storage for the open pass. A pass records its `work`.
 - Highlight and note are actions on the open step.

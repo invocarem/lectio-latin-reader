@@ -11,6 +11,9 @@ import {
   type Weekday,
 } from "../content/office/when";
 import { EDGE_GUARD_PX, isSwipePointer, swipeIntent } from "../swipe";
+import { SessionView } from "../session/SessionView";
+import { useSession } from "../session/useSession";
+import type { OpenPlace } from "../session/cursus";
 import type { ReaderWork } from "../types";
 import { DictPopup } from "./DictPopup";
 import { LatinText } from "./LatinText";
@@ -75,6 +78,18 @@ export function Office({ work, reading, onHome }: OfficeProps) {
   const [dict, setDict] = useState<DictState | null>(null);
   const closeDict = useCallback(() => setDict(null), []);
   const stageRef = useRef<HTMLDivElement>(null);
+  const session = useSession();
+
+  const chooseSessionPlace = useCallback(
+    (place: OpenPlace) => {
+      session.choose(place);
+      if (place.weekday) setWeekday(place.weekday);
+      setHour(place.hour);
+      setIndex(0);
+      closeDict();
+    },
+    [session, closeDict],
+  );
 
   const slots = hourSlots(weekday, hour);
   const lines = useMemo(
@@ -212,12 +227,33 @@ export function Office({ work, reading, onHome }: OfficeProps) {
           >
             English
           </button>
+          <button
+            type="button"
+            aria-pressed={session.open}
+            onClick={session.toggle}
+            title="Session"
+          >
+            Session
+          </button>
         </div>
       </header>
 
       <div className="lectio-layout">
         <div className="lectio-stage" ref={stageRef}>
-          <article className={reading === "line" ? "lectio-card" : "office-card"}>
+          {session.open ? (
+            <SessionView
+              pace={session.doc.pace}
+              places={session.places}
+              count={session.count}
+              total={session.total}
+              onPace={session.setPace}
+              onChoose={chooseSessionPlace}
+              onExport={session.exportSession}
+              onImport={session.importSession}
+              onClose={session.toggle}
+            />
+          ) : (
+            <article className={reading === "line" ? "lectio-card" : "office-card"}>
             <p className="lectio-kicker">
               {WEEKDAY_LABEL[weekday]} · {HOUR_LABEL[hour]} · {SEASON_LABEL[opened.season]} ·{" "}
               {TIME_LABEL[opened.time]}
@@ -330,22 +366,25 @@ export function Office({ work, reading, onHome }: OfficeProps) {
               })
             )}
           </article>
+          )}
         </div>
       </div>
 
-      <nav className="lectio-nav" aria-label={reading === "line" ? "Office lectio" : "Office psalms"}>
-        <button type="button" disabled={safeIndex <= 0} onClick={goPrev}>
-          Previous
-        </button>
-        <span className="lectio-progress">
-          {reading === "line"
-            ? `${safeIndex + 1} / ${total}`
-            : progressLabel(current, safeIndex, total)}
-        </span>
-        <button type="button" disabled={safeIndex >= total - 1} onClick={goNext}>
-          Next
-        </button>
-      </nav>
+      {session.open ? null : (
+        <nav className="lectio-nav" aria-label={reading === "line" ? "Office lectio" : "Office psalms"}>
+          <button type="button" disabled={safeIndex <= 0} onClick={goPrev}>
+            Previous
+          </button>
+          <span className="lectio-progress">
+            {reading === "line"
+              ? `${safeIndex + 1} / ${total}`
+              : progressLabel(current, safeIndex, total)}
+          </span>
+          <button type="button" disabled={safeIndex >= total - 1} onClick={goNext}>
+            Next
+          </button>
+        </nav>
+      )}
 
       {dict ? (
         <DictPopup

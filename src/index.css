@@ -927,3 +927,136 @@ a {
   font-size: 0.92rem;
   line-height: 1.4;
 }
+
+/* Session panel (psalter / cursus pass) */
+.session-panel {
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 0.5rem;
+  padding: 1.1rem 1.2rem;
+  max-width: 34rem;
+  margin: 0 auto;
+}
+
+.session-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.session-head h2 {
+  margin: 0;
+  font-family: "Cormorant Garamond", serif;
+  font-size: 1.35rem;
+  font-weight: 600;
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.session-count {
+  font-family: "Source Serif 4", serif;
+  font-size: 1rem;
+  color: var(--ink-soft);
+  font-variant-numeric: oldstyle-nums;
+}
+
+.session-close {
+  background: transparent;
+  border: none;
+  color: var(--ink-soft);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.session-close:hover {
+  color: var(--ink);
+}
+
+.session-pace {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0.9rem 0 1rem;
+}
+
+.session-pace button {
+  flex: 1;
+  padding: 0.45rem 0.6rem;
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 0.4rem;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.session-pace button.active {
+  background: var(--parchment-deep);
+  border-color: var(--rule);
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.session-places {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.session-group h3 {
+  margin: 0 0 0.35rem;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+}
+
+.session-group ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.session-group li button {
+  width: 100%;
+  text-align: left;
+  padding: 0.5rem 0.6rem;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 0.35rem;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.session-group li button:hover {
+  background: var(--parchment);
+  border-color: var(--rule);
+}
+
+.session-empty {
+  color: var(--ink-soft);
+  font-style: italic;
+  margin: 0.4rem 0;
+}
+
+.session-tools {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1.1rem;
+}
+
+.session-tools button {
+  padding: 0.45rem 0.9rem;
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 0.4rem;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.session-tools button:hover {
+  background: var(--parchment-deep);
+}
