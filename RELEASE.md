@@ -57,9 +57,9 @@ Keywords (the Latin name will not be what people type):
 
 ## Before the screenshots
 
-1. On the Mac, run `npm run cap:sync`, then archive. Raise the build number. The display name in the project is already **Lectio per cancellos**. The build already on TestFlight still says Lectio and will not pick this up.
+1. On the Mac, run `npm run cap:sync`, then archive. Raise the build number. The name under the icon is **Lectio**, because the full phrase is cut off on an iPhone home screen. The store name stays **Lectio per cancellos**.
 2. The Xcode project includes iPad as well as iPhone. For an iPhone-only release, set the target to iPhone before that archive. If it stays universal, App Store Connect also requires a 13-inch iPad screenshot set.
-3. On the phone or the Simulator, read the name under the icon. If iOS cuts it to “Lectio per…”, shorten only that label to **Cancelli**. Leave the store name as the full phrase.
+3. On the phone or the Simulator, read the name under the icon. It should say **Lectio**.
 4. Screenshots from the 6.7-inch iPhone: the home screen (all three works), one page of the Steps, one sermon page, one cursus page.
 
 ## Submitting it

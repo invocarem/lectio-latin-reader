@@ -16,8 +16,8 @@ export function Home({ onOpen, studyEnabled = true }: HomeProps) {
   return (
     <main className="home">
       <header className="home-masthead">
-        <p className="home-kicker">Lectio per cancellos</p>
-        <h1>A Latin reader</h1>
+        <h1>Lectio per cancellos</h1>
+        <p className="home-subtitle">A Latin reader</p>
       </header>
       <div className="home-featured">
         <OfficeCard onOpen={onOpen} />

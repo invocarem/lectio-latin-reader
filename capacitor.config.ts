@@ -2,7 +2,7 @@ import type { CapacitorConfig } from "@capacitor/cli";
 
 const config: CapacitorConfig = {
   appId: "com.invocarem.lectiolatinreader",
-  appName: "Lectio per cancellos",
+  appName: "Lectio",
   webDir: "dist",
   ios: {
     contentInset: "never",
