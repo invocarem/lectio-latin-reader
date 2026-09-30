@@ -12,7 +12,10 @@ import { OFFICE_HOURS, WEEKDAYS, type OfficeHour, type Weekday } from "../conten
 
 export type SessionViewProps = {
   pace: SessionPace;
-  todayWeekday: Weekday;
+  /** The day the Lectio screen is currently showing; the panel filters default to it. */
+  lectioWeekday: Weekday;
+  /** The hour the Lectio screen is currently showing; the panel filters default to it. */
+  lectioHour: OfficeHour;
   satKeys: ReadonlySet<string>;
   count: number;
   total: number;
@@ -41,7 +44,8 @@ type Group = { title: string; rows: Row[] };
 
 export function SessionView({
   pace,
-  todayWeekday,
+  lectioWeekday,
+  lectioHour,
   satKeys,
   count,
   total,
@@ -53,8 +57,8 @@ export function SessionView({
   onClose,
 }: SessionViewProps) {
   const fileRef = useRef<HTMLInputElement>(null);
-  const [day, setDay] = useState<Weekday>(todayWeekday);
-  const [hour, setHour] = useState<OfficeHour | "">("");
+  const [day, setDay] = useState<Weekday>(lectioWeekday);
+  const [hour, setHour] = useState<OfficeHour | "">(lectioHour);
   const [psalmText, setPsalmText] = useState("");
 
   const parsed = psalmText.trim() === "" ? null : Number(psalmText);

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { hourSlots, type OfficeSlot } from "../content/office/cursus";
-import { hourLines, nextPsalmIndex, prevPsalmIndex, sliceLabel, sliceVerses } from "../content/office/resolve";
+import { hourLines, sliceLabel, sliceVerses } from "../content/office/resolve";
 import {
   OFFICE_HOURS,
   WEEKDAYS,
@@ -129,27 +129,6 @@ export function Office({ work, reading, onHome }: OfficeProps) {
     setIndex((at) => Math.min(at + 1, Math.max(total - 1, 0)));
     closeDict();
   }, [closeDict, total]);
-
-  const nextPsalm = useMemo(
-    () => (reading === "line" ? nextPsalmIndex(lines, safeIndex) : -1),
-    [reading, lines, safeIndex],
-  );
-  const prevPsalm = useMemo(
-    () => (reading === "line" ? prevPsalmIndex(lines, safeIndex) : -1),
-    [reading, lines, safeIndex],
-  );
-
-  const goNextPsalm = useCallback(() => {
-    if (nextPsalm < 0) return;
-    setIndex(nextPsalm);
-    closeDict();
-  }, [nextPsalm, closeDict]);
-
-  const goPrevPsalm = useCallback(() => {
-    if (prevPsalm < 0) return;
-    setIndex(prevPsalm);
-    closeDict();
-  }, [prevPsalm, closeDict]);
 
   function chooseDay(next: Weekday) {
     closeDict();
@@ -297,32 +276,14 @@ export function Office({ work, reading, onHome }: OfficeProps) {
                   </h2>
                   <button
                     type="button"
-                    className="highlight-toggle"
+                    className="highlight-marker"
                     aria-pressed={highlighted}
+                    aria-label={highlighted ? "Clear highlight from this line" : "Highlight this line"}
+                    title="Highlight this line"
                     onClick={() => session.toggleHighlight(line.psalm, line.n)}
-                  >
-                    Highlight
-                  </button>
-                  <div className="office-psalm-nav">
-                    <button
-                      type="button"
-                      disabled={prevPsalm < 0}
-                      onClick={goPrevPsalm}
-                      aria-label="Previous psalm"
-                    >
-                      ‹
-                    </button>
-                    <button
-                      type="button"
-                      disabled={nextPsalm < 0}
-                      onClick={goNextPsalm}
-                      aria-label="Next psalm"
-                    >
-                      ›
-                    </button>
-                  </div>
+                  />
                 </div>
-                <div className="lectio-latin" lang="la">
+                <div className={`lectio-latin${highlighted ? " highlighted" : ""}`} lang="la">
                   <LatinText
                     text={line.latin}
                     unitId={line.id}
@@ -394,7 +355,8 @@ export function Office({ work, reading, onHome }: OfficeProps) {
         {session.open ? (
           <SessionView
             pace={session.doc.pace}
-            todayWeekday={session.todayWeekday}
+            lectioWeekday={weekday}
+            lectioHour={hour}
             satKeys={session.satKeys}
             count={session.count}
             total={session.total}
@@ -408,21 +370,19 @@ export function Office({ work, reading, onHome }: OfficeProps) {
         ) : null}
       </div>
 
-      {session.open ? null : (
-        <nav className="lectio-nav" aria-label={reading === "line" ? "Office lectio" : "Office psalms"}>
-          <button type="button" disabled={safeIndex <= 0} onClick={goPrev}>
-            Previous
-          </button>
-          <span className="lectio-progress">
-            {reading === "line"
-              ? `${safeIndex + 1} / ${total}`
-              : progressLabel(current, safeIndex, total)}
-          </span>
-          <button type="button" disabled={safeIndex >= total - 1} onClick={goNext}>
-            Next
-          </button>
-        </nav>
-      )}
+      <nav className="lectio-nav" aria-label={reading === "line" ? "Office lectio" : "Office psalms"}>
+        <button type="button" disabled={safeIndex <= 0} onClick={goPrev}>
+          Previous
+        </button>
+        <span className="lectio-progress">
+          {reading === "line"
+            ? `${safeIndex + 1} / ${total}`
+            : progressLabel(current, safeIndex, total)}
+        </span>
+        <button type="button" disabled={safeIndex >= total - 1} onClick={goNext}>
+          Next
+        </button>
+      </nav>
 
       {dict ? (
         <DictPopup
