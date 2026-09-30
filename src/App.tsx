@@ -15,7 +15,7 @@ export default function App() {
   const [mode, setMode] = useState<ReaderMode>("lectio");
   const [focusId, setFocusId] = useState<string>(defaultWork.lectio[0].id);
 
-  // On the built mobile app (iPhone) only Lectio is available; Study is hidden.
+  // Study and plates on desktop and iPad. iPhone stays on Lectio.
   const studyEnabled = platformSupportsStudy();
 
   function goHome() {

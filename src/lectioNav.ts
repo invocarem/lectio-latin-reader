@@ -33,7 +33,7 @@ export function lectioFocus<T extends { id: string }>(
   };
 }
 
-/** Study is per-work and hidden on the native iPhone app. */
+/** Study is per-work, and hidden when the screen is iPhone-sized. */
 export function resolveSession(
   work: {
     studyEnabled: boolean;
