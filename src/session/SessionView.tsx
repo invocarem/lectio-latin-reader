@@ -137,6 +137,7 @@ export function SessionView({
 
   return (
     <aside className="session-panel" id="session-panel">
+      <div className="session-scroll">
       <header className="session-panel-bar">
         <p className="session-count">
           <strong>Session</strong>
@@ -253,6 +254,7 @@ export function SessionView({
       ) : (
         <p className="session-miss">Nothing open on {WEEKDAY_LABEL[day]}.</p>
       )}
+      </div>
     </aside>
   );
 }
