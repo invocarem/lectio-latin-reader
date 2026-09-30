@@ -187,6 +187,8 @@ export type OfficeLineStep = {
   id: string;
   label: string;
   n: string;
+  /** Gallican psalm number the line belongs to (for highlight/note keys). */
+  psalm: number;
   latin: string;
   english: string;
 };
@@ -204,6 +206,7 @@ export function hourLines(weekday: Weekday, hour: OfficeHour): OfficeLineStep[] 
           id: `${span}:${verse.n}`,
           label,
           n: verse.n,
+          psalm: slice.psalm,
           latin: normLatin(verse.latin),
           english: verse.english,
         });

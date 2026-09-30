@@ -1,5 +1,14 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { createSession, parseSession, recordOpen, satCount, setPace, type SessionDoc } from "./document";
+import {
+  createSession,
+  parseSession,
+  recordOpen,
+  satCount,
+  setNote,
+  setPace,
+  toggleHighlight,
+  type SessionDoc,
+} from "./document";
 import { loadSession, saveSession } from "./store";
 import { cursusCourse, isoDate, openPlaces, type OpenPlace, type SessionPace } from "./cursus";
 
@@ -29,6 +38,16 @@ export function useSession() {
   );
 
   const setPaceValue = useCallback((pace: SessionPace) => setDoc((current) => setPace(current, pace)), []);
+
+  const toggleLineHighlight = useCallback(
+    (psalm: number, line: string) => setDoc((current) => toggleHighlight(current, psalm, line)),
+    [],
+  );
+
+  const writeLineNote = useCallback(
+    (psalm: number, line: string, text: string) => setDoc((current) => setNote(current, psalm, line, text, today)),
+    [today],
+  );
 
   const exportSession = useCallback(() => {
     const blob = new Blob([JSON.stringify(doc, null, 2)], { type: "application/json" });
@@ -67,5 +86,7 @@ export function useSession() {
     places,
     count: satCount(doc),
     total: cursusCourse.total(),
+    toggleHighlight: toggleLineHighlight,
+    writeNote: writeLineNote,
   };
 }

@@ -99,6 +99,6 @@ One Session switch sits on the office (cursus) screen. It is not a button on a w
 
 - [x] Document, `satWith`, the count of slices over `total()`, and resume at the cursor. Any open place can be chosen on a later civil day, still under its own weekday and hour. One Session switch opens the panel.
 - [x] Fortnight: first six of Vigils with the day hours, then the second six.
-- [ ] Highlight one office line, and a note on that line.
+- [x] Highlight one office line, and a note on that line.
 - [x] Export and import the session file as the same JSON.
 - [ ] De gradibus course: `total` is its lectio units, `next` is the next unit not yet sat with, and the card shows that count.

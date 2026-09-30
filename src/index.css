@@ -1060,3 +1060,51 @@ a {
 .session-tools button:hover {
   background: var(--parchment-deep);
 }
+
+/* Highlight and note on an office line */
+.highlight-toggle {
+  margin-right: auto;
+  padding: 0.3rem 0.7rem;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  background: transparent;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.highlight-toggle[aria-pressed="true"] {
+  color: var(--cinnabar);
+  border-color: var(--gold);
+  background: var(--highlight);
+}
+
+.session-note {
+  display: block;
+  margin-top: 0.9rem;
+}
+
+.session-note-label {
+  display: block;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+  margin-bottom: 0.35rem;
+}
+
+.session-note textarea {
+  width: 100%;
+  font: inherit;
+  color: var(--ink);
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 0.4rem;
+  padding: 0.5rem 0.6rem;
+  resize: vertical;
+}
+
+.session-note textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+}

@@ -13,6 +13,7 @@ import {
 import { EDGE_GUARD_PX, isSwipePointer, swipeIntent } from "../swipe";
 import { SessionView } from "../session/SessionView";
 import { useSession } from "../session/useSession";
+import { isHighlighted, noteFor } from "../session/document";
 import type { OpenPlace } from "../session/cursus";
 import type { ReaderWork } from "../types";
 import { DictPopup } from "./DictPopup";
@@ -100,6 +101,8 @@ export function Office({ work, reading, onHome }: OfficeProps) {
   const safeIndex = Math.min(index, Math.max(total - 1, 0));
   const current = slots[safeIndex];
   const line = lines[safeIndex];
+  const highlighted = line != null && isHighlighted(session.doc, line.psalm, line.n);
+  const note = line != null ? noteFor(session.doc, line.psalm, line.n) : undefined;
 
   const goPrev = useCallback(() => {
     setIndex((at) => {
@@ -292,6 +295,14 @@ export function Office({ work, reading, onHome }: OfficeProps) {
                   <h2 className="office-psalm">
                     {line.label} · {line.n}
                   </h2>
+                  <button
+                    type="button"
+                    className="highlight-toggle"
+                    aria-pressed={highlighted}
+                    onClick={() => session.toggleHighlight(line.psalm, line.n)}
+                  >
+                    Highlight
+                  </button>
                   <div className="office-psalm-nav">
                     <button
                       type="button"
@@ -329,6 +340,19 @@ export function Office({ work, reading, onHome }: OfficeProps) {
                   <p className="lectio-english" lang="en">
                     {line.english}
                   </p>
+                ) : null}
+                {highlighted ? (
+                  <label className="session-note">
+                    <span className="session-note-label">Note</span>
+                    <textarea
+                      value={note?.text ?? ""}
+                      rows={2}
+                      placeholder="A note on this line"
+                      onChange={(event) =>
+                        session.writeNote(line.psalm, line.n, event.target.value)
+                      }
+                    />
+                  </label>
                 ) : null}
               </>
             ) : (

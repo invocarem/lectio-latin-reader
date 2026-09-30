@@ -9,6 +9,12 @@
 
 import { keyOfStep } from "./cursus";
 
+/** A highlighted office line: the Gallican psalm number and the office line number. */
+export type Highlight = { psalm: number; line: string };
+
+/** A note on a highlighted office line, with the civil date it was written. */
+export type SessionNote = { psalm: number; line: string; text: string; at: string };
+
 export type SessionDoc = {
   id: string;
   work: "cursus";
@@ -16,8 +22,8 @@ export type SessionDoc = {
   started: string;
   cursor: string | null;
   satWith: { step: string; at: string }[];
-  highlights: never[];
-  notes: never[];
+  highlights: Highlight[];
+  notes: SessionNote[];
 };
 
 /** A fresh pass, opened today. */
@@ -49,6 +55,53 @@ export function recordOpen(doc: SessionDoc, step: string, today: string): Sessio
 export function setPace(doc: SessionDoc, pace: 7 | 14): SessionDoc {
   return updateDoc(doc, (next) => {
     next.pace = pace;
+    return next;
+  });
+}
+
+/** The stable key of a highlighted line. */
+export function highlightKey(psalm: number, line: string): string {
+  return `${psalm}:${line}`;
+}
+
+/** Add the highlight when absent, remove it when present. */
+export function toggleHighlight(doc: SessionDoc, psalm: number, line: string): SessionDoc {
+  return updateDoc(doc, (next) => {
+    const key = highlightKey(psalm, line);
+    const has = next.highlights.some((item) => highlightKey(item.psalm, item.line) === key);
+    next.highlights = has
+      ? next.highlights.filter((item) => highlightKey(item.psalm, item.line) !== key)
+      : [...next.highlights, { psalm, line }];
+    return next;
+  });
+}
+
+/** True when the office line is highlighted. */
+export function isHighlighted(doc: SessionDoc, psalm: number, line: string): boolean {
+  const key = highlightKey(psalm, line);
+  return doc.highlights.some((item) => highlightKey(item.psalm, item.line) === key);
+}
+
+/** The note on the highlighted line, or undefined. */
+export function noteFor(doc: SessionDoc, psalm: number, line: string): SessionNote | undefined {
+  const key = highlightKey(psalm, line);
+  return doc.notes.find((item) => highlightKey(item.psalm, item.line) === key);
+}
+
+/** Write the person's own words on a line. Keeps the first `at` if it is unchanged. */
+export function setNote(
+  doc: SessionDoc,
+  psalm: number,
+  line: string,
+  text: string,
+  today: string,
+): SessionDoc {
+  return updateDoc(doc, (next) => {
+    const key = highlightKey(psalm, line);
+    const index = next.notes.findIndex((item) => highlightKey(item.psalm, item.line) === key);
+    const note: SessionNote = { psalm, line, text, at: today };
+    if (index < 0) next.notes = [...next.notes, note];
+    else next.notes = next.notes.map((item, i) => (i === index ? note : item));
     return next;
   });
 }
@@ -90,6 +143,21 @@ export function parseSession(json: string): SessionDoc | null {
           (mark) => mark && typeof mark.step === "string" && typeof mark.at === "string",
         )
       : [];
+    const highlights = Array.isArray(value.highlights)
+      ? value.highlights.filter(
+          (item) => item && typeof item.psalm === "number" && typeof item.line === "string",
+        )
+      : [];
+    const notes = Array.isArray(value.notes)
+      ? value.notes.filter(
+          (note) =>
+            note &&
+            typeof note.psalm === "number" &&
+            typeof note.line === "string" &&
+            typeof note.text === "string" &&
+            typeof note.at === "string",
+        )
+      : [];
     return {
       id: typeof value.id === "string" ? value.id : value.started,
       work: "cursus",
@@ -97,8 +165,8 @@ export function parseSession(json: string): SessionDoc | null {
       started: value.started,
       cursor: typeof value.cursor === "string" ? value.cursor : null,
       satWith,
-      highlights: [],
-      notes: [],
+      highlights,
+      notes,
     };
   } catch {
     return null;
