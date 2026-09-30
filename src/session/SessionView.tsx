@@ -1,35 +1,118 @@
-import { useRef } from "react";
-import type { OpenPlace, SessionPace } from "./cursus";
+import { useMemo, useRef, useState } from "react";
+import {
+  HOUR_LABEL,
+  WEEKDAY_LABEL,
+  dayPlaces,
+  psalmLabel,
+  psalmPlaces,
+  type SessionPace,
+} from "./cursus";
+import type { OpenPlace } from "./cursus";
+import { OFFICE_HOURS, WEEKDAYS, type OfficeHour, type Weekday } from "../content/office/when";
 
 export type SessionViewProps = {
   pace: SessionPace;
-  places: OpenPlace[];
+  todayWeekday: Weekday;
+  satKeys: ReadonlySet<string>;
   count: number;
   total: number;
   onPace: (pace: SessionPace) => void;
-  onChoose: (place: OpenPlace) => void;
+  /** Open the psalm in Lectio without closing the panel. */
+  onLocate: (place: OpenPlace) => void;
+  /** Toggle the psalm's "done" mark in the pass. */
+  onToggleDone: (place: OpenPlace) => void;
   onExport: () => void;
   onImport: (file: File | null) => void;
   onClose: () => void;
 };
 
+type Row = {
+  id: string;
+  step: string;
+  weekday: Weekday | null;
+  hour: OfficeHour;
+  psalm: number;
+  label: string;
+  sat: boolean;
+  group: string;
+};
+
+type Group = { title: string; rows: Row[] };
+
 export function SessionView({
   pace,
-  places,
+  todayWeekday,
+  satKeys,
   count,
   total,
   onPace,
-  onChoose,
+  onLocate,
+  onToggleDone,
   onExport,
   onImport,
   onClose,
 }: SessionViewProps) {
   const fileRef = useRef<HTMLInputElement>(null);
-  const todayPlaces = places.filter((place) => place.isToday);
-  const earlierPlaces = places.filter((place) => !place.isToday);
+  const [day, setDay] = useState<Weekday>(todayWeekday);
+  const [hour, setHour] = useState<OfficeHour | "">("");
+  const [psalmText, setPsalmText] = useState("");
+
+  const parsed = psalmText.trim() === "" ? null : Number(psalmText);
+  const located =
+    parsed != null && Number.isInteger(parsed) && parsed >= 1 && parsed <= 150 ? parsed : null;
+
+  const rows = useMemo<Row[]>(() => {
+    if (located != null) {
+      return psalmPlaces(located).map((place) => ({
+        id: place.key,
+        step: place.step,
+        weekday: place.weekday,
+        hour: place.hour,
+        psalm: place.slice.psalm,
+        label: psalmLabel(place),
+        sat: satKeys.has(place.key),
+        group:
+          place.weekday != null
+            ? `${WEEKDAY_LABEL[place.weekday]} · ${HOUR_LABEL[place.hour]}`
+            : HOUR_LABEL[place.hour],
+      }));
+    }
+    return dayPlaces(day)
+      .filter((place) => hour === "" || place.hour === hour)
+      .map((place) => ({
+        id: place.key,
+        step: place.step,
+        weekday: place.weekday,
+        hour: place.hour,
+        psalm: place.slice.psalm,
+        label: psalmLabel(place),
+        sat: satKeys.has(place.key),
+        group: HOUR_LABEL[place.hour],
+      }));
+  }, [located, day, hour, satKeys]);
+
+  const groups: Group[] = [];
+  for (const row of rows) {
+    let group = groups.find((item) => item.title === row.group);
+    if (!group) {
+      group = { title: row.group, rows: [] };
+      groups.push(group);
+    }
+    group.rows.push(row);
+  }
+
+  const openPlace = (row: Row): OpenPlace => ({
+    step: row.step,
+    key: row.id,
+    label: row.label,
+    isToday: false,
+    weekday: row.weekday,
+    hour: row.hour,
+    psalm: row.psalm,
+  });
 
   return (
-    <div className="session-panel">
+    <aside className="session-panel" aria-label="Session">
       <div className="session-head">
         <h2>
           Session <span className="session-count">{count} / {total}</span>
@@ -56,18 +139,83 @@ export function SessionView({
         </button>
       </div>
 
+      <div className="session-filters">
+        <label>
+          <span>Day</span>
+          <select value={day} onChange={(event) => setDay(event.target.value as Weekday)}>
+            {WEEKDAYS.map((item) => (
+              <option key={item} value={item}>
+                {WEEKDAY_LABEL[item]}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          <span>Hour</span>
+          <select value={hour} onChange={(event) => setHour(event.target.value as OfficeHour | "")}>
+            <option value="">All hours</option>
+            {OFFICE_HOURS.map((item) => (
+              <option key={item} value={item}>
+                {HOUR_LABEL[item]}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          <span>Psalm</span>
+          <input
+            type="number"
+            min={1}
+            max={150}
+            placeholder="1–150"
+            value={psalmText}
+            onChange={(event) => setPsalmText(event.target.value)}
+          />
+        </label>
+      </div>
+
+      {located != null ? (
+        <p className="session-find">
+          <strong>Psalmus {located}</strong> across the week.
+        </p>
+      ) : (
+        <p className="session-find">
+          <strong>{WEEKDAY_LABEL[day]}</strong>
+          {hour ? ` · ${HOUR_LABEL[hour]}` : ""} · click a psalm to open it, tick the box when done.
+        </p>
+      )}
+
       <div className="session-places">
-        {todayPlaces.length > 0 ? (
-          <PlaceGroup label="Today" places={todayPlaces} onChoose={onChoose} />
-        ) : null}
-        {earlierPlaces.length > 0 ? (
-          <PlaceGroup label="Still open" places={earlierPlaces} onChoose={onChoose} />
-        ) : null}
-        {places.length === 0 ? (
-          <p className="session-empty">
-            Every slice of the psalter has been sat with. A finished pass stays available.
-          </p>
-        ) : null}
+        {groups.length === 0 ? (
+          <p className="session-empty">No psalm matches this filter.</p>
+        ) : (
+          groups.map((group) => (
+            <section className="session-group" key={group.title}>
+              <h3>{group.title}</h3>
+              <ul>
+                {group.rows.map((row) => (
+                  <li key={row.id}>
+                    <button
+                      type="button"
+                      className="session-locate"
+                      onClick={() => onLocate(openPlace(row))}
+                    >
+                      {row.label}
+                    </button>
+                    <label className="session-done">
+                      <input
+                        type="checkbox"
+                        checked={row.sat}
+                        onChange={() => onToggleDone(openPlace(row))}
+                        aria-label={`Mark ${row.label} as done`}
+                      />
+                    </label>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))
+        )}
       </div>
 
       <div className="session-tools">
@@ -88,31 +236,6 @@ export function SessionView({
           }}
         />
       </div>
-    </div>
-  );
-}
-
-function PlaceGroup({
-  label,
-  places,
-  onChoose,
-}: {
-  label: string;
-  places: OpenPlace[];
-  onChoose: (place: OpenPlace) => void;
-}) {
-  return (
-    <section className="session-group">
-      <h3>{label}</h3>
-      <ul>
-        {places.map((place) => (
-          <li key={place.step}>
-            <button type="button" onClick={() => onChoose(place)}>
-              {place.label}
-            </button>
-          </li>
-        ))}
-      </ul>
-    </section>
+    </aside>
   );
 }

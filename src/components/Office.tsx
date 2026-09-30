@@ -81,16 +81,29 @@ export function Office({ work, reading, onHome }: OfficeProps) {
   const stageRef = useRef<HTMLDivElement>(null);
   const session = useSession();
 
-  const chooseSessionPlace = useCallback(
+  /** Navigate Lectio to a psalm's place without closing the session panel. */
+  const locateSessionPlace = useCallback(
     (place: OpenPlace) => {
-      session.choose(place);
+      const targetWeekday = place.weekday ?? weekday;
       if (place.weekday) setWeekday(place.weekday);
       setHour(place.hour);
-      setIndex(0);
+      setIndex(indexForLocate(targetWeekday, place.hour, place.psalm));
       closeDict();
     },
-    [session, closeDict],
+    [weekday, closeDict],
   );
+
+  /** The index (a lectio line or an office slot) that holds `psalm`. */
+  function indexForLocate(targetWeekday: Weekday, targetHour: OfficeHour, psalm: number): number {
+    if (reading === "line") {
+      const at = hourLines(targetWeekday, targetHour).findIndex((line) => line.psalm === psalm);
+      return at < 0 ? 0 : at;
+    }
+    const at = hourSlots(targetWeekday, targetHour).findIndex((slot) =>
+      slot.slices.some((slice) => slice.psalm === psalm),
+    );
+    return at < 0 ? 0 : at;
+  }
 
   const slots = hourSlots(weekday, hour);
   const lines = useMemo(
@@ -241,21 +254,8 @@ export function Office({ work, reading, onHome }: OfficeProps) {
         </div>
       </header>
 
-      <div className="lectio-layout">
+      <div className={`lectio-layout${session.open ? " session-open" : ""}`}>
         <div className="lectio-stage" ref={stageRef}>
-          {session.open ? (
-            <SessionView
-              pace={session.doc.pace}
-              places={session.places}
-              count={session.count}
-              total={session.total}
-              onPace={session.setPace}
-              onChoose={chooseSessionPlace}
-              onExport={session.exportSession}
-              onImport={session.importSession}
-              onClose={session.toggle}
-            />
-          ) : (
             <article className={reading === "line" ? "lectio-card" : "office-card"}>
             <p className="lectio-kicker">
               {WEEKDAY_LABEL[weekday]} · {HOUR_LABEL[hour]} · {SEASON_LABEL[opened.season]} ·{" "}
@@ -390,8 +390,22 @@ export function Office({ work, reading, onHome }: OfficeProps) {
               })
             )}
           </article>
-          )}
         </div>
+        {session.open ? (
+          <SessionView
+            pace={session.doc.pace}
+            todayWeekday={session.todayWeekday}
+            satKeys={session.satKeys}
+            count={session.count}
+            total={session.total}
+            onPace={session.setPace}
+            onLocate={locateSessionPlace}
+            onToggleDone={session.toggleDone}
+            onExport={session.exportSession}
+            onImport={session.importSession}
+            onClose={session.toggle}
+          />
+        ) : null}
       </div>
 
       {session.open ? null : (

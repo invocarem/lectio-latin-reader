@@ -7,10 +7,12 @@ import {
   setNote,
   setPace,
   toggleHighlight,
+  toggleSat,
   type SessionDoc,
 } from "./document";
 import { loadSession, saveSession } from "./store";
-import { cursusCourse, isoDate, openPlaces, type OpenPlace, type SessionPace } from "./cursus";
+import { cursusCourse, isoDate, keyOfStep, type OpenPlace, type SessionPace } from "./cursus";
+import { WEEKDAYS } from "../content/office/when";
 
 /**
  * Owns the open session pass and its local persistence. The switch turns the
@@ -18,6 +20,7 @@ import { cursusCourse, isoDate, openPlaces, type OpenPlace, type SessionPace } f
  */
 export function useSession() {
   const today = useMemo(() => isoDate(new Date()), []);
+  const todayWeekday = useMemo(() => WEEKDAYS[new Date().getDay()], []);
   const [doc, setDoc] = useState<SessionDoc>(() => loadSession() ?? createSession(14, today));
   const [open, setOpen] = useState(false);
 
@@ -38,6 +41,12 @@ export function useSession() {
   );
 
   const setPaceValue = useCallback((pace: SessionPace) => setDoc((current) => setPace(current, pace)), []);
+
+  /** Mark a place done or not done (the pass's "done" checkbox), without navigating. */
+  const toggleDone = useCallback(
+    (place: OpenPlace) => setDoc((current) => toggleSat(current, place.step, today)),
+    [today],
+  );
 
   const toggleLineHighlight = useCallback(
     (psalm: number, line: string) => setDoc((current) => toggleHighlight(current, psalm, line)),
@@ -69,21 +78,23 @@ export function useSession() {
     });
   }, []);
 
-  const places = useMemo(
-    () => openPlaces(doc.pace, doc.started, today, doc.satWith.map((mark) => mark.step)),
-    [doc, today],
+  const satKeys = useMemo(
+    () => new Set(doc.satWith.map((mark) => keyOfStep(mark.step))),
+    [doc],
   );
 
   return {
     doc,
     today,
+    todayWeekday,
     open,
     toggle,
     choose,
     setPace: setPaceValue,
+    toggleDone,
     exportSession,
     importSession,
-    places,
+    satKeys,
     count: satCount(doc),
     total: cursusCourse.total(),
     toggleHighlight: toggleLineHighlight,

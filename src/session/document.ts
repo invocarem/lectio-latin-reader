@@ -51,6 +51,21 @@ export function recordOpen(doc: SessionDoc, step: string, today: string): Sessio
   });
 }
 
+/** Add or remove the sitting mark for a step (the pass's "done" checkbox). */
+export function toggleSat(doc: SessionDoc, step: string, today: string): SessionDoc {
+  return updateDoc(doc, (next) => {
+    const key = keyOfStep(step);
+    const exists = next.satWith.some((mark) => keyOfStep(mark.step) === key);
+    if (exists) {
+      next.satWith = next.satWith.filter((mark) => keyOfStep(mark.step) !== key);
+    } else {
+      next.satWith = [...next.satWith, { step, at: today }];
+      next.cursor = step;
+    }
+    return next;
+  });
+}
+
 /** Set the pace of the open pass. */
 export function setPace(doc: SessionDoc, pace: 7 | 14): SessionDoc {
   return updateDoc(doc, (next) => {

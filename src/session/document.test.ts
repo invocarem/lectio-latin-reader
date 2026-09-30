@@ -9,6 +9,7 @@ import {
   setNote,
   setPace,
   toggleHighlight,
+  toggleSat,
 } from "./document";
 
 describe("session document", () => {
@@ -42,6 +43,17 @@ describe("session document", () => {
   test("setPace changes the pace", () => {
     const doc = setPace(createSession(14, "2026-09-27"), 7);
     expect(doc.pace).toBe(7);
+  });
+
+  test("toggleSat adds then removes the sitting mark", () => {
+    let doc = createSession(14, "2026-09-27");
+    doc = toggleSat(doc, "wed:prime:10", "2026-09-27");
+    expect(doc.satWith.length).toBe(1);
+    expect(doc.cursor).toBe("wed:prime:10");
+    expect(satCount(doc)).toBe(1);
+    doc = toggleSat(doc, "wed:prime:10", "2026-09-27");
+    expect(doc.satWith.length).toBe(0);
+    expect(satCount(doc)).toBe(0);
   });
 
   test("serialize and parse round-trip", () => {

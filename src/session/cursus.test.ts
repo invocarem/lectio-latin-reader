@@ -1,4 +1,4 @@
-import { ALL_PLACES, cursusCourse, daysFrom, encodeStep, keyOfStep, nextStep, openPlaces, parseStep } from "./cursus";
+import { ALL_PLACES, cursusCourse, daysFrom, dayPlaces, encodeStep, keyOfStep, nextStep, openPlaces, parseStep, psalmLabel, psalmPlaces } from "./cursus";
 
 function distinctKeys(): Set<string> {
   return new Set(ALL_PLACES.map((place) => place.key));
@@ -118,6 +118,70 @@ describe("openPlaces", () => {
     const keys = places.map((place) => place.key);
     // Psalm 94 sits at Vigils on all seven weekdays but is one slice.
     expect(keys.filter((key) => key === "94").length).toBe(1);
+  });
+});
+
+describe("dayPlaces and psalmPlaces (session locator)", () => {
+  test("dayPlaces lists the full cursus of one weekday in hour order", () => {
+    const sun = dayPlaces("sun");
+    expect(sun.length).toBeGreaterThan(0);
+    // Psalm 21 is Sunday Vigils.
+    expect(sun.some((place) => place.slice.psalm === 21)).toBe(true);
+    // Order runs Vigils first and Compline last.
+    expect(sun[0].hour).toBe("vigils");
+    expect(sun[sun.length - 1].hour).toBe("compline");
+  });
+
+  test("dayPlaces places a psalm on the weekday of its hour", () => {
+    // Psalm 10 is Wednesday Prime.
+    const wed = dayPlaces("wed");
+    const found = wed.filter((place) => place.slice.psalm === 10);
+    expect(found.length).toBe(1);
+    expect(found[0].hour).toBe("prime");
+    // Psalm 10 is not on a Sunday schedule.
+    expect(dayPlaces("sun").some((place) => place.slice.psalm === 10)).toBe(false);
+  });
+
+  test("dayPlaces includes a daily psalm once at its hour", () => {
+    const places = dayPlaces("wed");
+    const daily = places.filter((place) => place.slice.psalm === 4);
+    expect(daily.length).toBe(1); // Compline only; one slice, not once per hour.
+    expect(daily[0].hour).toBe("compline");
+  });
+
+  test("psalmPlaces locates a psalm under its own weekday and hour", () => {
+    const found = psalmPlaces(10);
+    expect(found.length).toBe(1);
+    expect(found[0].weekday).toBe("wed");
+    expect(found[0].hour).toBe("prime");
+  });
+
+  test("psalmPlaces returns each slice of a divided psalm", () => {
+    const halves = psalmPlaces(36);
+    expect(halves.length).toBe(2);
+    expect(new Set(halves.map((place) => place.key))).toEqual(
+      new Set(["36:1-26", "36:27-40"]),
+    );
+  });
+
+  test("psalmPlaces returns a daily psalm once despite its many weekday slots", () => {
+    const found = psalmPlaces(4);
+    expect(found.length).toBe(1);
+    expect(found[0].weekday).toBeNull();
+    expect(found[0].hour).toBe("compline");
+  });
+
+  test("psalmLabel names divided psalms instead of verse ranges", () => {
+    // Psalm 118 aleph is verses 1–8, shown as its letter.
+    const aleph = psalmPlaces(118).find((place) => place.key === "118:1-8");
+    expect(aleph).toBeDefined();
+    expect(psalmLabel(aleph!)).toBe("Psalmus 118 · Aleph");
+    // Psalm 9 is cut in two on Tuesday and Wednesday Prime; part 1 is 2–19.
+    const ninePart1 = psalmPlaces(9).find((place) => place.slice.from === 2);
+    expect(ninePart1).toBeDefined();
+    expect(psalmLabel(ninePart1!)).toBe("Psalmus 9 · 1");
+    // A whole psalm keeps its number.
+    expect(psalmLabel(psalmPlaces(10)[0])).toBe("Psalmus 10");
   });
 });
 

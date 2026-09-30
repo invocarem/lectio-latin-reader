@@ -12,6 +12,7 @@
  */
 
 import { hourSlots, type PsalmSlice } from "../content/office/cursus";
+import { sliceLabel } from "../content/office/resolve";
 import { OFFICE_HOURS, WEEKDAYS, type OfficeHour, type Weekday } from "../content/office/when";
 import type { SessionCourse } from "./course";
 
@@ -166,7 +167,7 @@ export type OpenPlace = {
   psalm: number;
 };
 
-const WEEKDAY_LABEL: Record<Weekday, string> = {
+export const WEEKDAY_LABEL: Record<Weekday, string> = {
   sun: "Sunday",
   mon: "Monday",
   tue: "Tuesday",
@@ -176,7 +177,7 @@ const WEEKDAY_LABEL: Record<Weekday, string> = {
   sat: "Saturday",
 };
 
-const HOUR_LABEL: Record<OfficeHour, string> = {
+export const HOUR_LABEL: Record<OfficeHour, string> = {
   vigils: "Vigils",
   lauds: "Lauds",
   prime: "Prime",
@@ -189,9 +190,63 @@ const HOUR_LABEL: Record<OfficeHour, string> = {
 
 export function placeLabel(place: CursusPlace): string {
   const where = place.weekday != null ? `${WEEKDAY_LABEL[place.weekday]} · ` : "";
-  const psalm =
-    place.slice.from == null ? `Psalmus ${place.slice.psalm}` : `Psalmus ${place.slice.psalm} · ${place.slice.from}–${place.slice.to}`;
+  const psalm = psalmLabel(place);
   return `${where}${HOUR_LABEL[place.hour]} · ${psalm}`;
+}
+
+/**
+ * A psalm-only label for a place, e.g. "Psalmus 10", "Psalmus 118 · Aleph",
+ * or "Psalmus 9 · 1". Divided psalms use their name (the Psalm 118 section
+ * letter, or the part number) instead of the verse range.
+ */
+export function psalmLabel(place: CursusPlace): string {
+  return sliceLabel(place.slice);
+}
+
+/**
+ * The full cursus for one weekday, in hour order. Daily psalms (said every
+ * day) are included once at their hour. This is the locator the session panel
+ * browses; it shows every psalm of the weekday, whether or not it has been
+ * sat with in the current pass.
+ */
+export function dayPlaces(weekday: Weekday): CursusPlace[] {
+  const result: CursusPlace[] = [];
+  for (const hour of OFFICE_HOURS) {
+    const slots = hourSlots(weekday, hour);
+    for (let si = 0; si < slots.length; si++) {
+      for (const slice of slots[si].slices) {
+        const daily = DAILY.has(slice.psalm) && slice.from == null;
+        let half: 0 | 1 = 0;
+        if (hour === "vigils" && !daily) half = si < 8 ? 0 : 1;
+        result.push({
+          step: encodeStep(daily ? null : weekday, hour, slice.psalm, slice.from, slice.to),
+          key: sliceKey(slice),
+          slice,
+          weekday: daily ? null : weekday,
+          hour,
+          half,
+        });
+      }
+    }
+  }
+  return result;
+}
+
+/**
+ * Every place in the week that holds `psalm`, deduped by slice key, in cursus
+ * order. Psalm 10 is found under its own weekday (Wednesday Prime). A daily
+ * psalm is returned once. A divided psalm returns each of its slices.
+ */
+export function psalmPlaces(psalm: number): CursusPlace[] {
+  const seen = new Set<string>();
+  const result: CursusPlace[] = [];
+  for (const place of ALL_PLACES) {
+    if (place.slice.psalm !== psalm) continue;
+    if (seen.has(place.key)) continue;
+    seen.add(place.key);
+    result.push(place);
+  }
+  return result;
 }
 
 function dayContext(pace: SessionPace, started: string, today: string) {

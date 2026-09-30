@@ -929,19 +929,23 @@ a {
 }
 
 /* Session panel (psalter / cursus pass) */
+.lectio-layout.session-open {
+  grid-template-columns: minmax(0, 1fr) 23rem;
+}
+
 .session-panel {
-  background: var(--panel);
-  border: 1px solid var(--rule);
-  border-radius: 0.5rem;
-  padding: 1.1rem 1.2rem;
-  max-width: 34rem;
-  margin: 0 auto;
+  min-height: 0;
+  overflow: auto;
+  background: rgba(231, 217, 189, 0.35);
+  border-left: 1px solid var(--rule);
+  padding: 1.1rem 1.2rem calc(2rem + env(safe-area-inset-bottom));
 }
 
 .session-head {
   display: flex;
   align-items: baseline;
   justify-content: space-between;
+  gap: 1rem;
 }
 
 .session-head h2 {
@@ -962,39 +966,93 @@ a {
 }
 
 .session-close {
+  appearance: none;
   background: transparent;
-  border: none;
+  border: 1px solid var(--rule);
   color: var(--ink-soft);
-  font-size: 1.3rem;
+  width: 1.9rem;
+  height: 1.9rem;
   line-height: 1;
   cursor: pointer;
 }
 
 .session-close:hover {
+  background: var(--parchment-deep);
   color: var(--ink);
 }
 
 .session-pace {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 0.5rem;
   margin: 0.9rem 0 1rem;
 }
 
 .session-pace button {
-  flex: 1;
+  appearance: none;
   padding: 0.45rem 0.6rem;
   background: transparent;
   border: 1px solid var(--rule);
-  border-radius: 0.4rem;
   color: var(--ink-soft);
   cursor: pointer;
+  font-size: 0.76rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .session-pace button.active {
-  background: var(--parchment-deep);
-  border-color: var(--rule);
+  background: var(--cinnabar);
+  border-color: var(--cinnabar);
+  color: #fbf6ea;
+}
+
+.session-filters {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.7rem;
+  margin-bottom: 0.9rem;
+}
+
+.session-filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.session-filters label:last-child {
+  grid-column: 1 / -1;
+}
+
+.session-filters label span {
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--cinnabar);
+}
+
+.session-filters select,
+.session-filters input {
+  font: inherit;
   color: var(--ink);
-  font-weight: 600;
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  padding: 0.35rem 0.5rem;
+}
+
+.session-filters select:focus,
+.session-filters input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.session-find {
+  margin: 0 0 0.9rem;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.session-find strong {
+  color: var(--ink);
 }
 
 .session-places {
@@ -1005,10 +1063,10 @@ a {
 
 .session-group h3 {
   margin: 0 0 0.35rem;
-  font-size: 0.78rem;
+  font-size: 0.72rem;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--ink-soft);
+  letter-spacing: 0.1em;
+  color: var(--cinnabar);
 }
 
 .session-group ul {
@@ -1020,20 +1078,38 @@ a {
   gap: 0.25rem;
 }
 
-.session-group li button {
-  width: 100%;
+.session-group li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.session-group li .session-locate {
+  flex: 1;
   text-align: left;
   padding: 0.5rem 0.6rem;
   background: transparent;
   border: 1px solid transparent;
-  border-radius: 0.35rem;
   color: var(--ink);
   cursor: pointer;
 }
 
-.session-group li button:hover {
-  background: var(--parchment);
+.session-group li .session-locate:hover {
+  background: var(--panel);
   border-color: var(--rule);
+}
+
+.session-done {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+}
+
+.session-done input[type="checkbox"] {
+  width: 1.15rem;
+  height: 1.15rem;
+  accent-color: var(--cinnabar);
+  cursor: pointer;
 }
 
 .session-empty {
@@ -1049,16 +1125,37 @@ a {
 }
 
 .session-tools button {
+  appearance: none;
   padding: 0.45rem 0.9rem;
   background: transparent;
   border: 1px solid var(--rule);
-  border-radius: 0.4rem;
   color: var(--ink);
   cursor: pointer;
+  font-size: 0.76rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .session-tools button:hover {
   background: var(--parchment-deep);
+}
+
+@media (max-width: 860px) {
+  .lectio-layout.session-open {
+    grid-template-columns: 1fr;
+  }
+
+  .session-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: min(23rem, 88vw);
+    border-left: 1px solid var(--rule);
+    background: var(--panel);
+    box-shadow: var(--shadow);
+    z-index: 20;
+  }
 }
 
 /* Highlight and note on an office line */
