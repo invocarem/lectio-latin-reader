@@ -23,7 +23,7 @@ export type SessionViewProps = {
   /** Open the psalm in Lectio without closing the panel. */
   onLocate: (place: OpenPlace) => void;
   /** Toggle the psalm's "done" mark in the pass. */
-  onToggleDone: (place: OpenPlace) => void;
+  onToggleDone: (step: string) => void;
   onExport: () => void;
   onImport: (file: File | null) => void;
   onClose: () => void;
@@ -210,7 +210,7 @@ export function SessionView({
                       <input
                         type="checkbox"
                         checked={row.sat}
-                        onChange={() => onToggleDone(openPlace(row))}
+                        onChange={() => onToggleDone(row.step)}
                         aria-label={`Mark ${row.label} as done`}
                       />
                     </label>

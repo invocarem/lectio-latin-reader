@@ -354,7 +354,7 @@ export function Office({ work, reading, onHome }: OfficeProps) {
         </div>
         {session.open ? (
           <SessionView
-            pace={session.doc.pace}
+            pace={session.doc.pace ?? 14}
             lectioWeekday={weekday}
             lectioHour={hour}
             satKeys={session.satKeys}

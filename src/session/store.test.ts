@@ -1,5 +1,5 @@
 import { createSession, recordOpen } from "./document";
-import { clearSession, loadSession, saveSession, STORAGE_KEY } from "./store";
+import { clearSession, loadSession, saveSession, sessionKey } from "./store";
 
 class MemoryStorage implements Storage {
   private map = new Map<string, string>();
@@ -31,25 +31,36 @@ describe("session store", () => {
   });
 
   test("load returns null when nothing is stored", () => {
-    expect(loadSession(storage)).toBeNull();
+    expect(loadSession("cursus", storage)).toBeNull();
   });
 
   test("save writes the document and load reads it back", () => {
-    let doc = createSession(14, "2026-09-27");
+    let doc = createSession("cursus", "2026-09-27");
     doc = recordOpen(doc, "compline:4", "2026-09-27");
     saveSession(doc, storage);
-    expect(storage.getItem(STORAGE_KEY)).toBeTruthy();
-    expect(loadSession(storage)).toEqual(doc);
+    expect(storage.getItem(sessionKey("cursus"))).toBeTruthy();
+    expect(loadSession("cursus", storage)).toEqual(doc);
   });
 
   test("clear drops the stored pass", () => {
-    saveSession(createSession(14, "2026-09-27"), storage);
-    clearSession(storage);
-    expect(loadSession(storage)).toBeNull();
+    saveSession(createSession("cursus", "2026-09-27"), storage);
+    clearSession("cursus", storage);
+    expect(loadSession("cursus", storage)).toBeNull();
   });
 
   test("load ignores a corrupt stored file", () => {
-    storage.setItem(STORAGE_KEY, "{ not json");
-    expect(loadSession(storage)).toBeNull();
+    storage.setItem(sessionKey("cursus"), "{ not json");
+    expect(loadSession("cursus", storage)).toBeNull();
+  });
+
+  test("cursus and gradibus keep independent passes under separate keys", () => {
+    saveSession(createSession("cursus", "2026-09-27"), storage);
+    saveSession(createSession("gradibus", "2026-09-27"), storage);
+    expect(sessionKey("cursus")).not.toBe(sessionKey("gradibus"));
+    expect(loadSession("cursus", storage)?.work).toBe("cursus");
+    expect(loadSession("gradibus", storage)?.work).toBe("gradibus");
+    clearSession("cursus", storage);
+    expect(loadSession("cursus", storage)).toBeNull();
+    expect(loadSession("gradibus", storage)?.work).toBe("gradibus");
   });
 });

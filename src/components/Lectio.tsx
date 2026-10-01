@@ -4,6 +4,9 @@ import { EDGE_GUARD_PX, isSwipePointer, swipeIntent } from "../swipe";
 import type { LectioUnit, ReaderWork } from "../types";
 import { DictPopup } from "./DictPopup";
 import { LatinText } from "./LatinText";
+import { GradibusSessionView } from "../session/GradibusSessionView";
+import { gradibusCourse } from "../session/gradibus";
+import { useSession } from "../session/useSession";
 
 type LectioProps = {
   work: ReaderWork;
@@ -24,6 +27,27 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
   const [dict, setDict] = useState<DictState | null>(null);
   const closeDict = useCallback(() => setDict(null), []);
   const stageRef = useRef<HTMLDivElement>(null);
+
+  const isGradibus = work.id === "gradibus";
+  const session = useSession(isGradibus ? "gradibus" : "cursus", {
+    persist: isGradibus,
+  });
+
+  const nextGradibusStep = useMemo(() => {
+    if (!isGradibus) return null;
+    return gradibusCourse.next(
+      session.doc.cursor,
+      session.doc.satWith.map((mark) => mark.step),
+    );
+  }, [isGradibus, session.doc]);
+
+  const locateGradibus = useCallback(
+    (step: string) => {
+      closeDict();
+      onFocus(step);
+    },
+    [closeDict, onFocus],
+  );
 
   const lectioUnits = work.lectio;
   const chapters = work.chapters;
@@ -147,10 +171,27 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
           >
             English
           </button>
+          {isGradibus ? (
+            <button
+              type="button"
+              aria-pressed={session.open}
+              onClick={session.toggle}
+            >
+              Session
+            </button>
+          ) : null}
         </div>
       </header>
 
-      <div className={showToc ? "lectio-layout toc-open" : "lectio-layout"}>
+      <div
+        className={[
+          "lectio-layout",
+          showToc ? "toc-open" : "",
+          isGradibus && session.open ? "session-open" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+      >
         {showToc ? (
           <nav className="toc" aria-label="Chapters">
             <h2>Capita</h2>
@@ -220,6 +261,21 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
             ) : null}
           </article>
         </div>
+
+        {isGradibus && session.open ? (
+          <GradibusSessionView
+            count={session.count}
+            total={session.total}
+            nextStep={nextGradibusStep}
+            satSteps={session.satKeys}
+            onLocate={locateGradibus}
+            onToggleDone={session.toggleDone}
+            onGoNext={locateGradibus}
+            onExport={session.exportSession}
+            onImport={session.importSession}
+            onClose={session.toggle}
+          />
+        ) : null}
       </div>
 
       <nav className="lectio-nav" aria-label="Lectio steps">

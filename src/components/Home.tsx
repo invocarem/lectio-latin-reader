@@ -1,4 +1,5 @@
 import { workById } from "../content/works";
+import { sessionProgress } from "../session/useSession";
 import type { ReaderMode, ReaderWork, WorkId } from "../types";
 
 type HomeProps = {
@@ -81,7 +82,19 @@ function WorkCard({
           </button>
         ) : null}
       </div>
+      {work.id === "gradibus" ? (
+        <SessionProgress work={work.id} />
+      ) : null}
     </article>
+  );
+}
+
+function SessionProgress({ work }: { work: WorkId }) {
+  const { count, total } = sessionProgress(work as "gradibus");
+  return (
+    <p className="home-session">
+      Pass: <strong>{count} / {total}</strong> units read
+    </p>
   );
 }
 

@@ -15,10 +15,14 @@ export type Highlight = { psalm: number; line: string };
 /** A note on a highlighted office line, with the civil date it was written. */
 export type SessionNote = { psalm: number; line: string; text: string; at: string };
 
+/** A work that offers a session pass. */
+export type SessionWork = "cursus" | "gradibus";
+
 export type SessionDoc = {
   id: string;
-  work: "cursus";
-  pace: 7 | 14;
+  work: SessionWork;
+  /** Cursus only: 7 or 14. Another work omits it. */
+  pace?: 7 | 14;
   started: string;
   cursor: string | null;
   satWith: { step: string; at: string }[];
@@ -26,12 +30,20 @@ export type SessionDoc = {
   notes: SessionNote[];
 };
 
-/** A fresh pass, opened today. */
-export function createSession(pace: 7 | 14, today: string): SessionDoc {
+/** The identity a step counts as in a pass. Cursus dedupes by slice; gradibus is the unit id. */
+export function stepKey(work: SessionWork, step: string): string {
+  return work === "cursus" ? keyOfStep(step) : step;
+}
+
+/**
+ * A fresh pass, opened today. `pace` is the cursus pace (7 or 14, default 14);
+ * other works omit it.
+ */
+export function createSession(work: SessionWork, today: string, pace?: 7 | 14): SessionDoc {
   return {
     id: today,
-    work: "cursus",
-    pace,
+    work,
+    ...(work === "cursus" ? { pace: pace ?? 14 } : {}),
     started: today,
     cursor: null,
     satWith: [],
@@ -44,8 +56,8 @@ export function createSession(pace: 7 | 14, today: string): SessionDoc {
 export function recordOpen(doc: SessionDoc, step: string, today: string): SessionDoc {
   return updateDoc(doc, (next) => {
     next.cursor = step;
-    const key = stepKey(next, step);
-    const already = next.satWith.some((mark) => stepKey(next, mark.step) === key);
+    const key = stepKey(next.work, step);
+    const already = next.satWith.some((mark) => stepKey(next.work, mark.step) === key);
     if (!already) next.satWith = [...next.satWith, { step, at: today }];
     return next;
   });
@@ -54,10 +66,10 @@ export function recordOpen(doc: SessionDoc, step: string, today: string): Sessio
 /** Add or remove the sitting mark for a step (the pass's "done" checkbox). */
 export function toggleSat(doc: SessionDoc, step: string, today: string): SessionDoc {
   return updateDoc(doc, (next) => {
-    const key = keyOfStep(step);
-    const exists = next.satWith.some((mark) => keyOfStep(mark.step) === key);
+    const key = stepKey(next.work, step);
+    const exists = next.satWith.some((mark) => stepKey(next.work, mark.step) === key);
     if (exists) {
-      next.satWith = next.satWith.filter((mark) => keyOfStep(mark.step) !== key);
+      next.satWith = next.satWith.filter((mark) => stepKey(next.work, mark.step) !== key);
     } else {
       next.satWith = [...next.satWith, { step, at: today }];
       next.cursor = step;
@@ -66,7 +78,7 @@ export function toggleSat(doc: SessionDoc, step: string, today: string): Session
   });
 }
 
-/** Set the pace of the open pass. */
+/** Set the pace of the open pass (cursus only). */
 export function setPace(doc: SessionDoc, pace: 7 | 14): SessionDoc {
   return updateDoc(doc, (next) => {
     next.pace = pace;
@@ -126,17 +138,10 @@ function updateDoc(doc: SessionDoc, patch: (next: SessionDoc) => SessionDoc): Se
   return patch(clone);
 }
 
-/** Borrow slice-key computation without importing the course (keeps doc free). */
-function stepKey(_doc: SessionDoc, step: string): string {
-  return keyOfStep(step);
-}
-
 /** How many distinct slices have been sat with. */
 export function satCount(doc: SessionDoc): number {
-  return new Set(doc.satWith.map((mark) => keyOfStep(mark.step))).size;
+  return new Set(doc.satWith.map((mark) => stepKey(doc.work, mark.step))).size;
 }
-
-const SESSION_WORK = "cursus";
 
 /** Serialize the document for export / storage. */
 export function serializeSession(doc: SessionDoc): string {
@@ -145,13 +150,14 @@ export function serializeSession(doc: SessionDoc): string {
 
 /**
  * Parse and validate an imported session file. Returns the document when it is
- * a valid cursus pass, otherwise null.
+ * a valid pass for a known work, otherwise null.
  */
 export function parseSession(json: string): SessionDoc | null {
   try {
     const value = JSON.parse(json) as Partial<SessionDoc>;
-    if (value.work !== SESSION_WORK) return null;
-    if (value.pace !== 7 && value.pace !== 14) return null;
+    const work = value.work;
+    if (work !== "cursus" && work !== "gradibus") return null;
+    if (work === "cursus" && value.pace !== 7 && value.pace !== 14) return null;
     if (typeof value.started !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value.started)) return null;
     const satWith = Array.isArray(value.satWith)
       ? value.satWith.filter(
@@ -175,8 +181,8 @@ export function parseSession(json: string): SessionDoc | null {
       : [];
     return {
       id: typeof value.id === "string" ? value.id : value.started,
-      work: "cursus",
-      pace: value.pace,
+      work,
+      ...(work === "cursus" ? { pace: value.pace as 7 | 14 } : {}),
       started: value.started,
       cursor: typeof value.cursor === "string" ? value.cursor : null,
       satWith,

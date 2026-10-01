@@ -1114,6 +1114,35 @@ a {
   background: var(--parchment-deep);
 }
 
+.session-next {
+  margin-bottom: 0.9rem;
+}
+
+.session-next button {
+  appearance: none;
+  width: 100%;
+  padding: 0.5rem 0.8rem;
+  background: var(--parchment-deep);
+  border: 1px solid var(--rule);
+  color: var(--ink);
+  cursor: pointer;
+  font-size: 0.82rem;
+}
+
+.session-next button:hover {
+  background: rgba(231, 217, 189, 0.6);
+}
+
+.home-session {
+  margin: 0.6rem 0 0;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.home-session strong {
+  color: var(--ink);
+}
+
 @media (max-width: 860px) {
   .lectio-layout.session-open {
     grid-template-columns: 1fr;

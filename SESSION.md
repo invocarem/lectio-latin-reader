@@ -1,6 +1,6 @@
 # Session
 
-**Status.** One Session switch opens the cursus panel. The psalter course counts slices, a fortnight splits Vigils, and the panel imports and exports the pass. Highlight and De gradibus are not started. Implement one section at a time, and only when that section is the work in hand. Check an item only when it opens in the app and a test covers it.
+**Status.** One Session switch opens the cursus panel. The psalter course counts slices, a fortnight splits Vigils, and the panel browses the week, marks slices, and imports and exports the pass. De gradibus has its own pass: a panel groups its lectio units by chapter with a done box and a next-unread jump, and the card shows the count. Highlight and note are in hand. Each work keeps an independent pass. Implement one section at a time, and only when that section is the work in hand. Check an item only when it opens in the app and a test covers it.
 
 ## Branch
 
@@ -52,53 +52,53 @@ Created when a pass starts. On the phone it stays in local storage. A fixture in
   "work": "cursus",
   "pace": 14,
   "started": "2026-09-27",
-  "cursor": { "weekday": "sun", "hour": "vigils", "psalm": 21 },
+  "cursor": "sun:vigils:21",
   "satWith": [
-    { "weekday": "sun", "hour": "vigils", "psalm": 21, "at": "2026-09-29" },
-    { "hour": "compline", "psalm": 4, "at": "2026-09-27" },
-    { "psalm": 118, "part": "aleph", "at": "2026-09-28" }
+    { "step": "sun:vigils:21", "at": "2026-09-29" },
+    { "step": "compline:4", "at": "2026-09-27" },
+    { "step": "sun:prime:118:1-8", "at": "2026-09-28" }
   ],
   "highlights": [{ "psalm": 50, "line": "12" }],
   "notes": [{ "psalm": 50, "line": "12", "text": "", "at": "2026-09-28" }]
 }
 ```
 
-`work` chooses the course; for the cursus it is `"cursus"` (the same psalms, on the weekly cursus). `pace` is 7 or 14 for the cursus; another work may omit it. `started` is the local date the pass began. `cursor` is the step last opened, in the form that work's `next` returns. For the cursus it is the cursus place. In the example, Psalm 21 is Sunday Vigils, and `at` is the Tuesday it was sat with (`started` is Sunday 27 September 2026). Psalm 4 is Compline every day, so its mark has an hour and no weekday; `at` is the first day it was sat with. `satWith` is the progress through the slices. `highlights` mark one office line. `notes` are words on a highlighted line, with the date they were written.
+`work` chooses the course; for the cursus it is `"cursus"` (the same psalms, on the weekly cursus). `pace` is 7 or 14 for the cursus; another work may omit it. `started` is the local date the pass began. `cursor` is the step last opened, as the string the work's `next` returns (or null before anything is opened). For the cursus a step is the encoded cursus place — weekday, hour, psalm, and range for a slice of a divided psalm. In the example, `"sun:vigils:21"` is Psalm 21 at Sunday Vigils, and `at` is the Tuesday it was sat with (`started` is Sunday 27 September 2026). A daily psalm carries no weekday: `"compline:4"` is Psalm 4 at Compline every day, and `at` is the first day it was sat with. `satWith` records each slice's `step` and the `at` of its first sitting. `highlights` mark one office line. `notes` are words on a highlighted line, with the date they were written.
 
-## The open places
+## The places
 
-A place that belongs to one weekday stays on the list until it is sat with. The civil hour does not remove it. Sunday Vigils can be chosen on Tuesday, and the psalm is still labeled Sunday Vigils.
+The panel lists a weekday's whole cursus in hour order, whether or not a slice has been sat with. A place that belongs to one weekday is labeled with that weekday and hour, in the labels the app already uses; the civil day the pass is on does not re-label it. Sunday Vigils can be opened on Tuesday, and the psalm is still labeled Sunday Vigils.
 
-A daily psalm stays on its hour every day of the pass. Psalm 4 is offered at Compline on Tuesday even after it was sat with on Sunday. The count already includes it. Another sitting is welcome and adds nothing to the total.
+A daily psalm stays on its hour and is listed once, though it recurs every day of the pass. Psalm 4 is Compline every day; after it is sat with, another sitting adds nothing to the total, because progress counts each slice once. The first sitting of a slice records its `at`.
 
-The view offers the civil day's places first. Places still open from earlier in the pass are listed with them, under their own weekday and hour. The person chooses which place to open.
+**Seven days.** The whole week is the pass; every weekday's hours from Vigils through Compline are listed.
 
-**Seven days.** Each weekday's places are that day's hours, from Vigils through Compline.
+**Fourteen days.** The pass divides in half on `started`. In the first seven days, the first six of each night's Vigils run with the day hours; in the second seven, the second six run. Psalms 3 and 94 belong to the first time Vigils is opened in the pass.
 
-**Fourteen days.** The pass divides in half on `started`. In the first seven days, each weekday offers the day hours (Lauds through Compline) and the first six of that night's Vigils. In the second seven, each weekday offers the second six, and any place from the first half still open. Psalms 3 and 94 belong to the first time Vigils is opened in the pass.
-
-Opening the session resumes at the cursor. The person may choose any other open place instead.
+A box beside each psalm marks it done in the pass. Opening a psalm locates Lectio on its place.
 
 ## The view
 
-One Session switch sits on the office (cursus) screen. It is not a button on a work card. The pass it opens is the cursus. When the switch is on, a panel lists the open places. When it is off, the panel is hidden.
+One Session switch sits on the office (cursus) screen. It is not a button on a work card. The pass it opens is the cursus. When the switch is on, the panel is shown; when it is off, the panel is hidden.
 
-- The panel shows slices sat with over `total()`. Today's places come first. A missed Vigils stays in that list. A daily psalm stays on its hour, marked once. A mark records the civil date of the first sitting.
-- Choosing a place opens Lectio on that psalm and turns the switch off. The line number can be highlighted. A note on a highlighted line is shown under the English.
+- The header shows slices sat with over `total()`.
+- The panel browses the week: pick a day (or a psalm 1–150 to locate it across the week) and an hour filter, then tick each psalm's box when it is sat. It lists the whole weekday's cursus whether or not the slice has been sat with; the header count tracks the distinct slices marked.
+- Opening a place locates Lectio on that psalm without closing the panel. The line number can be highlighted. A note on a highlighted line is shown under the English.
+- Pace is 14 days by default, with 7 days available, chosen in the panel.
 - Export writes the session file as JSON, and the browser saves it on this computer. Import reads that same file and replaces the open pass.
 
 ## Where the code goes
 
-- `src/session/` — the slice, the session document, the course interface, and the session view. The view calls `total` and `next`. It is not a reader component.
+- `src/session/` — the slice, the session document, the course interface, and the session view. The view calls `total` for the count. It is not a reader component.
 - `src/session/cursus.ts` — the psalter course on the weekly cursus. `total` counts distinct slices. `next` walks the cursus.
-- A course beside De gradibus, when that section is in hand. `total` is its lectio length. `next` walks `gradibus.lectio`.
+- `src/session/gradibus.ts` — the De gradibus course. `total` is its lectio length; `next` walks `gradibus.lectio`. `src/session/GradibusSessionView.tsx` is its chapter-grouped panel. Each work keeps an independent pass under its own storage key (`session.cursus`, `session.gradibus`).
 - Local storage for the open pass. A pass records its `work`.
 - Highlight and note are actions on the open step.
 
 ## Sections
 
-- [x] Document, `satWith`, the count of slices over `total()`, and resume at the cursor. Any open place can be chosen on a later civil day, still under its own weekday and hour. One Session switch opens the panel.
+- [x] Document, `satWith`, the count of distinct slices over `total()`, and the week browse with a done box. A daily psalm counts once; a place can be marked on a later civil day under its own weekday and hour. One Session switch opens the panel.
 - [x] Fortnight: first six of Vigils with the day hours, then the second six.
 - [x] Highlight one office line, and a note on that line.
 - [x] Export and import the session file as the same JSON.
-- [ ] De gradibus course: `total` is its lectio units, `next` is the next unit not yet sat with, and the card shows that count.
+- [x] De gradibus: its own pass (one per work). `total` is its lectio units, `next` is the next unit not yet sat with, the panel groups units by chapter with a done box and a next-unread jump, and the card shows the count.

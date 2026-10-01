@@ -1,12 +1,15 @@
 /**
- * Local storage of the open session pass. On the phone this is Capacitor local
- * storage; in the browser it is localStorage. Import/export write the same
- * document as a JSON file.
+ * Local storage of the open session pass, keyed per work. On the phone this is
+ * Capacitor local storage; in the browser it is localStorage. Import/export
+ * write the same document as a JSON file.
  */
 
-import { parseSession, serializeSession, type SessionDoc } from "./document";
+import { parseSession, serializeSession, type SessionDoc, type SessionWork } from "./document";
 
-const STORAGE_KEY = "session.cursus";
+/** The storage key for one work's open pass. */
+export function sessionKey(work: SessionWork): string {
+  return `session.${work}`;
+}
 
 function local(): Storage | null {
   try {
@@ -16,27 +19,25 @@ function local(): Storage | null {
   }
 }
 
-/** Load the open pass, or null when none is stored or the file is invalid. */
-export function loadSession(storage?: Storage | null): SessionDoc | null {
+/** Load a work's open pass, or null when none is stored or the file is invalid. */
+export function loadSession(work: SessionWork, storage?: Storage | null): SessionDoc | null {
   const store = storage ?? local();
   if (!store) return null;
-  const raw = store.getItem(STORAGE_KEY);
+  const raw = store.getItem(sessionKey(work));
   if (!raw) return null;
   return parseSession(raw);
 }
 
-/** Save the open pass. */
+/** Save a work's open pass. */
 export function saveSession(doc: SessionDoc, storage?: Storage | null): void {
   const store = storage ?? local();
   if (!store) return;
-  store.setItem(STORAGE_KEY, serializeSession(doc));
+  store.setItem(sessionKey(doc.work), serializeSession(doc));
 }
 
-/** Drop the open pass. Used by tests. */
-export function clearSession(storage?: Storage | null): void {
+/** Drop a work's open pass. Used by tests. */
+export function clearSession(work: SessionWork, storage?: Storage | null): void {
   const store = storage ?? local();
   if (!store) return;
-  store.removeItem(STORAGE_KEY);
+  store.removeItem(sessionKey(work));
 }
-
-export { STORAGE_KEY };
