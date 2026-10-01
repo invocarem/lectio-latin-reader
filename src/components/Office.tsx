@@ -1,9 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { hourSlots, type OfficeSlot } from "../content/office/cursus";
+import { hourSlots, type OfficeSlot, type PsalmSlice } from "../content/office/cursus";
 import { hourLines, sliceLabel, sliceVerses } from "../content/office/resolve";
 import {
-  OFFICE_HOURS,
-  WEEKDAYS,
   officeNow,
   type OfficeHour,
   type OfficeSeason,
@@ -14,7 +12,7 @@ import { EDGE_GUARD_PX, isSwipePointer, swipeIntent } from "../swipe";
 import { SessionView } from "../session/SessionView";
 import { useSession } from "../session/useSession";
 import { isHighlighted, noteFor } from "../session/document";
-import type { OpenPlace } from "../session/cursus";
+import { parseStep, type OpenPlace } from "../session/cursus";
 import type { ReaderWork } from "../types";
 import { DictPopup } from "./DictPopup";
 import { LatinText } from "./LatinText";
@@ -87,20 +85,36 @@ export function Office({ work, reading, onHome }: OfficeProps) {
       const targetWeekday = place.weekday ?? weekday;
       if (place.weekday) setWeekday(place.weekday);
       setHour(place.hour);
-      setIndex(indexForLocate(targetWeekday, place.hour, place.psalm));
+      setIndex(indexForLocate(targetWeekday, place.hour, place));
       closeDict();
     },
     [weekday, closeDict],
   );
 
-  /** The index (a lectio line or an office slot) that holds `psalm`. */
-  function indexForLocate(targetWeekday: Weekday, targetHour: OfficeHour, psalm: number): number {
-    if (reading === "line") {
-      const at = hourLines(targetWeekday, targetHour).findIndex((line) => line.psalm === psalm);
-      return at < 0 ? 0 : at;
-    }
-    const at = hourSlots(targetWeekday, targetHour).findIndex((slot) =>
-      slot.slices.some((slice) => slice.psalm === psalm),
+  /** The exact slice (psalm and verse range) a session place means. */
+  function sliceOf(place: OpenPlace): PsalmSlice {
+    const parsed = parseStep(place.step);
+    return { psalm: parsed.psalm, from: parsed.from, to: parsed.to };
+  }
+
+  function sameSlice(a: PsalmSlice, b: PsalmSlice): boolean {
+    return a.psalm === b.psalm && a.from === b.from && a.to === b.to;
+  }
+
+  /** The index (a lectio line or an office slot) that holds exactly `place`'s slice. */
+  function indexForLocate(targetWeekday: Weekday, targetHour: OfficeHour, place: OpenPlace): number {
+    const target = sliceOf(place);
+    const slots = hourSlots(targetWeekday, targetHour);
+    const slotIndex = slots.findIndex((slot) => slot.slices.some((slice) => sameSlice(slice, target)));
+    if (reading !== "line") return slotIndex < 0 ? 0 : slotIndex;
+
+    // Line mode: office lines are laid out per slice, so match the slice by label
+    // (Psalm 118's sections are distinct labels even though they share a number).
+    const matched = slotIndex < 0 ? undefined : slots[slotIndex].slices.find((slice) => sameSlice(slice, target));
+    if (!matched) return 0;
+    const label = sliceLabel(matched);
+    const at = hourLines(targetWeekday, targetHour).findIndex(
+      (line) => line.psalm === target.psalm && line.label === label,
     );
     return at < 0 ? 0 : at;
   }
@@ -129,18 +143,6 @@ export function Office({ work, reading, onHome }: OfficeProps) {
     setIndex((at) => Math.min(at + 1, Math.max(total - 1, 0)));
     closeDict();
   }, [closeDict, total]);
-
-  function chooseDay(next: Weekday) {
-    closeDict();
-    setWeekday(next);
-    setIndex(0);
-  }
-
-  function chooseHour(next: OfficeHour) {
-    closeDict();
-    setHour(next);
-    setIndex(0);
-  }
 
   useEffect(() => {
     stageRef.current?.scrollTo({ top: 0 });
@@ -240,34 +242,6 @@ export function Office({ work, reading, onHome }: OfficeProps) {
               {WEEKDAY_LABEL[weekday]} · {HOUR_LABEL[hour]} · {SEASON_LABEL[opened.season]} ·{" "}
               {TIME_LABEL[opened.time]}
             </p>
-            <div className="office-switch">
-              <label>
-                Day
-                <select
-                  value={weekday}
-                  onChange={(event) => chooseDay(event.target.value as Weekday)}
-                >
-                  {WEEKDAYS.map((day) => (
-                    <option key={day} value={day}>
-                      {WEEKDAY_LABEL[day]}
-                    </option>
-                  ))}
-                </select>
-              </label>
-              <label>
-                Hour
-                <select
-                  value={hour}
-                  onChange={(event) => chooseHour(event.target.value as OfficeHour)}
-                >
-                  {OFFICE_HOURS.map((item) => (
-                    <option key={item} value={item}>
-                      {HOUR_LABEL[item]}
-                    </option>
-                  ))}
-                </select>
-              </label>
-            </div>
             {reading === "line" && line ? (
               <>
                 <div className="office-psalm-row">
@@ -354,17 +328,19 @@ export function Office({ work, reading, onHome }: OfficeProps) {
         </div>
         {session.open ? (
           <SessionView
-            pace={session.doc.pace ?? 14}
+            pace={session.doc.pace ?? 7}
             lectioWeekday={weekday}
             lectioHour={hour}
             satKeys={session.satKeys}
             count={session.count}
             total={session.total}
+            elapsed={session.elapsed}
             onPace={session.setPace}
             onLocate={locateSessionPlace}
             onToggleDone={session.toggleDone}
             onExport={session.exportSession}
             onImport={session.importSession}
+            onReport={session.reportSession}
             onClose={session.toggle}
           />
         ) : null}

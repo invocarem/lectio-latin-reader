@@ -40,8 +40,8 @@ export function isSessionWork(value: unknown): value is SessionWork {
 export type SessionDoc = {
   id: string;
   work: SessionWork;
-  /** Cursus only: 7 or 14. Another work omits it. */
-  pace?: 7 | 14;
+  /** Cursus only: 7, 14, or 40. Another work omits it. */
+  pace?: 7 | 14 | 40;
   started: string;
   cursor: string | null;
   satWith: { step: string; at: string }[];
@@ -55,14 +55,14 @@ export function stepKey(work: SessionWork, step: string): string {
 }
 
 /**
- * A fresh pass, opened today. `pace` is the cursus pace (7 or 14, default 14);
+ * A fresh pass, opened today. `pace` is the cursus pace (7, 14, or 40; default 7);
  * other works omit it.
  */
-export function createSession(work: SessionWork, today: string, pace?: 7 | 14): SessionDoc {
+export function createSession(work: SessionWork, today: string, pace?: 7 | 14 | 40): SessionDoc {
   return {
     id: today,
     work,
-    ...(work === "cursus" ? { pace: pace ?? 14 } : {}),
+    ...(work === "cursus" ? { pace: pace ?? 7 } : {}),
     started: today,
     cursor: null,
     satWith: [],
@@ -98,7 +98,7 @@ export function toggleSat(doc: SessionDoc, step: string, today: string): Session
 }
 
 /** Set the pace of the open pass (cursus only). */
-export function setPace(doc: SessionDoc, pace: 7 | 14): SessionDoc {
+export function setPace(doc: SessionDoc, pace: 7 | 14 | 40): SessionDoc {
   return updateDoc(doc, (next) => {
     next.pace = pace;
     return next;
@@ -176,7 +176,7 @@ export function parseSession(json: string): SessionDoc | null {
     const value = JSON.parse(json) as Partial<SessionDoc>;
     const work = value.work;
     if (!isSessionWork(work)) return null;
-    if (work === "cursus" && value.pace !== 7 && value.pace !== 14) return null;
+    if (work === "cursus" && value.pace !== 7 && value.pace !== 14 && value.pace !== 40) return null;
     if (typeof value.started !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value.started)) return null;
     const satWith = Array.isArray(value.satWith)
       ? value.satWith.filter(
@@ -201,7 +201,7 @@ export function parseSession(json: string): SessionDoc | null {
     return {
       id: typeof value.id === "string" ? value.id : value.started,
       work,
-      ...(work === "cursus" ? { pace: value.pace as 7 | 14 } : {}),
+      ...(work === "cursus" ? { pace: value.pace as 7 | 14 | 40 } : {}),
       started: value.started,
       cursor: typeof value.cursor === "string" ? value.cursor : null,
       satWith,

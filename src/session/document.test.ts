@@ -16,7 +16,7 @@ describe("session document", () => {
   test("createSession opens a fresh pass today", () => {
     const doc = createSession("cursus", "2026-09-27");
     expect(doc.work).toBe("cursus");
-    expect(doc.pace).toBe(14);
+    expect(doc.pace).toBe(7);
     expect(doc.started).toBe("2026-09-27");
     expect(doc.id).toBe("2026-09-27");
     expect(doc.cursor).toBeNull();
@@ -70,6 +70,8 @@ describe("session document", () => {
     expect(parseSession('{ "work": "cursus", "pace": 14, "started": "nope" }')).toBeNull();
     // a gradibus pass has no pace; a cursus pass without a valid pace is rejected
     expect(parseSession(JSON.stringify({ work: "cursus", pace: 9, started: "2026-09-27" }))).toBeNull();
+    // 7, 14, and 40 are all valid paces for a cursus pass
+    expect(parseSession(JSON.stringify({ work: "cursus", pace: 40, started: "2026-09-27" }))).not.toBeNull();
   });
 
   test("gradibus pass has no pace and counts units by id", () => {

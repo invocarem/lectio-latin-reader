@@ -19,7 +19,7 @@ import type { SessionCourse } from "./course";
 /** Psalms said every day (whole), each one a single slice in the pass. */
 const DAILY = new Set([3, 4, 50, 66, 90, 94, 133, 148, 149, 150]);
 
-export type SessionPace = 7 | 14;
+export type SessionPace = 7 | 14 | 40;
 
 /** A place opened in the cursus: what it is, where it lives, and its step. */
 export type CursusPlace = {
@@ -251,7 +251,7 @@ export function psalmPlaces(psalm: number): CursusPlace[] {
 
 function dayContext(pace: SessionPace, started: string, today: string) {
   const day = daysFrom(started, today);
-  const todayHalf: 0 | 1 = pace === 14 ? (day < 7 ? 0 : 1) : 0;
+  const todayHalf: 0 | 1 = pace === 14 || pace === 40 ? (day < 7 ? 0 : 1) : 0;
   const todayWeekday = WEEKDAYS[(((day % 7) + 7) % 7)];
   return { todayHalf, todayWeekday, todayIndex: WEEKDAYS.indexOf(todayWeekday) };
 }
@@ -288,7 +288,8 @@ export function openPlaces(
       if (pace === 7) {
         available = placeIndex <= todayIndex;
         isToday = placeIndex === todayIndex;
-      } else if (pace === 14) {
+      } else {
+        // Fourteen- and forty-day passes both spread Vigils over a fortnight.
         if (place.half === 0) {
           available = todayHalf === 1 || placeIndex <= todayIndex;
           isToday = todayHalf === 0 && placeIndex === todayIndex;
@@ -313,7 +314,7 @@ export function openPlaces(
   const sortRank = (place: OpenPlace) => {
     const weekdayIndex = place.weekday ? WEEKDAYS.indexOf(place.weekday) : 999;
     const hourIndex = OFFICE_HOURS.indexOf(place.hour);
-    const placeHalf = pace === 14 ? (place.weekday == null ? -1 : dayHalfOf(place.hour, place.weekday)) : 0;
+    const placeHalf = pace === 14 || pace === 40 ? (place.weekday == null ? -1 : dayHalfOf(place.hour, place.weekday)) : 0;
     return {
       today: place.isToday ? 0 : 1,
       half: placeHalf,

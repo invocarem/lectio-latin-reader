@@ -19,6 +19,8 @@ export type SessionViewProps = {
   satKeys: ReadonlySet<string>;
   count: number;
   total: number;
+  /** Whole civil days since the pass began (0 on the day it started). */
+  elapsed: number;
   onPace: (pace: SessionPace) => void;
   /** Open the psalm in Lectio without closing the panel. */
   onLocate: (place: OpenPlace) => void;
@@ -26,6 +28,7 @@ export type SessionViewProps = {
   onToggleDone: (step: string) => void;
   onExport: () => void;
   onImport: (file: File | null) => void;
+  onReport: () => void;
   onClose: () => void;
 };
 
@@ -49,11 +52,13 @@ export function SessionView({
   satKeys,
   count,
   total,
+  elapsed,
   onPace,
   onLocate,
   onToggleDone,
   onExport,
   onImport,
+  onReport,
   onClose,
 }: SessionViewProps) {
   const fileRef = useRef<HTMLInputElement>(null);
@@ -120,26 +125,12 @@ export function SessionView({
       <div className="session-head">
         <h2>
           Session <span className="session-count">{count} / {total}</span>
+          <span className="session-days">
+            · day {elapsed + 1} of {pace}
+          </span>
         </h2>
         <button type="button" className="session-close" onClick={onClose} aria-label="Close session">
           ×
-        </button>
-      </div>
-
-      <div className="session-pace" role="group" aria-label="Pass pace">
-        <button
-          type="button"
-          className={pace === 14 ? "active" : undefined}
-          onClick={() => onPace(14)}
-        >
-          Fourteen days
-        </button>
-        <button
-          type="button"
-          className={pace === 7 ? "active" : undefined}
-          onClick={() => onPace(7)}
-        >
-          Seven days
         </button>
       </div>
 
@@ -222,12 +213,26 @@ export function SessionView({
         )}
       </div>
 
+      <div className="session-pace">
+        <label>
+          <span>Days</span>
+          <select value={pace} onChange={(event) => onPace(Number(event.target.value) as SessionPace)}>
+            <option value={7}>7 days</option>
+            <option value={14}>14 days</option>
+            <option value={40}>40 days</option>
+          </select>
+        </label>
+      </div>
+
       <div className="session-tools">
         <button type="button" onClick={onExport}>
           Export
         </button>
         <button type="button" onClick={() => fileRef.current?.click()}>
           Import
+        </button>
+        <button type="button" className="session-report" onClick={onReport}>
+          Report
         </button>
         <input
           ref={fileRef}

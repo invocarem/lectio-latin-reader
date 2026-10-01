@@ -800,33 +800,6 @@ a {
   color: var(--ink-soft);
 }
 
-.office-switch {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8rem 1.2rem;
-  margin: 0.8rem 0 1.2rem;
-}
-
-.office-switch label {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-  font-size: 0.78rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--ink-soft);
-}
-
-.office-switch select {
-  font: inherit;
-  text-transform: none;
-  letter-spacing: 0;
-  color: var(--ink);
-  background: transparent;
-  border: 1px solid var(--rule);
-  padding: 0.35rem 0.5rem;
-}
-
 .office-card {
   width: min(32rem, 100%);
 }
@@ -939,6 +912,13 @@ a {
   font-variant-numeric: oldstyle-nums;
 }
 
+.session-days {
+  font-family: "Source Serif 4", serif;
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  font-variant-numeric: oldstyle-nums;
+}
+
 .session-close {
   appearance: none;
   background: transparent;
@@ -956,28 +936,33 @@ a {
 }
 
 .session-pace {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.5rem;
-  margin: 0.9rem 0 1rem;
+  margin: 0.2rem 0 0.6rem;
 }
 
-.session-pace button {
-  appearance: none;
-  padding: 0.45rem 0.6rem;
-  background: transparent;
-  border: 1px solid var(--rule);
-  color: var(--ink-soft);
-  cursor: pointer;
-  font-size: 0.76rem;
-  letter-spacing: 0.06em;
+.session-pace label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.session-pace label span {
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
+  color: var(--cinnabar);
 }
 
-.session-pace button.active {
-  background: var(--cinnabar);
-  border-color: var(--cinnabar);
-  color: #fbf6ea;
+.session-pace select {
+  font: inherit;
+  color: var(--ink);
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  padding: 0.35rem 0.5rem;
+}
+
+.session-pace select:focus {
+  outline: none;
+  border-color: var(--gold);
 }
 
 .session-filters {
@@ -1095,7 +1080,13 @@ a {
 .session-tools {
   display: flex;
   gap: 0.5rem;
-  margin-top: 1.1rem;
+  align-items: center;
+  margin-top: 0.9rem;
+}
+
+/* Keep Export and Import together; separate the Report action. */
+.session-tools .session-report {
+  margin-left: auto;
 }
 
 .session-tools button {

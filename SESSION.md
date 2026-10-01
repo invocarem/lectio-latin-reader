@@ -12,7 +12,7 @@ A session is one pass through a work. It measures how much of that work is finis
 
 The first course is the psalter, on the weekly cursus in `cursus.ts`. The cursus names the place of each psalm: weekday and hour. The sitting may be on another civil day. Psalm 21 belongs to Sunday Vigils (Matins). It may be opened on Tuesday, and it is still Sunday Vigils. Lectio and Cursus stay as they are. One Session switch opens the panel; it is not placed on a work.
 
-The psalter view is for sitting with every slice of the psalter in seven days or fourteen. Fourteen is the pace offered first. Seven stays available. Vigils is a place in that pass, not an hour the person must keep.
+The psalter view is for sitting with every slice of the psalter in seven, fourteen, or — at a gentle Lenten pace — forty days. Seven is the pace offered first. The longer paces only spread the Vigils over a fortnight; the number is the expected window, not a new distribution. Vigils is a place in that pass, not an hour the person must keep.
 
 ## The interface
 
@@ -50,7 +50,7 @@ Created when a pass starts. On the phone it stays in local storage. A fixture in
 {
   "id": "2026-09-27",
   "work": "cursus",
-  "pace": 14,
+  "pace": 7,
   "started": "2026-09-27",
   "cursor": "sun:vigils:21",
   "satWith": [
@@ -63,7 +63,7 @@ Created when a pass starts. On the phone it stays in local storage. A fixture in
 }
 ```
 
-`work` chooses the course; for the cursus it is `"cursus"` (the same psalms, on the weekly cursus). `pace` is 7 or 14 for the cursus; another work may omit it. `started` is the local date the pass began. `cursor` is the step last opened, as the string the work's `next` returns (or null before anything is opened). For the cursus a step is the encoded cursus place — weekday, hour, psalm, and range for a slice of a divided psalm. In the example, `"sun:vigils:21"` is Psalm 21 at Sunday Vigils, and `at` is the Tuesday it was sat with (`started` is Sunday 27 September 2026). A daily psalm carries no weekday: `"compline:4"` is Psalm 4 at Compline every day, and `at` is the first day it was sat with. `satWith` records each slice's `step` and the `at` of its first sitting. `highlights` mark one office line. `notes` are words on a highlighted line, with the date they were written.
+`work` chooses the course; for the cursus it is `"cursus"` (the same psalms, on the weekly cursus). `pace` is 7, 14, or 40 for the cursus; another work may omit it. `started` is the local date the pass began. `cursor` is the step last opened, as the string the work's `next` returns (or null before anything is opened). For the cursus a step is the encoded cursus place — weekday, hour, psalm, and range for a slice of a divided psalm. In the example, `"sun:vigils:21"` is Psalm 21 at Sunday Vigils, and `at` is the Tuesday it was sat with (`started` is Sunday 27 September 2026). A daily psalm carries no weekday: `"compline:4"` is Psalm 4 at Compline every day, and `at` is the first day it was sat with. `satWith` records each slice's `step` and the `at` of its first sitting. `highlights` mark one office line. `notes` are words on a highlighted line, with the date they were written.
 
 ## The places
 
@@ -75,6 +75,8 @@ A daily psalm stays on its hour and is listed once, though it recurs every day o
 
 **Fourteen days.** The pass divides in half on `started`. In the first seven days, the first six of each night's Vigils run with the day hours; in the second seven, the second six run. Psalms 3 and 94 belong to the first time Vigils is opened in the pass.
 
+**Forty days.** The same fortnight spread of Vigils as fourteen days, offered as a relaxed Lenten window; it is a gentler time-budget, not a different psalm distribution.
+
 A box beside each psalm marks it done in the pass. Opening a psalm locates Lectio on its place.
 
 ## The view
@@ -84,14 +86,16 @@ One Session switch sits on the office (cursus) screen. It is not a button on a w
 - The header shows slices sat with over `total()`.
 - The panel browses the week: pick a day (or a psalm 1–150 to locate it across the week) and an hour filter, then tick each psalm's box when it is sat. It lists the whole weekday's cursus whether or not the slice has been sat with; the header count tracks the distinct slices marked.
 - Opening a place locates Lectio on that psalm without closing the panel. The line number can be highlighted. A note on a highlighted line is shown under the English.
-- Pace is 14 days by default, with 7 days available, chosen in the panel.
+- Pace is 7 days by default, with 14 and 40 available, chosen from a small "Days" dropdown in the panel.
 - Export writes the session file as JSON, and the browser saves it on this computer. Import reads that same file and replaces the open pass.
+- Report writes the pass as a Word (.docx) file: three psalm tables — Psalm 118 (one cell per section, "Aleph"…"Tau"), the Gradual Psalms 119–133, then the Psalter — every slice as a cell shaded done (green) or not done, with the progress count, pace, and start date. It carries no Latin and no English, lists no sitting dates, and uses no "sat with" wording. The Report button sits in the cursus panel's tools; the `docx` library loads on demand.
 
 ## Where the code goes
 
 - `src/session/` — the slice, the session document, the course interface, and the session view. The view calls `total` for the count. It is not a reader component.
 - `src/session/cursus.ts` — the psalter course on the weekly cursus. `total` counts distinct slices. `next` walks the cursus.
 - `src/session/lectio.ts` — the shared lectio course for every work that opts in. `total` is its lectio length; `next` walks `work.lectio`. `src/session/courses.ts` is the tiny registry: the cursus has its own course, every other session work shares `makeLectioCourse`. `src/session/LectioSessionView.tsx` is the shared chapter-grouped panel for any lectio work. Each work keeps an independent pass under its own storage key (`session.cursus`, `session.gradibus`, `session.confessions`, `session.rule`, `session.cantica`).
+- `src/session/report.ts` — the Word report: `buildSessionReport` turns the pass into three psalm tables — Psalm 118, the Gradual Psalms, the Psalter — each slice as a `SliceCell` shaded done or not done (Psalm 118 cells are the section names, not the number), and `buildReportDoc` lays them out in a landscape document with the `docx` library. `reportBlob` renders it as a .docx Blob and `useSession.reportSession` imports it on demand and saves the file.
 - Local storage for the open pass. A pass records its `work`.
 - Highlight and note are actions on the open step.
 
@@ -102,3 +106,4 @@ One Session switch sits on the office (cursus) screen. It is not a button on a w
 - [x] Highlight one office line, and a note on that line.
 - [x] Export and import the session file as the same JSON.
 - [x] A lectio work (De gradibus, then the Confessions, the Rule, and the Sermons on the Song of Songs): one shared pass and panel, opted in with the `session` flag. `total` is its lectio units, `next` is the next unit not yet sat with, the panel groups units by chapter with a done box and a next-unread jump, and the card shows the count.
+- [x] Report the cursus pass as a Word (.docx) file from the session panel.

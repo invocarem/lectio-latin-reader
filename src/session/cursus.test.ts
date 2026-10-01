@@ -96,6 +96,15 @@ describe("openPlaces", () => {
     expect(steps).toContain("sun:vigils:26");
   });
 
+  test("a forty-day pass spreads Vigils over a fortnight like the fourteen-day pass", () => {
+    const started = "2026-09-27"; // Sunday
+    const first = openPlaces(40, started, "2026-09-27", []).map((place) => place.step);
+    expect(first).toContain("sun:vigils:20"); // first six offered
+    expect(first).not.toContain("sun:vigils:26"); // second six held back
+    const second = openPlaces(40, started, "2026-10-04", []).map((place) => place.step);
+    expect(second).toContain("sun:vigils:26"); // second six offered in week two
+  });
+
   test("an open Sunday place is still offered later in the week", () => {
     const started = "2026-09-27"; // Sunday
     const today = "2026-09-30"; // Wednesday

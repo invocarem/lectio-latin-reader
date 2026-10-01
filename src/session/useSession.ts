@@ -13,7 +13,7 @@ import {
   type SessionWork,
 } from "./document";
 import { loadSession, saveSession } from "./store";
-import { isoDate, type OpenPlace, type SessionPace } from "./cursus";
+import { daysFrom, isoDate, type OpenPlace, type SessionPace } from "./cursus";
 import { courseFor } from "./courses";
 import { WEEKDAYS } from "../content/office/when";
 
@@ -83,6 +83,23 @@ export function useSession(work: SessionWork = "cursus", options: { persist?: bo
     URL.revokeObjectURL(url);
   }, [doc]);
 
+  const total = courseFor(work).total();
+
+  const reportSession = useCallback(() => {
+    import("./report").then(({ reportBlob }) =>
+      reportBlob(doc, total, today).then((blob) => {
+        const url = URL.createObjectURL(blob);
+        const anchor = document.createElement("a");
+        anchor.href = url;
+        anchor.download = `session-${doc.work}-${doc.started}.docx`;
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+        URL.revokeObjectURL(url);
+      }),
+    );
+  }, [doc, total, today]);
+
   const importSession = useCallback((file: File | null) => {
     if (!file) return;
     file.text().then((text) => {
@@ -96,7 +113,8 @@ export function useSession(work: SessionWork = "cursus", options: { persist?: bo
     [doc],
   );
 
-  const total = courseFor(work).total();
+  // Whole civil days since the pass began; 0 on the day it started.
+  const elapsed = daysFrom(doc.started, today);
 
   return {
     doc,
@@ -109,9 +127,11 @@ export function useSession(work: SessionWork = "cursus", options: { persist?: bo
     toggleDone,
     exportSession,
     importSession,
+    reportSession,
     satKeys,
     count: satCount(doc),
     total,
+    elapsed,
     toggleHighlight: toggleLineHighlight,
     writeNote: writeLineNote,
   };

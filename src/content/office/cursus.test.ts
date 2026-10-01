@@ -17,6 +17,19 @@ describe("weekly cursus", () => {
     ]);
   });
 
+  test("Monday Terce is Psalm 118 sections Nun, Samech, Ain, each its own distinct slot", () => {
+    // Regression: the Session panel must be able to locate Samech and Ain even
+    // though all three sections share the psalm number 118. Their verse ranges
+    // are what tell them apart.
+    expect(
+      hourSlots("mon", "terce").map((slot) => slot.slices[0]).map((slice) => [slice.psalm, slice.from, slice.to]),
+    ).toEqual([
+      [118, 105, 112], // Nun
+      [118, 113, 120], // Samech
+      [118, 121, 128], // Ain
+    ]);
+  });
+
   test("Prime splits Psalm 9 and Psalm 17 on the Rule's verse cuts", () => {
     const tue = hourSlots("tue", "prime")[2].slices[0];
     const wed = hourSlots("wed", "prime")[0].slices[0];
