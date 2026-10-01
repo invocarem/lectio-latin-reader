@@ -1,18 +1,24 @@
 import { useMemo, useRef } from "react";
-import { gradibus } from "../content/gradibus";
-import type { Chapter, LectioUnit } from "../types";
+import type { ReaderWork, Chapter } from "../types";
+import { buildSlices, type LectioSlice } from "./lectio";
 
 /**
- * The De gradibus session panel. It lists the whole treatise unit by unit,
- * grouped by chapter, with the units already sat ticked. There is no weekday
- * and no hour: a step is one lectio unit, and the count is units sat over
- * `total()`.
+ * The shared lectio session panel, used by every work that opts in to a pass
+ * (`session: true`). It lists the work slice by slice (one row per section),
+ * grouped by chapter, with the sections already sat ticked. There is no
+ * weekday and no hour: a step is one section, and the count is sections sat
+ * over `total()`.
+ *
+ * A pure heading (a work title or a chapter title) never appears as a slice;
+ * it only labels a group. The lectio pages inside a section are not separate
+ * rows: they are one slice, stepped by its first page.
  */
 
-export type GradibusSessionViewProps = {
+export type LectioSessionViewProps = {
+  work: ReaderWork;
   count: number;
   total: number;
-  /** The next unit not yet sat with (from the course), or null when the pass is done. */
+  /** The next slice not yet sat with (from the course), or null when the pass is done. */
   nextStep: string | null;
   satSteps: ReadonlySet<string>;
   onLocate: (step: string) => void;
@@ -23,35 +29,37 @@ export type GradibusSessionViewProps = {
   onClose: () => void;
 };
 
-type Row = { step: string; sat: boolean; label: string };
-type Group = { title: string; rows: Row[] };
+type Row = { step: string; label: string };
+type Group = { key: string; title: string; rows: Row[] };
 
-function unitLabel(unit: LectioUnit): string {
-  if (unit.heading) return unit.heading;
-  const latin = (unit.latin ?? "").trim();
-  if (latin) return latin.length > 48 ? `${latin.slice(0, 47)}…` : latin;
-  return unit.id;
+/** Shorten a long chapter heading for the panel ("CAPUT PRIMUM. Christum esse viam…" → "CAPUT PRIMUM"). */
+function shortTitle(title: string): string {
+  const dot = title.indexOf(".");
+  if (dot > 0 && dot <= 20) return title.slice(0, dot).trim();
+  return title.length > 48 ? `${title.slice(0, 47)}…` : title;
 }
 
-/** Group the lectio units in order by their chapter. */
-function buildGroups(lectio: LectioUnit[], chapters: Chapter[]): Group[] {
+/** Group the slices in order by their chapter. */
+function groupSlices(slices: LectioSlice[], chapters: Chapter[]): Group[] {
   const byId = new Map<string, Chapter>();
   for (const chapter of chapters) byId.set(chapter.id, chapter);
   const groups: Group[] = [];
-  for (const unit of lectio) {
-    const chapter = unit.chapterId ? byId.get(unit.chapterId) : undefined;
-    const title = chapter ? chapter.title : "Front matter";
+  for (const slice of slices) {
+    const chapter = slice.chapterId ? byId.get(slice.chapterId) : undefined;
+    const key = chapter ? chapter.id : "front";
+    const title = chapter ? shortTitle(chapter.title) : "Front matter";
     let group = groups[groups.length - 1];
-    if (!group || group.title !== title) {
-      group = { title, rows: [] };
+    if (!group || group.key !== key) {
+      group = { key, title, rows: [] };
       groups.push(group);
     }
-    group.rows.push({ step: unit.id, sat: false, label: unitLabel(unit) });
+    group.rows.push({ step: slice.step, label: slice.label });
   }
   return groups;
 }
 
-export function GradibusSessionView({
+export function LectioSessionView({
+  work,
   count,
   total,
   nextStep,
@@ -62,20 +70,15 @@ export function GradibusSessionView({
   onExport,
   onImport,
   onClose,
-}: GradibusSessionViewProps) {
+}: LectioSessionViewProps) {
   const fileRef = useRef<HTMLInputElement>(null);
-  const groups = useMemo(() => buildGroups(gradibus.lectio, gradibus.chapters), []);
-  const sat = new Map(
-    groups
-      .flatMap((group) => group.rows)
-      .map((row) => [row.step, satSteps.has(row.step)]),
-  );
+  const groups = useMemo(() => groupSlices(buildSlices(work), work.chapters), [work]);
 
   return (
-    <aside className="session-panel" aria-label="De gradibus session">
+    <aside className="session-panel" aria-label={`${work.brandShort} session`}>
       <div className="session-head">
         <h2>
-          De gradibus <span className="session-count">{count} / {total}</span>
+          {work.brandShort} <span className="session-count">{count} / {total}</span>
         </h2>
         <button type="button" className="session-close" onClick={onClose} aria-label="Close session">
           ×
@@ -85,18 +88,18 @@ export function GradibusSessionView({
       {nextStep ? (
         <div className="session-next">
           <button type="button" onClick={() => onGoNext(nextStep)}>
-            Open the next unit not yet read
+            Open the next slice not yet read
           </button>
         </div>
       ) : (
         <p className="session-find">
-          <strong>Every unit of the pass is read.</strong>
+          <strong>Every slice of the pass is read.</strong>
         </p>
       )}
 
       <div className="session-places">
         {groups.map((group) => (
-          <section className="session-group" key={group.title}>
+          <section className="session-group" key={group.key}>
             <h3>{group.title}</h3>
             <ul>
               {group.rows.map((row) => (
@@ -107,7 +110,7 @@ export function GradibusSessionView({
                   <label className="session-done">
                     <input
                       type="checkbox"
-                      checked={sat.get(row.step) ?? false}
+                      checked={satSteps.has(row.step)}
                       onChange={() => onToggleDone(row.step)}
                       aria-label={`Mark ${row.label} as done`}
                     />

@@ -63,6 +63,7 @@ function adapt(): ReaderWork {
     intro:
       "The Rule of St Benedict, one block at a time — monastic Latin with the public-domain Verheyen (1949) English at hand.",
     studyEnabled: false,
+    session: true,
     lectio,
     chapters,
   };

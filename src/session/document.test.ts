@@ -91,6 +91,18 @@ describe("session document", () => {
     expect(parsed?.pace).toBeUndefined();
   });
 
+  test("confessions and rule passes serialize and parse like gradibus", () => {
+    for (const work of ["confessions", "rule"] as const) {
+      let doc = createSession(work, "2026-09-27");
+      doc = recordOpen(doc, `${work}:1:1`, "2026-09-27");
+      expect(doc.pace).toBeUndefined();
+      const parsed = parseSession(serializeSession(doc));
+      expect(parsed).toEqual(doc);
+      expect(parsed?.work).toBe(work);
+      expect(parsed?.pace).toBeUndefined();
+    }
+  });
+
   test("parse tolerates extra fields and drops bad marks", () => {
     const text = JSON.stringify({
       work: "cursus",

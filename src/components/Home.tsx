@@ -82,7 +82,7 @@ function WorkCard({
           </button>
         ) : null}
       </div>
-      {work.id === "gradibus" ? (
+      {work.session === true ? (
         <SessionProgress work={work.id} />
       ) : null}
     </article>
@@ -90,15 +90,16 @@ function WorkCard({
 }
 
 function SessionProgress({ work }: { work: WorkId }) {
-  const { count, total } = sessionProgress(work as "gradibus");
+  const { count, total } = sessionProgress(work);
   return (
     <p className="home-session">
-      Pass: <strong>{count} / {total}</strong> units read
+      Pass: <strong>{count} / {total}</strong> slices read
     </p>
   );
 }
 
 function OfficeCard({ onOpen }: { onOpen: HomeProps["onOpen"] }) {
+  const { count, total } = sessionProgress("cursus");
   return (
     <article className="home-card">
       <p className="home-kicker">Cursus</p>
@@ -115,6 +116,9 @@ function OfficeCard({ onOpen }: { onOpen: HomeProps["onOpen"] }) {
           Cursus
         </button>
       </div>
+      <p className="home-session">
+        Pass: <strong>{count} / {total}</strong> slices read
+      </p>
     </article>
   );
 }

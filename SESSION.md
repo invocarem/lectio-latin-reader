@@ -1,6 +1,6 @@
 # Session
 
-**Status.** One Session switch opens the cursus panel. The psalter course counts slices, a fortnight splits Vigils, and the panel browses the week, marks slices, and imports and exports the pass. De gradibus has its own pass: a panel groups its lectio units by chapter with a done box and a next-unread jump, and the card shows the count. Highlight and note are in hand. Each work keeps an independent pass. Implement one section at a time, and only when that section is the work in hand. Check an item only when it opens in the app and a test covers it.
+**Status.** One Session switch opens the cursus panel. The psalter course counts slices, a fortnight splits Vigils, and the panel browses the week, marks slices, and imports and exports the pass. De gradibus, the Confessions, the Rule, and the Sermons on the Song of Songs share one lectio course: each work's panel groups its lectio units by chapter with a done box and a next-unread jump, and the card shows the count. Highlight and note are in hand. Each work keeps an independent pass. Implement one section at a time, and only when that section is the work in hand. Check an item only when it opens in the app and a test covers it.
 
 ## Branch
 
@@ -31,7 +31,7 @@ A step is a string the work chooses. The session stores that string, the civil d
 
 **Psalter.** A step is a slice, the `PsalmSlice` already in `cursus.ts`. `total` is the number of distinct slices, which is more than 150. A whole psalm is one slice. A divided psalm counts each slice: Psalm 36 is two, and Psalm 118 is twenty-two, one letter each. `part` is the label on such a slice (`1`, `2`, or `aleph`), not the thing being counted. Psalms 115 and 116 share a Vespers slot and are two slices. A psalm said every day is one slice. `next` walks the cursus: an open place such as Sunday Vigils, or a daily psalm such as Psalm 4 at Compline. The course decides the order.
 
-**De gradibus.** The same session. `total` is the number of lectio units in `gradibus.lectio`. `next` returns the next of those units not yet sat with, in that list's order. There is no weekday and no hour. The card shows the count of units sat with.
+**A lectio work (De gradibus, the Confessions, the Rule, the Sermons on the Song of Songs).** They share the same lectio course. A work opts in with the `session` flag on its card; it then gets one shared course, not its own structure. A slice is one section of the work — caput 1.1, sermo 1.2, a psalm — and `total` is the number of slices. Two rules hold in every work alike. A pure heading — the work title or a chapter title — is never a slice: it is not counted and not stepped through (like a psalm number is not a psalm slice). And a section is one slice however many lectio pages it is split into; the pages are like the verses of a psalm, not slices of their own, so Retractatio, Praefatio, and every numbered section are one slice each. `next` returns the next slice not yet sat with, stepping to its first page. There is no weekday and no hour. The card shows the count of slices sat with.
 
 ## Boundary
 
@@ -91,7 +91,7 @@ One Session switch sits on the office (cursus) screen. It is not a button on a w
 
 - `src/session/` — the slice, the session document, the course interface, and the session view. The view calls `total` for the count. It is not a reader component.
 - `src/session/cursus.ts` — the psalter course on the weekly cursus. `total` counts distinct slices. `next` walks the cursus.
-- `src/session/gradibus.ts` — the De gradibus course. `total` is its lectio length; `next` walks `gradibus.lectio`. `src/session/GradibusSessionView.tsx` is its chapter-grouped panel. Each work keeps an independent pass under its own storage key (`session.cursus`, `session.gradibus`).
+- `src/session/lectio.ts` — the shared lectio course for every work that opts in. `total` is its lectio length; `next` walks `work.lectio`. `src/session/courses.ts` is the tiny registry: the cursus has its own course, every other session work shares `makeLectioCourse`. `src/session/LectioSessionView.tsx` is the shared chapter-grouped panel for any lectio work. Each work keeps an independent pass under its own storage key (`session.cursus`, `session.gradibus`, `session.confessions`, `session.rule`, `session.cantica`).
 - Local storage for the open pass. A pass records its `work`.
 - Highlight and note are actions on the open step.
 
@@ -101,4 +101,4 @@ One Session switch sits on the office (cursus) screen. It is not a button on a w
 - [x] Fortnight: first six of Vigils with the day hours, then the second six.
 - [x] Highlight one office line, and a note on that line.
 - [x] Export and import the session file as the same JSON.
-- [x] De gradibus: its own pass (one per work). `total` is its lectio units, `next` is the next unit not yet sat with, the panel groups units by chapter with a done box and a next-unread jump, and the card shows the count.
+- [x] A lectio work (De gradibus, then the Confessions, the Rule, and the Sermons on the Song of Songs): one shared pass and panel, opted in with the `session` flag. `total` is its lectio units, `next` is the next unit not yet sat with, the panel groups units by chapter with a done box and a next-unread jump, and the card shows the count.

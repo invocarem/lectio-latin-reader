@@ -4,8 +4,8 @@ import { EDGE_GUARD_PX, isSwipePointer, swipeIntent } from "../swipe";
 import type { LectioUnit, ReaderWork } from "../types";
 import { DictPopup } from "./DictPopup";
 import { LatinText } from "./LatinText";
-import { GradibusSessionView } from "../session/GradibusSessionView";
-import { gradibusCourse } from "../session/gradibus";
+import { LectioSessionView } from "../session/LectioSessionView";
+import { courseFor } from "../session/courses";
 import { useSession } from "../session/useSession";
 
 type LectioProps = {
@@ -28,20 +28,20 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
   const closeDict = useCallback(() => setDict(null), []);
   const stageRef = useRef<HTMLDivElement>(null);
 
-  const isGradibus = work.id === "gradibus";
-  const session = useSession(isGradibus ? "gradibus" : "cursus", {
-    persist: isGradibus,
+  const sessionEnabled = work.session === true;
+  const session = useSession(sessionEnabled ? work.id : "cursus", {
+    persist: sessionEnabled,
   });
 
-  const nextGradibusStep = useMemo(() => {
-    if (!isGradibus) return null;
-    return gradibusCourse.next(
+  const nextStep = useMemo(() => {
+    if (!sessionEnabled) return null;
+    return courseFor(work.id).next(
       session.doc.cursor,
       session.doc.satWith.map((mark) => mark.step),
     );
-  }, [isGradibus, session.doc]);
+  }, [sessionEnabled, work.id, session.doc]);
 
-  const locateGradibus = useCallback(
+  const locateStep = useCallback(
     (step: string) => {
       closeDict();
       onFocus(step);
@@ -171,7 +171,7 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
           >
             English
           </button>
-          {isGradibus ? (
+          {sessionEnabled ? (
             <button
               type="button"
               aria-pressed={session.open}
@@ -187,7 +187,7 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
         className={[
           "lectio-layout",
           showToc ? "toc-open" : "",
-          isGradibus && session.open ? "session-open" : "",
+          sessionEnabled && session.open ? "session-open" : "",
         ]
           .filter(Boolean)
           .join(" ")}
@@ -219,26 +219,28 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
           <article className={`lectio-card${current.kind !== "section" && current.kind !== "retractatio" && current.kind !== "praefatio" ? " heading" : ""}`}>
             <div className="lectio-kicker-row">
               <p className="lectio-kicker">{kicker(current)}</p>
-              <div className="lectio-chapter-nav">
-                <button
-                  type="button"
-                  disabled={!prevChapter}
-                  onClick={goPrevChapter}
-                  aria-label="Previous chapter"
-                  title="Previous chapter"
-                >
-                  ‹
-                </button>
-                <button
-                  type="button"
-                  disabled={!nextChapter}
-                  onClick={goNextChapter}
-                  aria-label="Next chapter"
-                  title="Next chapter"
-                >
-                  ›
-                </button>
-              </div>
+              {!sessionEnabled ? (
+                <div className="lectio-chapter-nav">
+                  <button
+                    type="button"
+                    disabled={!prevChapter}
+                    onClick={goPrevChapter}
+                    aria-label="Previous chapter"
+                    title="Previous chapter"
+                  >
+                    ‹
+                  </button>
+                  <button
+                    type="button"
+                    disabled={!nextChapter}
+                    onClick={goNextChapter}
+                    aria-label="Next chapter"
+                    title="Next chapter"
+                  >
+                    ›
+                  </button>
+                </div>
+              ) : null}
             </div>
             <div className="lectio-latin" lang="la">
               <LatinText
@@ -262,15 +264,16 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
           </article>
         </div>
 
-        {isGradibus && session.open ? (
-          <GradibusSessionView
+        {sessionEnabled && session.open ? (
+          <LectioSessionView
+            work={work}
             count={session.count}
             total={session.total}
-            nextStep={nextGradibusStep}
+            nextStep={nextStep}
             satSteps={session.satKeys}
-            onLocate={locateGradibus}
+            onLocate={locateStep}
             onToggleDone={session.toggleDone}
-            onGoNext={locateGradibus}
+            onGoNext={locateStep}
             onExport={session.exportSession}
             onImport={session.importSession}
             onClose={session.toggle}

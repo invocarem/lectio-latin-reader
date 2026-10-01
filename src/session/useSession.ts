@@ -13,21 +13,21 @@ import {
   type SessionWork,
 } from "./document";
 import { loadSession, saveSession } from "./store";
-import { cursusCourse, isoDate, type OpenPlace, type SessionPace } from "./cursus";
-import { gradibusCourse } from "./gradibus";
+import { isoDate, type OpenPlace, type SessionPace } from "./cursus";
+import { courseFor } from "./courses";
 import { WEEKDAYS } from "../content/office/when";
 
 /** Read-only progress for a work's pass, without opening or saving one. */
 export function sessionProgress(work: SessionWork, storage?: Storage | null): { count: number; total: number } {
   const doc = loadSession(work, storage);
-  const total = work === "cursus" ? cursusCourse.total() : gradibusCourse.total();
+  const total = courseFor(work).total();
   return { count: doc ? satCount(doc) : 0, total };
 }
 
 /**
  * Owns the open session pass for one work and its local persistence. The switch
- * turns the panel on and off; everything else lives in this hook. Cursus and
- * De gradibus each keep an independent pass.
+ * turns the panel on and off; everything else lives in this hook. The cursus
+ * and each lectio work keep an independent pass.
  */
 export function useSession(work: SessionWork = "cursus", options: { persist?: boolean } = {}) {
   const { persist = true } = options;
@@ -96,7 +96,7 @@ export function useSession(work: SessionWork = "cursus", options: { persist?: bo
     [doc],
   );
 
-  const total = work === "cursus" ? cursusCourse.total() : gradibusCourse.total();
+  const total = courseFor(work).total();
 
   return {
     doc,

@@ -106,6 +106,19 @@ describe("resolveSession", () => {
     });
   });
 
+  test("lectio opens the first readable page, skipping a leading title", () => {
+    const work = {
+      studyEnabled: false,
+      lectio: [
+        { id: "tractatus", kind: "title" },
+        { id: "cap1-title", kind: "chapter-title" },
+        { id: "retractatio-s1", kind: "retractatio" },
+        { id: "retractatio-s2", kind: "retractatio" },
+      ],
+    };
+    expect(resolveSession(work, true)).toEqual({ mode: "lectio", focusId: "retractatio-s1" });
+  });
+
   test("the psalter can open the office", () => {
     expect(
       resolveSession({ ...lectioOnlyWork, officeEnabled: true }, false, "office"),

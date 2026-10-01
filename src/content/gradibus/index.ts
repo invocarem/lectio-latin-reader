@@ -88,6 +88,7 @@ export const gradibus: ReaderWork = {
   intro:
     "One short Latin paragraph at a time, with English at hand. Study mode keeps the full parallel columns of each Patrologia section.",
   studyEnabled: true,
+  session: true,
   lectio,
   chapters,
   study: { units, chapters },

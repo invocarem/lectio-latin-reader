@@ -33,12 +33,18 @@ export function lectioFocus<T extends { id: string }>(
   };
 }
 
+/** The first lectio page to open: a readable page, skipping a leading work/chapter title. */
+function firstReadableId(lectio: { id: string; kind?: string }[]): string {
+  const first = lectio.find((unit) => unit.kind !== "title" && unit.kind !== "chapter-title");
+  return (first ?? lectio[0]).id;
+}
+
 /** Study is per-work, and hidden when the screen is iPhone-sized. */
 export function resolveSession(
   work: {
     studyEnabled: boolean;
     officeEnabled?: boolean;
-    lectio: { id: string }[];
+    lectio: { id: string; kind?: string }[];
     study?: { units: { id: string }[] };
   },
   platformStudy: boolean,
@@ -51,6 +57,6 @@ export function resolveSession(
   const focusId =
     mode === "study"
       ? work.study?.units[0]?.id ?? work.lectio[0].id
-      : work.lectio[0].id;
+      : firstReadableId(work.lectio);
   return { mode, focusId };
 }

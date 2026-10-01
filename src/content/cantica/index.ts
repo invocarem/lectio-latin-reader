@@ -140,6 +140,7 @@ function adapt(): ReaderWork {
     intro:
       "Bernard's eighty-six sermons on the Song of Songs, one short stretch at a time — Patrologia Latina with a close English reading at hand. The cycle reaches Song 3:1.",
     studyEnabled: true,
+    session: true,
     lectio,
     chapters,
     study: {

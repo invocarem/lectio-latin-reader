@@ -8,6 +8,7 @@
  */
 
 import { keyOfStep } from "./cursus";
+import type { WorkId } from "../types";
 
 /** A highlighted office line: the Gallican psalm number and the office line number. */
 export type Highlight = { psalm: number; line: string };
@@ -15,8 +16,26 @@ export type Highlight = { psalm: number; line: string };
 /** A note on a highlighted office line, with the civil date it was written. */
 export type SessionNote = { psalm: number; line: string; text: string; at: string };
 
-/** A work that offers a session pass. */
-export type SessionWork = "cursus" | "gradibus";
+/** A work that offers a session pass: the cursus, or any library work. */
+export type SessionWork = "cursus" | WorkId;
+
+/** Every registered work id that `work` may name in a session file. */
+const WORK_IDS: readonly WorkId[] = [
+  "gradibus",
+  "canticum",
+  "cantica",
+  "psalter",
+  "rule",
+  "confessions",
+];
+
+/** True when `value` names the cursus or a registered work. */
+export function isSessionWork(value: unknown): value is SessionWork {
+  return (
+    value === "cursus" ||
+    (typeof value === "string" && (WORK_IDS as readonly string[]).includes(value))
+  );
+}
 
 export type SessionDoc = {
   id: string;
@@ -30,7 +49,7 @@ export type SessionDoc = {
   notes: SessionNote[];
 };
 
-/** The identity a step counts as in a pass. Cursus dedupes by slice; gradibus is the unit id. */
+/** The identity a step counts as in a pass. Cursus dedupes by slice; a lectio work counts its unit id. */
 export function stepKey(work: SessionWork, step: string): string {
   return work === "cursus" ? keyOfStep(step) : step;
 }
@@ -156,7 +175,7 @@ export function parseSession(json: string): SessionDoc | null {
   try {
     const value = JSON.parse(json) as Partial<SessionDoc>;
     const work = value.work;
-    if (work !== "cursus" && work !== "gradibus") return null;
+    if (!isSessionWork(work)) return null;
     if (work === "cursus" && value.pace !== 7 && value.pace !== 14) return null;
     if (typeof value.started !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value.started)) return null;
     const satWith = Array.isArray(value.satWith)

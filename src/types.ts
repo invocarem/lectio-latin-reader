@@ -76,6 +76,11 @@ export type ReaderWork = {
   studyEnabled: boolean;
   /** Per-work opt-in for the Divine Office. The psalter only. */
   officeEnabled?: boolean;
+  /**
+   * Per-work opt-in for a session pass. Any lectio work can be read
+   * unit by unit; the flag says it offers that pass.
+   */
+  session?: boolean;
   /** One short reading at a time for Lectio. */
   lectio: LectioUnit[];
   /** TOC navigation for Lectio. */

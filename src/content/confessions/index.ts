@@ -80,6 +80,7 @@ function adapt(): ReaderWork {
     intro:
       "Augustine's Confessions, one short stretch at a time — O'Donnell's Latin with Pusey's 1838 English at hand.",
     studyEnabled: false,
+    session: true,
     lectio,
     chapters,
   };
