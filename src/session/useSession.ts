@@ -12,6 +12,7 @@ import {
   type SessionDoc,
   type SessionWork,
 } from "./document";
+import { downloadBytes } from "./download";
 import { loadSession, saveSession } from "./store";
 import { daysFrom, isoDate, type OpenPlace, type SessionPace } from "./cursus";
 import { courseFor } from "./courses";
@@ -73,14 +74,7 @@ export function useSession(work: SessionWork = "cursus", options: { persist?: bo
 
   const exportSession = useCallback(() => {
     const blob = new Blob([JSON.stringify(doc, null, 2)], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = url;
-    anchor.download = `session-${doc.work}-${doc.started}.json`;
-    document.body.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
-    URL.revokeObjectURL(url);
+    void downloadBytes(`session-${doc.work}-${doc.started}.json`, blob);
   }, [doc]);
 
   const total = courseFor(work).total();
@@ -88,14 +82,7 @@ export function useSession(work: SessionWork = "cursus", options: { persist?: bo
   const reportSession = useCallback(() => {
     import("./report").then(({ reportBlob }) =>
       reportBlob(doc, total, today).then((blob) => {
-        const url = URL.createObjectURL(blob);
-        const anchor = document.createElement("a");
-        anchor.href = url;
-        anchor.download = `session-${doc.work}-${doc.started}.docx`;
-        document.body.appendChild(anchor);
-        anchor.click();
-        anchor.remove();
-        URL.revokeObjectURL(url);
+        void downloadBytes(`session-${doc.work}-${doc.started}.docx`, blob);
       }),
     );
   }, [doc, total, today]);
