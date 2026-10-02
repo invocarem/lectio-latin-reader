@@ -151,6 +151,13 @@ export function Office({ work, reading, onHome }: OfficeProps) {
   useEffect(() => {
     if (reading !== "line") return;
     function onKey(event: KeyboardEvent) {
+      const target = event.target as HTMLElement | null;
+      const editing =
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target instanceof HTMLSelectElement ||
+        target?.isContentEditable;
+      if (editing) return;
       if (event.key === "ArrowLeft" && safeIndex > 0) {
         event.preventDefault();
         goPrev();

@@ -93,13 +93,21 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
-      if (event.key === "ArrowLeft" && prev) {
-        event.preventDefault();
-        goPrev();
-      }
-      if (event.key === "ArrowRight" && next) {
-        event.preventDefault();
-        goNext();
+      const target = event.target as HTMLElement | null;
+      const editing =
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target instanceof HTMLSelectElement ||
+        target?.isContentEditable;
+      if (!editing) {
+        if (event.key === "ArrowLeft" && prev) {
+          event.preventDefault();
+          goPrev();
+        }
+        if (event.key === "ArrowRight" && next) {
+          event.preventDefault();
+          goNext();
+        }
       }
       if (event.key === "Escape") setShowToc(false);
     }
