@@ -1,6 +1,7 @@
 import { workById } from "../content/works";
 import { sessionProgress } from "../session/useSession";
 import type { ReaderMode, ReaderWork, WorkId } from "../types";
+import { ThemeToggle } from "./ThemeToggle";
 
 type HomeProps = {
   onOpen: (workId: ReaderWork["id"], mode: ReaderMode) => void;
@@ -17,7 +18,10 @@ export function Home({ onOpen, studyEnabled = true }: HomeProps) {
   return (
     <main className="home">
       <header className="home-masthead">
-        <h1>Lectio per cancellos</h1>
+        <div className="home-title-row">
+          <h1>Lectio per cancellos</h1>
+          <ThemeToggle />
+        </div>
         <p className="home-subtitle">A Latin reader</p>
       </header>
       <div className="home-featured">

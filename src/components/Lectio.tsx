@@ -4,6 +4,7 @@ import { EDGE_GUARD_PX, isSwipePointer, swipeIntent } from "../swipe";
 import type { LectioUnit, ReaderWork } from "../types";
 import { DictPopup } from "./DictPopup";
 import { LatinText } from "./LatinText";
+import { ThemeToggle } from "./ThemeToggle";
 import { LectioSessionView } from "../session/LectioSessionView";
 import { courseFor } from "../session/courses";
 import { useSession } from "../session/useSession";
@@ -188,6 +189,7 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
               Session
             </button>
           ) : null}
+          <ThemeToggle />
         </div>
       </header>
 

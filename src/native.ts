@@ -1,6 +1,7 @@
 import { Capacitor } from "@capacitor/core";
 import { SplashScreen } from "@capacitor/splash-screen";
 import { StatusBar, Style } from "@capacitor/status-bar";
+import { chromeColor, type ThemePref } from "./theme";
 
 function isNative(): boolean {
   return Capacitor.isNativePlatform();
@@ -25,17 +26,36 @@ export function platformSupportsStudy(): boolean {
   return screenSupportsStudy(isNative(), shortSide);
 }
 
+function resolvedTheme(): ThemePref {
+  return document.documentElement.dataset.theme === "dark" ? "dark" : "light";
+}
+
+/** Match the status bar to the resolved theme. No-op in the browser. */
+async function applyStatusBar(): Promise<void> {
+  if (!isNative()) return;
+  try {
+    const theme = resolvedTheme();
+    await StatusBar.setStyle({ style: theme === "dark" ? Style.Dark : Style.Light });
+    await StatusBar.setBackgroundColor({ color: chromeColor(theme) });
+  } catch {
+    /* plugin unavailable */
+  }
+}
+
 /** Theme the status bar to match the parchment chrome; no-op in the browser. */
 export async function initNative(): Promise<void> {
   if (!isNative()) return;
 
   try {
     await StatusBar.setOverlaysWebView({ overlay: true });
-    await StatusBar.setStyle({ style: Style.Light });
-    await StatusBar.setBackgroundColor({ color: "#f3ead8" });
   } catch {
     /* plugin unavailable */
   }
+
+  await applyStatusBar();
+  window.addEventListener("lectio:themechange", () => {
+    void applyStatusBar();
+  });
 
   try {
     await SplashScreen.hide();

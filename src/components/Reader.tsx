@@ -11,6 +11,7 @@ import { studyUnitsInView } from "../studyView";
 import type { ReaderWork, Unit } from "../types";
 import { DictPopup } from "./DictPopup";
 import { LatinText } from "./LatinText";
+import { ThemeToggle } from "./ThemeToggle";
 
 type ReaderProps = {
   work: ReaderWork;
@@ -183,6 +184,7 @@ export function Reader({ work, focusId, onFocus, onHome }: ReaderProps) {
           >
             Facsimile
           </button>
+          <ThemeToggle />
         </div>
       </header>
 

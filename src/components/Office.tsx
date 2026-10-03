@@ -16,6 +16,7 @@ import { parseStep, type OpenPlace } from "../session/cursus";
 import type { ReaderWork } from "../types";
 import { DictPopup } from "./DictPopup";
 import { LatinText } from "./LatinText";
+import { ThemeToggle } from "./ThemeToggle";
 
 type DictState = {
   word: string;
@@ -239,6 +240,7 @@ export function Office({ work, reading, onHome }: OfficeProps) {
           >
             Session
           </button>
+          <ThemeToggle />
         </div>
       </header>
 
