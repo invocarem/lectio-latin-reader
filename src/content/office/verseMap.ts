@@ -6353,17 +6353,17 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
     },
   ],
   119: [
-    { sources: [1], dropLatinPrefix: GRADUAL },
+    { pieces: [{ verse: 1, dropLatinPrefix: GRADUAL, englishFrom: "In my trouble" }] },
     { sources: [2] },
     { sources: [3] },
     { sources: [4] },
     { sources: [5, 6] },
     { sources: [7] },
   ],
-  120: dropTitle(GRADUAL),
-  121: dropTitle(GRADUAL),
+  120: dropTitle(GRADUAL, "A gradual canticle. "),
+  121: dropTitle(GRADUAL, "A gradual canticle. "),
   122: [
-    { pieces: [{ verse: 1, dropLatinPrefix: GRADUAL }] },
+    { pieces: [{ verse: 1, dropLatinPrefix: GRADUAL, englishFrom: "To thee have I lifted up my eyes" }] },
     {
       pieces: [
         {
@@ -6781,6 +6781,7 @@ export const VERSE_MAP: Partial<Record<number, VerseMapEntry>> = {
           verse: 1,
           dropLatinPrefix: GRADUAL,
           latinThrough: "omnes servi Domini :",
+          englishFrom: "Behold now bless ye",
           englishThrough: "all ye servants of the Lord:",
         },
       ],
