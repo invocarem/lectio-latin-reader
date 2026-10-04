@@ -31,7 +31,7 @@ import {
   VerticalAlign,
   WidthType,
 } from "docx";
-import type { SessionDoc, SessionNote } from "./document";
+import type { Annotation, SessionDoc } from "./document";
 import { ALL_PLACES, daysFrom, keyOfStep } from "./cursus";
 import { sliceLabel } from "../content/office/resolve";
 
@@ -64,8 +64,7 @@ export type SessionReport = {
   count: number;
   total: number;
   tables: ReportTable[];
-  highlights: { psalm: number; line: string }[];
-  notes: SessionNote[];
+  annotations: Annotation[];
 };
 
 const GRADUAL_FROM = 119;
@@ -134,8 +133,7 @@ export function buildSessionReport(doc: SessionDoc, total: number): SessionRepor
       { title: "Gradual Psalms", columns: 15, cells: graduals },
       { title: "The Psalter", columns: 12, cells: main },
     ],
-    highlights: doc.highlights,
-    notes: doc.notes,
+    annotations: doc.annotations,
   };
 }
 
@@ -211,29 +209,17 @@ export function buildReportDoc(report: SessionReport, generated: string): Docume
     }
   }
 
-  if (report.highlights.length > 0) {
-    children.push(new Paragraph({ heading: HeadingLevel.HEADING_1, children: [new TextRun("Highlights")] }));
-    for (const item of report.highlights) {
-      children.push(
-        new Paragraph({
-          bullet: { level: 0 },
-          children: [new TextRun(`Psalmus ${item.psalm} · line ${item.line}`)],
-        }),
-      );
-    }
-  }
-
-  if (report.notes.length > 0) {
-    children.push(new Paragraph({ heading: HeadingLevel.HEADING_1, children: [new TextRun("Notes")] }));
-    for (const note of report.notes) {
+  if (report.annotations.length > 0) {
+    children.push(new Paragraph({ heading: HeadingLevel.HEADING_1, children: [new TextRun("Annotations")] }));
+    for (const annotation of report.annotations) {
       children.push(
         new Paragraph({
           bullet: { level: 0 },
           spacing: { after: 40 },
           children: [
-            new TextRun({ text: `Psalmus ${note.psalm} · line ${note.line} — `, bold: true }),
-            new TextRun(note.text || "(blank)"),
-            ...(note.at ? [new TextRun({ text: `  (${note.at})`, italics: true })] : []),
+            new TextRun({ text: `Psalmus ${annotation.psalm} · line ${annotation.line} — `, bold: true }),
+            new TextRun(annotation.text || "(highlighted)"),
+            ...(annotation.at ? [new TextRun({ text: `  (${annotation.at})`, italics: true })] : []),
           ],
         }),
       );

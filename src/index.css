@@ -1341,7 +1341,9 @@ select option {
   margin-bottom: 0.35rem;
 }
 
-.session-note textarea {
+/* Editing: an auto-growing textarea that never feels too small. */
+.session-note-edit {
+  display: block;
   width: 100%;
   font: inherit;
   color: var(--ink);
@@ -1349,10 +1351,39 @@ select option {
   border: 1px solid var(--rule);
   border-radius: 0.4rem;
   padding: 0.5rem 0.6rem;
-  resize: vertical;
+  resize: none;
+  overflow: hidden;
+  line-height: 1.45;
 }
 
-.session-note textarea:focus {
+.session-note-edit:focus {
   outline: none;
   border-color: var(--gold);
+}
+
+/* Viewing: the full note as readable text, scrollable when it is long. */
+.session-note-view {
+  display: block;
+  width: 100%;
+  font: inherit;
+  line-height: 1.45;
+  text-align: left;
+  color: var(--ink);
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 0.4rem;
+  padding: 0.5rem 0.6rem;
+  white-space: pre-wrap;
+  overflow-y: auto;
+  max-height: 14rem;
+  cursor: pointer;
+}
+
+.session-note-view:hover {
+  border-color: var(--gold);
+}
+
+.session-note-view.empty {
+  color: var(--ink-soft);
+  font-style: italic;
 }

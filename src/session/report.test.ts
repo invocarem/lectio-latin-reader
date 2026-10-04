@@ -11,8 +11,7 @@ function cursusDoc(patch?: Partial<SessionDoc>): SessionDoc {
     started: "2026-09-27",
     cursor: null,
     satWith: [],
-    highlights: [],
-    notes: [],
+    annotations: [],
     ...patch,
   };
 }
@@ -90,15 +89,14 @@ describe("buildSessionReport", () => {
     expect(report.tables.flatMap((table) => table.cells).filter((cell) => cell.done)).toHaveLength(1);
   });
 
-  it("reflects highlights and notes", () => {
+  it("reflects annotations (highlight and note together)", () => {
     const total = new Set(ALL_PLACES.map((place) => place.key)).size;
     const doc = cursusDoc({
-      highlights: [{ psalm: 50, line: "12" }],
-      notes: [{ psalm: 50, line: "12", text: "Miserere", at: "2026-09-28" }],
+      annotations: [{ psalm: 50, line: "12", text: "Miserere", at: "2026-09-28" }],
     });
     const report = buildSessionReport(doc, total);
-    expect(report.highlights).toHaveLength(1);
-    expect(report.notes[0].text).toBe("Miserere");
+    expect(report.annotations).toHaveLength(1);
+    expect(report.annotations[0].text).toBe("Miserere");
   });
 });
 

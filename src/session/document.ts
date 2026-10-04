@@ -4,17 +4,18 @@
  *
  * It stores no Latin and no English: a step is a string the work chooses (for
  * the cursus it is the weekday/hour/psalm place), the `at` is a civil date,
- * and highlights and notes are reserved for a later phase.
+ * and each line may carry one annotation — its highlight with any note.
  */
 
 import { keyOfStep } from "./cursus";
 import type { WorkId } from "../types";
 
-/** A highlighted office line: the Gallican psalm number and the office line number. */
-export type Highlight = { psalm: number; line: string };
-
-/** A note on a highlighted office line, with the civil date it was written. */
-export type SessionNote = { psalm: number; line: string; text: string; at: string };
+/**
+ * A note on an office line: the Gallican psalm number, the office line
+ * number, the person's own words, and the date written. Its presence on the
+ * line is the highlight; `text` is the optional note on that line.
+ */
+export type Annotation = { psalm: number; line: string; text: string; at: string };
 
 /** A work that offers a session pass: the cursus, or any library work. */
 export type SessionWork = "cursus" | WorkId;
@@ -45,8 +46,7 @@ export type SessionDoc = {
   started: string;
   cursor: string | null;
   satWith: { step: string; at: string }[];
-  highlights: Highlight[];
-  notes: SessionNote[];
+  annotations: Annotation[];
 };
 
 /** The identity a step counts as in a pass. Cursus dedupes by slice; a lectio work counts its unit id. */
@@ -66,8 +66,7 @@ export function createSession(work: SessionWork, today: string, pace?: 7 | 14 | 
     started: today,
     cursor: null,
     satWith: [],
-    highlights: [],
-    notes: [],
+    annotations: [],
   };
 }
 
@@ -105,37 +104,45 @@ export function setPace(doc: SessionDoc, pace: 7 | 14 | 40): SessionDoc {
   });
 }
 
-/** The stable key of a highlighted line. */
-export function highlightKey(psalm: number, line: string): string {
+/** The stable key of an annotated line. */
+export function annotationKey(psalm: number, line: string): string {
   return `${psalm}:${line}`;
 }
 
-/** Add the highlight when absent, remove it when present. */
-export function toggleHighlight(doc: SessionDoc, psalm: number, line: string): SessionDoc {
+/** Add the annotation when absent, remove it (and its note) when present. */
+export function toggleAnnotation(
+  doc: SessionDoc,
+  psalm: number,
+  line: string,
+  today: string,
+): SessionDoc {
   return updateDoc(doc, (next) => {
-    const key = highlightKey(psalm, line);
-    const has = next.highlights.some((item) => highlightKey(item.psalm, item.line) === key);
-    next.highlights = has
-      ? next.highlights.filter((item) => highlightKey(item.psalm, item.line) !== key)
-      : [...next.highlights, { psalm, line }];
+    const key = annotationKey(psalm, line);
+    next.annotations = next.annotations.some((item) => annotationKey(item.psalm, item.line) === key)
+      ? next.annotations.filter((item) => annotationKey(item.psalm, item.line) !== key)
+      : [...next.annotations, { psalm, line, text: "", at: today }];
     return next;
   });
 }
 
-/** True when the office line is highlighted. */
-export function isHighlighted(doc: SessionDoc, psalm: number, line: string): boolean {
-  const key = highlightKey(psalm, line);
-  return doc.highlights.some((item) => highlightKey(item.psalm, item.line) === key);
+/** True when the office line is annotated (highlighted). */
+export function isAnnotated(doc: SessionDoc, psalm: number, line: string): boolean {
+  const key = annotationKey(psalm, line);
+  return doc.annotations.some((item) => annotationKey(item.psalm, item.line) === key);
 }
 
-/** The note on the highlighted line, or undefined. */
-export function noteFor(doc: SessionDoc, psalm: number, line: string): SessionNote | undefined {
-  const key = highlightKey(psalm, line);
-  return doc.notes.find((item) => highlightKey(item.psalm, item.line) === key);
+/** The annotation on the line, or undefined. */
+export function annotationFor(
+  doc: SessionDoc,
+  psalm: number,
+  line: string,
+): Annotation | undefined {
+  const key = annotationKey(psalm, line);
+  return doc.annotations.find((item) => annotationKey(item.psalm, item.line) === key);
 }
 
-/** Write the person's own words on a line. Keeps the first `at` if it is unchanged. */
-export function setNote(
+/** Write the person's own words on an annotated line. Keeps the first `at` if it is unchanged. */
+export function setAnnotation(
   doc: SessionDoc,
   psalm: number,
   line: string,
@@ -143,17 +150,17 @@ export function setNote(
   today: string,
 ): SessionDoc {
   return updateDoc(doc, (next) => {
-    const key = highlightKey(psalm, line);
-    const index = next.notes.findIndex((item) => highlightKey(item.psalm, item.line) === key);
-    const note: SessionNote = { psalm, line, text, at: today };
-    if (index < 0) next.notes = [...next.notes, note];
-    else next.notes = next.notes.map((item, i) => (i === index ? note : item));
+    const key = annotationKey(psalm, line);
+    const index = next.annotations.findIndex((item) => annotationKey(item.psalm, item.line) === key);
+    const annotation: Annotation = { psalm, line, text, at: today };
+    if (index < 0) next.annotations = [...next.annotations, annotation];
+    else next.annotations = next.annotations.map((item, i) => (i === index ? annotation : item));
     return next;
   });
 }
 
 function updateDoc(doc: SessionDoc, patch: (next: SessionDoc) => SessionDoc): SessionDoc {
-  const clone: SessionDoc = { ...doc, satWith: [...doc.satWith], highlights: [...doc.highlights], notes: [...doc.notes] };
+  const clone: SessionDoc = { ...doc, satWith: [...doc.satWith], annotations: [...doc.annotations] };
   return patch(clone);
 }
 
@@ -165,6 +172,27 @@ export function satCount(doc: SessionDoc): number {
 /** Serialize the document for export / storage. */
 export function serializeSession(doc: SessionDoc): string {
   return JSON.stringify(doc, null, 2);
+}
+
+/** A pre-merge highlight from an older session file. */
+type LegacyHighlight = { psalm: number; line: string };
+/** A pre-merge note from an older session file. */
+type LegacyNote = { psalm: number; line: string; text: string; at: string };
+
+function isLegacyHighlight(item: unknown): item is LegacyHighlight {
+  const v = item as Record<string, unknown> | null;
+  return !!v && typeof v.psalm === "number" && typeof v.line === "string";
+}
+
+function isLegacyNote(item: unknown): item is LegacyNote {
+  const v = item as Record<string, unknown> | null;
+  return (
+    !!v &&
+    typeof v.psalm === "number" &&
+    typeof v.line === "string" &&
+    typeof v.text === "string" &&
+    typeof v.at === "string"
+  );
 }
 
 /**
@@ -183,13 +211,8 @@ export function parseSession(json: string): SessionDoc | null {
           (mark) => mark && typeof mark.step === "string" && typeof mark.at === "string",
         )
       : [];
-    const highlights = Array.isArray(value.highlights)
-      ? value.highlights.filter(
-          (item) => item && typeof item.psalm === "number" && typeof item.line === "string",
-        )
-      : [];
-    const notes = Array.isArray(value.notes)
-      ? value.notes.filter(
+    const annotations = Array.isArray(value.annotations)
+      ? value.annotations.filter(
           (note) =>
             note &&
             typeof note.psalm === "number" &&
@@ -198,6 +221,21 @@ export function parseSession(json: string): SessionDoc | null {
             typeof note.at === "string",
         )
       : [];
+    // Legacy files before the merge stored highlights and notes separately.
+    // Fold them into the single annotation list, notes winning a shared line.
+    const raw = value as Partial<SessionDoc> & { highlights?: unknown; notes?: unknown };
+    const legacyHighlights = Array.isArray(raw.highlights) ? raw.highlights.filter(isLegacyHighlight) : [];
+    const legacyNotes = Array.isArray(raw.notes) ? raw.notes.filter(isLegacyNote) : [];
+    for (const item of legacyHighlights) {
+      if (!annotations.some((a) => annotationKey(a.psalm, a.line) === annotationKey(item.psalm, item.line))) {
+        annotations.push({ psalm: item.psalm, line: item.line, text: "", at: value.started });
+      }
+    }
+    for (const note of legacyNotes) {
+      const index = annotations.findIndex((a) => annotationKey(a.psalm, a.line) === annotationKey(note.psalm, note.line));
+      if (index < 0) annotations.push({ psalm: note.psalm, line: note.line, text: note.text, at: note.at });
+      else annotations[index] = { ...annotations[index], text: note.text, at: note.at };
+    }
     return {
       id: typeof value.id === "string" ? value.id : value.started,
       work,
@@ -205,8 +243,7 @@ export function parseSession(json: string): SessionDoc | null {
       started: value.started,
       cursor: typeof value.cursor === "string" ? value.cursor : null,
       satWith,
-      highlights,
-      notes,
+      annotations,
     };
   } catch {
     return null;

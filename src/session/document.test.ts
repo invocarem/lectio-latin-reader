@@ -1,14 +1,14 @@
 import {
+  annotationFor,
   createSession,
-  isHighlighted,
-  noteFor,
+  isAnnotated,
   parseSession,
   recordOpen,
   satCount,
   serializeSession,
-  setNote,
+  setAnnotation,
   setPace,
-  toggleHighlight,
+  toggleAnnotation,
   toggleSat,
 } from "./document";
 
@@ -117,45 +117,61 @@ describe("session document", () => {
     });
     const parsed = parseSession(text);
     expect(parsed?.satWith.length).toBe(1);
-    expect(parsed?.highlights).toEqual([]);
+    expect(parsed?.annotations).toEqual([]);
   });
 });
 
-describe("highlight and note", () => {
-  test("toggleHighlight adds then removes a line", () => {
+describe("annotation (highlight + note)", () => {
+  test("toggleAnnotation adds then removes a line, deleting its note", () => {
     const base = createSession("cursus", "2026-09-27");
-    const on = toggleHighlight(base, 50, "12");
-    expect(on.highlights).toEqual([{ psalm: 50, line: "12" }]);
-    expect(isHighlighted(on, 50, "12")).toBe(true);
-    expect(isHighlighted(on, 50, "13")).toBe(false);
-    const off = toggleHighlight(on, 50, "12");
-    expect(off.highlights).toEqual([]);
+    const on = toggleAnnotation(base, 50, "12", "2026-09-27");
+    expect(on.annotations).toEqual([{ psalm: 50, line: "12", text: "", at: "2026-09-27" }]);
+    expect(isAnnotated(on, 50, "12")).toBe(true);
+    expect(isAnnotated(on, 50, "13")).toBe(false);
+    const noted = setAnnotation(on, 50, "12", "He is my God", "2026-09-28");
+    expect(noted.annotations[0].text).toBe("He is my God");
+    const off = toggleAnnotation(noted, 50, "12", "2026-09-29");
+    expect(off.annotations).toEqual([]);
   });
 
-  test("setNote writes and updates a note on a line", () => {
+  test("setAnnotation writes and updates a note on a line, refreshing its date", () => {
     const base = createSession("cursus", "2026-09-27");
-    const first = setNote(base, 50, "12", "He is my God", "2026-09-28");
-    expect(noteFor(first, 50, "12")).toEqual({ psalm: 50, line: "12", text: "He is my God", at: "2026-09-28" });
-    const second = setNote(first, 50, "12", "Shown under the English", "2026-09-29");
-    expect(second.notes.length).toBe(1);
-    expect(noteFor(second, 50, "12")?.text).toBe("Shown under the English");
-    expect(noteFor(second, 50, "12")?.at).toBe("2026-09-29");
+    const first = setAnnotation(base, 50, "12", "He is my God", "2026-09-28");
+    expect(annotationFor(first, 50, "12")).toEqual({ psalm: 50, line: "12", text: "He is my God", at: "2026-09-28" });
+    const second = setAnnotation(first, 50, "12", "Shown under the English", "2026-09-29");
+    expect(second.annotations.length).toBe(1);
+    expect(annotationFor(second, 50, "12")?.text).toBe("Shown under the English");
+    expect(annotationFor(second, 50, "12")?.at).toBe("2026-09-29");
   });
 
-  test("setNote on another line does not touch the first", () => {
-    const base = setNote(createSession("cursus", "2026-09-27"), 50, "12", "one", "2026-09-28");
-    const next = setNote(base, 50, "13", "two", "2026-09-28");
-    expect(next.notes.length).toBe(2);
-    expect(noteFor(next, 50, "12")?.text).toBe("one");
-    expect(noteFor(next, 50, "13")?.text).toBe("two");
+  test("setAnnotation on another line does not touch the first", () => {
+    const base = setAnnotation(createSession("cursus", "2026-09-27"), 50, "12", "one", "2026-09-28");
+    const next = setAnnotation(base, 50, "13", "two", "2026-09-28");
+    expect(next.annotations.length).toBe(2);
+    expect(annotationFor(next, 50, "12")?.text).toBe("one");
+    expect(annotationFor(next, 50, "13")?.text).toBe("two");
   });
 
-  test("import round-trips highlights and notes", () => {
+  test("import round-trips annotations", () => {
     let doc = createSession("cursus", "2026-09-27");
-    doc = toggleHighlight(doc, 50, "12");
-    doc = setNote(doc, 50, "12", "He is my God", "2026-09-28");
+    doc = toggleAnnotation(doc, 50, "12", "2026-09-27");
+    doc = setAnnotation(doc, 50, "12", "He is my God", "2026-09-28");
     const parsed = parseSession(serializeSession(doc));
-    expect(parsed?.highlights).toEqual([{ psalm: 50, line: "12" }]);
-    expect(parsed?.notes).toEqual([{ psalm: 50, line: "12", text: "He is my God", at: "2026-09-28" }]);
+    expect(parsed?.annotations).toEqual([{ psalm: 50, line: "12", text: "He is my God", at: "2026-09-28" }]);
+  });
+
+  test("import folds legacy highlights and notes into one annotation list", () => {
+    const legacy = JSON.stringify({
+      work: "cursus",
+      pace: 7,
+      started: "2026-09-27",
+      cursor: null,
+      satWith: [],
+      highlights: [{ psalm: 50, line: "12" }, { psalm: 51, line: "3" }],
+      notes: [{ psalm: 50, line: "12", text: "He is my God", at: "2026-09-28" }],
+    });
+    const parsed = parseSession(legacy);
+    expect(parsed?.annotations).toContainEqual({ psalm: 50, line: "12", text: "He is my God", at: "2026-09-28" });
+    expect(parsed?.annotations).toContainEqual({ psalm: 51, line: "3", text: "", at: "2026-09-27" });
   });
 });

@@ -4,10 +4,10 @@ import {
   parseSession,
   recordOpen,
   satCount,
-  setNote,
+  setAnnotation,
   setPace,
   stepKey,
-  toggleHighlight,
+  toggleAnnotation,
   toggleSat,
   type SessionDoc,
   type SessionWork,
@@ -62,13 +62,14 @@ export function useSession(work: SessionWork = "cursus", options: { persist?: bo
     [today],
   );
 
-  const toggleLineHighlight = useCallback(
-    (psalm: number, line: string) => setDoc((current) => toggleHighlight(current, psalm, line)),
-    [],
+  const toggleLineAnnotation = useCallback(
+    (psalm: number, line: string) => setDoc((current) => toggleAnnotation(current, psalm, line, today)),
+    [today],
   );
 
   const writeLineNote = useCallback(
-    (psalm: number, line: string, text: string) => setDoc((current) => setNote(current, psalm, line, text, today)),
+    (psalm: number, line: string, text: string) =>
+      setDoc((current) => setAnnotation(current, psalm, line, text, today)),
     [today],
   );
 
@@ -119,7 +120,7 @@ export function useSession(work: SessionWork = "cursus", options: { persist?: bo
     count: satCount(doc),
     total,
     elapsed,
-    toggleHighlight: toggleLineHighlight,
+    toggleHighlight: toggleLineAnnotation,
     writeNote: writeLineNote,
   };
 }

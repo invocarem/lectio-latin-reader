@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { hourSlots, type OfficeSlot, type PsalmSlice } from "../content/office/cursus";
 import { hourLines, sliceLabel, sliceVerses } from "../content/office/resolve";
+import { normLatin } from "../latinNorm";
 import {
   officeNow,
   type OfficeHour,
@@ -11,7 +12,7 @@ import {
 import { EDGE_GUARD_PX, isSwipePointer, swipeIntent } from "../swipe";
 import { SessionView } from "../session/SessionView";
 import { useSession } from "../session/useSession";
-import { isHighlighted, noteFor } from "../session/document";
+import { isAnnotated, annotationFor } from "../session/document";
 import { parseStep, type OpenPlace } from "../session/cursus";
 import type { ReaderWork } from "../types";
 import { DictPopup } from "./DictPopup";
@@ -129,8 +130,24 @@ export function Office({ work, reading, onHome }: OfficeProps) {
   const safeIndex = Math.min(index, Math.max(total - 1, 0));
   const current = slots[safeIndex];
   const line = lines[safeIndex];
-  const highlighted = line != null && isHighlighted(session.doc, line.psalm, line.n);
-  const note = line != null ? noteFor(session.doc, line.psalm, line.n) : undefined;
+  const highlighted = line != null && isAnnotated(session.doc, line.psalm, line.n);
+  const note = line != null ? annotationFor(session.doc, line.psalm, line.n) : undefined;
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const noteRef = useRef<HTMLTextAreaElement>(null);
+  const growNote = (el: HTMLTextAreaElement) => {
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  };
+  const editing = line != null && editingId === line.id;
+  useEffect(() => {
+    setEditingId(null);
+  }, [line?.id]);
+  useEffect(() => {
+    if (editing && noteRef.current) {
+      noteRef.current.focus();
+      growNote(noteRef.current);
+    }
+  }, [editing]);
 
   const goPrev = useCallback(() => {
     setIndex((at) => {
@@ -286,17 +303,35 @@ export function Office({ work, reading, onHome }: OfficeProps) {
                   </p>
                 ) : null}
                 {highlighted ? (
-                  <label className="session-note">
+                  <div className="session-note">
                     <span className="session-note-label">Note</span>
-                    <textarea
-                      value={note?.text ?? ""}
-                      rows={2}
-                      placeholder="A note on this line"
-                      onChange={(event) =>
-                        session.writeNote(line.psalm, line.n, event.target.value)
-                      }
-                    />
-                  </label>
+                    {editing ? (
+                      <textarea
+                        ref={noteRef}
+                        className="session-note-edit"
+                        value={note?.text ?? ""}
+                        rows={1}
+                        placeholder="A note on this line"
+                        onChange={(event) => {
+                          session.writeNote(line.psalm, line.n, event.target.value);
+                          growNote(event.target);
+                        }}
+                        onBlur={() => setEditingId(null)}
+                        onKeyDown={(event) => {
+                          if (event.key === "Escape") event.currentTarget.blur();
+                        }}
+                      />
+                    ) : (
+                      <button
+                        type="button"
+                        className={`session-note-view${note?.text ? "" : " empty"}`}
+                        onClick={() => setEditingId(line.id)}
+                        title="Tap to edit this note"
+                      >
+                        {note?.text || "Add a note…"}
+                      </button>
+                    )}
+                  </div>
                 ) : null}
               </>
             ) : (
@@ -310,7 +345,7 @@ export function Office({ work, reading, onHome }: OfficeProps) {
                         <span className="office-verse-n">{verse.n}</span>
                         <div className="office-latin" lang="la">
                           <LatinText
-                            text={verse.latin}
+                            text={normLatin(verse.latin)}
                             unitId={`${slice.psalm}:${verse.n}`}
                             activeToken={dict?.tokenKey}
                             onWord={(word, el, tokenKey) => {
