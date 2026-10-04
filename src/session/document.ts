@@ -96,6 +96,17 @@ export function toggleSat(doc: SessionDoc, step: string, today: string): Session
   });
 }
 
+/**
+ * Remember the place now being read, so returning to the work reopens it —
+ * without counting it as a sitting. `recordOpen` still marks the sitting.
+ */
+export function markPosition(doc: SessionDoc, step: string): SessionDoc {
+  return updateDoc(doc, (next) => {
+    next.cursor = step;
+    return next;
+  });
+}
+
 /** Set the pace of the open pass (cursus only). */
 export function setPace(doc: SessionDoc, pace: 7 | 14 | 40): SessionDoc {
   return updateDoc(doc, (next) => {

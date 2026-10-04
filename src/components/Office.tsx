@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { hourSlots, type OfficeSlot, type PsalmSlice } from "../content/office/cursus";
-import { hourLines, sliceLabel, sliceVerses } from "../content/office/resolve";
+import { hourLines, sliceLabel, sliceVerses, type OfficeLineStep } from "../content/office/resolve";
 import { normLatin } from "../latinNorm";
 import {
   officeNow,
+  OFFICE_HOURS,
   type OfficeHour,
   type OfficeSeason,
   type OfficeTime,
@@ -13,7 +14,7 @@ import { EDGE_GUARD_PX, isSwipePointer, swipeIntent } from "../swipe";
 import { SessionView } from "../session/SessionView";
 import { useSession } from "../session/useSession";
 import { isAnnotated, annotationFor } from "../session/document";
-import { parseStep, type OpenPlace } from "../session/cursus";
+import { encodeStep, isDailyPsalm, parseStep, sliceKey, type OpenPlace } from "../session/cursus";
 import type { ReaderWork } from "../types";
 import { DictPopup } from "./DictPopup";
 import { LatinText } from "./LatinText";
@@ -70,16 +71,113 @@ function progressLabel(slot: OfficeSlot | undefined, index: number, total: numbe
   return `${name} · ${index + 1} / ${total}`;
 }
 
+/** The exact slice (psalm and verse range) a session place means. */
+function sliceOf(place: OpenPlace): PsalmSlice {
+  const parsed = parseStep(place.step);
+  return { psalm: parsed.psalm, from: parsed.from, to: parsed.to };
+}
+
+function sameSlice(a: PsalmSlice, b: PsalmSlice): boolean {
+  return a.psalm === b.psalm && a.from === b.from && a.to === b.to;
+}
+
+/** The index (a lectio line or an office slot) that holds exactly `place`'s slice. */
+function indexForLocate(
+  reading: "line" | "hour",
+  targetWeekday: Weekday,
+  targetHour: OfficeHour,
+  place: OpenPlace,
+): number {
+  const target = sliceOf(place);
+  const slots = hourSlots(targetWeekday, targetHour);
+  const slotIndex = slots.findIndex((slot) => slot.slices.some((slice) => sameSlice(slice, target)));
+  if (reading !== "line") return slotIndex < 0 ? 0 : slotIndex;
+
+  // Line mode: office lines are laid out per slice, so match the slice by label
+  // (Psalm 118's sections are distinct labels even though they share a number).
+  const matched = slotIndex < 0 ? undefined : slots[slotIndex].slices.find((slice) => sameSlice(slice, target));
+  if (!matched) return 0;
+  const label = sliceLabel(matched);
+  const at = hourLines(targetWeekday, targetHour).findIndex(
+    (line) => line.psalm === target.psalm && line.label === label,
+  );
+  return at < 0 ? 0 : at;
+}
+
+/**
+ * Where the office should open on mount: the last-read place from the session
+ * cursor when it is valid, otherwise the current clock hour at the first slot.
+ */
+function initialPosition(
+  reading: "line" | "hour",
+  cursor: string | null,
+  clockWeekday: Weekday,
+  clockHour: OfficeHour,
+): { weekday: Weekday; hour: OfficeHour; index: number } {
+  if (cursor) {
+    const parsed = parseStep(cursor);
+    const validHour = (OFFICE_HOURS as readonly string[]).includes(parsed.hour);
+    if (validHour && Number.isFinite(parsed.psalm) && parsed.psalm >= 1 && parsed.psalm <= 150) {
+      const hour = parsed.hour as OfficeHour;
+      const weekday = parsed.weekday ?? clockWeekday;
+      const place: OpenPlace = {
+        step: cursor,
+        key: sliceKey({ psalm: parsed.psalm, from: parsed.from, to: parsed.to }),
+        label: "",
+        isToday: false,
+        weekday: parsed.weekday,
+        hour,
+        psalm: parsed.psalm,
+      };
+      return { weekday, hour, index: indexForLocate(reading, weekday, hour, place) };
+    }
+  }
+  return { weekday: clockWeekday, hour: clockHour, index: 0 };
+}
+
+/** The cursus step of the place now on screen, or "" when it cannot be named. */
+function currentStep(
+  weekday: Weekday,
+  hour: OfficeHour,
+  reading: "line" | "hour",
+  slot: OfficeSlot | undefined,
+  line: OfficeLineStep | undefined,
+): string {
+  let slice: PsalmSlice | undefined;
+  if (reading === "line") {
+    if (!line) return "";
+    for (const officeSlot of hourSlots(weekday, hour)) {
+      for (const candidate of officeSlot.slices) {
+        if (candidate.psalm === line.psalm && sliceLabel(candidate) === line.label) {
+          slice = candidate;
+          break;
+        }
+      }
+      if (slice) break;
+    }
+  } else {
+    slice = slot?.slices[0];
+  }
+  if (!slice) return "";
+  const daily = slice.from == null && isDailyPsalm(slice.psalm);
+  return encodeStep(daily ? null : weekday, hour, slice.psalm, slice.from, slice.to);
+}
+
 export function Office({ work, reading, onHome }: OfficeProps) {
   const opened = useMemo(() => officeNow(new Date()), []);
-  const [weekday, setWeekday] = useState<Weekday>(opened.weekday);
-  const [hour, setHour] = useState<OfficeHour>(opened.hour);
-  const [index, setIndex] = useState(0);
+  const session = useSession();
+  // The first mount restores the last-read place from the session cursor so
+  // returning to Cursus/Lectio reopens the psalm instead of the clock hour.
+  // The useState initializers below run only on mount, so this single
+  // computation is enough even though it is re-derived on every render.
+  const initial = initialPosition(reading, session.doc.cursor, opened.weekday, opened.hour);
+  const [weekday, setWeekday] = useState<Weekday>(initial.weekday);
+  const [hour, setHour] = useState<OfficeHour>(initial.hour);
+  const [index, setIndex] = useState(initial.index);
   const [showEnglish, setShowEnglish] = useState(true);
   const [dict, setDict] = useState<DictState | null>(null);
   const closeDict = useCallback(() => setDict(null), []);
   const stageRef = useRef<HTMLDivElement>(null);
-  const session = useSession();
 
   /** Navigate Lectio to a psalm's place without closing the session panel. */
   const locateSessionPlace = useCallback(
@@ -87,39 +185,11 @@ export function Office({ work, reading, onHome }: OfficeProps) {
       const targetWeekday = place.weekday ?? weekday;
       if (place.weekday) setWeekday(place.weekday);
       setHour(place.hour);
-      setIndex(indexForLocate(targetWeekday, place.hour, place));
+      setIndex(indexForLocate(reading, targetWeekday, place.hour, place));
       closeDict();
     },
-    [weekday, closeDict],
+    [reading, weekday, closeDict],
   );
-
-  /** The exact slice (psalm and verse range) a session place means. */
-  function sliceOf(place: OpenPlace): PsalmSlice {
-    const parsed = parseStep(place.step);
-    return { psalm: parsed.psalm, from: parsed.from, to: parsed.to };
-  }
-
-  function sameSlice(a: PsalmSlice, b: PsalmSlice): boolean {
-    return a.psalm === b.psalm && a.from === b.from && a.to === b.to;
-  }
-
-  /** The index (a lectio line or an office slot) that holds exactly `place`'s slice. */
-  function indexForLocate(targetWeekday: Weekday, targetHour: OfficeHour, place: OpenPlace): number {
-    const target = sliceOf(place);
-    const slots = hourSlots(targetWeekday, targetHour);
-    const slotIndex = slots.findIndex((slot) => slot.slices.some((slice) => sameSlice(slice, target)));
-    if (reading !== "line") return slotIndex < 0 ? 0 : slotIndex;
-
-    // Line mode: office lines are laid out per slice, so match the slice by label
-    // (Psalm 118's sections are distinct labels even though they share a number).
-    const matched = slotIndex < 0 ? undefined : slots[slotIndex].slices.find((slice) => sameSlice(slice, target));
-    if (!matched) return 0;
-    const label = sliceLabel(matched);
-    const at = hourLines(targetWeekday, targetHour).findIndex(
-      (line) => line.psalm === target.psalm && line.label === label,
-    );
-    return at < 0 ? 0 : at;
-  }
 
   const slots = hourSlots(weekday, hour);
   const lines = useMemo(
@@ -130,6 +200,12 @@ export function Office({ work, reading, onHome }: OfficeProps) {
   const safeIndex = Math.min(index, Math.max(total - 1, 0));
   const current = slots[safeIndex];
   const line = lines[safeIndex];
+  // Keep the session cursor at the place being read, so leaving to the menu
+  // and returning (or restarting the app) reopens the same psalm.
+  useEffect(() => {
+    const step = currentStep(weekday, hour, reading, current, line);
+    if (step) session.rememberPlace(step);
+  }, [weekday, hour, reading, current, line, session.rememberPlace]);
   const highlighted = line != null && isAnnotated(session.doc, line.psalm, line.n);
   const note = line != null ? annotationFor(session.doc, line.psalm, line.n) : undefined;
   const [editingId, setEditingId] = useState<string | null>(null);

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   createSession,
+  markPosition,
   parseSession,
   recordOpen,
   satCount,
@@ -67,6 +68,12 @@ export function useSession(work: SessionWork = "cursus", options: { persist?: bo
     [today],
   );
 
+  /** Remember where the reader is, so returning reopens it (no sitting mark). */
+  const rememberPlace = useCallback(
+    (step: string) => setDoc((current) => markPosition(current, step)),
+    [],
+  );
+
   const writeLineNote = useCallback(
     (psalm: number, line: string, text: string) =>
       setDoc((current) => setAnnotation(current, psalm, line, text, today)),
@@ -122,5 +129,6 @@ export function useSession(work: SessionWork = "cursus", options: { persist?: bo
     elapsed,
     toggleHighlight: toggleLineAnnotation,
     writeNote: writeLineNote,
+    rememberPlace,
   };
 }

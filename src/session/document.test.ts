@@ -2,6 +2,7 @@ import {
   annotationFor,
   createSession,
   isAnnotated,
+  markPosition,
   parseSession,
   recordOpen,
   satCount,
@@ -173,5 +174,24 @@ describe("annotation (highlight + note)", () => {
     const parsed = parseSession(legacy);
     expect(parsed?.annotations).toContainEqual({ psalm: 50, line: "12", text: "He is my God", at: "2026-09-28" });
     expect(parsed?.annotations).toContainEqual({ psalm: 51, line: "3", text: "", at: "2026-09-27" });
+  });
+});
+
+describe("remembered position (markPosition)", () => {
+  test("remembers where the reader is without counting it as a sitting", () => {
+    let doc = createSession("cursus", "2026-09-27");
+    expect(doc.cursor).toBeNull();
+    doc = markPosition(doc, "sun:vigils:21");
+    expect(doc.cursor).toBe("sun:vigils:21");
+    expect(doc.satWith).toEqual([]);
+    expect(satCount(doc)).toBe(0);
+  });
+
+  test("moving on from a remembered position keeps the pass unmarked", () => {
+    let doc = createSession("cursus", "2026-09-27");
+    doc = markPosition(doc, "mon:vespers:113");
+    doc = markPosition(doc, "mon:vespers:114");
+    expect(doc.cursor).toBe("mon:vespers:114");
+    expect(doc.satWith).toEqual([]);
   });
 });

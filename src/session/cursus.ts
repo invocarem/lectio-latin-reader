@@ -19,6 +19,11 @@ import type { SessionCourse } from "./course";
 /** Psalms said every day (whole), each one a single slice in the pass. */
 const DAILY = new Set([3, 4, 50, 66, 90, 94, 133, 148, 149, 150]);
 
+/** True when a whole (un-split) psalm is said every day and carries no weekday in its step. */
+export function isDailyPsalm(psalm: number): boolean {
+  return DAILY.has(psalm);
+}
+
 export type SessionPace = 7 | 14 | 40;
 
 /** A place opened in the cursus: what it is, where it lives, and its step. */
