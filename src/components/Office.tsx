@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { hourSlots, type OfficeSlot, type PsalmSlice } from "../content/office/cursus";
-import { hourLines, sliceLabel, sliceVerses, type OfficeLineStep } from "../content/office/resolve";
+import { hourLines, sliceLabel, sliceVerses } from "../content/office/resolve";
 import { normLatin } from "../latinNorm";
 import {
   officeNow,
-  OFFICE_HOURS,
   type OfficeHour,
   type OfficeSeason,
   type OfficeTime,
@@ -14,7 +13,7 @@ import { EDGE_GUARD_PX, isSwipePointer, swipeIntent } from "../swipe";
 import { SessionView } from "../session/SessionView";
 import { useSession } from "../session/useSession";
 import { isAnnotated, annotationFor } from "../session/document";
-import { encodeStep, isDailyPsalm, parseStep, sliceKey, type OpenPlace } from "../session/cursus";
+import { parseStep, type OpenPlace } from "../session/cursus";
 import type { ReaderWork } from "../types";
 import { DictPopup } from "./DictPopup";
 import { LatinText } from "./LatinText";
@@ -105,72 +104,38 @@ function indexForLocate(
 }
 
 /**
- * Where the office should open on mount: the last-read place from the session
- * cursor when it is valid, otherwise the current clock hour at the first slot.
+ * The Office position, kept only in memory for this app run. It is never
+ * persisted, so a fresh start reopens the psalm of the current clock hour.
+ */
+type OfficePosition = { weekday: Weekday; hour: OfficeHour; index: number };
+
+/**
+ * The last Office place chosen during this app run per reading mode (Cursus
+ * "hour" and Lectio "line" have different index spaces). Empty on a fresh start.
+ */
+const lastOfficePosition: Partial<Record<"line" | "hour", OfficePosition>> = {};
+
+/**
+ * Where the office should open on mount: the place last chosen in this app
+ * run when there is one, otherwise the current clock hour at the first slot.
  */
 function initialPosition(
-  reading: "line" | "hour",
-  cursor: string | null,
+  last: OfficePosition | null | undefined,
   clockWeekday: Weekday,
   clockHour: OfficeHour,
-): { weekday: Weekday; hour: OfficeHour; index: number } {
-  if (cursor) {
-    const parsed = parseStep(cursor);
-    const validHour = (OFFICE_HOURS as readonly string[]).includes(parsed.hour);
-    if (validHour && Number.isFinite(parsed.psalm) && parsed.psalm >= 1 && parsed.psalm <= 150) {
-      const hour = parsed.hour as OfficeHour;
-      const weekday = parsed.weekday ?? clockWeekday;
-      const place: OpenPlace = {
-        step: cursor,
-        key: sliceKey({ psalm: parsed.psalm, from: parsed.from, to: parsed.to }),
-        label: "",
-        isToday: false,
-        weekday: parsed.weekday,
-        hour,
-        psalm: parsed.psalm,
-      };
-      return { weekday, hour, index: indexForLocate(reading, weekday, hour, place) };
-    }
-  }
+): OfficePosition {
+  if (last) return last;
   return { weekday: clockWeekday, hour: clockHour, index: 0 };
-}
-
-/** The cursus step of the place now on screen, or "" when it cannot be named. */
-function currentStep(
-  weekday: Weekday,
-  hour: OfficeHour,
-  reading: "line" | "hour",
-  slot: OfficeSlot | undefined,
-  line: OfficeLineStep | undefined,
-): string {
-  let slice: PsalmSlice | undefined;
-  if (reading === "line") {
-    if (!line) return "";
-    for (const officeSlot of hourSlots(weekday, hour)) {
-      for (const candidate of officeSlot.slices) {
-        if (candidate.psalm === line.psalm && sliceLabel(candidate) === line.label) {
-          slice = candidate;
-          break;
-        }
-      }
-      if (slice) break;
-    }
-  } else {
-    slice = slot?.slices[0];
-  }
-  if (!slice) return "";
-  const daily = slice.from == null && isDailyPsalm(slice.psalm);
-  return encodeStep(daily ? null : weekday, hour, slice.psalm, slice.from, slice.to);
 }
 
 export function Office({ work, reading, onHome }: OfficeProps) {
   const opened = useMemo(() => officeNow(new Date()), []);
   const session = useSession();
-  // The first mount restores the last-read place from the session cursor so
-  // returning to Cursus/Lectio reopens the psalm instead of the clock hour.
-  // The useState initializers below run only on mount, so this single
-  // computation is enough even though it is re-derived on every render.
-  const initial = initialPosition(reading, session.doc.cursor, opened.weekday, opened.hour);
+  // The first mount opens the psalm of the current clock hour (a fresh start),
+  // or the place last chosen earlier in this same app run. The useState
+  // initializers run only on mount, so this single computation is enough even
+  // though it is re-derived on every render.
+  const initial = initialPosition(lastOfficePosition[reading], opened.weekday, opened.hour);
   const [weekday, setWeekday] = useState<Weekday>(initial.weekday);
   const [hour, setHour] = useState<OfficeHour>(initial.hour);
   const [index, setIndex] = useState(initial.index);
@@ -200,12 +165,12 @@ export function Office({ work, reading, onHome }: OfficeProps) {
   const safeIndex = Math.min(index, Math.max(total - 1, 0));
   const current = slots[safeIndex];
   const line = lines[safeIndex];
-  // Keep the session cursor at the place being read, so leaving to the menu
-  // and returning (or restarting the app) reopens the same psalm.
+  // Keep the place being read in memory (not persisted) so leaving to the menu
+  // and returning within the same app run reopens the same psalm, while a
+  // fresh start still opens the psalm of the current clock hour.
   useEffect(() => {
-    const step = currentStep(weekday, hour, reading, current, line);
-    if (step) session.rememberPlace(step);
-  }, [weekday, hour, reading, current, line, session.rememberPlace]);
+    lastOfficePosition[reading] = { weekday, hour, index: safeIndex };
+  }, [reading, weekday, hour, safeIndex]);
   const highlighted = line != null && isAnnotated(session.doc, line.psalm, line.n);
   const note = line != null ? annotationFor(session.doc, line.psalm, line.n) : undefined;
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -311,27 +276,34 @@ export function Office({ work, reading, onHome }: OfficeProps) {
   return (
     <div className="app-shell lectio-shell">
       <header className="topbar">
-        <button className="brand" type="button" onClick={onHome}>
-          <strong>Cursus</strong>
-          <small>
-            {reading === "line" ? "Lectio" : "Cursus"} · according to the Rule
-          </small>
-        </button>
+        <div className="topbar-left">
+          <button
+            type="button"
+            className="tool-icon"
+            aria-pressed={session.open}
+            aria-label={session.open ? "Close session" : "Open session"}
+            title={session.open ? "Close session" : "Open session"}
+            onClick={session.toggle}
+          >
+            {"\u{2630}"}
+          </button>
+          <button className="brand" type="button" onClick={onHome}>
+            <strong>Cursus</strong>
+            <small>
+              {reading === "line" ? "Lectio" : "Cursus"} · according to the Rule
+            </small>
+          </button>
+        </div>
         <div className="tools">
           <button
             type="button"
+            className="tool-icon"
             aria-pressed={showEnglish}
+            aria-label={showEnglish ? "Hide English translation" : "Show English translation"}
+            title={showEnglish ? "Hide English translation" : "Show English translation"}
             onClick={() => setShowEnglish((open) => !open)}
           >
-            English
-          </button>
-          <button
-            type="button"
-            aria-pressed={session.open}
-            onClick={session.toggle}
-            title="Session"
-          >
-            Session
+            {"\u{1F170}\u{FE0F}"}
           </button>
           <ThemeToggle />
         </div>
@@ -461,22 +433,57 @@ export function Office({ work, reading, onHome }: OfficeProps) {
             onExport={session.exportSession}
             onImport={session.importSession}
             onReport={session.reportSession}
-            onClose={session.toggle}
           />
         ) : null}
       </div>
 
       <nav className="lectio-nav" aria-label={reading === "line" ? "Office lectio" : "Office psalms"}>
-        <button type="button" disabled={safeIndex <= 0} onClick={goPrev}>
-          Previous
+        <button
+          type="button"
+          disabled={safeIndex <= 0}
+          onClick={goPrev}
+          aria-label="Previous"
+          title="Previous"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2.5}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
         </button>
         <span className="lectio-progress">
           {reading === "line"
             ? `${safeIndex + 1} / ${total}`
             : progressLabel(current, safeIndex, total)}
         </span>
-        <button type="button" disabled={safeIndex >= total - 1} onClick={goNext}>
-          Next
+        <button
+          type="button"
+          disabled={safeIndex >= total - 1}
+          onClick={goNext}
+          aria-label="Next"
+          title="Next"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2.5}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
         </button>
       </nav>
 

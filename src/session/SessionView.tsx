@@ -29,7 +29,6 @@ export type SessionViewProps = {
   onExport: () => void;
   onImport: (file: File | null) => void;
   onReport: () => void;
-  onClose: () => void;
 };
 
 type Row = {
@@ -59,7 +58,6 @@ export function SessionView({
   onExport,
   onImport,
   onReport,
-  onClose,
 }: SessionViewProps) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [day, setDay] = useState<Weekday>(lectioWeekday);
@@ -129,9 +127,6 @@ export function SessionView({
             · day {elapsed + 1} of {pace}
           </span>
         </h2>
-        <button type="button" className="session-close" onClick={onClose} aria-label="Close session">
-          ×
-        </button>
       </div>
 
       <div className="session-filters">

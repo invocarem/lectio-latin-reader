@@ -26,7 +26,6 @@ export type LectioSessionViewProps = {
   onGoNext: (step: string) => void;
   onExport: () => void;
   onImport: (file: File | null) => void;
-  onClose: () => void;
 };
 
 type Row = { step: string; label: string };
@@ -69,7 +68,6 @@ export function LectioSessionView({
   onGoNext,
   onExport,
   onImport,
-  onClose,
 }: LectioSessionViewProps) {
   const fileRef = useRef<HTMLInputElement>(null);
   const groups = useMemo(() => groupSlices(buildSlices(work), work.chapters), [work]);
@@ -80,9 +78,6 @@ export function LectioSessionView({
         <h2>
           {work.brandShort} <span className="session-count">{count} / {total}</span>
         </h2>
-        <button type="button" className="session-close" onClick={onClose} aria-label="Close session">
-          ×
-        </button>
       </div>
 
       {nextStep ? (

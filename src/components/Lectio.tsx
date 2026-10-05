@@ -161,10 +161,24 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
   return (
     <div className="app-shell lectio-shell">
       <header className="topbar">
-        <button className="brand" type="button" onClick={onHome}>
-          <strong>{work.brandShort}</strong>
-          <small>{work.brandLine}</small>
-        </button>
+        <div className="topbar-left">
+          {sessionEnabled ? (
+            <button
+              type="button"
+              className="tool-icon"
+              aria-pressed={session.open}
+              aria-label={session.open ? "Close session" : "Open session"}
+              title={session.open ? "Close session" : "Open session"}
+              onClick={session.toggle}
+            >
+              {"\u{2630}"}
+            </button>
+          ) : null}
+          <button className="brand" type="button" onClick={onHome}>
+            <strong>{work.brandShort}</strong>
+            <small>{work.brandLine}</small>
+          </button>
+        </div>
         <div className="tools">
           <button
             type="button"
@@ -175,20 +189,14 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
           </button>
           <button
             type="button"
+            className="tool-icon"
             aria-pressed={showEnglish}
+            aria-label={showEnglish ? "Hide English translation" : "Show English translation"}
+            title={showEnglish ? "Hide English translation" : "Show English translation"}
             onClick={() => setShowEnglish((open) => !open)}
           >
-            English
+            {"\u{1F170}\u{FE0F}"}
           </button>
-          {sessionEnabled ? (
-            <button
-              type="button"
-              aria-pressed={session.open}
-              onClick={session.toggle}
-            >
-              Session
-            </button>
-          ) : null}
           <ThemeToggle />
         </div>
       </header>
@@ -286,20 +294,55 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
             onGoNext={locateStep}
             onExport={session.exportSession}
             onImport={session.importSession}
-            onClose={session.toggle}
           />
         ) : null}
       </div>
 
       <nav className="lectio-nav" aria-label="Lectio steps">
-        <button type="button" disabled={!prev} onClick={goPrev}>
-          Previous
+        <button
+          type="button"
+          disabled={!prev}
+          onClick={goPrev}
+          aria-label="Previous"
+          title="Previous"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2.5}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <polyline points="15 18 9 12 15 6" />
+          </svg>
         </button>
         <span className="lectio-progress">
           {index + 1} / {lectioUnits.length}
         </span>
-        <button type="button" disabled={!next} onClick={goNext}>
-          Next
+        <button
+          type="button"
+          disabled={!next}
+          onClick={goNext}
+          aria-label="Next"
+          title="Next"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={2.5}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
         </button>
       </nav>
 
