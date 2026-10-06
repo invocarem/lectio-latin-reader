@@ -5,7 +5,7 @@
  * reading order. There is no weekday and no hour.
  *
  * This is the one course every lectio work shares (gradibus, confessions,
- * rule, cantica, any future lectio work). A work opts in to a session with the
+ * rule, cantica, canticum, any future lectio work). A work opts in to a session with the
  * `session` flag; it gets this course, not its own structure.
  *
  * Two rules hold in every work alike:

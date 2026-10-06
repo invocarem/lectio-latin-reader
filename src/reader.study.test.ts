@@ -38,7 +38,7 @@ describe("study reader mount", () => {
     // the sermon heading now pairs with its English title in the Study pane
     expect(html).toContain("Concerning the very title of the book");
     expect(html).toContain('class="reader no-facsimile"');
-    expect(html).toMatch(/aria-pressed="false">\s*Facsimile/);
+    expect(html).toContain('aria-pressed="false" aria-label="Show facsimile"');
     expect(html).not.toContain("facsimile-viewport");
   });
 
@@ -68,6 +68,6 @@ describe("study reader mount", () => {
     const html = markup(gradibus, units[0].id);
     expect(articleCount(html)).toBe(units.length * 2);
     expect(html).toContain("facsimile-viewport");
-    expect(html).toMatch(/aria-pressed="true">\s*Facsimile/);
+    expect(html).toContain('aria-pressed="true" aria-label="Hide facsimile"');
   });
 });

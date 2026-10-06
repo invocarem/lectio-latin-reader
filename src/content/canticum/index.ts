@@ -7,6 +7,10 @@ import { canticum as source } from "./work";
  *
  * Lectio English is the aligned Challoner Douay-Rheims column.
  * Study mode is not enabled: there are no facsimile plates.
+ *
+ * The session pass is the eight chapters. Verses stay separate lectio pages,
+ * but they share the chapter id as sourceId so the pass counts one slice
+ * per chapter and opens on that chapter's first verse.
  */
 function adapt(): ReaderWork {
   const lectio: LectioUnit[] = [];
@@ -19,16 +23,18 @@ function adapt(): ReaderWork {
       for (const paragraph of chapter.paragraphs) {
         for (const segment of paragraph.segments) {
           const unitId = `${chapterId}:${segment.id}`;
+          const isFirst = firstUnitId == null;
           if (!firstUnitId) firstUnitId = unitId;
           const verseNo = paragraph.n;
           lectio.push({
             id: unitId,
-            sourceId: unitId,
+            sourceId: chapterId,
             chapterId,
             kind: "section",
             caput: null,
             section: verseNo ? Number(verseNo) : null,
-            heading: null,
+            // Names the chapter slice. The reader kicker still uses `label`.
+            heading: isFirst ? chapter.title : null,
             latin: segment.latin,
             english: segment.translations.douay ?? "",
             column: 0,
@@ -61,6 +67,7 @@ function adapt(): ReaderWork {
     intro:
       "The Song of Songs, one verse at a time — Clementine Latin with the Challoner Douay-Rheims at hand.",
     studyEnabled: false,
+    session: true,
     lectio,
     chapters,
   };

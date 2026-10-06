@@ -465,13 +465,17 @@ select option {
 
 .theme-toggle {
   appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex: none;
-  font-size: 1.05rem;
-  line-height: 1;
+  width: 2rem;
+  height: 2rem;
+  line-height: 0;
   border: 1px solid var(--rule);
   background: var(--panel);
   color: var(--ink);
-  padding: 0.35rem 0.5rem;
+  padding: 0;
   border-radius: 4px;
   cursor: pointer;
 }
@@ -509,15 +513,24 @@ select option {
 
 .tool-icon {
   appearance: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   flex: none;
-  font-size: 1.05rem;
-  line-height: 1;
+  width: 2rem;
+  height: 2rem;
+  line-height: 0;
   border: 1px solid var(--rule);
   background: var(--panel);
   color: var(--ink);
-  padding: 0.35rem 0.5rem;
+  padding: 0;
   border-radius: 4px;
   cursor: pointer;
+}
+
+.tool-icon svg,
+.theme-toggle svg {
+  display: block;
 }
 
 .tool-icon:hover,
@@ -553,30 +566,32 @@ select option {
   border-color: var(--ink);
 }
 
+.tools .tool-icon,
+.tools .theme-toggle {
+  padding: 0;
+}
+
 .tools .theme-toggle {
   margin-left: 0.2rem;
-  padding: 0.4rem 0.55rem;
-  font-size: 1.05rem;
 }
 
 @media (max-width: 540px) {
+  /* Keep the header on a single row on narrow screens: the title (and the
+     session toggle) stays on the left with the tools (English / theme icons) on
+     the right, instead of wrapping the tools onto a second row. The brand
+     truncates with an ellipsis when space runs out. */
   .topbar {
-    flex-wrap: wrap;
-    row-gap: 0.55rem;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
   }
 
-  .topbar-left,
+  .topbar-left {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
   .tools {
-    flex: 1 1 100%;
-  }
-
-  .tools {
-    justify-content: flex-end;
-  }
-
-  /* The wrapped (two-row) topbar is taller here, so clear it too. */
-  .session-panel {
-    top: calc(6.1rem + env(safe-area-inset-top, 0px));
+    flex: none;
   }
 }
 
@@ -1300,7 +1315,7 @@ select option {
 
   .session-panel {
     position: fixed;
-    /* Start below the sticky topbar so the ☰ toggle stays visible. */
+    /* Start below the sticky topbar so the session toggle stays visible. */
     top: calc(3.4rem + env(safe-area-inset-top, 0px));
     left: 0;
     /* Stay above Previous/Next, and above the home indicator. */

@@ -23,10 +23,6 @@ export function nextTheme(current: ThemePref): ThemePref {
   return current === "dark" ? "light" : "dark";
 }
 
-export function themeLabel(pref: ThemePref): string {
-  return pref === "dark" ? "\u{1F319}" : "\u{2600}\u{FE0F}";
-}
-
 export function themeTooltip(pref: ThemePref): string {
   return pref === "dark"
     ? "Dark theme. Click for light."

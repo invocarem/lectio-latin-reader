@@ -3,10 +3,10 @@ import {
   cycleTheme,
   resolveTheme,
   THEME_KEY,
-  themeLabel,
   themeTooltip,
   type ThemePref,
 } from "../theme";
+import { MoonIcon, SunIcon } from "./icons";
 
 function currentTheme(): ThemePref {
   if (
@@ -21,7 +21,7 @@ function currentTheme(): ThemePref {
   return resolveTheme(stored, osDark);
 }
 
-/** Sun or moon, last in the switch row, after Session. */
+/** Sun or moon, last in the switch row. */
 export function ThemeToggle() {
   const [pref, setPref] = useState<ThemePref>(currentTheme);
 
@@ -39,7 +39,7 @@ export function ThemeToggle() {
       title={themeTooltip(pref)}
       onClick={() => setPref(cycleTheme())}
     >
-      {themeLabel(pref)}
+      {pref === "dark" ? <MoonIcon /> : <SunIcon />}
     </button>
   );
 }

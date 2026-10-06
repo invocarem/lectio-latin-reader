@@ -3,6 +3,7 @@ import { gradibus } from "../content/gradibus";
 import { confessions } from "../content/confessions";
 import { rule } from "../content/rule";
 import { cantica } from "../content/cantica";
+import { canticum } from "../content/canticum";
 import { buildSlices, makeLectioCourse } from "./lectio";
 import type { SessionCourse } from "./course";
 
@@ -11,6 +12,7 @@ const cases: Array<[string, SessionCourse, ReaderWork]> = [
   ["confessions", makeLectioCourse(confessions), confessions],
   ["rule", makeLectioCourse(rule), rule],
   ["cantica", makeLectioCourse(cantica), cantica],
+  ["canticum", makeLectioCourse(canticum), canticum],
 ];
 
 describe("shared lectio course", () => {
@@ -62,6 +64,24 @@ describe("shared lectio course", () => {
     const readable = gradibus.lectio.filter((u) => u.kind !== "title" && u.kind !== "chapter-title");
     const slices = buildSlices(gradibus);
     expect(readable.length).toBeGreaterThan(slices.length);
+  });
+
+  test("canticum is one slice per chapter, opening on the first verse", () => {
+    const slices = buildSlices(canticum);
+    expect(slices.map((slice) => slice.label)).toEqual([
+      "Caput 1",
+      "Caput 2",
+      "Caput 3",
+      "Caput 4",
+      "Caput 5",
+      "Caput 6",
+      "Caput 7",
+      "Caput 8",
+    ]);
+    expect(canticum.lectio.length).toBeGreaterThan(slices.length);
+    expect(slices.map((slice) => slice.step)).toEqual(
+      canticum.chapters.map((chapter) => chapter.firstUnitId),
+    );
   });
 
   test("gradibus Retractatio and Praefatio are one slice each, like any section", () => {

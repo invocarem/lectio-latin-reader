@@ -11,6 +11,7 @@ import { studyUnitsInView } from "../studyView";
 import type { ReaderWork, Unit } from "../types";
 import { DictPopup } from "./DictPopup";
 import { LatinText } from "./LatinText";
+import { EnglishIcon, PlateIcon } from "./icons";
 import { ThemeToggle } from "./ThemeToggle";
 
 type ReaderProps = {
@@ -172,17 +173,23 @@ export function Reader({ work, focusId, onFocus, onHome }: ReaderProps) {
         <div className="tools">
           <button
             type="button"
+            className="tool-icon"
             aria-pressed={showEnglish}
+            aria-label={showEnglish ? "Hide English translation" : "Show English translation"}
+            title={showEnglish ? "Hide English translation" : "Show English translation"}
             onClick={() => setShowEnglish((open) => !open)}
           >
-            English
+            <EnglishIcon />
           </button>
           <button
             type="button"
+            className="tool-icon"
             aria-pressed={showPlate}
+            aria-label={showPlate ? "Hide facsimile" : "Show facsimile"}
+            title={showPlate ? "Hide facsimile" : "Show facsimile"}
             onClick={() => setShowPlate((open) => !open)}
           >
-            Facsimile
+            <PlateIcon />
           </button>
           <ThemeToggle />
         </div>

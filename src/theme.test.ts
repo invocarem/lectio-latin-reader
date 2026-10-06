@@ -3,7 +3,6 @@ import {
   nextTheme,
   resolveTheme,
   themeFollowsOs,
-  themeLabel,
   themeTooltip,
 } from "./theme";
 
@@ -37,9 +36,7 @@ describe("nextTheme", () => {
 });
 
 describe("theme chrome", () => {
-  test("labels and chrome colors match the active theme", () => {
-    expect(themeLabel("dark")).toBe("\u{1F319}");
-    expect(themeLabel("light")).toBe("\u{2600}\u{FE0F}");
+  test("tooltips and chrome colors match the active theme", () => {
     expect(themeTooltip("dark")).toMatch(/Click for light/);
     expect(themeTooltip("light")).toMatch(/Click for dark/);
     expect(chromeColor("light")).toBe("#f3ead8");

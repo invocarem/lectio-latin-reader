@@ -4,6 +4,7 @@ import { EDGE_GUARD_PX, isSwipePointer, swipeIntent } from "../swipe";
 import type { LectioUnit, ReaderWork } from "../types";
 import { DictPopup } from "./DictPopup";
 import { LatinText } from "./LatinText";
+import { CapitaIcon, EnglishIcon, SessionIcon } from "./icons";
 import { ThemeToggle } from "./ThemeToggle";
 import { LectioSessionView } from "../session/LectioSessionView";
 import { courseFor } from "../session/courses";
@@ -171,7 +172,7 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
               title={session.open ? "Close session" : "Open session"}
               onClick={session.toggle}
             >
-              {"\u{2630}"}
+              <SessionIcon />
             </button>
           ) : null}
           <button className="brand" type="button" onClick={onHome}>
@@ -180,13 +181,18 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
           </button>
         </div>
         <div className="tools">
-          <button
-            type="button"
-            aria-pressed={showToc}
-            onClick={() => setShowToc((open) => !open)}
-          >
-            Capita
-          </button>
+          {!sessionEnabled ? (
+            <button
+              type="button"
+              className="tool-icon"
+              aria-pressed={showToc}
+              aria-label="Capita"
+              title="Capita"
+              onClick={() => setShowToc((open) => !open)}
+            >
+              <CapitaIcon />
+            </button>
+          ) : null}
           <button
             type="button"
             className="tool-icon"
@@ -195,7 +201,7 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
             title={showEnglish ? "Hide English translation" : "Show English translation"}
             onClick={() => setShowEnglish((open) => !open)}
           >
-            {"\u{1F170}\u{FE0F}"}
+            <EnglishIcon />
           </button>
           <ThemeToggle />
         </div>
@@ -204,13 +210,13 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
       <div
         className={[
           "lectio-layout",
-          showToc ? "toc-open" : "",
+          !sessionEnabled && showToc ? "toc-open" : "",
           sessionEnabled && session.open ? "session-open" : "",
         ]
           .filter(Boolean)
           .join(" ")}
       >
-        {showToc ? (
+        {!sessionEnabled && showToc ? (
           <nav className="toc" aria-label="Chapters">
             <h2>Capita</h2>
             {chapters.map((chapter) => (
