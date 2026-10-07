@@ -4,6 +4,7 @@ import { EDGE_GUARD_PX, isSwipePointer, swipeIntent } from "../swipe";
 import type { LectioUnit, ReaderWork } from "../types";
 import { DictPopup } from "./DictPopup";
 import { LatinText } from "./LatinText";
+import { AppTitle } from "./AppTitle";
 import { CapitaIcon, EnglishIcon, SessionIcon } from "./icons";
 import { ThemeToggle } from "./ThemeToggle";
 import { LectioSessionView } from "../session/LectioSessionView";
@@ -175,10 +176,7 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
               <SessionIcon />
             </button>
           ) : null}
-          <button className="brand" type="button" onClick={onHome}>
-            <strong>{work.brandShort}</strong>
-            <small>{work.brandLine}</small>
-          </button>
+          <AppTitle line={`${work.brandShort} · ${work.brandLine}`} onHome={onHome} />
         </div>
         <div className="tools">
           {!sessionEnabled ? (

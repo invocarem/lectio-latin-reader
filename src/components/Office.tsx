@@ -17,6 +17,7 @@ import { parseStep, type OpenPlace } from "../session/cursus";
 import type { ReaderWork } from "../types";
 import { DictPopup } from "./DictPopup";
 import { LatinText } from "./LatinText";
+import { AppTitle } from "./AppTitle";
 import { EnglishIcon, SessionIcon } from "./icons";
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -288,12 +289,10 @@ export function Office({ work, reading, onHome }: OfficeProps) {
           >
             <SessionIcon />
           </button>
-          <button className="brand" type="button" onClick={onHome}>
-            <strong>Cursus</strong>
-            <small>
-              {reading === "line" ? "Lectio" : "Cursus"} · according to the Rule
-            </small>
-          </button>
+          <AppTitle
+            line={`Cursus · ${reading === "line" ? "Lectio · " : ""}according to the Rule`}
+            onHome={onHome}
+          />
         </div>
         <div className="tools">
           <button

@@ -11,6 +11,7 @@ import { studyUnitsInView } from "../studyView";
 import type { ReaderWork, Unit } from "../types";
 import { DictPopup } from "./DictPopup";
 import { LatinText } from "./LatinText";
+import { AppTitle } from "./AppTitle";
 import { EnglishIcon, PlateIcon } from "./icons";
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -166,10 +167,7 @@ export function Reader({ work, focusId, onFocus, onHome }: ReaderProps) {
   return (
     <div className="app-shell">
       <header className="topbar">
-        <button className="brand" type="button" onClick={onHome}>
-          <strong>{work.brandShort}</strong>
-          <small>{work.brandLine}</small>
-        </button>
+        <AppTitle line={`${work.brandShort} · ${work.brandLine}`} onHome={onHome} />
         <div className="tools">
           <button
             type="button"

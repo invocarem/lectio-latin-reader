@@ -1,6 +1,7 @@
 import { workById } from "../content/works";
 import { sessionProgress } from "../session/useSession";
 import type { ReaderMode, ReaderWork, WorkId } from "../types";
+import { AppTitle } from "./AppTitle";
 import { ThemeToggle } from "./ThemeToggle";
 
 type HomeProps = {
@@ -17,33 +18,36 @@ export function Home({ onOpen, studyEnabled = true }: HomeProps) {
 
   return (
     <main className="home">
-      <header className="home-masthead">
-        <div className="home-title-row">
-          <h1>Lectio per cancellos</h1>
+      <header className="topbar">
+        <div className="topbar-left">
+          <AppTitle line="A Latin reader" />
+        </div>
+        <div className="tools">
           <ThemeToggle />
         </div>
-        <p className="home-subtitle">A Latin reader</p>
       </header>
-      <div className="home-featured">
-        <OfficeCard onOpen={onOpen} />
-        {featured.map((work) => (
-          <WorkCard key={work.id} work={work} onOpen={onOpen} studyEnabled={studyEnabled} />
-        ))}
-      </div>
-      <details className="home-other">
-        <summary className="home-kicker">Other works</summary>
-        <div className="home-other-list">
-          {other.map((work) => (
-            <WorkCard
-              key={work.id}
-              work={work}
-              onOpen={onOpen}
-              studyEnabled={studyEnabled}
-              compact
-            />
+      <div className="home-body">
+        <div className="home-featured">
+          <OfficeCard onOpen={onOpen} />
+          {featured.map((work) => (
+            <WorkCard key={work.id} work={work} onOpen={onOpen} studyEnabled={studyEnabled} />
           ))}
         </div>
-      </details>
+        <details className="home-other">
+          <summary className="home-kicker">Other works</summary>
+          <div className="home-other-list">
+            {other.map((work) => (
+              <WorkCard
+                key={work.id}
+                work={work}
+                onOpen={onOpen}
+                studyEnabled={studyEnabled}
+                compact
+              />
+            ))}
+          </div>
+        </details>
+      </div>
     </main>
   );
 }
