@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { workById } from "../content/works";
 import {
   bundleFromStorage,
@@ -8,6 +8,8 @@ import {
   sessionsFromFiles,
 } from "../session/bundle";
 import { downloadBytes } from "../session/download";
+import type { SyncNotice } from "../session/sync";
+import { sync } from "../session/syncHost";
 import { sessionProgress } from "../session/useSession";
 import type { ReaderMode, ReaderWork, WorkId } from "../types";
 import { AppTitle } from "./AppTitle";
@@ -24,7 +26,8 @@ const OTHER: WorkId[] = ["rule", "confessions", "psalter", "canticum"];
 export function Home({ onOpen, studyEnabled = true }: HomeProps) {
   const featured = worksFor(FEATURED);
   const other = worksFor(OTHER);
-  const [, refreshProgress] = useState(0);
+  const [, setProgressRev] = useState(0);
+  const refreshProgress = useCallback(() => setProgressRev((rev) => rev + 1), []);
 
   return (
     <main className="home">
@@ -37,7 +40,7 @@ export function Home({ onOpen, studyEnabled = true }: HomeProps) {
         </div>
       </header>
       <div className="home-body">
-        <SyncBar onImported={() => refreshProgress((rev) => rev + 1)} />
+        <SyncBar onImported={refreshProgress} />
         <div className="home-featured">
           <OfficeCard onOpen={onOpen} />
           {featured.map((work) => (
@@ -65,7 +68,17 @@ export function Home({ onOpen, studyEnabled = true }: HomeProps) {
 
 function SyncBar({ onImported }: { onImported: () => void }) {
   const fileRef = useRef<HTMLInputElement>(null);
-  const [message, setMessage] = useState<string | null>(null);
+  const [notice, setNotice] = useState<SyncNotice>(() => sync.current());
+  const [importNote, setImportNote] = useState<string | null>(null);
+
+  useEffect(() => {
+    setNotice(sync.current());
+    return sync.subscribe((next) => {
+      setImportNote(null);
+      setNotice(next);
+      if (next.refreshed) onImported();
+    });
+  }, [onImported]);
 
   function exportPasses() {
     const text = serializeBundle(bundleFromStorage());
@@ -80,21 +93,33 @@ function SyncBar({ onImported }: { onImported: () => void }) {
         const read = sessionsFromFiles(files);
         if (!read.bundle) {
           const which = read.rejected.length > 0 ? read.rejected.join(", ") : "this file";
-          setMessage(`Could not read ${which}.`);
+          setImportNote(`Could not read ${which}.`);
           return;
         }
         const outcome = importBundle(read.bundle);
         onImported();
         const skipped = read.rejected.length > 0 ? ` Skipped ${read.rejected.join(", ")}.` : "";
-        setMessage(`${describeMerge(outcome)}.${skipped}`);
+        setImportNote(`${describeMerge(outcome)}.${skipped}`);
       },
     );
   }
+
+  const showSyncNow = notice.mode === "ready" || notice.mode === "needs-gesture" || notice.mode === "offline";
 
   return (
     <div className="home-sync">
       <p className="home-kicker">Progress</p>
       <div className="home-actions">
+        {notice.mode === "unsupported" ? null : (
+          <button className="start ghost" type="button" onClick={() => void sync.choose()}>
+            Choose sync file
+          </button>
+        )}
+        {showSyncNow ? (
+          <button className="start ghost" type="button" onClick={() => void sync.syncNow()}>
+            Sync now
+          </button>
+        ) : null}
         <button className="start ghost" type="button" onClick={exportPasses}>
           Export
         </button>
@@ -102,13 +127,9 @@ function SyncBar({ onImported }: { onImported: () => void }) {
           Import
         </button>
       </div>
-      {message ? (
-        <p className="home-sync-result" role="status">
-          {message}
-        </p>
-      ) : (
-        <p className="home-sync-result">Export or import every pass as one file.</p>
-      )}
+      <p className="home-sync-result" role="status">
+        {importNote ?? notice.text}
+      </p>
       <input
         ref={fileRef}
         type="file"

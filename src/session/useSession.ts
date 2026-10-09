@@ -43,6 +43,16 @@ export function useSession(work: SessionWork = "cursus", options: { persist?: bo
     saveSession(doc);
   }, [doc, persist]);
 
+  useEffect(() => {
+    if (!persist) return;
+    const reload = () => {
+      const stored = loadSession(work);
+      if (stored) setDoc(stored);
+    };
+    window.addEventListener("lectio:sessions", reload);
+    return () => window.removeEventListener("lectio:sessions", reload);
+  }, [persist, work]);
+
   const toggle = useCallback(() => setOpen((value) => !value), []);
 
   /** Open a place: record the sitting, close the panel, and drive Office. */

@@ -11,6 +11,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import { initNative } from "./native";
+import { startSync } from "./session/syncHost";
 import { applyTheme, watchOsTheme } from "./theme";
 import "./index.css";
 
@@ -19,6 +20,7 @@ import "./index.css";
 applyTheme();
 watchOsTheme();
 void initNative();
+startSync();
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

@@ -1,6 +1,6 @@
 # Sync across devices
 
-**Current step: 2. Synced file** (not started). Tick a box here when that piece lands, and move the current-step line with it.
+**Current step: done.** Tick a box here when that piece lands, and move the current-step line with it.
 
 - [x] 0. Plan
 - [x] 1. Bundle and merge
@@ -10,13 +10,13 @@
   - [x] Convert supplied old progress JSON into `lectio-sessions.json` (files not in the repo yet; Import accepts them)
   - [x] Home export and import, with a short merge result
   - [x] Single-work import writes `session.${work}` and does not replace a different open pass
-- [ ] 2. Synced file
-  - [ ] Pick the file once per device
-  - [ ] Read it on launch
-  - [ ] Write it a few seconds after a real edit, not on each keystroke
-- [ ] 3. Resume
-  - [ ] Read again when the app becomes active
-  - [ ] Offline, keep the local copy and merge on the next successful read
+- [x] 2. Synced file
+  - [x] Pick the file once per device
+  - [x] Read it on launch
+  - [x] Write it a few seconds after a real edit, not on each keystroke
+- [x] 3. Resume
+  - [x] Read again when the app becomes active
+  - [x] Offline, keep the local copy and merge on the next successful read
 
 Progress for a pass lives in `localStorage` on the device that wrote it (`session.${work}`). The phone app is a Capacitor shell, so its store is that WebView, separate from the browser. Export / Import moves one work’s file and replaces the open document. Two devices that both read in one day cannot be combined that way: the later file drops sittings and notes that exist only on the other side.
 
