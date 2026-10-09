@@ -1,4 +1,13 @@
+import { useRef, useState } from "react";
 import { workById } from "../content/works";
+import {
+  bundleFromStorage,
+  describeMerge,
+  importBundle,
+  serializeBundle,
+  sessionsFromFiles,
+} from "../session/bundle";
+import { downloadBytes } from "../session/download";
 import { sessionProgress } from "../session/useSession";
 import type { ReaderMode, ReaderWork, WorkId } from "../types";
 import { AppTitle } from "./AppTitle";
@@ -15,6 +24,7 @@ const OTHER: WorkId[] = ["rule", "confessions", "psalter", "canticum"];
 export function Home({ onOpen, studyEnabled = true }: HomeProps) {
   const featured = worksFor(FEATURED);
   const other = worksFor(OTHER);
+  const [, refreshProgress] = useState(0);
 
   return (
     <main className="home">
@@ -27,6 +37,7 @@ export function Home({ onOpen, studyEnabled = true }: HomeProps) {
         </div>
       </header>
       <div className="home-body">
+        <SyncBar onImported={() => refreshProgress((rev) => rev + 1)} />
         <div className="home-featured">
           <OfficeCard onOpen={onOpen} />
           {featured.map((work) => (
@@ -49,6 +60,67 @@ export function Home({ onOpen, studyEnabled = true }: HomeProps) {
         </details>
       </div>
     </main>
+  );
+}
+
+function SyncBar({ onImported }: { onImported: () => void }) {
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [message, setMessage] = useState<string | null>(null);
+
+  function exportPasses() {
+    const text = serializeBundle(bundleFromStorage());
+    const blob = new Blob([text], { type: "application/json" });
+    void downloadBytes("lectio-sessions.json", blob);
+  }
+
+  function importPasses(list: FileList | null) {
+    if (!list || list.length === 0) return;
+    Promise.all([...list].map(async (file) => ({ name: file.name, text: await file.text() }))).then(
+      (files) => {
+        const read = sessionsFromFiles(files);
+        if (!read.bundle) {
+          const which = read.rejected.length > 0 ? read.rejected.join(", ") : "this file";
+          setMessage(`Could not read ${which}.`);
+          return;
+        }
+        const outcome = importBundle(read.bundle);
+        onImported();
+        const skipped = read.rejected.length > 0 ? ` Skipped ${read.rejected.join(", ")}.` : "";
+        setMessage(`${describeMerge(outcome)}.${skipped}`);
+      },
+    );
+  }
+
+  return (
+    <div className="home-sync">
+      <p className="home-kicker">Progress</p>
+      <div className="home-actions">
+        <button className="start ghost" type="button" onClick={exportPasses}>
+          Export
+        </button>
+        <button className="start ghost" type="button" onClick={() => fileRef.current?.click()}>
+          Import
+        </button>
+      </div>
+      {message ? (
+        <p className="home-sync-result" role="status">
+          {message}
+        </p>
+      ) : (
+        <p className="home-sync-result">Export or import every pass as one file.</p>
+      )}
+      <input
+        ref={fileRef}
+        type="file"
+        accept="application/json,.json"
+        multiple
+        hidden
+        onChange={(event) => {
+          importPasses(event.target.files);
+          event.target.value = "";
+        }}
+      />
+    </div>
   );
 }
 

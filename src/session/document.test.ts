@@ -22,6 +22,8 @@ describe("session document", () => {
     expect(doc.id).toBe("2026-09-27");
     expect(doc.cursor).toBeNull();
     expect(doc.satWith).toEqual([]);
+    expect(doc.cursorAt).toBeUndefined();
+    expect(doc.touchedAt).toBeUndefined();
   });
 
   test("recordOpen records the first sitting of each slice once", () => {
@@ -104,6 +106,35 @@ describe("session document", () => {
       expect(parsed?.work).toBe(work);
       expect(parsed?.pace).toBeUndefined();
     }
+  });
+
+  test("a real edit stamps touchedAt, and a cursor move stamps cursorAt", () => {
+    const now = "2026-10-09T22:15:00.000Z";
+    let doc = createSession("cursus", "2026-09-27");
+    doc = recordOpen(doc, "compline:4", "2026-10-09", now);
+    expect(doc.touchedAt).toBe(now);
+    expect(doc.cursorAt).toBe(now);
+    doc = recordOpen(doc, "compline:4", "2026-10-10", "2026-10-10T01:00:00.000Z");
+    expect(doc.cursorAt).toBe(now);
+    expect(doc.touchedAt).toBe(now);
+    doc = setPace(doc, 14, "2026-10-10T02:00:00.000Z");
+    expect(doc.touchedAt).toBe("2026-10-10T02:00:00.000Z");
+    expect(doc.cursorAt).toBe(now);
+  });
+
+  test("parse keeps ISO timestamps and drops a malformed one", () => {
+    const text = JSON.stringify({
+      work: "gradibus",
+      started: "2026-09-27",
+      cursor: "cap1-s1",
+      cursorAt: "2026-10-09T23:59:59.999Z",
+      touchedAt: "not-a-stamp",
+      satWith: [],
+      annotations: [],
+    });
+    const parsed = parseSession(text);
+    expect(parsed?.cursorAt).toBe("2026-10-09T23:59:59.999Z");
+    expect(parsed?.touchedAt).toBeUndefined();
   });
 
   test("parse tolerates extra fields and drops bad marks", () => {

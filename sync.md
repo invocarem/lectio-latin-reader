@@ -1,14 +1,15 @@
 # Sync across devices
 
-**Current step: 1. Bundle and merge** (not started). Tick a box here when that piece lands, and move the current-step line with it.
+**Current step: 2. Synced file** (not started). Tick a box here when that piece lands, and move the current-step line with it.
 
 - [x] 0. Plan
-- [ ] 1. Bundle and merge
-  - [ ] `cursorAt` and `touchedAt` on the session document
-  - [ ] `mergeSession` and tests
-  - [ ] Read and write `lectio-sessions.json`
-  - [ ] Home export and import, with a short merge result
-  - [ ] Single-work import writes `session.${work}` and does not replace a different open pass
+- [x] 1. Bundle and merge
+  - [x] `cursorAt` and `touchedAt` on the session document
+  - [x] `mergeSession` and tests
+  - [x] Read and write `lectio-sessions.json`
+  - [x] Convert supplied old progress JSON into `lectio-sessions.json` (files not in the repo yet; Import accepts them)
+  - [x] Home export and import, with a short merge result
+  - [x] Single-work import writes `session.${work}` and does not replace a different open pass
 - [ ] 2. Synced file
   - [ ] Pick the file once per device
   - [ ] Read it on launch
@@ -66,6 +67,14 @@ This plan keeps `localStorage` as the live store. Sync copies one bundle and mer
 
 Existing files and `localStorage` values without those fields still parse. Missing timestamps sort as older than any present timestamp.
 
+## Old progress
+
+The existing passes are exported session files, one work each, not a bundle. They are not in the repo. When they are supplied, convert them into one `lectio-sessions.json` so the first sync does not start empty.
+
+Accept each file `parseSession` already accepts, including a file that still has separate `highlights` and `notes`. Key the result by `work`. Several files become one `sessions` map. A file that does not parse is reported and left out. The others are still written.
+
+Keep `cursor`, `satWith`, and `annotations`. Set `cursorAt` and `touchedAt` from the latest `at` in that pass (end of that civil day, UTC) when the cursor or any sitting or note is present, so the converted pass counts as a real edit. An empty pass gets neither timestamp.
+
 ## Merge
 
 `mergeSession(local, remote)` is a pure function. Identity is the work id, not `SessionDoc.id` (today `id` is the start date). Apply it once per key present on either side. Then save each merged document with `saveSession`.
@@ -97,7 +106,7 @@ No account and no server in these two phases. A private GitHub file would still 
 
 ## Order
 
-The checklist at the top is the tracker. Do the steps in that order. Step 1’s tests cover union of sittings, a note whose text diverged, an empty pass that must not clobber, an unknown key skipped, and a single-work import that writes the right key.
+The checklist at the top is the tracker. Do the steps in that order. Step 1’s tests cover union of sittings, a note whose text diverged, an empty pass that must not clobber, an unknown key skipped, a single-work import that writes the right key, and old progress files folded into one bundle.
 
 ## Out of scope
 

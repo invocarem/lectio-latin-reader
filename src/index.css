@@ -94,6 +94,30 @@ select option {
     max(1.1rem, env(safe-area-inset-left));
 }
 
+.home-sync {
+  width: min(64rem, 100%);
+  margin: 0 auto 1.35rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem 1rem;
+}
+
+.home-sync .home-kicker {
+  margin: 0;
+}
+
+.home-sync .home-actions {
+  margin: 0;
+  padding: 0;
+}
+
+.home-sync-result {
+  flex-basis: 100%;
+  margin: 0.15rem 0 0;
+  font-size: 0.92rem;
+}
+
 .home-featured,
 .home-other {
   width: min(64rem, 100%);

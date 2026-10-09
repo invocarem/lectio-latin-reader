@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   createSession,
   markPosition,
-  parseSession,
   recordOpen,
   satCount,
   setAnnotation,
@@ -13,6 +12,7 @@ import {
   type SessionDoc,
   type SessionWork,
 } from "./document";
+import { importProgress } from "./bundle";
 import { downloadBytes } from "./download";
 import { loadSession, saveSession } from "./store";
 import { daysFrom, isoDate, type OpenPlace, type SessionPace } from "./cursus";
@@ -48,35 +48,39 @@ export function useSession(work: SessionWork = "cursus", options: { persist?: bo
   /** Open a place: record the sitting, close the panel, and drive Office. */
   const choose = useCallback(
     (place: OpenPlace): OpenPlace => {
-      setDoc((current) => recordOpen(current, place.step, today));
+      setDoc((current) => recordOpen(current, place.step, today, new Date().toISOString()));
       setOpen(false);
       return place;
     },
     [today],
   );
 
-  const setPaceValue = useCallback((pace: SessionPace) => setDoc((current) => setPace(current, pace)), []);
+  const setPaceValue = useCallback(
+    (pace: SessionPace) => setDoc((current) => setPace(current, pace, new Date().toISOString())),
+    [],
+  );
 
   /** Mark a step done or not done (the pass's "done" checkbox), without navigating. */
   const toggleDone = useCallback(
-    (step: string) => setDoc((current) => toggleSat(current, step, today)),
+    (step: string) => setDoc((current) => toggleSat(current, step, today, new Date().toISOString())),
     [today],
   );
 
   const toggleLineAnnotation = useCallback(
-    (psalm: number, line: string) => setDoc((current) => toggleAnnotation(current, psalm, line, today)),
+    (psalm: number, line: string) =>
+      setDoc((current) => toggleAnnotation(current, psalm, line, today, new Date().toISOString())),
     [today],
   );
 
   /** Remember where the reader is, so returning reopens it (no sitting mark). */
   const rememberPlace = useCallback(
-    (step: string) => setDoc((current) => markPosition(current, step)),
+    (step: string) => setDoc((current) => markPosition(current, step, new Date().toISOString())),
     [],
   );
 
   const writeLineNote = useCallback(
     (psalm: number, line: string, text: string) =>
-      setDoc((current) => setAnnotation(current, psalm, line, text, today)),
+      setDoc((current) => setAnnotation(current, psalm, line, text, today, new Date().toISOString())),
     [today],
   );
 
@@ -98,10 +102,10 @@ export function useSession(work: SessionWork = "cursus", options: { persist?: bo
   const importSession = useCallback((file: File | null) => {
     if (!file) return;
     file.text().then((text) => {
-      const parsed = parseSession(text);
-      if (parsed) setDoc(parsed);
+      const read = importProgress(text, undefined, work);
+      if (read.open) setDoc(read.open);
     });
-  }, []);
+  }, [work]);
 
   const satKeys = useMemo(
     () => new Set(doc.satWith.map((mark) => stepKey(doc.work, mark.step))),
