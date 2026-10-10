@@ -4,7 +4,8 @@
  *
  * It stores no Latin and no English: a step is a string the work chooses (for
  * the cursus it is the weekday/hour/psalm place), the `at` is a civil date,
- * and each line may carry one annotation — its highlight with any note.
+ * and each place may carry one annotation — its highlight with any note.
+ * A cursus place is an office line. A library work's place is one lectio page.
  */
 
 import { keyOfStep } from "./cursus";
@@ -18,7 +19,22 @@ import type { WorkId } from "../types";
  * A psalm sung in parts numbers each part from 1, so `line` is `part:number`
  * (`"1:1"` is part 1, line 1). A whole psalm keeps the bare line number.
  */
-export type Annotation = { psalm: number; line: string; text: string; at: string };
+export type PsalmAnnotation = { psalm: number; line: string; text: string; at: string };
+
+/**
+ * A note on one lectio page of a library work (Gradibus, Confessions, and
+ * the rest). `unit` is that page's id. Presence is the highlight; `text` is
+ * the optional note.
+ */
+export type UnitAnnotation = { unit: string; text: string; at: string };
+
+/** One highlight, on an office line or on a library lectio page. */
+export type Annotation = PsalmAnnotation | UnitAnnotation;
+
+/** True when the note belongs to a library lectio page rather than an office line. */
+export function isUnitAnnotation(note: Annotation): note is UnitAnnotation {
+  return "unit" in note;
+}
 
 /** A work that offers a session pass: the cursus, or any library work. */
 export type SessionWork = "cursus" | WorkId;
@@ -140,9 +156,14 @@ export function setPace(doc: SessionDoc, pace: 7 | 14 | 40, now?: string): Sessi
   });
 }
 
-/** The stable key of an annotated line. */
+/** The stable key of an annotated office line. */
 export function annotationKey(psalm: number, line: string): string {
   return `${psalm}:${line}`;
+}
+
+/** The stable key of any annotation, office line or lectio page. */
+export function annotationIdentity(note: Annotation): string {
+  return isUnitAnnotation(note) ? `unit:${note.unit}` : annotationKey(note.psalm, note.line);
 }
 
 /**
@@ -153,6 +174,11 @@ function annotationKeys(psalm: number, line: string, legacyLine?: string): Set<s
   const keys = new Set([annotationKey(psalm, line)]);
   if (legacyLine && legacyLine !== line) keys.add(annotationKey(psalm, legacyLine));
   return keys;
+}
+
+/** The office-line key, or undefined when the note is on a lectio page. */
+function psalmKeyOf(item: Annotation): string | undefined {
+  return isUnitAnnotation(item) ? undefined : annotationKey(item.psalm, item.line);
 }
 
 /** Add the annotation when absent, remove it (and its note) when present. */
@@ -166,9 +192,15 @@ export function toggleAnnotation(
 ): SessionDoc {
   return updateDoc(doc, (next) => {
     const keys = annotationKeys(psalm, line, legacyLine);
-    const has = next.annotations.some((item) => keys.has(annotationKey(item.psalm, item.line)));
+    const has = next.annotations.some((item) => {
+      const key = psalmKeyOf(item);
+      return key != null && keys.has(key);
+    });
     next.annotations = has
-      ? next.annotations.filter((item) => !keys.has(annotationKey(item.psalm, item.line)))
+      ? next.annotations.filter((item) => {
+          const key = psalmKeyOf(item);
+          return key == null || !keys.has(key);
+        })
       : [...next.annotations, { psalm, line, text: "", at: today }];
     stamp(next, now, true, false);
     return next;
@@ -178,7 +210,7 @@ export function toggleAnnotation(
 /** True when the office line is annotated (highlighted). */
 export function isAnnotated(doc: SessionDoc, psalm: number, line: string): boolean {
   const key = annotationKey(psalm, line);
-  return doc.annotations.some((item) => annotationKey(item.psalm, item.line) === key);
+  return doc.annotations.some((item) => psalmKeyOf(item) === key);
 }
 
 /** The annotation on the line, or undefined. */
@@ -188,7 +220,7 @@ export function annotationFor(
   line: string,
 ): Annotation | undefined {
   const key = annotationKey(psalm, line);
-  return doc.annotations.find((item) => annotationKey(item.psalm, item.line) === key);
+  return doc.annotations.find((item) => psalmKeyOf(item) === key);
 }
 
 /**
@@ -223,19 +255,64 @@ export function setAnnotation(
   return updateDoc(doc, (next) => {
     const key = annotationKey(psalm, line);
     const legacyKey = legacyLine && legacyLine !== line ? annotationKey(psalm, legacyLine) : undefined;
-    const index = next.annotations.findIndex((item) => annotationKey(item.psalm, item.line) === key);
+    const index = next.annotations.findIndex((item) => psalmKeyOf(item) === key);
     const previous = index < 0 ? undefined : next.annotations[index];
     const hadLegacy =
-      legacyKey != null && next.annotations.some((item) => annotationKey(item.psalm, item.line) === legacyKey);
-    const annotation: Annotation = { psalm, line, text, at: today };
+      legacyKey != null && next.annotations.some((item) => psalmKeyOf(item) === legacyKey);
+    const annotation: PsalmAnnotation = { psalm, line, text, at: today };
     let annotations = legacyKey
-      ? next.annotations.filter((item) => annotationKey(item.psalm, item.line) !== legacyKey)
+      ? next.annotations.filter((item) => psalmKeyOf(item) !== legacyKey)
       : next.annotations;
-    const nextIndex = annotations.findIndex((item) => annotationKey(item.psalm, item.line) === key);
+    const nextIndex = annotations.findIndex((item) => psalmKeyOf(item) === key);
     if (nextIndex < 0) annotations = [...annotations, annotation];
     else annotations = annotations.map((item, i) => (i === nextIndex ? annotation : item));
     next.annotations = annotations;
     const changed = !previous || previous.text !== text || previous.at !== today || hadLegacy;
+    stamp(next, now, changed, false);
+    return next;
+  });
+}
+
+/** Add the annotation on a lectio page when absent, remove it (and its note) when present. */
+export function toggleUnitAnnotation(
+  doc: SessionDoc,
+  unit: string,
+  today: string,
+  now?: string,
+): SessionDoc {
+  return updateDoc(doc, (next) => {
+    const has = next.annotations.some((item) => isUnitAnnotation(item) && item.unit === unit);
+    next.annotations = has
+      ? next.annotations.filter((item) => !(isUnitAnnotation(item) && item.unit === unit))
+      : [...next.annotations, { unit, text: "", at: today }];
+    stamp(next, now, true, false);
+    return next;
+  });
+}
+
+/** The annotation on this lectio page, or undefined. */
+export function annotationForUnit(doc: SessionDoc, unit: string): UnitAnnotation | undefined {
+  return doc.annotations.find((item): item is UnitAnnotation => isUnitAnnotation(item) && item.unit === unit);
+}
+
+/**
+ * Write the person's own words on an annotated lectio page. Keeps the first
+ * `at` when the text is unchanged on the same day.
+ */
+export function setUnitAnnotation(
+  doc: SessionDoc,
+  unit: string,
+  text: string,
+  today: string,
+  now?: string,
+): SessionDoc {
+  return updateDoc(doc, (next) => {
+    const index = next.annotations.findIndex((item) => isUnitAnnotation(item) && item.unit === unit);
+    const previous = index < 0 ? undefined : next.annotations[index];
+    const annotation: UnitAnnotation = { unit, text, at: today };
+    if (index < 0) next.annotations = [...next.annotations, annotation];
+    else next.annotations = next.annotations.map((item, i) => (i === index ? annotation : item));
+    const changed = !previous || previous.text !== text || previous.at !== today;
     stamp(next, now, changed, false);
     return next;
   });
@@ -279,6 +356,20 @@ function parseTimestamp(value: unknown): string | undefined {
   return typeof value === "string" && ISO_STAMP.test(value) ? value : undefined;
 }
 
+/** One stored annotation, either an office line or a lectio page. Anything else is dropped. */
+function parseAnnotation(note: unknown): Annotation | null {
+  if (!note || typeof note !== "object") return null;
+  const value = note as Record<string, unknown>;
+  if (typeof value.text !== "string" || typeof value.at !== "string") return null;
+  if (typeof value.unit === "string" && value.unit.length > 0) {
+    return { unit: value.unit, text: value.text, at: value.at };
+  }
+  if (typeof value.psalm === "number" && typeof value.line === "string") {
+    return { psalm: value.psalm, line: value.line, text: value.text, at: value.at };
+  }
+  return null;
+}
+
 function isLegacyNote(item: unknown): item is LegacyNote {
   const v = item as Record<string, unknown> | null;
   return (
@@ -307,14 +398,10 @@ export function parseSession(json: string): SessionDoc | null {
         )
       : [];
     const annotations = Array.isArray(value.annotations)
-      ? value.annotations.filter(
-          (note) =>
-            note &&
-            typeof note.psalm === "number" &&
-            typeof note.line === "string" &&
-            typeof note.text === "string" &&
-            typeof note.at === "string",
-        )
+      ? value.annotations.flatMap((note) => {
+          const parsed = parseAnnotation(note);
+          return parsed ? [parsed] : [];
+        })
       : [];
     // Legacy files before the merge stored highlights and notes separately.
     // Fold them into the single annotation list, notes winning a shared line.
@@ -322,12 +409,12 @@ export function parseSession(json: string): SessionDoc | null {
     const legacyHighlights = Array.isArray(raw.highlights) ? raw.highlights.filter(isLegacyHighlight) : [];
     const legacyNotes = Array.isArray(raw.notes) ? raw.notes.filter(isLegacyNote) : [];
     for (const item of legacyHighlights) {
-      if (!annotations.some((a) => annotationKey(a.psalm, a.line) === annotationKey(item.psalm, item.line))) {
+      if (!annotations.some((a) => psalmKeyOf(a) === annotationKey(item.psalm, item.line))) {
         annotations.push({ psalm: item.psalm, line: item.line, text: "", at: value.started });
       }
     }
     for (const note of legacyNotes) {
-      const index = annotations.findIndex((a) => annotationKey(a.psalm, a.line) === annotationKey(note.psalm, note.line));
+      const index = annotations.findIndex((a) => psalmKeyOf(a) === annotationKey(note.psalm, note.line));
       if (index < 0) annotations.push({ psalm: note.psalm, line: note.line, text: note.text, at: note.at });
       else annotations[index] = { ...annotations[index], text: note.text, at: note.at };
     }

@@ -6,9 +6,11 @@ import {
   satCount,
   setAnnotation,
   setPace,
+  setUnitAnnotation,
   stepKey,
   toggleAnnotation,
   toggleSat,
+  toggleUnitAnnotation,
   type SessionDoc,
   type SessionWork,
 } from "./document";
@@ -94,6 +96,18 @@ export function useSession(work: SessionWork = "cursus", options: { persist?: bo
     [today],
   );
 
+  const toggleUnitHighlight = useCallback(
+    (unitId: string) =>
+      setDoc((current) => toggleUnitAnnotation(current, unitId, today, new Date().toISOString())),
+    [today],
+  );
+
+  const writeUnitNote = useCallback(
+    (unitId: string, text: string) =>
+      setDoc((current) => setUnitAnnotation(current, unitId, text, today, new Date().toISOString())),
+    [today],
+  );
+
   const exportSession = useCallback(() => {
     const blob = new Blob([JSON.stringify(doc, null, 2)], { type: "application/json" });
     void downloadBytes(`session-${doc.work}-${doc.started}.json`, blob);
@@ -143,6 +157,8 @@ export function useSession(work: SessionWork = "cursus", options: { persist?: bo
     elapsed,
     toggleHighlight: toggleLineAnnotation,
     writeNote: writeLineNote,
+    toggleUnitHighlight,
+    writeUnitNote,
     rememberPlace,
   };
 }

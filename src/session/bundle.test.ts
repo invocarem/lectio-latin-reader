@@ -103,6 +103,34 @@ describe("mergeSession", () => {
     expect(merged.conflicts).toEqual([]);
   });
 
+  test("merges a library passage note by its unit, apart from any office line", () => {
+    const local = pass("confessions", {
+      annotations: [{ unit: "1.1", text: "earlier words", at: "2026-10-01" }],
+    });
+    const remote = pass("confessions", {
+      annotations: [{ unit: "1.1", text: "later words", at: "2026-10-02" }],
+    });
+    const merged = mergeSession(local, remote);
+    expect(merged.doc.annotations).toEqual([
+      { unit: "1.1", text: "later words", at: "2026-10-02" },
+    ]);
+    expect(merged.conflicts).toEqual([
+      {
+        work: "confessions",
+        unit: "1.1",
+        kept: "later words",
+        dropped: "earlier words",
+      },
+    ]);
+    expect(describeMerge({
+      sessions: {},
+      sittingsAdded: 0,
+      notesAdded: 0,
+      cursorsMoved: 0,
+      conflicts: merged.conflicts,
+    })).toBe("0 sittings added, 0 notes added, cursor unchanged. Kept the later note on confessions 1.1");
+  });
+
   test("the later cursorAt moves the cursor, and a missing one does not", () => {
     const local = pass("gradibus", {
       cursor: "cap1-s1",

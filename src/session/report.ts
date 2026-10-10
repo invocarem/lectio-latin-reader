@@ -76,6 +76,7 @@ function cellLabel(slice: { psalm: number; from?: number; to?: number }): string
 
 /** A divided psalm's note key is `part:line`; the heading names the part. */
 function annotationHeading(annotation: Annotation): string {
+  if ("unit" in annotation) return annotation.unit;
   const divided = /^(\d+):(\d+)$/.exec(annotation.line);
   if (!divided) return `Psalmus ${annotation.psalm} · line ${annotation.line}`;
   return `Psalmus ${annotation.psalm} · ${divided[1]} · line ${divided[2]}`;

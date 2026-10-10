@@ -1,6 +1,7 @@
 import {
   annotationFor,
   annotationForLine,
+  annotationForUnit,
   createSession,
   isAnnotated,
   markPosition,
@@ -10,8 +11,10 @@ import {
   serializeSession,
   setAnnotation,
   setPace,
+  setUnitAnnotation,
   toggleAnnotation,
   toggleSat,
+  toggleUnitAnnotation,
 } from "./document";
 
 describe("session document", () => {
@@ -203,6 +206,33 @@ describe("annotation (highlight + note)", () => {
     doc = setAnnotation(doc, 50, "12", "He is my God", "2026-09-28");
     const parsed = parseSession(serializeSession(doc));
     expect(parsed?.annotations).toEqual([{ psalm: 50, line: "12", text: "He is my God", at: "2026-09-28" }]);
+  });
+
+  test("a library passage toggles, keeps its note, and round-trips on the unit id", () => {
+    const base = createSession("gradibus", "2026-09-27");
+    const on = toggleUnitAnnotation(base, "cap1-s1", "2026-09-27");
+    expect(on.annotations).toEqual([{ unit: "cap1-s1", text: "", at: "2026-09-27" }]);
+    expect(annotationForUnit(on, "cap1-s1")?.text).toBe("");
+    expect(annotationForUnit(on, "cap1-s2")).toBeUndefined();
+    const noted = setUnitAnnotation(on, "cap1-s1", "the first step", "2026-09-28");
+    expect(annotationForUnit(noted, "cap1-s1")).toEqual({
+      unit: "cap1-s1",
+      text: "the first step",
+      at: "2026-09-28",
+    });
+    const parsed = parseSession(serializeSession(noted));
+    expect(parsed?.annotations).toEqual(noted.annotations);
+    const off = toggleUnitAnnotation(noted, "cap1-s1", "2026-09-29");
+    expect(off.annotations).toEqual([]);
+  });
+
+  test("a passage note does not collide with an office line", () => {
+    let doc = toggleAnnotation(createSession("cursus", "2026-09-27"), 50, "12", "2026-09-27");
+    doc = toggleUnitAnnotation(doc, "cap1-s1", "2026-09-27");
+    expect(doc.annotations).toHaveLength(2);
+    doc = toggleAnnotation(doc, 50, "12", "2026-09-28");
+    expect(annotationForUnit(doc, "cap1-s1")).toEqual({ unit: "cap1-s1", text: "", at: "2026-09-27" });
+    expect(doc.annotations).toHaveLength(1);
   });
 
   test("import folds legacy highlights and notes into one annotation list", () => {

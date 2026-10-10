@@ -14,7 +14,7 @@ import {
   type BundleOutcome,
   type SessionBundle,
 } from "./bundle";
-import type { SessionDoc } from "./document";
+import { annotationIdentity, isUnitAnnotation, type Annotation, type SessionDoc } from "./document";
 import { saveSession } from "./store";
 
 export type SyncMode = "unsupported" | "none" | "needs-gesture" | "ready" | "offline";
@@ -61,6 +61,14 @@ function emptyBundle(): SessionBundle {
   return { version: BUNDLE_VERSION, sessions: {} };
 }
 
+/** Office lines stay in psalm order. A lectio page sorts by its unit id. */
+function compareAnnotations(a: Annotation, b: Annotation): number {
+  if (!isUnitAnnotation(a) && !isUnitAnnotation(b)) {
+    return a.psalm - b.psalm || a.line.localeCompare(b.line) || a.at.localeCompare(b.at);
+  }
+  return annotationIdentity(a).localeCompare(annotationIdentity(b)) || a.at.localeCompare(b.at);
+}
+
 function canonicalDoc(doc: SessionDoc): SessionDoc {
   return {
     id: doc.id,
@@ -71,9 +79,7 @@ function canonicalDoc(doc: SessionDoc): SessionDoc {
     ...(doc.cursorAt ? { cursorAt: doc.cursorAt } : {}),
     ...(doc.touchedAt ? { touchedAt: doc.touchedAt } : {}),
     satWith: [...doc.satWith].sort((a, b) => a.step.localeCompare(b.step) || a.at.localeCompare(b.at)),
-    annotations: [...doc.annotations].sort(
-      (a, b) => a.psalm - b.psalm || a.line.localeCompare(b.line) || a.at.localeCompare(b.at),
-    ),
+    annotations: [...doc.annotations].sort(compareAnnotations),
   };
 }
 

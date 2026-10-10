@@ -6,8 +6,9 @@
 
 import {
   SESSION_WORKS,
-  annotationKey,
+  annotationIdentity,
   isSessionWork,
+  isUnitAnnotation,
   parseSession,
   stepKey,
   type Annotation,
@@ -25,8 +26,11 @@ export type SessionBundle = {
 
 export type NoteConflict = {
   work: SessionWork;
-  psalm: number;
-  line: string;
+  /** Office line. Absent when `unit` names a lectio page. */
+  psalm?: number;
+  line?: string;
+  /** Lectio page id, when the note is on a library work. */
+  unit?: string;
   kept: string;
   dropped: string;
 };
@@ -131,11 +135,11 @@ function mergeAnnotations(
   remote: Annotation[],
 ): { annotations: Annotation[]; notesAdded: number; conflicts: NoteConflict[] } {
   const byKey = new Map<string, Annotation>();
-  for (const note of local) byKey.set(annotationKey(note.psalm, note.line), note);
+  for (const note of local) byKey.set(annotationIdentity(note), note);
   let notesAdded = 0;
   const conflicts: NoteConflict[] = [];
   for (const note of remote) {
-    const key = annotationKey(note.psalm, note.line);
+    const key = annotationIdentity(note);
     const existing = byKey.get(key);
     if (!existing) {
       byKey.set(key, note);
@@ -147,8 +151,9 @@ function mergeAnnotations(
     if (chosen.dropped != null) {
       conflicts.push({
         work,
-        psalm: note.psalm,
-        line: note.line,
+        ...(isUnitAnnotation(note)
+          ? { unit: note.unit }
+          : { psalm: note.psalm, line: note.line }),
         kept: chosen.annotation.text,
         dropped: chosen.dropped,
       });
@@ -331,7 +336,8 @@ export function describeMerge(outcome: BundleOutcome): string {
   let text = `${sittings}, ${notes}, ${cursor}`;
   if (outcome.conflicts.length === 1) {
     const conflict = outcome.conflicts[0];
-    text += `. Kept the later note on ${conflict.work} ${conflict.psalm}:${conflict.line}`;
+    const place = conflict.unit ?? `${conflict.psalm}:${conflict.line}`;
+    text += `. Kept the later note on ${conflict.work} ${place}`;
   } else if (outcome.conflicts.length > 1) {
     text += `. Kept the later text on ${outcome.conflicts.length} notes`;
   }

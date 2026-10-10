@@ -9,6 +9,7 @@ import { CapitaIcon, EnglishIcon, SessionIcon } from "./icons";
 import { ThemeToggle } from "./ThemeToggle";
 import { LectioSessionView } from "../session/LectioSessionView";
 import { courseFor } from "../session/courses";
+import { annotationForUnit } from "../session/document";
 import { useSession } from "../session/useSession";
 
 type LectioProps = {
@@ -28,8 +29,10 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
   const [showEnglish, setShowEnglish] = useState(true);
   const [showToc, setShowToc] = useState(false);
   const [dict, setDict] = useState<DictState | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
   const closeDict = useCallback(() => setDict(null), []);
   const stageRef = useRef<HTMLDivElement>(null);
+  const noteRef = useRef<HTMLTextAreaElement>(null);
 
   const sessionEnabled = work.session === true;
   const session = useSession(sessionEnabled ? work.id : "cursus", {
@@ -60,6 +63,14 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
     [lectioUnits, focusId],
   );
   const activeChapter = current.chapterId ?? "";
+  const note = sessionEnabled ? annotationForUnit(session.doc, current.id) : undefined;
+  const highlighted = note != null;
+  const editing = highlighted && editingId === current.id;
+
+  const growNote = (el: HTMLTextAreaElement) => {
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  };
 
   const { prev: prevChapter, next: nextChapter } = useMemo(
     () => chapterFocus(chapters, activeChapter),
@@ -93,6 +104,17 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
   useEffect(() => {
     stageRef.current?.scrollTo({ top: 0 });
   }, [current.id]);
+
+  useEffect(() => {
+    setEditingId(null);
+  }, [current.id]);
+
+  useEffect(() => {
+    if (editing && noteRef.current) {
+      noteRef.current.focus();
+      growNote(noteRef.current);
+    }
+  }, [editing]);
 
   useEffect(() => {
     function onKey(event: KeyboardEvent) {
@@ -130,7 +152,7 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
       if (!isSwipePointer(event.pointerType)) return;
       if (event.clientX < EDGE_GUARD_PX) return;
       const target = event.target as HTMLElement | null;
-      if (target?.closest("button, .dict")) return;
+      if (target?.closest("button, .dict, textarea, .session-note")) return;
       tracking = true;
       startX = event.clientX;
       startY = event.clientY;
@@ -241,7 +263,16 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
           <article className={`lectio-card${current.kind !== "section" && current.kind !== "retractatio" && current.kind !== "praefatio" ? " heading" : ""}`}>
             <div className="lectio-kicker-row">
               <p className="lectio-kicker">{kicker(current)}</p>
-              {!sessionEnabled ? (
+              {sessionEnabled ? (
+                <button
+                  type="button"
+                  className="highlight-marker"
+                  aria-pressed={highlighted}
+                  aria-label={highlighted ? "Clear highlight from this passage" : "Highlight this passage"}
+                  title="Highlight this passage"
+                  onClick={() => session.toggleUnitHighlight(current.id)}
+                />
+              ) : (
                 <div className="lectio-chapter-nav">
                   <button
                     type="button"
@@ -262,9 +293,9 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
                     ›
                   </button>
                 </div>
-              ) : null}
+              )}
             </div>
-            <div className="lectio-latin" lang="la">
+            <div className={`lectio-latin${highlighted ? " highlighted" : ""}`} lang="la">
               <LatinText
                 text={current.latin}
                 unitId={current.id}
@@ -282,6 +313,37 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
               <p className="lectio-english" lang="en">
                 {current.english}
               </p>
+            ) : null}
+            {highlighted ? (
+              <div className="session-note">
+                <span className="session-note-label">Note</span>
+                {editing ? (
+                  <textarea
+                    ref={noteRef}
+                    className="session-note-edit"
+                    value={note?.text ?? ""}
+                    rows={1}
+                    placeholder="A note on this passage"
+                    onChange={(event) => {
+                      session.writeUnitNote(current.id, event.target.value);
+                      growNote(event.target);
+                    }}
+                    onBlur={() => setEditingId(null)}
+                    onKeyDown={(event) => {
+                      if (event.key === "Escape") event.currentTarget.blur();
+                    }}
+                  />
+                ) : (
+                  <button
+                    type="button"
+                    className={`session-note-view${note?.text ? "" : " empty"}`}
+                    onClick={() => setEditingId(current.id)}
+                    title="Tap to edit this note"
+                  >
+                    {note?.text || "Add a note…"}
+                  </button>
+                )}
+              </div>
             ) : null}
           </article>
         </div>
