@@ -77,8 +77,8 @@ export function useSession(work: SessionWork = "cursus", options: { persist?: bo
   );
 
   const toggleLineAnnotation = useCallback(
-    (psalm: number, line: string) =>
-      setDoc((current) => toggleAnnotation(current, psalm, line, today, new Date().toISOString())),
+    (psalm: number, line: string, legacyLine?: string) =>
+      setDoc((current) => toggleAnnotation(current, psalm, line, today, new Date().toISOString(), legacyLine)),
     [today],
   );
 
@@ -89,8 +89,8 @@ export function useSession(work: SessionWork = "cursus", options: { persist?: bo
   );
 
   const writeLineNote = useCallback(
-    (psalm: number, line: string, text: string) =>
-      setDoc((current) => setAnnotation(current, psalm, line, text, today, new Date().toISOString())),
+    (psalm: number, line: string, text: string, legacyLine?: string) =>
+      setDoc((current) => setAnnotation(current, psalm, line, text, today, new Date().toISOString(), legacyLine)),
     [today],
   );
 

@@ -14,6 +14,9 @@ import type { WorkId } from "../types";
  * A note on an office line: the Gallican psalm number, the office line
  * number, the person's own words, and the date written. Its presence on the
  * line is the highlight; `text` is the optional note on that line.
+ *
+ * A psalm sung in parts numbers each part from 1, so `line` is `part:number`
+ * (`"1:1"` is part 1, line 1). A whole psalm keeps the bare line number.
  */
 export type Annotation = { psalm: number; line: string; text: string; at: string };
 
@@ -142,6 +145,16 @@ export function annotationKey(psalm: number, line: string): string {
   return `${psalm}:${line}`;
 }
 
+/**
+ * Keys that name this line. `legacyLine` is the bare verse number a note used
+ * before a divided psalm's part was stored with it.
+ */
+function annotationKeys(psalm: number, line: string, legacyLine?: string): Set<string> {
+  const keys = new Set([annotationKey(psalm, line)]);
+  if (legacyLine && legacyLine !== line) keys.add(annotationKey(psalm, legacyLine));
+  return keys;
+}
+
 /** Add the annotation when absent, remove it (and its note) when present. */
 export function toggleAnnotation(
   doc: SessionDoc,
@@ -149,11 +162,13 @@ export function toggleAnnotation(
   line: string,
   today: string,
   now?: string,
+  legacyLine?: string,
 ): SessionDoc {
   return updateDoc(doc, (next) => {
-    const key = annotationKey(psalm, line);
-    next.annotations = next.annotations.some((item) => annotationKey(item.psalm, item.line) === key)
-      ? next.annotations.filter((item) => annotationKey(item.psalm, item.line) !== key)
+    const keys = annotationKeys(psalm, line, legacyLine);
+    const has = next.annotations.some((item) => keys.has(annotationKey(item.psalm, item.line)));
+    next.annotations = has
+      ? next.annotations.filter((item) => !keys.has(annotationKey(item.psalm, item.line)))
       : [...next.annotations, { psalm, line, text: "", at: today }];
     stamp(next, now, true, false);
     return next;
@@ -176,7 +191,26 @@ export function annotationFor(
   return doc.annotations.find((item) => annotationKey(item.psalm, item.line) === key);
 }
 
-/** Write the person's own words on an annotated line. Keeps the first `at` if it is unchanged. */
+/**
+ * The annotation on this line. A note saved before the part was stored is
+ * still found under `legacyLine`, and only the caller for part 1 passes that.
+ */
+export function annotationForLine(
+  doc: SessionDoc,
+  psalm: number,
+  line: string,
+  legacyLine?: string,
+): Annotation | undefined {
+  return (
+    annotationFor(doc, psalm, line) ??
+    (legacyLine && legacyLine !== line ? annotationFor(doc, psalm, legacyLine) : undefined)
+  );
+}
+
+/**
+ * Write the person's own words on an annotated line. Keeps the first `at` if it
+ * is unchanged. When `legacyLine` still holds the note, it is moved onto `line`.
+ */
 export function setAnnotation(
   doc: SessionDoc,
   psalm: number,
@@ -184,15 +218,24 @@ export function setAnnotation(
   text: string,
   today: string,
   now?: string,
+  legacyLine?: string,
 ): SessionDoc {
   return updateDoc(doc, (next) => {
     const key = annotationKey(psalm, line);
+    const legacyKey = legacyLine && legacyLine !== line ? annotationKey(psalm, legacyLine) : undefined;
     const index = next.annotations.findIndex((item) => annotationKey(item.psalm, item.line) === key);
     const previous = index < 0 ? undefined : next.annotations[index];
-    const changed = !previous || previous.text !== text || previous.at !== today;
+    const hadLegacy =
+      legacyKey != null && next.annotations.some((item) => annotationKey(item.psalm, item.line) === legacyKey);
     const annotation: Annotation = { psalm, line, text, at: today };
-    if (index < 0) next.annotations = [...next.annotations, annotation];
-    else next.annotations = next.annotations.map((item, i) => (i === index ? annotation : item));
+    let annotations = legacyKey
+      ? next.annotations.filter((item) => annotationKey(item.psalm, item.line) !== legacyKey)
+      : next.annotations;
+    const nextIndex = annotations.findIndex((item) => annotationKey(item.psalm, item.line) === key);
+    if (nextIndex < 0) annotations = [...annotations, annotation];
+    else annotations = annotations.map((item, i) => (i === nextIndex ? annotation : item));
+    next.annotations = annotations;
+    const changed = !previous || previous.text !== text || previous.at !== today || hadLegacy;
     stamp(next, now, changed, false);
     return next;
   });

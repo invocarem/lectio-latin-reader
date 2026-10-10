@@ -187,11 +187,34 @@ export type OfficeLineStep = {
   id: string;
   label: string;
   n: string;
+  /**
+   * Highlight and note key. A divided psalm restarts its line numbers in each
+   * part, so the key is `part:line` and verse 1 of part 1 is not verse 1 of part 2.
+   */
+  noteKey: string;
+  /**
+   * Bare line number used by notes saved before parts were part of the key.
+   * Set only on part 1, the section those shared numbers were written on.
+   */
+  legacyNoteKey?: string;
   /** Gallican psalm number the line belongs to (for highlight/note keys). */
   psalm: number;
   latin: string;
   english: string;
 };
+
+/**
+ * Notes follow the line the reader sees. When a psalm is sung in parts, each
+ * part is numbered from 1, so the key has to name the part as well.
+ */
+function noteKeys(slice: PsalmSlice, n: string): { noteKey: string; legacyNoteKey?: string } {
+  const divided = slice.part != null && Array.isArray(VERSE_MAP[slice.psalm]);
+  if (!divided) return { noteKey: n };
+  return {
+    noteKey: `${slice.part}:${n}`,
+    ...(slice.part === 1 ? { legacyNoteKey: n } : {}),
+  };
+}
 
 /** Office lines of one hour, in cursus order. Each card of office lectio is one step. */
 export function hourLines(weekday: Weekday, hour: OfficeHour): OfficeLineStep[] {
@@ -206,6 +229,7 @@ export function hourLines(weekday: Weekday, hour: OfficeHour): OfficeLineStep[] 
           id: `${span}:${verse.n}`,
           label,
           n: verse.n,
+          ...noteKeys(slice, verse.n),
           psalm: slice.psalm,
           latin: normLatin(verse.latin),
           english: verse.english,

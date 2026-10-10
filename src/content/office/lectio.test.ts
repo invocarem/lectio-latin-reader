@@ -8,6 +8,7 @@ describe("hourLines", () => {
     expect(lines[0]).toMatchObject({
       label: "Psalmus 118 · Res",
       n: "153",
+      noteKey: "153",
     });
     expect(lines[0].latin.startsWith("Vide")).toBe(true);
     expect(lines[8].label).toBe("Psalmus 118 · Sin");
@@ -55,6 +56,22 @@ describe("hourLines", () => {
     expect(prevPsalmIndex(lines, oneThirtyThree)).toBe(ninety);
     expect(prevPsalmIndex(lines, ninety)).toBe(first);
     expect(prevPsalmIndex(lines, first)).toBe(-1);
+  });
+
+  test("Friday Vespers Psalm 143 sections keep separate note keys", () => {
+    const lines = hourLines("fri", "vespers");
+    const first = lines.filter((line) => line.label === "Psalmus 143 · 1");
+    const second = lines.filter((line) => line.label === "Psalmus 143 · 2");
+    expect(first.length).toBeGreaterThan(0);
+    expect(second.map((line) => line.n)).toEqual(first.map((line) => line.n));
+    expect(first[0]).toMatchObject({ n: "1", noteKey: "1:1", legacyNoteKey: "1" });
+    expect(second[0]).toMatchObject({ n: "1", noteKey: "2:1" });
+    expect(second[0].legacyNoteKey).toBeUndefined();
+    const keys = new Set([...first, ...second].map((line) => line.noteKey));
+    expect(keys.size).toBe(first.length + second.length);
+    const whole = lines.find((line) => line.label === "Psalmus 141");
+    expect(whole?.noteKey).toBe(whole?.n);
+    expect(whole?.legacyNoteKey).toBeUndefined();
   });
 
   test("psalm jump: joined Psalms 115 and 116 at Monday Vespers are separate steps", () => {

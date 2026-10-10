@@ -74,6 +74,13 @@ function cellLabel(slice: { psalm: number; from?: number; to?: number }): string
   return sliceLabel(slice).replace(/^Psalmus /, "");
 }
 
+/** A divided psalm's note key is `part:line`; the heading names the part. */
+function annotationHeading(annotation: Annotation): string {
+  const divided = /^(\d+):(\d+)$/.exec(annotation.line);
+  if (!divided) return `Psalmus ${annotation.psalm} · line ${annotation.line}`;
+  return `Psalmus ${annotation.psalm} · ${divided[1]} · line ${divided[2]}`;
+}
+
 /** A Psalm 118 cell shows only its section name ("Aleph", "Beth", …), not the number. */
 function p118Label(slice: { psalm: number; from?: number; to?: number }): string {
   const name = sliceLabel(slice).split("·")[1]?.trim();
@@ -217,7 +224,7 @@ export function buildReportDoc(report: SessionReport, generated: string): Docume
           bullet: { level: 0 },
           spacing: { after: 40 },
           children: [
-            new TextRun({ text: `Psalmus ${annotation.psalm} · line ${annotation.line} — `, bold: true }),
+            new TextRun({ text: `${annotationHeading(annotation)} — `, bold: true }),
             new TextRun(annotation.text || "(highlighted)"),
             ...(annotation.at ? [new TextRun({ text: `  (${annotation.at})`, italics: true })] : []),
           ],

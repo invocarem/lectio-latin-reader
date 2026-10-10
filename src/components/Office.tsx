@@ -12,7 +12,7 @@ import {
 import { EDGE_GUARD_PX, isSwipePointer, swipeIntent } from "../swipe";
 import { SessionView } from "../session/SessionView";
 import { useSession } from "../session/useSession";
-import { isAnnotated, annotationFor } from "../session/document";
+import { annotationForLine } from "../session/document";
 import { parseStep, type OpenPlace } from "../session/cursus";
 import type { ReaderWork } from "../types";
 import { DictPopup } from "./DictPopup";
@@ -173,8 +173,9 @@ export function Office({ work, reading, onHome }: OfficeProps) {
   useEffect(() => {
     lastOfficePosition[reading] = { weekday, hour, index: safeIndex };
   }, [reading, weekday, hour, safeIndex]);
-  const highlighted = line != null && isAnnotated(session.doc, line.psalm, line.n);
-  const note = line != null ? annotationFor(session.doc, line.psalm, line.n) : undefined;
+  const note =
+    line != null ? annotationForLine(session.doc, line.psalm, line.noteKey, line.legacyNoteKey) : undefined;
+  const highlighted = note != null;
   const [editingId, setEditingId] = useState<string | null>(null);
   const noteRef = useRef<HTMLTextAreaElement>(null);
   const growNote = (el: HTMLTextAreaElement) => {
@@ -328,7 +329,7 @@ export function Office({ work, reading, onHome }: OfficeProps) {
                     aria-pressed={highlighted}
                     aria-label={highlighted ? "Clear highlight from this line" : "Highlight this line"}
                     title="Highlight this line"
-                    onClick={() => session.toggleHighlight(line.psalm, line.n)}
+                    onClick={() => session.toggleHighlight(line.psalm, line.noteKey, line.legacyNoteKey)}
                   />
                 </div>
                 <div className={`lectio-latin${highlighted ? " highlighted" : ""}`} lang="la">
@@ -361,7 +362,7 @@ export function Office({ work, reading, onHome }: OfficeProps) {
                         rows={1}
                         placeholder="A note on this line"
                         onChange={(event) => {
-                          session.writeNote(line.psalm, line.n, event.target.value);
+                          session.writeNote(line.psalm, line.noteKey, event.target.value, line.legacyNoteKey);
                           growNote(event.target);
                         }}
                         onBlur={() => setEditingId(null)}

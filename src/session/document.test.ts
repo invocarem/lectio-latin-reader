@@ -1,5 +1,6 @@
 import {
   annotationFor,
+  annotationForLine,
   createSession,
   isAnnotated,
   markPosition,
@@ -182,6 +183,18 @@ describe("annotation (highlight + note)", () => {
     expect(next.annotations.length).toBe(2);
     expect(annotationFor(next, 50, "12")?.text).toBe("one");
     expect(annotationFor(next, 50, "13")?.text).toBe("two");
+  });
+
+  test("a note saved before parts were stored stays on part 1 and moves when edited", () => {
+    const saved = setAnnotation(createSession("cursus", "2026-09-27"), 143, "1", "first half", "2026-09-28");
+    expect(annotationForLine(saved, 143, "1:1", "1")?.text).toBe("first half");
+    expect(annotationForLine(saved, 143, "2:1")).toBeUndefined();
+    const moved = setAnnotation(saved, 143, "1:1", "still the first half", "2026-09-29", undefined, "1");
+    expect(moved.annotations).toEqual([
+      { psalm: 143, line: "1:1", text: "still the first half", at: "2026-09-29" },
+    ]);
+    const cleared = toggleAnnotation(saved, 143, "1:1", "2026-09-29", undefined, "1");
+    expect(cleared.annotations).toEqual([]);
   });
 
   test("import round-trips annotations", () => {
