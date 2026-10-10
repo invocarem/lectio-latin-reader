@@ -1,4 +1,15 @@
+import { useCallback, useEffect, useRef, useState } from "react";
 import { workById } from "../content/works";
+import {
+  bundleFromStorage,
+  describeMerge,
+  importBundle,
+  serializeBundle,
+  sessionsFromFiles,
+} from "../session/bundle";
+import { downloadBytes } from "../session/download";
+import type { SyncNotice } from "../session/sync";
+import { sync } from "../session/syncHost";
 import { sessionProgress } from "../session/useSession";
 import type { ReaderMode, ReaderWork, WorkId } from "../types";
 import { AppTitle } from "./AppTitle";
@@ -15,6 +26,8 @@ const OTHER: WorkId[] = ["rule", "confessions", "psalter", "canticum"];
 export function Home({ onOpen, studyEnabled = true }: HomeProps) {
   const featured = worksFor(FEATURED);
   const other = worksFor(OTHER);
+  const [, setProgressRev] = useState(0);
+  const refreshProgress = useCallback(() => setProgressRev((rev) => rev + 1), []);
 
   return (
     <main className="home">
@@ -27,6 +40,7 @@ export function Home({ onOpen, studyEnabled = true }: HomeProps) {
         </div>
       </header>
       <div className="home-body">
+        <SyncBar onImported={refreshProgress} />
         <div className="home-featured">
           <OfficeCard onOpen={onOpen} />
           {featured.map((work) => (
@@ -49,6 +63,85 @@ export function Home({ onOpen, studyEnabled = true }: HomeProps) {
         </details>
       </div>
     </main>
+  );
+}
+
+function SyncBar({ onImported }: { onImported: () => void }) {
+  const fileRef = useRef<HTMLInputElement>(null);
+  const [notice, setNotice] = useState<SyncNotice>(() => sync.current());
+  const [importNote, setImportNote] = useState<string | null>(null);
+
+  useEffect(() => {
+    setNotice(sync.current());
+    return sync.subscribe((next) => {
+      setImportNote(null);
+      setNotice(next);
+      if (next.refreshed) onImported();
+    });
+  }, [onImported]);
+
+  function exportPasses() {
+    const text = serializeBundle(bundleFromStorage());
+    const blob = new Blob([text], { type: "application/json" });
+    void downloadBytes("lectio-sessions.json", blob);
+  }
+
+  function importPasses(list: FileList | null) {
+    if (!list || list.length === 0) return;
+    Promise.all([...list].map(async (file) => ({ name: file.name, text: await file.text() }))).then(
+      (files) => {
+        const read = sessionsFromFiles(files);
+        if (!read.bundle) {
+          const which = read.rejected.length > 0 ? read.rejected.join(", ") : "this file";
+          setImportNote(`Could not read ${which}.`);
+          return;
+        }
+        const outcome = importBundle(read.bundle);
+        onImported();
+        const skipped = read.rejected.length > 0 ? ` Skipped ${read.rejected.join(", ")}.` : "";
+        setImportNote(`${describeMerge(outcome)}.${skipped}`);
+      },
+    );
+  }
+
+  const showSyncNow = notice.mode === "ready" || notice.mode === "needs-gesture" || notice.mode === "offline";
+
+  return (
+    <div className="home-sync">
+      <p className="home-kicker">Progress</p>
+      <div className="home-actions">
+        {notice.mode === "unsupported" ? null : (
+          <button className="start ghost" type="button" onClick={() => void sync.choose()}>
+            Choose sync file
+          </button>
+        )}
+        {showSyncNow ? (
+          <button className="start ghost" type="button" onClick={() => void sync.syncNow()}>
+            Sync now
+          </button>
+        ) : null}
+        <button className="start ghost" type="button" onClick={exportPasses}>
+          Export
+        </button>
+        <button className="start ghost" type="button" onClick={() => fileRef.current?.click()}>
+          Import
+        </button>
+      </div>
+      <p className="home-sync-result" role="status">
+        {importNote ?? notice.text}
+      </p>
+      <input
+        ref={fileRef}
+        type="file"
+        accept="application/json,.json"
+        multiple
+        hidden
+        onChange={(event) => {
+          importPasses(event.target.files);
+          event.target.value = "";
+        }}
+      />
+    </div>
   );
 }
 

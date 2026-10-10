@@ -30,6 +30,9 @@ const WORK_IDS: readonly WorkId[] = [
   "confessions",
 ];
 
+/** The cursus plus every registered work. Bundle import and export walk this list. */
+export const SESSION_WORKS: readonly SessionWork[] = ["cursus", ...WORK_IDS];
+
 /** True when `value` names the cursus or a registered work. */
 export function isSessionWork(value: unknown): value is SessionWork {
   return (
@@ -45,6 +48,13 @@ export type SessionDoc = {
   pace?: 7 | 14 | 40;
   started: string;
   cursor: string | null;
+  /**
+   * When the cursor last moved, as an ISO timestamp. Absent on a pass that
+   * has never moved its cursor, including a fresh `createSession`.
+   */
+  cursorAt?: string;
+  /** When a sitting, note, cursor, or pace last changed. Absent on a fresh pass. */
+  touchedAt?: string;
   satWith: { step: string; at: string }[];
   annotations: Annotation[];
 };
@@ -70,27 +80,35 @@ export function createSession(work: SessionWork, today: string, pace?: 7 | 14 | 
   };
 }
 
-/** Register that a place was opened. Records the first sitting of each slice. */
-export function recordOpen(doc: SessionDoc, step: string, today: string): SessionDoc {
+/**
+ * Register that a place was opened. Records the first sitting of each slice.
+ * `now`, when passed, stamps `touchedAt` and `cursorAt` only if something moved.
+ */
+export function recordOpen(doc: SessionDoc, step: string, today: string, now?: string): SessionDoc {
   return updateDoc(doc, (next) => {
+    const cursorMoved = next.cursor !== step;
     next.cursor = step;
     const key = stepKey(next.work, step);
     const already = next.satWith.some((mark) => stepKey(next.work, mark.step) === key);
     if (!already) next.satWith = [...next.satWith, { step, at: today }];
+    stamp(next, now, cursorMoved || !already, cursorMoved);
     return next;
   });
 }
 
 /** Add or remove the sitting mark for a step (the pass's "done" checkbox). */
-export function toggleSat(doc: SessionDoc, step: string, today: string): SessionDoc {
+export function toggleSat(doc: SessionDoc, step: string, today: string, now?: string): SessionDoc {
   return updateDoc(doc, (next) => {
     const key = stepKey(next.work, step);
     const exists = next.satWith.some((mark) => stepKey(next.work, mark.step) === key);
     if (exists) {
       next.satWith = next.satWith.filter((mark) => stepKey(next.work, mark.step) !== key);
+      stamp(next, now, true, false);
     } else {
+      const cursorMoved = next.cursor !== step;
       next.satWith = [...next.satWith, { step, at: today }];
       next.cursor = step;
+      stamp(next, now, true, cursorMoved);
     }
     return next;
   });
@@ -100,17 +118,21 @@ export function toggleSat(doc: SessionDoc, step: string, today: string): Session
  * Remember the place now being read, so returning to the work reopens it —
  * without counting it as a sitting. `recordOpen` still marks the sitting.
  */
-export function markPosition(doc: SessionDoc, step: string): SessionDoc {
+export function markPosition(doc: SessionDoc, step: string, now?: string): SessionDoc {
   return updateDoc(doc, (next) => {
+    const cursorMoved = next.cursor !== step;
     next.cursor = step;
+    stamp(next, now, cursorMoved, cursorMoved);
     return next;
   });
 }
 
 /** Set the pace of the open pass (cursus only). */
-export function setPace(doc: SessionDoc, pace: 7 | 14 | 40): SessionDoc {
+export function setPace(doc: SessionDoc, pace: 7 | 14 | 40, now?: string): SessionDoc {
   return updateDoc(doc, (next) => {
+    const changed = next.pace !== pace;
     next.pace = pace;
+    stamp(next, now, changed, false);
     return next;
   });
 }
@@ -126,12 +148,14 @@ export function toggleAnnotation(
   psalm: number,
   line: string,
   today: string,
+  now?: string,
 ): SessionDoc {
   return updateDoc(doc, (next) => {
     const key = annotationKey(psalm, line);
     next.annotations = next.annotations.some((item) => annotationKey(item.psalm, item.line) === key)
       ? next.annotations.filter((item) => annotationKey(item.psalm, item.line) !== key)
       : [...next.annotations, { psalm, line, text: "", at: today }];
+    stamp(next, now, true, false);
     return next;
   });
 }
@@ -159,15 +183,26 @@ export function setAnnotation(
   line: string,
   text: string,
   today: string,
+  now?: string,
 ): SessionDoc {
   return updateDoc(doc, (next) => {
     const key = annotationKey(psalm, line);
     const index = next.annotations.findIndex((item) => annotationKey(item.psalm, item.line) === key);
+    const previous = index < 0 ? undefined : next.annotations[index];
+    const changed = !previous || previous.text !== text || previous.at !== today;
     const annotation: Annotation = { psalm, line, text, at: today };
     if (index < 0) next.annotations = [...next.annotations, annotation];
     else next.annotations = next.annotations.map((item, i) => (i === index ? annotation : item));
+    stamp(next, now, changed, false);
     return next;
   });
+}
+
+/** Stamp a real edit. A no-op leaves both timestamps alone, so opening a pass does not look newer. */
+function stamp(doc: SessionDoc, now: string | undefined, changed: boolean, cursorMoved: boolean): void {
+  if (!now || !changed) return;
+  doc.touchedAt = now;
+  if (cursorMoved) doc.cursorAt = now;
 }
 
 function updateDoc(doc: SessionDoc, patch: (next: SessionDoc) => SessionDoc): SessionDoc {
@@ -193,6 +228,12 @@ type LegacyNote = { psalm: number; line: string; text: string; at: string };
 function isLegacyHighlight(item: unknown): item is LegacyHighlight {
   const v = item as Record<string, unknown> | null;
   return !!v && typeof v.psalm === "number" && typeof v.line === "string";
+}
+
+const ISO_STAMP = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,3})?Z$/;
+
+function parseTimestamp(value: unknown): string | undefined {
+  return typeof value === "string" && ISO_STAMP.test(value) ? value : undefined;
 }
 
 function isLegacyNote(item: unknown): item is LegacyNote {
@@ -247,12 +288,16 @@ export function parseSession(json: string): SessionDoc | null {
       if (index < 0) annotations.push({ psalm: note.psalm, line: note.line, text: note.text, at: note.at });
       else annotations[index] = { ...annotations[index], text: note.text, at: note.at };
     }
+    const cursorAt = parseTimestamp(value.cursorAt);
+    const touchedAt = parseTimestamp(value.touchedAt);
     return {
       id: typeof value.id === "string" ? value.id : value.started,
       work,
       ...(work === "cursus" ? { pace: value.pace as 7 | 14 | 40 } : {}),
       started: value.started,
       cursor: typeof value.cursor === "string" ? value.cursor : null,
+      ...(cursorAt ? { cursorAt } : {}),
+      ...(touchedAt ? { touchedAt } : {}),
       satWith,
       annotations,
     };
