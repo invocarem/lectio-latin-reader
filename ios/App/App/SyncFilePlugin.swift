@@ -36,16 +36,7 @@ public class SyncFilePlugin: CAPPlugin, CAPBridgedPlugin, UIDocumentPickerDelega
     }
 
     @objc func read(_ call: CAPPluginCall) {
-        do {
-            let text = try withBookmark { url in
-                try self.coordinate(url, writing: false) { item in
-                    try String(contentsOf: item, encoding: .utf8)
-                }
-            }
-            call.resolve(["text": text])
-        } catch {
-            call.reject(error.localizedDescription)
-        }
+        withFile(call, write: false)
     }
 
     @objc func write(_ call: CAPPluginCall) {
@@ -53,15 +44,62 @@ public class SyncFilePlugin: CAPPlugin, CAPBridgedPlugin, UIDocumentPickerDelega
             call.reject("Missing text.")
             return
         }
+        withFile(call, write: true, text: text)
+    }
+
+    /**
+     * Reads or writes the sync file under a security-scoped bookmark, using
+     * the asynchronous `NSFileCoordinator` API. Capacitor runs plugin methods
+     * on the main thread, but the synchronous `coordinate(...)` variants block
+     * and can deadlock when called there; the `byAccessor`/`completionHandler`
+     * variants do the I/O off the main thread and the call is settled on it.
+     */
+    private func withFile(_ call: CAPPluginCall, write: Bool, text: String? = nil) {
         do {
-            try withBookmark { url in
-                try self.coordinate(url, writing: true) { item in
-                    try text.write(to: item, atomically: false, encoding: .utf8)
+            let url = try resolvedBookmark()
+            // Stay in the security scope until the coordinated I/O finishes.
+            let started = url.startAccessingSecurityScopedResource()
+
+            let coordinator = NSFileCoordinator()
+            var finished = false
+            let settle: (Result<Any?, Error>) -> Void = { result in
+                guard !finished else { return }
+                finished = true
+                if started { url.stopAccessingSecurityScopedResource() }
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let value):
+                        if let dict = value as? [String: Any] { call.resolve(dict) }
+                        else { call.resolve() }
+                    case .failure(let error):
+                        call.reject(error.localizedDescription)
+                    }
                 }
             }
-            call.resolve()
+
+            let accessor: (URL) -> Void = { item in
+                do {
+                    if let text {
+                        try text.write(to: item, atomically: false, encoding: .utf8)
+                        settle(.success(nil))
+                    } else {
+                        settle(.success(["text": try String(contentsOf: item, encoding: .utf8)]))
+                    }
+                } catch {
+                    settle(.failure(error))
+                }
+            }
+            let coordinationDone: (Error?) -> Void = { error in
+                if let error { settle(.failure(error)) }
+            }
+
+            if write {
+                coordinator.coordinate(writingItemAt: url, options: [], byAccessor: accessor, completionHandler: coordinationDone)
+            } else {
+                coordinator.coordinate(readingItemAt: url, options: [], byAccessor: accessor, completionHandler: coordinationDone)
+            }
         } catch {
-            call.reject(error.localizedDescription)
+            DispatchQueue.main.async { call.reject(error.localizedDescription) }
         }
     }
 
@@ -100,30 +138,11 @@ public class SyncFilePlugin: CAPPlugin, CAPBridgedPlugin, UIDocumentPickerDelega
         return url
     }
 
-    private func withBookmark<T>(_ body: (URL) throws -> T) throws -> T {
+    private func resolvedBookmark() throws -> URL {
         guard let url = resolveBookmark() else {
             throw SyncFileError.missing
         }
-        let started = url.startAccessingSecurityScopedResource()
-        defer { if started { url.stopAccessingSecurityScopedResource() } }
-        return try body(url)
-    }
-
-    private func coordinate<T>(_ url: URL, writing: Bool, _ body: (URL) throws -> T) throws -> T {
-        var coordinationError: NSError?
-        var result: Result<T, Error>?
-        let coordinator = NSFileCoordinator()
-        let finish: (URL) -> Void = { item in
-            result = Result { try body(item) }
-        }
-        if writing {
-            coordinator.coordinate(writingItemAt: url, options: [], error: &coordinationError, byAccessor: finish)
-        } else {
-            coordinator.coordinate(readingItemAt: url, options: [], error: &coordinationError, byAccessor: finish)
-        }
-        if let coordinationError { throw coordinationError }
-        guard let result else { throw SyncFileError.missing }
-        return try result.get()
+        return url
     }
 }
 
