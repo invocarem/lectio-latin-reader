@@ -48,58 +48,52 @@ public class SyncFilePlugin: CAPPlugin, CAPBridgedPlugin, UIDocumentPickerDelega
     }
 
     /**
-     * Reads or writes the sync file under a security-scoped bookmark, using
-     * the asynchronous `NSFileCoordinator` API. Capacitor runs plugin methods
-     * on the main thread, but the synchronous `coordinate(...)` variants block
-     * and can deadlock when called there; the `byAccessor`/`completionHandler`
-     * variants do the I/O off the main thread and the call is settled on it.
+     * Reads or writes the sync file under a security-scoped bookmark.
+     * Capacitor runs plugin methods on the main thread. The synchronous
+     * `coordinate(readingItemAt:...)` methods block that thread until file
+     * presenters reply, which can deadlock. `coordinate(with:queue:byAccessor:)`
+     * waits in the background and runs the file access on `queue`.
      */
     private func withFile(_ call: CAPPluginCall, write: Bool, text: String? = nil) {
+        let url: URL
         do {
-            let url = try resolvedBookmark()
-            // Stay in the security scope until the coordinated I/O finishes.
-            let started = url.startAccessingSecurityScopedResource()
-
-            let coordinator = NSFileCoordinator()
-            var finished = false
-            let settle: (Result<Any?, Error>) -> Void = { result in
-                guard !finished else { return }
-                finished = true
-                if started { url.stopAccessingSecurityScopedResource() }
-                DispatchQueue.main.async {
-                    switch result {
-                    case .success(let value):
-                        if let dict = value as? [String: Any] { call.resolve(dict) }
-                        else { call.resolve() }
-                    case .failure(let error):
-                        call.reject(error.localizedDescription)
-                    }
-                }
-            }
-
-            let accessor: (URL) -> Void = { item in
-                do {
-                    if let text {
-                        try text.write(to: item, atomically: false, encoding: .utf8)
-                        settle(.success(nil))
-                    } else {
-                        settle(.success(["text": try String(contentsOf: item, encoding: .utf8)]))
-                    }
-                } catch {
-                    settle(.failure(error))
-                }
-            }
-            let coordinationDone: (Error?) -> Void = { error in
-                if let error { settle(.failure(error)) }
-            }
-
-            if write {
-                coordinator.coordinate(writingItemAt: url, options: [], byAccessor: accessor, completionHandler: coordinationDone)
-            } else {
-                coordinator.coordinate(readingItemAt: url, options: [], byAccessor: accessor, completionHandler: coordinationDone)
-            }
+            url = try resolvedBookmark()
         } catch {
-            DispatchQueue.main.async { call.reject(error.localizedDescription) }
+            call.reject(error.localizedDescription)
+            return
+        }
+
+        // Stay in the security scope until the coordinated I/O finishes.
+        let started = url.startAccessingSecurityScopedResource()
+        let intent: NSFileAccessIntent = write
+            ? .writingIntent(with: url)
+            : .readingIntent(with: url)
+        let coordinator = NSFileCoordinator()
+        let queue = OperationQueue()
+        queue.name = "lectio.sync.file"
+        queue.maxConcurrentOperationCount = 1
+
+        // Capture the coordinator and queue so they outlive this method.
+        coordinator.coordinate(with: [intent], queue: queue) { [coordinator, queue] error in
+            withExtendedLifetime((coordinator, queue)) {}
+            defer {
+                if started { url.stopAccessingSecurityScopedResource() }
+            }
+            if let error {
+                DispatchQueue.main.async { call.reject(error.localizedDescription) }
+                return
+            }
+            do {
+                if let text {
+                    try text.write(to: intent.url, atomically: false, encoding: .utf8)
+                    DispatchQueue.main.async { call.resolve() }
+                } else {
+                    let contents = try String(contentsOf: intent.url, encoding: .utf8)
+                    DispatchQueue.main.async { call.resolve(["text": contents]) }
+                }
+            } catch {
+                DispatchQueue.main.async { call.reject(error.localizedDescription) }
+            }
         }
     }
 
