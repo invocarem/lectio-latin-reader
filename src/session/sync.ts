@@ -78,6 +78,7 @@ function canonicalDoc(doc: SessionDoc): SessionDoc {
     cursor: doc.cursor,
     ...(doc.cursorAt ? { cursorAt: doc.cursorAt } : {}),
     ...(doc.touchedAt ? { touchedAt: doc.touchedAt } : {}),
+    ...(doc.passAt ? { passAt: doc.passAt } : {}),
     satWith: [...doc.satWith].sort((a, b) => a.step.localeCompare(b.step) || a.at.localeCompare(b.at)),
     annotations: [...doc.annotations].sort(compareAnnotations),
   };
@@ -190,6 +191,7 @@ export function createSync(options: {
       merged.outcome.sittingsAdded > 0 ||
       merged.outcome.notesAdded > 0 ||
       merged.outcome.cursorsMoved > 0 ||
+      merged.outcome.passesReset > 0 ||
       merged.outcome.conflicts.length > 0;
     if (merged.dirty) {
       try {

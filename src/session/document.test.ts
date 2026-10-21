@@ -7,6 +7,7 @@ import {
   markPosition,
   parseSession,
   recordOpen,
+  resetSession,
   satCount,
   serializeSession,
   setAnnotation,
@@ -100,6 +101,50 @@ describe("session document", () => {
     expect(parsed?.pace).toBeUndefined();
   });
 
+  test("resetSession clears the sat-marks and cursor but keeps the notes", () => {
+    let doc = createSession("psalter", "2026-09-01");
+    doc = recordOpen(doc, "ps-1", "2026-09-01");
+    doc = recordOpen(doc, "ps-2", "2026-09-02");
+    doc = toggleUnitAnnotation(doc, "ps-1", "2026-09-01");
+    doc = setUnitAnnotation(doc, "ps-1", "he is my shepherd", "2026-09-01");
+    expect(satCount(doc)).toBe(2);
+    expect(doc.satWith.length).toBe(2);
+    expect(doc.annotations.length).toBe(1);
+
+    const now = "2026-10-09T15:00:00.000Z";
+    const resetDoc = resetSession({ ...doc, cursorAt: "2026-09-02T12:00:00.000Z", touchedAt: "2026-09-02T12:00:00.000Z" }, "2026-10-09", now);
+    expect(resetDoc.work).toBe("psalter");
+    expect(resetDoc.id).toBe("2026-10-09");
+    expect(resetDoc.started).toBe("2026-10-09");
+    expect(resetDoc.cursor).toBeNull();
+    expect(resetDoc.cursorAt).toBeUndefined();
+    expect(resetDoc.passAt).toBe(now);
+    expect(resetDoc.touchedAt).toBe(now);
+    expect(resetDoc.satWith).toEqual([]);
+    expect(satCount(resetDoc)).toBe(0);
+    // The notes and highlights carry over to the new pass.
+    expect(resetDoc.annotations).toEqual([
+      { unit: "ps-1", text: "he is my shepherd", at: "2026-09-01" },
+    ]);
+    expect(annotationForUnit(resetDoc, "ps-1")?.text).toBe("he is my shepherd");
+  });
+
+  test("resetSession keeps the cursus pace and restarts the clock", () => {
+    let doc = createSession("cursus", "2026-09-01", 40);
+    doc = setPace(doc, 14);
+    doc = recordOpen(doc, "wed:prime:10", "2026-09-02");
+    doc = toggleAnnotation(doc, 50, "12", "2026-09-02");
+    const now = "2026-10-09T15:00:00.000Z";
+    const resetDoc = resetSession(doc, "2026-10-09", now);
+    expect(resetDoc.work).toBe("cursus");
+    expect(resetDoc.pace).toBe(14);
+    expect(resetDoc.started).toBe("2026-10-09");
+    expect(resetDoc.passAt).toBe(now);
+    expect(resetDoc.satWith).toEqual([]);
+    expect(resetDoc.annotations).toHaveLength(1);
+    expect(isAnnotated(resetDoc, 50, "12")).toBe(true);
+  });
+
   test("confessions and rule passes serialize and parse like gradibus", () => {
     for (const work of ["confessions", "rule"] as const) {
       let doc = createSession(work, "2026-09-27");
@@ -139,6 +184,27 @@ describe("session document", () => {
     const parsed = parseSession(text);
     expect(parsed?.cursorAt).toBe("2026-10-09T23:59:59.999Z");
     expect(parsed?.touchedAt).toBeUndefined();
+    expect(parsed?.passAt).toBeUndefined();
+  });
+
+  test("parse keeps a pass boundary and drops a malformed one", () => {
+    const kept = parseSession(JSON.stringify({
+      work: "psalter",
+      started: "2026-10-09",
+      passAt: "2026-10-09T15:00:00.000Z",
+      satWith: [],
+      annotations: [{ unit: "ps-1", text: "kept", at: "2026-09-01" }],
+    }));
+    expect(kept?.passAt).toBe("2026-10-09T15:00:00.000Z");
+    expect(kept?.annotations).toHaveLength(1);
+    const dropped = parseSession(JSON.stringify({
+      work: "psalter",
+      started: "2026-10-09",
+      passAt: "yesterday",
+      satWith: [],
+      annotations: [],
+    }));
+    expect(dropped?.passAt).toBeUndefined();
   });
 
   test("parse tolerates extra fields and drops bad marks", () => {

@@ -26,6 +26,8 @@ export type LectioSessionViewProps = {
   onGoNext: (step: string) => void;
   onExport: () => void;
   onImport: (file: File | null) => void;
+  /** Start a fresh pass: clear the checked marks, keep the notes. */
+  onReset: () => void;
 };
 
 type Row = { step: string; label: string };
@@ -68,6 +70,7 @@ export function LectioSessionView({
   onGoNext,
   onExport,
   onImport,
+  onReset,
 }: LectioSessionViewProps) {
   const fileRef = useRef<HTMLInputElement>(null);
   const groups = useMemo(() => groupSlices(buildSlices(work), work.chapters), [work]);
@@ -123,6 +126,23 @@ export function LectioSessionView({
         </button>
         <button type="button" onClick={() => fileRef.current?.click()}>
           Import
+        </button>
+        <button
+          type="button"
+          className="session-reset"
+          aria-label="Reset this pass (clears the checked marks, keeps notes)"
+          title="Clear the checked marks and start the pass again; your notes stay"
+          onClick={() => {
+            if (
+              window.confirm(
+                "Start this pass over? This clears the checked marks, but keeps your notes.",
+              )
+            ) {
+              onReset();
+            }
+          }}
+        >
+          Reset
         </button>
         <input
           ref={fileRef}

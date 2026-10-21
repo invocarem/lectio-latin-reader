@@ -3,6 +3,7 @@ import {
   createSession,
   markPosition,
   recordOpen,
+  resetSession,
   satCount,
   setAnnotation,
   setPace,
@@ -108,6 +109,12 @@ export function useSession(work: SessionWork = "cursus", options: { persist?: bo
     [today],
   );
 
+  /** Start a new pass of this work: clear the sat-marks, keep the notes. */
+  const reset = useCallback(
+    () => setDoc((current) => resetSession(current, today, new Date().toISOString())),
+    [today],
+  );
+
   const exportSession = useCallback(() => {
     const blob = new Blob([JSON.stringify(doc, null, 2)], { type: "application/json" });
     void downloadBytes(`session-${doc.work}-${doc.started}.json`, blob);
@@ -151,6 +158,7 @@ export function useSession(work: SessionWork = "cursus", options: { persist?: bo
     exportSession,
     importSession,
     reportSession,
+    reset,
     satKeys,
     count: satCount(doc),
     total,

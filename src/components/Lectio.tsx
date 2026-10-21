@@ -360,6 +360,7 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
             onGoNext={locateStep}
             onExport={session.exportSession}
             onImport={session.importSession}
+            onReset={session.reset}
           />
         ) : null}
       </div>

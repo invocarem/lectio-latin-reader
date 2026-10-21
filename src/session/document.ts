@@ -74,6 +74,12 @@ export type SessionDoc = {
   cursorAt?: string;
   /** When a sitting, note, cursor, or pace last changed. Absent on a fresh pass. */
   touchedAt?: string;
+  /**
+   * When this pass was started over, as an ISO timestamp. Absent on a pass
+   * that has never been reset. A later `passAt` replaces the other copy's
+   * sittings, cursor, and start date when two devices merge. Notes still combine.
+   */
+  passAt?: string;
   satWith: { step: string; at: string }[];
   annotations: Annotation[];
 };
@@ -96,6 +102,29 @@ export function createSession(work: SessionWork, today: string, pace?: 7 | 14 | 
     cursor: null,
     satWith: [],
     annotations: [],
+  };
+}
+
+/**
+ * Begin a new pass of the same work, restarting the reading while keeping
+ * every note and highlight. The sat-marks and the cursor are cleared so the
+ * count restarts and the pass reads from the beginning again, and the clock
+ * restarts today. `now` stamps `passAt` and `touchedAt`, and the old `cursorAt`
+ * is dropped, so a later merge keeps this pass instead of unioning the marks
+ * that were cleared. Used to start a fresh cycle (e.g. read the psalter again
+ * after a week, a fortnight, or forty days) without losing what was written.
+ */
+export function resetSession(doc: SessionDoc, today: string, now: string): SessionDoc {
+  return {
+    id: today,
+    work: doc.work,
+    ...(doc.work === "cursus" ? { pace: doc.pace ?? 7 } : {}),
+    started: today,
+    cursor: null,
+    satWith: [],
+    annotations: [...doc.annotations],
+    passAt: now,
+    touchedAt: now,
   };
 }
 
@@ -420,6 +449,7 @@ export function parseSession(json: string): SessionDoc | null {
     }
     const cursorAt = parseTimestamp(value.cursorAt);
     const touchedAt = parseTimestamp(value.touchedAt);
+    const passAt = parseTimestamp(value.passAt);
     return {
       id: typeof value.id === "string" ? value.id : value.started,
       work,
@@ -428,6 +458,7 @@ export function parseSession(json: string): SessionDoc | null {
       cursor: typeof value.cursor === "string" ? value.cursor : null,
       ...(cursorAt ? { cursorAt } : {}),
       ...(touchedAt ? { touchedAt } : {}),
+      ...(passAt ? { passAt } : {}),
       satWith,
       annotations,
     };

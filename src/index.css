@@ -1309,6 +1309,10 @@ button.brand:hover strong {
   background: var(--parchment-deep);
 }
 
+/* The Reset action starts the pass over: it clears the checked marks but
+   keeps the notes. Styled as a normal tool button; confirmation is handled
+   by a native dialog, not an in-place state change. */
+
 .session-next {
   margin-bottom: 0.9rem;
 }

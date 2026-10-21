@@ -40,6 +40,8 @@ export type MergeOutcome = {
   sittingsAdded: number;
   notesAdded: number;
   cursorMoved: boolean;
+  /** The other copy's later reset replaced this copy's sittings, cursor, and start date. */
+  passReset: boolean;
   conflicts: NoteConflict[];
 };
 
@@ -48,6 +50,7 @@ export type BundleOutcome = {
   sittingsAdded: number;
   notesAdded: number;
   cursorsMoved: number;
+  passesReset: number;
   conflicts: NoteConflict[];
 };
 
@@ -87,6 +90,17 @@ function later(a: string | undefined, b: string | undefined): "local" | "remote"
   if (a) return "local";
   if (b) return "remote";
   return "neither";
+}
+
+/**
+ * Which copy's reset is current. Equal timestamps, including both absent,
+ * are the same pass and still merge sittings together. A reset beats a pass
+ * that has never been reset, and a later reset beats an earlier one.
+ */
+function passSide(local: string | undefined, remote: string | undefined): "local" | "remote" | "same" {
+  if (local === remote) return "same";
+  if (local && remote) return local > remote ? "local" : "remote";
+  return local ? "local" : "remote";
 }
 
 function mergeSittings(
@@ -166,13 +180,21 @@ function mergeAnnotations(
 /** Combine two passes of the same work. A different work is ignored. */
 export function mergeSession(local: SessionDoc, remote: SessionDoc): MergeOutcome {
   if (local.work !== remote.work) {
-    return { doc: local, sittingsAdded: 0, notesAdded: 0, cursorMoved: false, conflicts: [] };
+    return { doc: local, sittingsAdded: 0, notesAdded: 0, cursorMoved: false, passReset: false, conflicts: [] };
   }
-  const sittings = mergeSittings(local.work, local.satWith, remote.satWith);
   const notes = mergeAnnotations(local.work, local.annotations, remote.annotations);
+  const boundary = passSide(local.passAt, remote.passAt);
+  const samePass = boundary === "same";
+  const sittings = samePass
+    ? mergeSittings(local.work, local.satWith, remote.satWith)
+    : {
+        satWith: boundary === "remote" ? [...remote.satWith] : [...local.satWith],
+        added: 0,
+      };
   const cursorSide = later(local.cursorAt, remote.cursorAt);
-  const cursor = cursorSide === "remote" ? remote.cursor : local.cursor;
-  const cursorAt = cursorSide === "remote" ? remote.cursorAt : local.cursorAt;
+  const winner = boundary === "remote" ? remote : local;
+  const cursor = samePass ? (cursorSide === "remote" ? remote.cursor : local.cursor) : winner.cursor;
+  const cursorAt = samePass ? (cursorSide === "remote" ? remote.cursorAt : local.cursorAt) : winner.cursorAt;
   const paceSide = later(local.touchedAt, remote.touchedAt);
   const pace =
     local.work === "cursus"
@@ -182,14 +204,16 @@ export function mergeSession(local: SessionDoc, remote: SessionDoc): MergeOutcom
       : undefined;
   const touchedAt =
     paceSide === "remote" ? remote.touchedAt : paceSide === "local" ? local.touchedAt : undefined;
+  const passAt = samePass ? (local.passAt ?? remote.passAt) : winner.passAt;
   const doc: SessionDoc = {
     id: local.id,
     work: local.work,
     ...(local.work === "cursus" && pace != null ? { pace } : {}),
-    started: local.started <= remote.started ? local.started : remote.started,
+    started: samePass ? (local.started <= remote.started ? local.started : remote.started) : winner.started,
     cursor,
     ...(cursorAt ? { cursorAt } : {}),
     ...(touchedAt ? { touchedAt } : {}),
+    ...(passAt ? { passAt } : {}),
     satWith: sittings.satWith,
     annotations: notes.annotations,
   };
@@ -198,6 +222,7 @@ export function mergeSession(local: SessionDoc, remote: SessionDoc): MergeOutcom
     sittingsAdded: sittings.added,
     notesAdded: notes.notesAdded,
     cursorMoved: cursor !== local.cursor,
+    passReset: boundary === "remote",
     conflicts: notes.conflicts,
   };
 }
@@ -305,6 +330,7 @@ export function mergeBundle(local: SessionBundle, remote: SessionBundle): Bundle
   let sittingsAdded = 0;
   let notesAdded = 0;
   let cursorsMoved = 0;
+  let passesReset = 0;
   const conflicts: NoteConflict[] = [];
   for (const work of works) {
     const here = local.sessions[work];
@@ -315,6 +341,7 @@ export function mergeBundle(local: SessionBundle, remote: SessionBundle): Bundle
       sittingsAdded += merged.sittingsAdded;
       notesAdded += merged.notesAdded;
       if (merged.cursorMoved) cursorsMoved += 1;
+      if (merged.passReset) passesReset += 1;
       conflicts.push(...merged.conflicts);
     } else if (there) {
       sessions[work] = there;
@@ -325,12 +352,15 @@ export function mergeBundle(local: SessionBundle, remote: SessionBundle): Bundle
       sessions[work] = here;
     }
   }
-  return { sessions, sittingsAdded, notesAdded, cursorsMoved, conflicts };
+  return { sessions, sittingsAdded, notesAdded, cursorsMoved, passesReset, conflicts };
 }
 
 /** One line for the Home screen after an import. */
 export function describeMerge(outcome: BundleOutcome): string {
-  const sittings = `${outcome.sittingsAdded} ${outcome.sittingsAdded === 1 ? "sitting" : "sittings"} added`;
+  const sittings =
+    outcome.passesReset > 0
+      ? `${outcome.passesReset} ${outcome.passesReset === 1 ? "pass started over" : "passes started over"}`
+      : `${outcome.sittingsAdded} ${outcome.sittingsAdded === 1 ? "sitting" : "sittings"} added`;
   const notes = `${outcome.notesAdded} ${outcome.notesAdded === 1 ? "note" : "notes"} added`;
   const cursor = outcome.cursorsMoved > 0 ? "cursor moved" : "cursor unchanged";
   let text = `${sittings}, ${notes}, ${cursor}`;

@@ -7,7 +7,7 @@ import {
   serializeBundle,
   sessionsFromFiles,
 } from "./bundle";
-import { createSession, type SessionDoc, type SessionWork } from "./document";
+import { createSession, resetSession, type SessionDoc, type SessionWork } from "./document";
 import { clearSession, loadSession, saveSession, sessionKey } from "./store";
 
 class MemoryStorage implements Storage {
@@ -86,6 +86,7 @@ describe("mergeSession", () => {
       sittingsAdded: 0,
       notesAdded: 0,
       cursorsMoved: 0,
+      passesReset: 0,
       conflicts: merged.conflicts,
     })).toBe("0 sittings added, 0 notes added, cursor unchanged. Kept the later note on cursus 50:12");
   });
@@ -127,6 +128,7 @@ describe("mergeSession", () => {
       sittingsAdded: 0,
       notesAdded: 0,
       cursorsMoved: 0,
+      passesReset: 0,
       conflicts: merged.conflicts,
     })).toBe("0 sittings added, 0 notes added, cursor unchanged. Kept the later note on confessions 1.1");
   });
@@ -208,6 +210,88 @@ describe("mergeSession", () => {
     expect(merged.doc.id).toBe(empty.id);
     expect(merged.sittingsAdded).toBe(1);
     expect(merged.cursorMoved).toBe(true);
+  });
+
+  test("a reset pass replaces the other copy's sittings, cursor, and start date", () => {
+    const now = "2026-10-09T15:00:00.000Z";
+    const old = pass("psalter", {
+      started: "2026-09-01",
+      cursor: "ps-2",
+      cursorAt: "2026-09-02T12:00:00.000Z",
+      touchedAt: "2026-09-02T12:00:00.000Z",
+      satWith: [
+        { step: "ps-1", at: "2026-09-01" },
+        { step: "ps-2", at: "2026-09-02" },
+      ],
+      annotations: [{ unit: "ps-1", text: "on this device", at: "2026-09-01" }],
+    });
+    const reset = resetSession(
+      pass("psalter", {
+        annotations: [{ unit: "ps-3", text: "from the other pass", at: "2026-09-03" }],
+      }),
+      "2026-10-09",
+      now,
+    );
+    const kept = mergeSession(reset, old);
+    expect(kept.passReset).toBe(false);
+    expect(kept.sittingsAdded).toBe(0);
+    expect(kept.doc.satWith).toEqual([]);
+    expect(kept.doc.cursor).toBeNull();
+    expect(kept.doc.cursorAt).toBeUndefined();
+    expect(kept.doc.started).toBe("2026-10-09");
+    expect(kept.doc.passAt).toBe(now);
+    expect(kept.doc.annotations).toEqual([
+      { unit: "ps-3", text: "from the other pass", at: "2026-09-03" },
+      { unit: "ps-1", text: "on this device", at: "2026-09-01" },
+    ]);
+
+    const replaced = mergeSession(old, reset);
+    expect(replaced.passReset).toBe(true);
+    expect(replaced.doc.satWith).toEqual([]);
+    expect(replaced.doc.cursor).toBeNull();
+    expect(replaced.doc.started).toBe("2026-10-09");
+    expect(replaced.doc.passAt).toBe(now);
+    expect(replaced.doc.id).toBe(old.id);
+    expect(replaced.cursorMoved).toBe(true);
+    expect(describeMerge({
+      sessions: {},
+      sittingsAdded: replaced.sittingsAdded,
+      notesAdded: replaced.notesAdded,
+      cursorsMoved: replaced.cursorMoved ? 1 : 0,
+      passesReset: 1,
+      conflicts: replaced.conflicts,
+    })).toBe("1 pass started over, 1 note added, cursor moved");
+  });
+
+  test("the later reset wins, and the same pass still unions sittings", () => {
+    const earlier = pass("gradibus", {
+      started: "2026-10-01",
+      passAt: "2026-10-01T12:00:00.000Z",
+      cursor: "cap1-s1",
+      cursorAt: "2026-10-02T12:00:00.000Z",
+      satWith: [{ step: "cap1-s1", at: "2026-10-02" }],
+    });
+    const later = pass("gradibus", {
+      started: "2026-10-09",
+      passAt: "2026-10-09T15:00:00.000Z",
+      cursor: "cap1-s4",
+      cursorAt: "2026-10-10T12:00:00.000Z",
+      satWith: [{ step: "cap1-s4", at: "2026-10-10" }],
+    });
+    const merged = mergeSession(earlier, later);
+    expect(merged.doc.satWith).toEqual(later.satWith);
+    expect(merged.doc.cursor).toBe("cap1-s4");
+    expect(merged.doc.started).toBe("2026-10-09");
+    expect(merged.doc.passAt).toBe(later.passAt);
+    expect(merged.sittingsAdded).toBe(0);
+
+    const same = mergeSession(
+      { ...later, satWith: [{ step: "cap1-s4", at: "2026-10-10" }] },
+      { ...later, satWith: [{ step: "cap1-s5", at: "2026-10-11" }], cursor: "cap1-s5" },
+    );
+    expect(same.passReset).toBe(false);
+    expect(same.doc.satWith.map((mark) => mark.step).sort()).toEqual(["cap1-s4", "cap1-s5"]);
+    expect(same.sittingsAdded).toBe(1);
   });
 });
 

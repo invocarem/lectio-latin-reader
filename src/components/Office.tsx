@@ -434,6 +434,7 @@ export function Office({ work, reading, onHome }: OfficeProps) {
             onExport={session.exportSession}
             onImport={session.importSession}
             onReport={session.reportSession}
+            onReset={session.reset}
           />
         ) : null}
       </div>

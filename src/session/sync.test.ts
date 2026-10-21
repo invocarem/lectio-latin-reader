@@ -1,4 +1,4 @@
-import { createSession, type SessionDoc } from "./document";
+import { createSession, resetSession, type SessionDoc } from "./document";
 import { loadSession, saveSession, sessionChanged } from "./store";
 import { createSync, mergeRemoteText, type SyncTransport } from "./sync";
 
@@ -120,6 +120,67 @@ describe("mergeRemoteText", () => {
     expect(merged.ok).toBe(true);
     if (!merged.ok) return;
     expect(merged.dirty).toBe(false);
+  });
+
+  test("a local reset is not filled back in from the sync file", () => {
+    const storage = new MemoryStorage();
+    const old = pass({
+      started: "2026-09-01",
+      cursor: "cap1-s2",
+      cursorAt: "2026-10-02T12:00:00.000Z",
+      touchedAt: "2026-10-02T12:00:00.000Z",
+      satWith: [
+        { step: "cap1-s1", at: "2026-10-01" },
+        { step: "cap1-s2", at: "2026-10-02" },
+      ],
+      annotations: [{ unit: "cap1-s1", text: "kept", at: "2026-10-01" }],
+    });
+    const now = "2026-10-09T15:00:00.000Z";
+    saveSession(resetSession(old, "2026-10-09", now), storage);
+    const merged = mergeRemoteText(bundle(old), storage);
+    expect(merged.ok).toBe(true);
+    if (!merged.ok) return;
+    const stored = loadSession("gradibus", storage);
+    expect(stored?.satWith).toEqual([]);
+    expect(stored?.cursor).toBeNull();
+    expect(stored?.cursorAt).toBeUndefined();
+    expect(stored?.started).toBe("2026-10-09");
+    expect(stored?.passAt).toBe(now);
+    expect(stored?.annotations).toEqual(old.annotations);
+    expect(merged.outcome.passesReset).toBe(0);
+    expect(merged.outcome.sittingsAdded).toBe(0);
+    expect(merged.dirty).toBe(true);
+    expect(merged.nextText).toContain(now);
+    expect(merged.nextText).not.toContain("cap1-s2");
+  });
+
+  test("a reset in the sync file replaces this device and reloads the pass", () => {
+    const storage = new MemoryStorage();
+    saveSession(
+      pass({ annotations: [{ unit: "cap1-s1", text: "local note", at: "2026-10-01" }] }),
+      storage,
+    );
+    const now = "2026-10-09T15:00:00.000Z";
+    const reset = resetSession(
+      pass({ annotations: [{ unit: "cap1-s9", text: "other note", at: "2026-10-08" }] }),
+      "2026-10-09",
+      now,
+    );
+    const merged = mergeRemoteText(bundle(reset), storage);
+    expect(merged.ok).toBe(true);
+    if (!merged.ok) return;
+    const stored = loadSession("gradibus", storage);
+    expect(stored?.satWith).toEqual([]);
+    expect(stored?.cursor).toBeNull();
+    expect(stored?.started).toBe("2026-10-09");
+    expect(stored?.passAt).toBe(now);
+    expect(stored?.annotations).toEqual([
+      { unit: "cap1-s1", text: "local note", at: "2026-10-01" },
+      { unit: "cap1-s9", text: "other note", at: "2026-10-08" },
+    ]);
+    expect(merged.outcome.passesReset).toBe(1);
+    expect(merged.outcome.sittingsAdded).toBe(0);
+    expect(merged.nextText).toContain(now);
   });
 
   test("a file that is not lectio progress is left unread", () => {

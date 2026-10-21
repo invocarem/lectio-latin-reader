@@ -29,6 +29,8 @@ export type SessionViewProps = {
   onExport: () => void;
   onImport: (file: File | null) => void;
   onReport: () => void;
+  /** Start a fresh pass: clear the checked marks, keep the notes. */
+  onReset: () => void;
 };
 
 type Row = {
@@ -58,6 +60,7 @@ export function SessionView({
   onExport,
   onImport,
   onReport,
+  onReset,
 }: SessionViewProps) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [day, setDay] = useState<Weekday>(lectioWeekday);
@@ -225,6 +228,23 @@ export function SessionView({
         </button>
         <button type="button" onClick={() => fileRef.current?.click()}>
           Import
+        </button>
+        <button
+          type="button"
+          className="session-reset"
+          aria-label="Reset this pass (clears the checked marks, keeps notes)"
+          title="Clear the checked marks and start the pass again; your notes stay"
+          onClick={() => {
+            if (
+              window.confirm(
+                "Start this pass over? This clears the checked marks, but keeps your notes and the chosen days (pace).",
+              )
+            ) {
+              onReset();
+            }
+          }}
+        >
+          Reset
         </button>
         <button type="button" className="session-report" onClick={onReport}>
           Report
