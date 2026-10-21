@@ -39,15 +39,45 @@ On a Docker host (e.g. the Linux box that already runs open-webui):
 
 ```bash
 docker build -t lectio-sync services/sync
+docker rm -f lectio-sync
 docker run -d --restart unless-stopped \
-  -p 127.0.0.1:3010:3010 \
-  -v "$PWD/sync-data:/data" \
+  --name lectio-sync \
+  -p 0.0.0.0:3010:3010 \
+  -v "$HOME/code/hello:/data" \
+  -e LECTIO_SYNC_HOST=0.0.0.0 \
   -e LECTIO_SYNC_FILE=/data/lectio-sessions.json \
   -e LECTIO_SYNC_TOKEN="$(openssl rand -hex 32)" \
   lectio-sync
 ```
 
-The file path and token come from the environment, never from this repo. The route accepts only a version-1 bundle (`{"version":1,"sessions":{…}}`, matching `BUNDLE_VERSION` in `src/session/bundle.ts`), stores the bytes as sent, and does not merge. `LECTIO_SYNC_HOST`, `LECTIO_SYNC_PORT`, and `LECTIO_SYNC_ORIGINS` are optional overrides (see `service-sync.md`).
+`LECTIO_SYNC_HOST=0.0.0.0` is required. The image listens on `127.0.0.1` inside the container, and Docker forwards the published port to the container's other interface, so a process bound only to container loopback never accepts the connection. Publishing `0.0.0.0:3010` on the host lets other machines on the LAN reach ideacentre. `cloudflared` on that same computer still uses `http://127.0.0.1:3010`. `docker rm -f` removes a previous container of the same name and leaves the JSON in `$HOME/code/hello`.
+
+To publish it with an HTTPS name from behind NAT without a router forward, run `cloudflared` as a service (`/etc/systemd/system/cloudflared-lectio.service`):
+
+```ini
+[Unit]
+Description=Cloudflare tunnel for lectio sync
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+ExecStart=/usr/local/bin/cloudflared tunnel --url http://127.0.0.1:3010
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target
+```
+
+```bash
+sudo systemctl daemon-reload
+sudo systemctl enable --now cloudflared-lectio
+journalctl -u cloudflared-lectio -n 50 | grep -o 'https://[a-z0-9-]*\.trycloudflare\.com'
+```
+
+The quick tunnel's `*.trycloudflare.com` URL changes each time `cloudflared` restarts; enter the new one in the app after a reboot. A named tunnel with a domain keeps the URL stable.
+
+The file path and token come from the environment, never from this repo. The route accepts only a version-1 bundle (`{"version":1,"sessions":{…}}`, matching `BUNDLE_VERSION` in `src/session/bundle.ts`), stores the bytes as sent, and does not merge. For a bare `node` process, `LECTIO_SYNC_HOST`, `LECTIO_SYNC_PORT`, and `LECTIO_SYNC_ORIGINS` are optional overrides (see `service-sync.md`). The Docker run above has to set `LECTIO_SYNC_HOST`.
 
 In the app, Home → **Sync service** lets a device aim at this service (enter the tailnet URL and `LECTIO_SYNC_TOKEN`) instead of a picked Drive file; a device uses either the file or the service, one at a time. The read is the `GET` and the write is the `PUT` (with the `ETag` as `If-Match`), so a device whose write races another is refused (`412`) and keeps its local progress until the next sync.
 

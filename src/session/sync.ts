@@ -36,11 +36,11 @@ export type SyncTransport = {
 };
 
 const CHOOSE =
-  "Choose lectio-sessions.json in a folder your devices already share. Export once if you still need to create that file.";
+  "Choose lectio-sessions.json in a shared folder such as Google Drive, or save a sync service. Export once if you still need to create that file.";
 const WAITING = "Sync is waiting for access to the file. Tap Sync now.";
-const OFFLINE = "Could not reach the sync file. This device kept its own progress.";
-const UNREADABLE = "The sync file is not lectio progress. This device kept its own progress.";
-const UNSUPPORTED = "This browser cannot keep a sync file open. Export and Import will move it.";
+const OFFLINE = "Could not reach sync. This device kept its own progress.";
+const UNREADABLE = "Sync did not return lectio progress. This device kept its own progress.";
+const UNSUPPORTED = "This browser cannot keep a sync file open. Save a sync service, or use Export and Import.";
 
 export const SYNC_DELAY_MS = 4000;
 

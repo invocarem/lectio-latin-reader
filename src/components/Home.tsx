@@ -10,7 +10,7 @@ import {
 import { downloadBytes } from "../session/download";
 import type { SyncNotice } from "../session/sync";
 import { configureSyncService, currentSyncService, clearSyncService, sync } from "../session/syncHost";
-import { validateEndpoint } from "../session/serviceSync";
+import { validateEndpoint, type ServiceEndpoint } from "../session/serviceSync";
 import { sessionProgress } from "../session/useSession";
 import type { ReaderMode, ReaderWork, WorkId } from "../types";
 import { AppTitle } from "./AppTitle";
@@ -75,7 +75,11 @@ function SyncBar({ onImported }: { onImported: () => void }) {
   const [serviceUrl, setServiceUrl] = useState("");
   const [serviceToken, setServiceToken] = useState("");
   const [serviceError, setServiceError] = useState<string | null>(null);
-  const configuredService = currentSyncService();
+  const [showToken, setShowToken] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const service = currentSyncService();
+  const place = syncPlace(service, notice, serviceOpen);
+  const linked = service != null || notice.mode === "ready" || notice.mode === "needs-gesture" || notice.mode === "offline";
 
   useEffect(() => {
     setNotice(sync.current());
@@ -115,10 +119,11 @@ function SyncBar({ onImported }: { onImported: () => void }) {
     setServiceUrl(existing?.baseUrl ?? "");
     setServiceToken(existing?.token ?? "");
     setServiceError(null);
+    setShowToken(false);
     setServiceOpen((open) => !open);
   }
 
-  function saveService() {
+  async function saveService() {
     const url = serviceUrl.trim();
     const token = serviceToken.trim();
     const error = validateEndpoint({ baseUrl: url, token });
@@ -126,44 +131,69 @@ function SyncBar({ onImported }: { onImported: () => void }) {
       setServiceError(error);
       return;
     }
-    configureSyncService({ baseUrl: url, token });
     setServiceOpen(false);
     setServiceUrl("");
     setServiceToken("");
     setServiceError(null);
+    setImportNote(null);
+    setBusy(true);
+    try {
+      await configureSyncService({ baseUrl: url, token });
+    } finally {
+      setBusy(false);
+    }
   }
 
-  function forgetService() {
-    clearSyncService();
+  async function forgetService() {
     setServiceUrl("");
     setServiceToken("");
     setServiceError(null);
+    setImportNote(null);
+    setNotice({ mode: "none", text: "", refreshed: false });
+    setBusy(true);
+    try {
+      await clearSyncService();
+    } finally {
+      setNotice(sync.current());
+      setBusy(false);
+    }
   }
 
-  const showSyncNow = notice.mode === "ready" || notice.mode === "needs-gesture" || notice.mode === "offline";
+  async function syncNow() {
+    setImportNote(null);
+    setBusy(true);
+    try {
+      await sync.syncNow();
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  const outcome = busy ? "Syncing…" : (importNote ?? standingResult(notice) ?? syncCue(service, notice));
 
   return (
-    <div className="home-sync">
-      <p className="home-kicker">Progress</p>
+    <section className="home-sync" aria-labelledby="progress-heading">
+      <p id="progress-heading" className="home-kicker">
+        Progress
+      </p>
+      {service ? (
+        <p className="home-sync-url">{serviceAddress(service)}</p>
+      ) : place.title ? (
+        <p className="home-sync-where">{place.title}</p>
+      ) : null}
       <div className="home-actions">
-        {notice.mode === "unsupported" ? null : (
-          <button className="start ghost" type="button" onClick={() => void sync.choose()}>
-            Choose sync file
-          </button>
-        )}
-        <button className="start ghost" type="button" onClick={openServiceForm}>
-          Sync service
-        </button>
-        {showSyncNow ? (
-          <button className="start ghost" type="button" onClick={() => void sync.syncNow()}>
+        {linked ? (
+          <button className="start" type="button" disabled={busy} onClick={() => void syncNow()}>
             Sync now
           </button>
         ) : null}
-        <button className="start ghost" type="button" onClick={exportPasses}>
-          Export
-        </button>
-        <button className="start ghost" type="button" onClick={() => fileRef.current?.click()}>
-          Import
+        {place.fileLabel ? (
+          <button className="start ghost" type="button" onClick={() => void sync.choose()}>
+            {place.fileLabel}
+          </button>
+        ) : null}
+        <button className="start ghost" type="button" onClick={openServiceForm} aria-expanded={serviceOpen}>
+          {place.serviceLabel}
         </button>
       </div>
       {serviceOpen ? (
@@ -171,41 +201,79 @@ function SyncBar({ onImported }: { onImported: () => void }) {
           className="home-sync-service"
           onSubmit={(event) => {
             event.preventDefault();
-            saveService();
+            void saveService();
           }}
         >
-          <input
-            type="url"
-            value={serviceUrl}
-            onChange={(event) => setServiceUrl(event.target.value)}
-            placeholder="https://… (home service URL)"
-            aria-label="Sync service URL"
-          />
-          <input
-            type="password"
-            value={serviceToken}
-            onChange={(event) => setServiceToken(event.target.value)}
-            placeholder="LECTIO_SYNC_TOKEN"
-            aria-label="Sync service token"
-          />
-          <button className="start" type="submit">
-            Save service
-          </button>
-          {configuredService ? (
-            <button className="start ghost" type="button" onClick={forgetService}>
-              Forget
-            </button>
+          <div className="home-sync-field">
+            <label htmlFor="sync-service-url">Service URL</label>
+            <input
+              id="sync-service-url"
+              type="url"
+              value={serviceUrl}
+              onChange={(event) => setServiceUrl(event.target.value)}
+              placeholder="https://name.trycloudflare.com"
+              autoComplete="url"
+              spellCheck={false}
+            />
+            <p>The https address of the computer running the sync service.</p>
+          </div>
+          <div className="home-sync-field">
+            <label htmlFor="sync-service-token">Token</label>
+            <div className="home-sync-token">
+              <input
+                id="sync-service-token"
+                type={showToken ? "text" : "password"}
+                value={serviceToken}
+                onChange={(event) => setServiceToken(event.target.value)}
+                placeholder="Paste the token"
+                autoComplete="off"
+                autoCapitalize="off"
+                autoCorrect="off"
+                spellCheck={false}
+              />
+              <button
+                className="home-sync-reveal"
+                type="button"
+                aria-pressed={showToken}
+                onClick={() => setShowToken((shown) => !shown)}
+              >
+                {showToken ? "Hide" : "Show"}
+              </button>
+            </div>
+            <p>The LECTIO_SYNC_TOKEN from that same computer.</p>
+          </div>
+          {serviceError ? (
+            <p className="home-sync-service-error" role="alert">
+              {serviceError}
+            </p>
           ) : null}
+          <div className="home-sync-service-actions">
+            <button className="start" type="submit" disabled={busy}>
+              Save and sync
+            </button>
+            {service ? (
+              <button className="start ghost" type="button" disabled={busy} onClick={() => void forgetService()}>
+                Forget service
+              </button>
+            ) : null}
+          </div>
         </form>
       ) : null}
-      {serviceError ? (
-        <p className="home-sync-service-error" role="alert">
-          {serviceError}
+      <div className="home-sync-copy">
+        <div className="home-actions">
+          <button className="start ghost" type="button" onClick={exportPasses}>
+            Export
+          </button>
+          <button className="start ghost" type="button" onClick={() => fileRef.current?.click()}>
+            Import
+          </button>
+        </div>
+      </div>
+      {outcome ? (
+        <p className="home-sync-result" role="status">
+          {outcome}
         </p>
       ) : null}
-      <p className="home-sync-result" role="status">
-        {importNote ?? notice.text}
-      </p>
       <input
         ref={fileRef}
         type="file"
@@ -217,8 +285,50 @@ function SyncBar({ onImported }: { onImported: () => void }) {
           event.target.value = "";
         }}
       />
-    </div>
+    </section>
   );
+}
+
+function serviceAddress(endpoint: ServiceEndpoint): string {
+  return endpoint.baseUrl.replace(/\/+$/, "");
+}
+
+function syncPlace(
+  service: ServiceEndpoint | null,
+  notice: SyncNotice,
+  serviceOpen: boolean,
+): { title: string | null; fileLabel: string | null; serviceLabel: string } {
+  const serviceLabel = serviceOpen ? "Close" : service ? "Edit service" : "Sync service";
+  if (service) {
+    return {
+      title: null,
+      fileLabel: notice.mode === "unsupported" ? null : "Switch to file",
+      serviceLabel,
+    };
+  }
+  if (notice.mode === "unsupported") {
+    return { title: null, fileLabel: null, serviceLabel };
+  }
+  if (notice.mode === "needs-gesture" || notice.mode === "ready" || notice.mode === "offline") {
+    return {
+      title: "Shared file",
+      fileLabel: "Change file",
+      serviceLabel: serviceOpen ? "Close" : "Switch to service",
+    };
+  }
+  return { title: null, fileLabel: "Choose sync file", serviceLabel };
+}
+
+/** A result worth a status line. */
+function standingResult(notice: SyncNotice): string | null {
+  if (notice.mode === "offline" || notice.mode === "ready") return notice.text;
+  return null;
+}
+
+function syncCue(service: ServiceEndpoint | null, notice: SyncNotice): string | null {
+  if (service) return null;
+  if (notice.mode === "needs-gesture" || notice.mode === "unsupported") return notice.text;
+  return null;
 }
 
 function worksFor(ids: WorkId[]): ReaderWork[] {

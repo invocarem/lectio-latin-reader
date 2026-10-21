@@ -128,7 +128,7 @@ While that computer is asleep, the service is down. If the file lives in the Dri
 
 Step 4 waits until the service is ticked. `SyncTransport` is already `read()` and `write(text)`. A new transport saves the base URL and the token on the device, the same way the desktop remembers a file handle. `read` is the `GET`. `write` sends the merged text with the etag from that read.
 
-`src/session/sync.ts` already turns a failed write into "could not reach the sync file" and leaves `localStorage` as it was. The next open reads again and merges. A `412` uses that same path. The service does not merge on the writer's behalf.
+`src/session/sync.ts` already turns a failed write into "could not reach sync" and leaves `localStorage` as it was. The next open reads again and merges. A `412` uses that same path. The service does not merge on the writer's behalf.
 
 **Choose sync file** stays. That is Google Drive, iCloud, or any other file the phone can bookmark. The service is a second choice, not a replacement. One device uses one of them at a time. They only stay in step when both are aimed at the same file.
 

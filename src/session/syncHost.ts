@@ -212,9 +212,9 @@ export const sync: SyncController = createSync({
 });
 
 /** Aim this device at the home service and sync now. Replaces the picked file. */
-export function configureSyncService(endpoint: ServiceEndpoint): void {
+export function configureSyncService(endpoint: ServiceEndpoint): Promise<void> {
   saveEndpoint(endpoint, serviceStorage());
-  void sync.syncNow();
+  return sync.syncNow();
 }
 
 /** The service this device is aimed at, if it saved one. */
@@ -223,9 +223,9 @@ export function currentSyncService(): ServiceEndpoint | null {
 }
 
 /** Forget the saved service; the next pick falls back to the file backend. */
-export function clearSyncService(): void {
+export function clearSyncService(): Promise<void> {
   clearEndpoint(serviceStorage());
-  void sync.syncNow();
+  return sync.syncNow();
 }
 
 /** Remember edits, read the file if it is already allowed, and read again when the app is shown. */
