@@ -9,7 +9,8 @@ import {
 } from "../session/bundle";
 import { downloadBytes } from "../session/download";
 import type { SyncNotice } from "../session/sync";
-import { sync } from "../session/syncHost";
+import { configureSyncService, currentSyncService, clearSyncService, sync } from "../session/syncHost";
+import { validateEndpoint } from "../session/serviceSync";
 import { sessionProgress } from "../session/useSession";
 import type { ReaderMode, ReaderWork, WorkId } from "../types";
 import { AppTitle } from "./AppTitle";
@@ -70,6 +71,11 @@ function SyncBar({ onImported }: { onImported: () => void }) {
   const fileRef = useRef<HTMLInputElement>(null);
   const [notice, setNotice] = useState<SyncNotice>(() => sync.current());
   const [importNote, setImportNote] = useState<string | null>(null);
+  const [serviceOpen, setServiceOpen] = useState(false);
+  const [serviceUrl, setServiceUrl] = useState("");
+  const [serviceToken, setServiceToken] = useState("");
+  const [serviceError, setServiceError] = useState<string | null>(null);
+  const configuredService = currentSyncService();
 
   useEffect(() => {
     setNotice(sync.current());
@@ -104,6 +110,36 @@ function SyncBar({ onImported }: { onImported: () => void }) {
     );
   }
 
+  function openServiceForm() {
+    const existing = currentSyncService();
+    setServiceUrl(existing?.baseUrl ?? "");
+    setServiceToken(existing?.token ?? "");
+    setServiceError(null);
+    setServiceOpen((open) => !open);
+  }
+
+  function saveService() {
+    const url = serviceUrl.trim();
+    const token = serviceToken.trim();
+    const error = validateEndpoint({ baseUrl: url, token });
+    if (error) {
+      setServiceError(error);
+      return;
+    }
+    configureSyncService({ baseUrl: url, token });
+    setServiceOpen(false);
+    setServiceUrl("");
+    setServiceToken("");
+    setServiceError(null);
+  }
+
+  function forgetService() {
+    clearSyncService();
+    setServiceUrl("");
+    setServiceToken("");
+    setServiceError(null);
+  }
+
   const showSyncNow = notice.mode === "ready" || notice.mode === "needs-gesture" || notice.mode === "offline";
 
   return (
@@ -115,6 +151,9 @@ function SyncBar({ onImported }: { onImported: () => void }) {
             Choose sync file
           </button>
         )}
+        <button className="start ghost" type="button" onClick={openServiceForm}>
+          Sync service
+        </button>
         {showSyncNow ? (
           <button className="start ghost" type="button" onClick={() => void sync.syncNow()}>
             Sync now
@@ -127,6 +166,43 @@ function SyncBar({ onImported }: { onImported: () => void }) {
           Import
         </button>
       </div>
+      {serviceOpen ? (
+        <form
+          className="home-sync-service"
+          onSubmit={(event) => {
+            event.preventDefault();
+            saveService();
+          }}
+        >
+          <input
+            type="url"
+            value={serviceUrl}
+            onChange={(event) => setServiceUrl(event.target.value)}
+            placeholder="https://… (home service URL)"
+            aria-label="Sync service URL"
+          />
+          <input
+            type="password"
+            value={serviceToken}
+            onChange={(event) => setServiceToken(event.target.value)}
+            placeholder="LECTIO_SYNC_TOKEN"
+            aria-label="Sync service token"
+          />
+          <button className="start" type="submit">
+            Save service
+          </button>
+          {configuredService ? (
+            <button className="start ghost" type="button" onClick={forgetService}>
+              Forget
+            </button>
+          ) : null}
+        </form>
+      ) : null}
+      {serviceError ? (
+        <p className="home-sync-service-error" role="alert">
+          {serviceError}
+        </p>
+      ) : null}
       <p className="home-sync-result" role="status">
         {importNote ?? notice.text}
       </p>

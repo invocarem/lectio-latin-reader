@@ -6,6 +6,13 @@
 import { Capacitor, registerPlugin } from "@capacitor/core";
 import { onSessionEdit } from "./store";
 import { createSync, type SyncController, type SyncTransport } from "./sync";
+import {
+  clearEndpoint,
+  loadEndpoint,
+  saveEndpoint,
+  serviceTransport,
+  type ServiceEndpoint,
+} from "./serviceSync";
 
 type NativeSync = {
   ready(): Promise<{ state: "ready" | "none" }>;
@@ -157,7 +164,7 @@ function unsupportedTransport(): SyncTransport {
   };
 }
 
-export function liveTransport(): SyncTransport {
+export function fileTransport(): SyncTransport {
   if (Capacitor.isNativePlatform()) return nativeTransport();
   if (typeof window !== "undefined" && typeof (window as PickerWindow).showOpenFilePicker === "function") {
     return webTransport();
@@ -165,10 +172,61 @@ export function liveTransport(): SyncTransport {
   return unsupportedTransport();
 }
 
+function serviceStorage(): Storage | null {
+  return typeof window !== "undefined" ? window.localStorage : null;
+}
+
+/**
+ * One device uses one backend at a time: a saved service endpoint means the
+ * service, otherwise the picked file. Choosing a file clears the endpoint, and
+ * saving a service ignores the stored file handle, so they cannot both be live.
+ */
+function liveTransport(): SyncTransport {
+  const file = fileTransport();
+  const service = serviceTransport({ load: () => loadEndpoint(serviceStorage()) });
+  return {
+    async status() {
+      return loadEndpoint(serviceStorage()) ? service.status() : file.status();
+    },
+    async choose() {
+      // Pick first: only a successful pick replaces a saved service. A cancelled
+      // picker keeps the service as the active backend.
+      await file.choose();
+      clearEndpoint(serviceStorage());
+    },
+    async prepare() {
+      return loadEndpoint(serviceStorage()) ? service.prepare() : file.prepare();
+    },
+    async read() {
+      return loadEndpoint(serviceStorage()) ? service.read() : file.read();
+    },
+    async write(text) {
+      return loadEndpoint(serviceStorage()) ? service.write(text) : file.write(text);
+    },
+  };
+}
+
 export const sync: SyncController = createSync({
   transport: liveTransport(),
   onRefreshed: () => window.dispatchEvent(new Event("lectio:sessions")),
 });
+
+/** Aim this device at the home service and sync now. Replaces the picked file. */
+export function configureSyncService(endpoint: ServiceEndpoint): void {
+  saveEndpoint(endpoint, serviceStorage());
+  void sync.syncNow();
+}
+
+/** The service this device is aimed at, if it saved one. */
+export function currentSyncService(): ServiceEndpoint | null {
+  return loadEndpoint(serviceStorage());
+}
+
+/** Forget the saved service; the next pick falls back to the file backend. */
+export function clearSyncService(): void {
+  clearEndpoint(serviceStorage());
+  void sync.syncNow();
+}
 
 /** Remember edits, read the file if it is already allowed, and read again when the app is shown. */
 export function startSync(): void {

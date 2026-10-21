@@ -1,6 +1,6 @@
 # Home sync service
 
-**Current step: 4. Reader.** Tick a box here when that piece lands, and move the current-step line with it.
+**Current step: done.**
 
 - [x] 0. Plan
 - [x] 1. File store
@@ -22,11 +22,11 @@
   - [x] File path and token come from the environment, never from the repo
   - [x] Tests for the store, the status table, and one live process
   - [x] Short run notes in the README (Docker on the Linux box, bare `node` elsewhere)
-- [ ] 4. Reader
-  - [ ] A transport whose `read` and `write` are the `GET` and the `PUT`
-  - [ ] A failed write leaves this device's progress in place for the next read
-  - [ ] The phone can keep the picked file (Google Drive), or save this service instead
-  - [ ] One device uses one of those at a time
+- [x] 4. Reader
+  - [x] A transport whose `read` and `write` are the `GET` and the `PUT`
+  - [x] A failed write leaves this device's progress in place for the next read
+  - [x] The phone can keep the picked file (Google Drive), or save this service instead
+  - [x] One device uses one of those at a time
 
 `sync.md` already merges. This plan adds a place for that same file to live on one home computer. The service stores bytes. It does not merge, and it does not replace `localStorage`.
 

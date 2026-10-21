@@ -49,6 +49,8 @@ docker run -d --restart unless-stopped \
 
 The file path and token come from the environment, never from this repo. The route accepts only a version-1 bundle (`{"version":1,"sessions":{…}}`, matching `BUNDLE_VERSION` in `src/session/bundle.ts`), stores the bytes as sent, and does not merge. `LECTIO_SYNC_HOST`, `LECTIO_SYNC_PORT`, and `LECTIO_SYNC_ORIGINS` are optional overrides (see `service-sync.md`).
 
+In the app, Home → **Sync service** lets a device aim at this service (enter the tailnet URL and `LECTIO_SYNC_TOKEN`) instead of a picked Drive file; a device uses either the file or the service, one at a time. The read is the `GET` and the write is the `PUT` (with the `ETag` as `If-Match`), so a device whose write races another is refused (`412`) and keeps its local progress until the next sync.
+
 ## iOS (Mac)
 
 The iPhone app is a Capacitor shell around that Vite bundle, the same pattern as `~/code/lectio`. Xcode does **not** watch `src/`. It loads a copied snapshot in `ios/App/App/public`. `npm run dev` only updates the browser.
