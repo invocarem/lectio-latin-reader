@@ -14,7 +14,8 @@
     "lexicon:extract": "python3 scripts/extract_wordlist.py",
     "lexicon:analyze": "bash scripts/analyze-in-docker.sh",
     "lexicon:parse": "python3 scripts/parse_analyses.py",
-    "lexicon:curate": "python3 scripts/apply_overrides.py"
+    "lexicon:curate": "python3 scripts/apply_overrides.py",
+    "sync:serve": "node --experimental-strip-types services/sync/server.ts"
   },
   "dependencies": {
     "@capacitor/core": "^8.5.2",

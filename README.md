@@ -21,6 +21,34 @@ npm run preview  # serve the build
 npm run content  # rebuild de-gradibus.json from latin-units.json
 ```
 
+## Sync service
+
+`services/sync` is a small HTTP store for `lectio-sessions.json`, so the phone and your computers can share progress over a tailnet instead of a cloud folder. It is a plain conditional-write store (`GET`/`PUT` with an `ETag`/`If-Match`); the app still does the merge. The full plan is in `service-sync.md`.
+
+Run it directly on any machine with Node 22+ (no install step):
+
+```bash
+export LECTIO_SYNC_FILE=/path/to/lectio-sessions.json
+export LECTIO_SYNC_TOKEN="$(node -e "console.log(require('crypto').randomBytes(32).toString('hex'))")"
+npm run sync:serve
+```
+
+It binds to `127.0.0.1:3010` by default and logs the listen address and file path. Publish it with Tailscale Serve so the phone reaches it over an HTTPS tailnet name; do not open the port to the LAN.
+
+On a Docker host (e.g. the Linux box that already runs open-webui):
+
+```bash
+docker build -t lectio-sync services/sync
+docker run -d --restart unless-stopped \
+  -p 127.0.0.1:3010:3010 \
+  -v "$PWD/sync-data:/data" \
+  -e LECTIO_SYNC_FILE=/data/lectio-sessions.json \
+  -e LECTIO_SYNC_TOKEN="$(openssl rand -hex 32)" \
+  lectio-sync
+```
+
+The file path and token come from the environment, never from this repo. The route accepts only a version-1 bundle (`{"version":1,"sessions":{…}}`, matching `BUNDLE_VERSION` in `src/session/bundle.ts`), stores the bytes as sent, and does not merge. `LECTIO_SYNC_HOST`, `LECTIO_SYNC_PORT`, and `LECTIO_SYNC_ORIGINS` are optional overrides (see `service-sync.md`).
+
 ## iOS (Mac)
 
 The iPhone app is a Capacitor shell around that Vite bundle, the same pattern as `~/code/lectio`. Xcode does **not** watch `src/`. It loads a copied snapshot in `ios/App/App/public`. `npm run dev` only updates the browser.
