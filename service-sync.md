@@ -115,6 +115,7 @@ docker run -d --restart unless-stopped \
   -p 127.0.0.1:3010:3010 \
   -v /path/to/a/folder:/data \
   -e LECTIO_SYNC_FILE=/data/lectio-sessions.json \
+  -e LECTIO_SYNC_DIR=/data \
   -e LECTIO_SYNC_TOKEN="$(openssl rand -hex 32)" \
   lectio-sync
 ```

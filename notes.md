@@ -14,7 +14,7 @@
   - [x] Notes live in their own local store, separate from `session.${work}`
   - [x] The open office slice lists the notes for that place
   - [x] Psalm 118 Nun (verses 105–112) lists the notes whose section is `nun`
-  - [x] The body is shown as written, under the section
+  - [x] The body is shown as a reading view, under the section
   - [x] A line highlight stays on the line and is not turned into a file
 - [x] 3. Folder
   - [x] The picked place is a folder: `lectio-sessions.json` beside `notes/`
@@ -108,11 +108,9 @@ The office already knows the open slice (`PsalmSlice`: psalm, and `from` / `to` 
 - A slice with `part`: that number.
 - A whole psalm: the number alone.
 
-The notes for that place are listed on the section, under the English. Each one shows its title and its body as written, markdown marks included. This plan does not add a markdown renderer.
+The notes for that place are listed on the section, under the English. Each one shows its title and its body as a reading view: paragraphs, lists, and pipe tables. The app displays the files. It does not create or edit them. The markdown is written in the folder, and a sync read brings it onto the device.
 
-The line highlight stays where it is. `annotationForLine` in `src/components/Office.tsx` still reads `annotations` on the session document. Opening Nun does not copy those lines into files, and saving a markdown file does not write the body back into the JSON.
-
-A note can be added from the section. The app creates the next file for that place, with today's `at`, an `updated` of now, and an empty body, then the person edits the body. The editor is a text area, the same kind the line note already uses.
+The line highlight stays where it is. `annotationForLine` in `src/components/Office.tsx` still reads `annotations` on the session document. Opening Nun does not copy those lines into files, and a markdown file does not write its body back into the JSON.
 
 ## Local store
 

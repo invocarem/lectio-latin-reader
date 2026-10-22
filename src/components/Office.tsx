@@ -397,16 +397,7 @@ export function Office({ work, reading, onHome }: OfficeProps) {
                     )}
                   </div>
                 ) : null}
-                {linePlace ? (
-                  <SectionNotes
-                    place={linePlace}
-                    notes={learning.notes}
-                    ready={learning.ready}
-                    onAdd={learning.add}
-                    onWrite={learning.write}
-                    onDelete={learning.remove}
-                  />
-                ) : null}
+                {linePlace ? <SectionNotes place={linePlace} notes={learning.notes} /> : null}
               </>
             ) : (
               current?.slices.map((slice) => {
@@ -439,16 +430,7 @@ export function Office({ work, reading, onHome }: OfficeProps) {
                         ) : null}
                       </div>
                     ))}
-                    {place ? (
-                      <SectionNotes
-                        place={place}
-                        notes={learning.notes}
-                        ready={learning.ready}
-                        onAdd={learning.add}
-                        onWrite={learning.write}
-                    onDelete={learning.remove}
-                      />
-                    ) : null}
+                    {place ? <SectionNotes place={place} notes={learning.notes} /> : null}
                   </section>
                 );
               })
