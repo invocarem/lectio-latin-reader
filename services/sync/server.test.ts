@@ -107,7 +107,7 @@ describe("sync HTTP (Step 2)", () => {
     expect(r.status).toBe(200);
     expect(r.body.toString()).toBe("hello-bytes");
     expect(r.headers.etag).toBe(etagOf(Buffer.from("hello-bytes")));
-    expect(r.headers["cache-control"]).toBe("no-store");
+    expect(r.headers["cache-control"]).toBe("no-store, no-transform");
   });
 
   it("PUT with a missing or wrong token: 401 and file unchanged", async () => {
@@ -158,6 +158,18 @@ describe("sync HTTP (Step 2)", () => {
     const r = await rawRequest({ method: "PUT", headers: putHeaders({ "If-Match": current }), body: big });
     expect(r.status).toBe(413);
     expect(await fs.readFile(file, "utf8")).toBe("orig");
+  });
+
+  it("PUT with the same hash in a weak etag: 204, bytes stored", async () => {
+    await fs.writeFile(file, "orig");
+    const current = etagOf(Buffer.from("orig"));
+    const r = await rawRequest({
+      method: "PUT",
+      headers: putHeaders({ "If-Match": `W/${current}` }),
+      body: BODY,
+    });
+    expect(r.status).toBe(204);
+    expect(await fs.readFile(file, "utf8")).toBe(BODY);
   });
 
   it("PUT with a matching etag: 204, new etag, bytes stored as sent", async () => {

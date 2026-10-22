@@ -121,6 +121,24 @@ describe("service transport (Step 4)", () => {
     expect(await configured.status()).toBe("ready");
   });
 
+  it("strips a weak etag before sending If-Match", async () => {
+    const store = configuredStore();
+    let sent: string | null = null;
+    const fetchFn = (async (_input, init) => {
+      const method = init?.method ?? "GET";
+      const headers = (init?.headers ?? {}) as Record<string, string>;
+      if (method === "PUT") {
+        sent = headers["If-Match"] ?? null;
+        return response(204, 'W/"1"', "");
+      }
+      return response(200, 'W/"abc"', V1);
+    }) as typeof fetch;
+    const transport = serviceTransport({ load: () => loadEndpoint(store), fetchFn });
+    await transport.read();
+    await transport.write(V1);
+    expect(sent).toBe('"abc"');
+  });
+
   it("read is the GET and write sends that read's etag", async () => {
     const store = configuredStore();
     const svc = inMemoryService(V1);

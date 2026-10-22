@@ -44,6 +44,15 @@ function etagOf(bytes: Buffer): string {
   return `"${createHash("sha256").update(bytes).digest("hex")}"`;
 }
 
+/**
+ * If-Match is a strong comparison. A proxy may hand the client the same
+ * hash prefixed with `W/`. That prefix is not a different file.
+ */
+function etagMatches(ifMatch: string, currentEtag: string): boolean {
+  const presented = ifMatch.trim().replace(/^W\//i, "");
+  return presented === currentEtag;
+}
+
 function isMissing(error: unknown): boolean {
   return (
     error instanceof Error &&
@@ -105,7 +114,7 @@ export class FileStore {
     return this.enqueue(async () => {
       const current = await this.readBytes();
       const currentEtag = etagOf(current);
-      if (ifMatch === null || ifMatch !== currentEtag) {
+      if (ifMatch === null || !etagMatches(ifMatch, currentEtag)) {
         return { ok: false, currentEtag };
       }
       await this.replace(bytes);
@@ -296,7 +305,7 @@ export function createSyncHandler(
           }
           const { bytes, etag } = await store.read();
           res.setHeader("ETag", etag);
-          res.setHeader("Cache-Control", "no-store");
+          res.setHeader("Cache-Control", "no-store, no-transform");
           res.setHeader("Content-Type", "application/json; charset=utf-8");
           res.writeHead(200);
           res.end(bytes);

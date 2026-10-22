@@ -77,6 +77,17 @@ type ServiceTransportOptions = {
   fetchFn?: typeof fetch;
 };
 
+/**
+ * The tunnel compresses the body and rewrites a strong etag as `W/"…"`.
+ * The quoted hash is unchanged. If-Match has to be the strong form, or the
+ * service answers 412 and this device reports that it could not reach sync.
+ */
+function asStrongEtag(value: string | null): string | null {
+  if (!value) return null;
+  const strong = value.trim().replace(/^W\//i, "");
+  return strong.length > 0 ? strong : null;
+}
+
 export function serviceTransport(options: ServiceTransportOptions): SyncTransport {
   const fetchFn = options.fetchFn ?? ((input, init) => fetch(input, init));
   let etag: string | null = null;
@@ -105,7 +116,7 @@ export function serviceTransport(options: ServiceTransportOptions): SyncTranspor
         cache: "no-store",
       });
       if (res.status !== 200) throw new Error(`Sync GET failed (${res.status})`);
-      const next = res.headers.get("etag");
+      const next = asStrongEtag(res.headers.get("etag"));
       if (next) etag = next;
       return res.text();
     },
@@ -122,7 +133,7 @@ export function serviceTransport(options: ServiceTransportOptions): SyncTranspor
         body: text,
       });
       if (res.status === 204) {
-        const next = res.headers.get("etag");
+        const next = asStrongEtag(res.headers.get("etag"));
         if (next) etag = next;
         return;
       }
