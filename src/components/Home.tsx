@@ -69,17 +69,18 @@ export function Home({ onOpen, studyEnabled = true }: HomeProps) {
 
 function SyncBar({ onImported }: { onImported: () => void }) {
   const fileRef = useRef<HTMLInputElement>(null);
+  const serviceDetails = useRef<HTMLDetailsElement>(null);
   const [notice, setNotice] = useState<SyncNotice>(() => sync.current());
   const [importNote, setImportNote] = useState<string | null>(null);
-  const [serviceOpen, setServiceOpen] = useState(false);
   const [serviceUrl, setServiceUrl] = useState("");
   const [serviceToken, setServiceToken] = useState("");
   const [serviceError, setServiceError] = useState<string | null>(null);
   const [showToken, setShowToken] = useState(false);
   const [busy, setBusy] = useState(false);
   const service = currentSyncService();
-  const place = syncPlace(service, notice, serviceOpen);
+  const fileTitle = sharedFileTitle(service, notice);
   const linked = service != null || notice.mode === "ready" || notice.mode === "needs-gesture" || notice.mode === "offline";
+  const fileChoice = notice.mode !== "unsupported";
 
   useEffect(() => {
     setNotice(sync.current());
@@ -114,13 +115,16 @@ function SyncBar({ onImported }: { onImported: () => void }) {
     );
   }
 
-  function openServiceForm() {
+  function fillServiceForm() {
     const existing = currentSyncService();
     setServiceUrl(existing?.baseUrl ?? "");
     setServiceToken(existing?.token ?? "");
     setServiceError(null);
     setShowToken(false);
-    setServiceOpen((open) => !open);
+  }
+
+  function closeServiceForm() {
+    if (serviceDetails.current) serviceDetails.current.open = false;
   }
 
   async function saveService() {
@@ -131,7 +135,7 @@ function SyncBar({ onImported }: { onImported: () => void }) {
       setServiceError(error);
       return;
     }
-    setServiceOpen(false);
+    closeServiceForm();
     setServiceUrl("");
     setServiceToken("");
     setServiceError(null);
@@ -149,6 +153,7 @@ function SyncBar({ onImported }: { onImported: () => void }) {
     setServiceToken("");
     setServiceError(null);
     setImportNote(null);
+    closeServiceForm();
     setNotice({ mode: "none", text: "", refreshed: false });
     setBusy(true);
     try {
@@ -178,87 +183,96 @@ function SyncBar({ onImported }: { onImported: () => void }) {
       </p>
       {service ? (
         <p className="home-sync-url">{serviceAddress(service)}</p>
-      ) : place.title ? (
-        <p className="home-sync-where">{place.title}</p>
+      ) : fileTitle ? (
+        <p className="home-sync-where">{fileTitle}</p>
       ) : null}
-      <div className="home-actions">
+      {outcome ? (
+        <p className="home-sync-result" role="status">
+          {outcome}
+        </p>
+      ) : null}
+      <div className="home-sync-places">
         {linked ? (
-          <button className="start" type="button" disabled={busy} onClick={() => void syncNow()}>
+          <button className="home-kicker home-sync-text" type="button" disabled={busy} onClick={() => void syncNow()}>
             Sync now
           </button>
         ) : null}
-        {place.fileLabel ? (
-          <button className="start ghost" type="button" onClick={() => void sync.choose()}>
-            {place.fileLabel}
+        {fileChoice ? (
+          <button className="home-kicker home-sync-text" type="button" disabled={busy} onClick={() => void sync.choose()}>
+            Sync file
           </button>
         ) : null}
-        <button className="start ghost" type="button" onClick={openServiceForm} aria-expanded={serviceOpen}>
-          {place.serviceLabel}
-        </button>
-      </div>
-      {serviceOpen ? (
-        <form
-          className="home-sync-service"
-          onSubmit={(event) => {
-            event.preventDefault();
-            void saveService();
+        <details
+          className="home-sync-setup"
+          ref={serviceDetails}
+          onToggle={(event) => {
+            if (event.currentTarget.open) fillServiceForm();
           }}
         >
-          <div className="home-sync-field">
-            <label htmlFor="sync-service-url">Service URL</label>
-            <input
-              id="sync-service-url"
-              type="url"
-              value={serviceUrl}
-              onChange={(event) => setServiceUrl(event.target.value)}
-              placeholder="https://name.trycloudflare.com"
-              autoComplete="url"
-              spellCheck={false}
-            />
-            <p>The https address of the computer running the sync service.</p>
-          </div>
-          <div className="home-sync-field">
-            <label htmlFor="sync-service-token">Token</label>
-            <div className="home-sync-token">
+          <summary className="home-kicker">Sync service</summary>
+          <form
+            className="home-sync-service"
+            onSubmit={(event) => {
+              event.preventDefault();
+              void saveService();
+            }}
+          >
+            <div className="home-sync-field">
+              <label htmlFor="sync-service-url">Service URL</label>
               <input
-                id="sync-service-token"
-                type={showToken ? "text" : "password"}
-                value={serviceToken}
-                onChange={(event) => setServiceToken(event.target.value)}
-                placeholder="Paste the token"
-                autoComplete="off"
-                autoCapitalize="off"
-                autoCorrect="off"
+                id="sync-service-url"
+                type="url"
+                value={serviceUrl}
+                onChange={(event) => setServiceUrl(event.target.value)}
+                placeholder="https://name.trycloudflare.com"
+                autoComplete="url"
                 spellCheck={false}
               />
-              <button
-                className="home-sync-reveal"
-                type="button"
-                aria-pressed={showToken}
-                onClick={() => setShowToken((shown) => !shown)}
-              >
-                {showToken ? "Hide" : "Show"}
-              </button>
+              <p>The https address of the computer running the sync service.</p>
             </div>
-            <p>The LECTIO_SYNC_TOKEN from that same computer.</p>
-          </div>
-          {serviceError ? (
-            <p className="home-sync-service-error" role="alert">
-              {serviceError}
-            </p>
-          ) : null}
-          <div className="home-sync-service-actions">
-            <button className="start" type="submit" disabled={busy}>
-              Save and sync
-            </button>
-            {service ? (
-              <button className="start ghost" type="button" disabled={busy} onClick={() => void forgetService()}>
-                Forget service
-              </button>
+            <div className="home-sync-field">
+              <label htmlFor="sync-service-token">Token</label>
+              <div className="home-sync-token">
+                <input
+                  id="sync-service-token"
+                  type={showToken ? "text" : "password"}
+                  value={serviceToken}
+                  onChange={(event) => setServiceToken(event.target.value)}
+                  placeholder="Paste the token"
+                  autoComplete="off"
+                  autoCapitalize="off"
+                  autoCorrect="off"
+                  spellCheck={false}
+                />
+                <button
+                  className="home-sync-reveal"
+                  type="button"
+                  aria-pressed={showToken}
+                  onClick={() => setShowToken((shown) => !shown)}
+                >
+                  {showToken ? "Hide" : "Show"}
+                </button>
+              </div>
+              <p>The LECTIO_SYNC_TOKEN from that same computer.</p>
+            </div>
+            {serviceError ? (
+              <p className="home-sync-service-error" role="alert">
+                {serviceError}
+              </p>
             ) : null}
-          </div>
-        </form>
-      ) : null}
+            <div className="home-sync-service-actions">
+              <button className="start" type="submit" disabled={busy}>
+                Save and sync
+              </button>
+              {service ? (
+                <button className="start ghost" type="button" disabled={busy} onClick={() => void forgetService()}>
+                  Forget service
+                </button>
+              ) : null}
+            </div>
+          </form>
+        </details>
+      </div>
       <div className="home-sync-copy">
         <div className="home-actions">
           <button className="start ghost" type="button" onClick={exportPasses}>
@@ -269,11 +283,6 @@ function SyncBar({ onImported }: { onImported: () => void }) {
           </button>
         </div>
       </div>
-      {outcome ? (
-        <p className="home-sync-result" role="status">
-          {outcome}
-        </p>
-      ) : null}
       <input
         ref={fileRef}
         type="file"
@@ -293,30 +302,10 @@ function serviceAddress(endpoint: ServiceEndpoint): string {
   return endpoint.baseUrl.replace(/\/+$/, "");
 }
 
-function syncPlace(
-  service: ServiceEndpoint | null,
-  notice: SyncNotice,
-  serviceOpen: boolean,
-): { title: string | null; fileLabel: string | null; serviceLabel: string } {
-  const serviceLabel = serviceOpen ? "Close" : service ? "Edit service" : "Sync service";
-  if (service) {
-    return {
-      title: null,
-      fileLabel: notice.mode === "unsupported" ? null : "Switch to file",
-      serviceLabel,
-    };
-  }
-  if (notice.mode === "unsupported") {
-    return { title: null, fileLabel: null, serviceLabel };
-  }
-  if (notice.mode === "needs-gesture" || notice.mode === "ready" || notice.mode === "offline") {
-    return {
-      title: "Shared file",
-      fileLabel: "Change file",
-      serviceLabel: serviceOpen ? "Close" : "Switch to service",
-    };
-  }
-  return { title: null, fileLabel: "Choose sync file", serviceLabel };
+function sharedFileTitle(service: ServiceEndpoint | null, notice: SyncNotice): string | null {
+  if (service) return null;
+  if (notice.mode === "needs-gesture" || notice.mode === "ready" || notice.mode === "offline") return "Shared file";
+  return null;
 }
 
 /** A result worth a status line. */

@@ -133,6 +133,56 @@ select option {
   cursor: progress;
 }
 
+.home-sync-places {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.7rem;
+  width: 100%;
+  margin-top: 0.2rem;
+}
+
+.home-sync-text {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+.home-sync-text:focus-visible {
+  outline: 1px solid var(--cinnabar);
+  outline-offset: 0.25rem;
+}
+
+.home-sync-text:disabled {
+  opacity: 0.55;
+  cursor: progress;
+}
+
+.home-sync-setup {
+  width: 100%;
+}
+
+.home-sync-setup summary {
+  width: fit-content;
+  cursor: pointer;
+  list-style: none;
+}
+
+.home-sync-setup summary::-webkit-details-marker {
+  display: none;
+}
+
+.home-sync-setup summary:focus-visible {
+  outline: 1px solid var(--cinnabar);
+  outline-offset: 0.25rem;
+}
+
+.home-sync-setup[open] .home-sync-service {
+  margin-top: 0.85rem;
+}
+
 .home-sync-copy {
   width: 100%;
   margin-top: 0.15rem;
