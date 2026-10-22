@@ -177,9 +177,9 @@ function SyncBar({ onImported }: { onImported: () => void }) {
         loadServiceForm();
         void refreshFileName();
       } else if (result === "failed" && currentSyncService()) {
-        setFileNote("The file was not opened. This device is still using the service.");
+        setFileNote("The folder was not opened. This device is still using the service.");
       } else if (result === "failed") {
-        setFileNote("The file was not opened.");
+        setFileNote("The folder was not opened.");
       }
     } finally {
       setBusyOn(null);
@@ -334,7 +334,7 @@ function FileSyncControl({
             <span className="home-kicker">File</span>
             {active ? <ActiveMark /> : null}
           </span>
-          {hasFile ? <span className="home-sync-identity">{fileName ?? "Shared file"}</span> : null}
+          {hasFile ? <span className="home-sync-identity">{fileName ?? "Shared folder"}</span> : null}
         </button>
       </h3>
       {!open && status ? (
@@ -352,12 +352,12 @@ function FileSyncControl({
           <div className="home-sync-actions">
             {picker && hasFile && !active ? (
               <button className="start" type="button" disabled={busy} onClick={onUse}>
-                Use this file
+                Use this folder
               </button>
             ) : null}
             {picker ? (
               <button className={hasFile && !active ? "start ghost" : "start"} type="button" disabled={busy} onClick={onChoose}>
-                {hasFile ? "Change file…" : "Choose file…"}
+                {hasFile ? "Change folder…" : "Choose folder…"}
               </button>
             ) : null}
             {active ? (
@@ -517,8 +517,8 @@ function ActiveMark() {
 }
 
 function fileDescription(active: boolean, hasFile: boolean, fileName: string | null): string | null {
-  if (!hasFile) return "Pick a sync file to sync progress from this device.";
-  if (active) return `Progress syncs through ${fileName ?? "this file"}.`;
+  if (!hasFile) return "Pick a folder to sync progress and notes from this device.";
+  if (active) return `Progress and notes sync through ${fileName ?? "this folder"}.`;
   return "Saved on this device.";
 }
 

@@ -11,7 +11,10 @@ import {
 } from "../content/office/when";
 import { EDGE_GUARD_PX, isSwipePointer, swipeIntent } from "../swipe";
 import { SessionView } from "../session/SessionView";
+import { SectionNotes } from "../session/SectionNotes";
+import { useLearningNotes } from "../session/useLearningNotes";
 import { useSession } from "../session/useSession";
+import { placeOfSlice } from "../session/notes";
 import { annotationForLine } from "../session/document";
 import { parseStep, type OpenPlace } from "../session/cursus";
 import type { ReaderWork } from "../types";
@@ -65,6 +68,15 @@ const TIME_LABEL: Record<OfficeTime, string> = {
   "after-pentecost": "after Pentecost",
   lent: "Lent",
 };
+
+function sliceForLine(slots: OfficeSlot[], line: { psalm: number; label: string }): PsalmSlice | undefined {
+  for (const slot of slots) {
+    for (const slice of slot.slices) {
+      if (slice.psalm === line.psalm && sliceLabel(slice) === line.label) return slice;
+    }
+  }
+  return undefined;
+}
 
 function progressLabel(slot: OfficeSlot | undefined, index: number, total: number): string {
   if (!slot || total === 0) return "0 / 0";
@@ -133,6 +145,7 @@ function initialPosition(
 export function Office({ work, reading, onHome }: OfficeProps) {
   const opened = useMemo(() => officeNow(new Date()), []);
   const session = useSession();
+  const learning = useLearningNotes();
   // The first mount opens the psalm of the current clock hour (a fresh start),
   // or the place last chosen earlier in this same app run. The useState
   // initializers run only on mount, so this single computation is enough even
@@ -175,6 +188,8 @@ export function Office({ work, reading, onHome }: OfficeProps) {
   }, [reading, weekday, hour, safeIndex]);
   const note =
     line != null ? annotationForLine(session.doc, line.psalm, line.noteKey, line.legacyNoteKey) : undefined;
+  const lineSlice = line != null ? sliceForLine(slots, line) : undefined;
+  const linePlace = lineSlice ? placeOfSlice(lineSlice) : null;
   const highlighted = note != null;
   const [editingId, setEditingId] = useState<string | null>(null);
   const noteRef = useRef<HTMLTextAreaElement>(null);
@@ -382,10 +397,21 @@ export function Office({ work, reading, onHome }: OfficeProps) {
                     )}
                   </div>
                 ) : null}
+                {linePlace ? (
+                  <SectionNotes
+                    place={linePlace}
+                    notes={learning.notes}
+                    ready={learning.ready}
+                    onAdd={learning.add}
+                    onWrite={learning.write}
+                    onDelete={learning.remove}
+                  />
+                ) : null}
               </>
             ) : (
               current?.slices.map((slice) => {
                 const verses = sliceVerses(slice);
+                const place = placeOfSlice(slice);
                 return (
                   <section key={`${slice.psalm}:${slice.from ?? 1}:${slice.to ?? "end"}`}>
                     <h2 className="office-psalm">{sliceLabel(slice)}</h2>
@@ -413,6 +439,16 @@ export function Office({ work, reading, onHome }: OfficeProps) {
                         ) : null}
                       </div>
                     ))}
+                    {place ? (
+                      <SectionNotes
+                        place={place}
+                        notes={learning.notes}
+                        ready={learning.ready}
+                        onAdd={learning.add}
+                        onWrite={learning.write}
+                    onDelete={learning.remove}
+                      />
+                    ) : null}
                   </section>
                 );
               })

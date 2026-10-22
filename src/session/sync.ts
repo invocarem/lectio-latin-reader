@@ -15,6 +15,8 @@ import {
   type SessionBundle,
 } from "./bundle";
 import { annotationIdentity, isUnitAnnotation, type Annotation, type SessionDoc } from "./document";
+import { describeNoteMerge, isNoteEntry, mergeNoteFolders } from "./noteSync";
+import { type NoteFile, type NoteFiles } from "./noteStore";
 import { saveSession } from "./store";
 
 export type SyncMode = "unsupported" | "none" | "needs-gesture" | "ready" | "offline";
@@ -33,14 +35,22 @@ export type SyncTransport = {
   prepare(): Promise<void>;
   read(): Promise<string>;
   write(text: string): Promise<void>;
+  /**
+   * Notes beside the progress file. `null` means this backend has no notes
+   * folder (the sync service, until it grows those routes). An empty list is
+   * a folder with no notes.
+   */
+  listNotes?(): Promise<NoteFile[] | null>;
+  writeNote?(name: string, text: string): Promise<void>;
+  removeNote?(name: string): Promise<void>;
 };
 
 const CHOOSE =
-  "Choose lectio-sessions.json in a shared folder such as Google Drive, or save a sync service. Export once if you still need to create that file.";
-const WAITING = "Sync is waiting for access to the file. Tap Sync now.";
+  "Choose the lectio-sessions folder in a shared place such as Google Drive, or save a sync service. The folder holds lectio-sessions.json and a notes directory.";
+const WAITING = "Sync is waiting for access to the folder. Tap Sync now.";
 const OFFLINE = "Could not reach sync. This device kept its own progress.";
 const UNREADABLE = "Sync did not return lectio progress. This device kept its own progress.";
-const UNSUPPORTED = "This browser cannot keep a sync file open. Save a sync service, or use Export and Import.";
+const UNSUPPORTED = "This browser cannot keep a sync folder open. Save a sync service, or use Export and Import.";
 
 export const SYNC_DELAY_MS = 4000;
 
@@ -113,6 +123,36 @@ export function mergeRemoteText(
   return { ok: true, outcome, nextText, dirty: canonicalBundle(parsed.bundle) !== nextText };
 }
 
+/** Read the folder's notes into the local store. A pull does not write them back. */
+async function applyNotes(
+  notes: NoteFiles,
+  transport: SyncTransport,
+  pull: boolean,
+): Promise<{ changed: boolean; notice: string | null }> {
+  const remote = await transport.listNotes?.();
+  if (remote == null) return { changed: false, notice: null };
+  const local = await notes.list();
+  const merged = mergeNoteFolders(local, remote);
+  const desired = new Map(merged.local.map((file) => [file.name, file.text]));
+  let changed = false;
+  for (const file of local) {
+    if (!isNoteEntry(file.name) || desired.has(file.name)) continue;
+    await notes.remove(file.name);
+    changed = true;
+  }
+  for (const file of merged.local) {
+    const current = local.find((item) => item.name === file.name);
+    if (current?.text === file.text) continue;
+    await notes.write(file.name, file.text);
+    changed = true;
+  }
+  if (!pull) {
+    for (const file of merged.upload) await transport.writeNote?.(file.name, file.text);
+    for (const name of merged.removeRemote) await transport.removeNote?.(name);
+  }
+  return { changed, notice: describeNoteMerge(merged) };
+}
+
 function noticeFor(mode: Exclude<SyncMode, "offline">): SyncNotice {
   if (mode === "unsupported") return { mode, text: UNSUPPORTED, refreshed: false };
   if (mode === "needs-gesture") return { mode, text: WAITING, refreshed: false };
@@ -129,6 +169,8 @@ function isCancel(error: unknown): boolean {
 export function createSync(options: {
   transport: SyncTransport;
   storage?: Storage | null;
+  /** Learning notes on this device. Absent in tests that only merge the bundle. */
+  notes?: NoteFiles;
   delayMs?: number;
   schedule?: (fn: () => void, ms: number) => Cancel;
   onRefreshed?: () => void;
@@ -204,10 +246,29 @@ export function createSync(options: {
         return;
       }
     }
+    let noteNotice: string | null = null;
+    let notesChanged = false;
+    if (options.notes && options.transport.listNotes) {
+      try {
+        const applied = await applyNotes(options.notes, options.transport, call.pull === true);
+        notesChanged = applied.changed;
+        noteNotice = applied.notice;
+      } catch {
+        publish({ mode: "offline", text: OFFLINE, refreshed });
+        return;
+      }
+    }
+    const noticeText = brought
+      ? `${describeMerge(merged.outcome)}.${noteNotice ? ` ${noteNotice}` : ""}`
+      : noteNotice
+        ? noteNotice
+        : call.pull
+          ? "Up to date."
+          : "Synced.";
     publish({
       mode: "ready",
-      text: brought ? `${describeMerge(merged.outcome)}.` : call.pull ? "Up to date." : "Synced.",
-      refreshed,
+      text: noticeText,
+      refreshed: refreshed || notesChanged,
     });
   }
 

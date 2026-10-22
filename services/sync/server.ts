@@ -4,9 +4,11 @@
  * One `lectio-sessions.json` on a home computer, reached over HTTP. The store
  * reads the bytes and writes them only when the caller still holds the current
  * etag, replacing the file atomically through a temp file beside it. The HTTP
- * surface exposes one route, `/lectio-sessions.json`, gated by a bearer token,
- * with `OPTIONS` for CORS. The service stores bytes as sent and never merges,
- * reformats, or validates the sessions inside.
+ * surface exposes `/lectio-sessions.json`, gated by a bearer token, with
+ * `OPTIONS` for CORS. When `LECTIO_SYNC_DIR` is set, that folder also holds
+ * `notes/`, and `/notes` serves those files the same way: one etag per file,
+ * bytes stored as sent. The service never merges, reformats, or validates the
+ * sessions inside.
  *
  * One TypeScript file, no imports of `src/`, so it runs on Node 22 with type
  * stripping and no compile step:
@@ -34,7 +36,20 @@ export const DEFAULT_ORIGINS = [
 ];
 
 const ROUTE = "/lectio-sessions.json";
+const NOTES_ROUTE = "/notes";
 const TMP_SUFFIX = ".tmp";
+const TOMBSTONE = ".deleted";
+const ISO_STAMP = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d{1,3})?Z$/;
+const NOTE_NAME = /^(\d{2})_psalm_([1-9]\d{0,2})(?:_([a-z0-9]+))?\.md$/;
+
+/** Psalm 118 sections, matching `PSALM_118_SECTIONS` in `src/session/notes.ts`. */
+const PSALM_118_SECTIONS = new Set([
+  "aleph", "beth", "ghimel", "daleth", "he", "vau", "zain", "heth", "teth", "iod",
+  "caph", "lamed", "mem", "nun", "samech", "ain", "phe", "sade", "coph", "res", "sin", "tau",
+]);
+
+/** Psalms sung in numbered parts, matching `NUMBERED_PARTS` in `src/session/notes.ts`. */
+const NUMBERED_PARTS = new Set([9, 17, 36, 67, 68, 77, 88, 103, 104, 105, 106, 138, 143, 144]);
 
 /* ------------------------------------------------------------------ *
  * File store (Step 1)
@@ -122,6 +137,37 @@ export class FileStore {
     });
   }
 
+  /**
+   * Remove the file only when `ifMatch` equals the current etag. A missing
+   * file's etag is the etag of empty bytes, the same value a GET returns.
+   */
+  removeIfMatch(
+    ifMatch: string | null,
+  ): Promise<{ ok: true; etag: string } | { ok: false; currentEtag: string }> {
+    return this.enqueue(async () => {
+      const current = await this.readBytes();
+      const currentEtag = etagOf(current);
+      if (ifMatch === null || !etagMatches(ifMatch, currentEtag)) {
+        return { ok: false, currentEtag };
+      }
+      await fs.rm(this.filePath, { force: true });
+      return { ok: true, etag: currentEtag };
+    });
+  }
+
+  /** Bytes when the file is present, including an empty file. Null when it is absent. */
+  readExisting(): Promise<{ bytes: Buffer; etag: string } | null> {
+    return this.enqueue(async () => {
+      try {
+        const bytes = await fs.readFile(this.filePath);
+        return { bytes, etag: etagOf(bytes) };
+      } catch (error) {
+        if (isMissing(error)) return null;
+        throw error;
+      }
+    });
+  }
+
   private async replace(bytes: Buffer): Promise<void> {
     const dir = path.dirname(this.filePath);
     const tmp = path.join(dir, `${path.basename(this.filePath)}${TMP_SUFFIX}`);
@@ -139,12 +185,86 @@ export class FileStore {
   }
 }
 
+/** A note filename, or that filename plus `.deleted`. Anything else is not a route. */
+export function isSyncNoteName(name: string): boolean {
+  const filename = name.endsWith(TOMBSTONE) ? name.slice(0, -TOMBSTONE.length) : name;
+  const match = NOTE_NAME.exec(filename);
+  if (!match) return false;
+  const psalm = Number(match[2]);
+  const section = match[3];
+  if (psalm < 1 || psalm > 150) return false;
+  if (psalm === 118) return section != null && PSALM_118_SECTIONS.has(section);
+  if (NUMBERED_PARTS.has(psalm)) return section === "1" || section === "2";
+  return section == null;
+}
+
+/** `updated` from a note header, or the timestamp body of a tombstone. */
+export function noteUpdated(name: string, text: string): string | undefined {
+  if (name.endsWith(TOMBSTONE)) {
+    const value = text.trim();
+    return ISO_STAMP.test(value) ? value : undefined;
+  }
+  for (const line of text.split(/\r?\n/)) {
+    const match = /^updated:\s*(\S+)\s*$/.exec(line);
+    if (match && ISO_STAMP.test(match[1])) return match[1];
+  }
+  return undefined;
+}
+
+export type ListedNote = { name: string; etag: string; updated?: string };
+
+/**
+ * The `notes/` directory. Each file has its own `FileStore`, so one lock
+ * covers that file and a write to another note does not wait on it.
+ */
+export class NoteDirectory {
+  private readonly stores = new Map<string, FileStore>();
+  private readonly dir: string;
+
+  constructor(dir: string) {
+    this.dir = dir;
+  }
+
+  private store(name: string): FileStore {
+    const existing = this.stores.get(name);
+    if (existing) return existing;
+    const created = new FileStore(path.join(this.dir, name));
+    this.stores.set(name, created);
+    return created;
+  }
+
+  file(name: string): FileStore {
+    return this.store(name);
+  }
+
+  async list(): Promise<ListedNote[]> {
+    let names: string[];
+    try {
+      names = await fs.readdir(this.dir);
+    } catch (error) {
+      if (isMissing(error)) return [];
+      throw error;
+    }
+    const listed: ListedNote[] = [];
+    for (const name of names.sort()) {
+      if (!isSyncNoteName(name)) continue;
+      const found = await this.store(name).readExisting();
+      if (!found) continue;
+      const updated = noteUpdated(name, found.bytes.toString("utf8"));
+      listed.push(updated ? { name, etag: found.etag, updated } : { name, etag: found.etag });
+    }
+    return listed;
+  }
+}
+
 /* ------------------------------------------------------------------ *
  * HTTP (Step 2)
  * ------------------------------------------------------------------ */
 
 export type SyncConfig = {
   filePath: string;
+  /** `notes/` inside `LECTIO_SYNC_DIR`. Null when the process was started with `LECTIO_SYNC_FILE` alone. */
+  notesDir: string | null;
   token: string;
   host: string;
   port: number;
@@ -154,9 +274,11 @@ export type SyncConfig = {
 
 /** Read configuration from the environment, refusing to run on a bad setup. */
 export function configFromEnv(env: NodeJS.ProcessEnv = process.env): SyncConfig {
-  const filePath = env.LECTIO_SYNC_FILE;
+  const dir = env.LECTIO_SYNC_DIR?.trim();
+  const filePath = dir ? path.join(dir, "lectio-sessions.json") : env.LECTIO_SYNC_FILE;
+  const notesDir = dir ? path.join(dir, "notes") : null;
   const token = env.LECTIO_SYNC_TOKEN;
-  if (!filePath) throw new Error("LECTIO_SYNC_FILE is required");
+  if (!filePath) throw new Error("LECTIO_SYNC_FILE or LECTIO_SYNC_DIR is required");
   if (!token) throw new Error("LECTIO_SYNC_TOKEN is required");
   if (token.length < 16) throw new Error("LECTIO_SYNC_TOKEN must be at least 16 characters");
   if (/\s/.test(token)) throw new Error("LECTIO_SYNC_TOKEN must not contain spaces");
@@ -173,7 +295,7 @@ export function configFromEnv(env: NodeJS.ProcessEnv = process.env): SyncConfig 
     .map((o) => o.toLowerCase())
     .filter((o) => o.length > 0);
 
-  return { filePath, token, host, port, origins };
+  return { filePath, notesDir, token, host, port, origins };
 }
 
 /** A strong hash of the bytes, quoted, so it can be sent as an HTTP ETag. */
@@ -267,13 +389,46 @@ async function readBody(
   return { bytes: Buffer.concat(chunks), tooLarge: false };
 }
 
+type SyncRoute =
+  | { kind: "bundle" }
+  | { kind: "notes" }
+  | { kind: "note"; name: string }
+  | { kind: "other" };
+
+function routeOf(url: string | undefined): SyncRoute {
+  const pathname = pathOf(url);
+  if (pathname === ROUTE) return { kind: "bundle" };
+  if (pathname === NOTES_ROUTE) return { kind: "notes" };
+  if (pathname.startsWith(`${NOTES_ROUTE}/`)) {
+    const name = pathname.slice(NOTES_ROUTE.length + 1);
+    if (!name || name.includes("/")) return { kind: "other" };
+    return { kind: "note", name };
+  }
+  return { kind: "other" };
+}
+
+function allowMethods(res: ServerResponse, methods: string): void {
+  res.setHeader("Access-Control-Allow-Methods", methods);
+  res.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, If-Match");
+  res.setHeader("Access-Control-Max-Age", "600");
+  respond(res, 204);
+}
+
+function ifMatchOf(req: IncomingMessage): string | null {
+  const header = req.headers["if-match"];
+  if (typeof header !== "string" || header.trim() === "") return null;
+  return header;
+}
+
 /**
  * Build the request handler for one store. Importing it never listens; the
- * caller creates the server (as tests do) or `start()` does.
+ * caller creates the server (as tests do) or `start()` does. `notes` is set
+ * only when the process was given `LECTIO_SYNC_DIR`.
  */
 export function createSyncHandler(
   store: FileStore,
   config: Pick<SyncConfig, "token" | "origins">,
+  notes: NoteDirectory | null = null,
 ): (req: IncomingMessage, res: ServerResponse) => Promise<void> {
   return async (req, res) => {
     try {
@@ -285,79 +440,201 @@ export function createSyncHandler(
       }
       if (allowed) applyCors(res, origin as string);
 
-      if (pathOf(req.url) !== ROUTE) {
+      const route = routeOf(req.url);
+      if (route.kind === "other") {
+        respond(res, 404);
+        return;
+      }
+      if ((route.kind === "notes" || route.kind === "note") && !notes) {
+        respond(res, 404);
+        return;
+      }
+      if (route.kind === "note" && !isSyncNoteName(route.name)) {
         respond(res, 404);
         return;
       }
 
-      switch (req.method) {
-        case "OPTIONS": {
-          res.setHeader("Access-Control-Allow-Methods", "GET, PUT, OPTIONS");
-          res.setHeader("Access-Control-Allow-Headers", "Authorization, Content-Type, If-Match");
-          res.setHeader("Access-Control-Max-Age", "600");
-          respond(res, 204);
-          return;
-        }
-        case "GET": {
-          if (!authorized(req, config.token)) {
-            respond(res, 401);
-            return;
-          }
-          const { bytes, etag } = await store.read();
-          res.setHeader("ETag", etag);
-          res.setHeader("Cache-Control", "no-store, no-transform");
-          res.setHeader("Content-Type", "application/json; charset=utf-8");
-          res.writeHead(200);
-          res.end(bytes);
-          return;
-        }
-        case "PUT": {
-          if (!authorized(req, config.token)) {
-            respond(res, 401);
-            return;
-          }
-          const ifMatch = req.headers["if-match"];
-          if (typeof ifMatch !== "string" || ifMatch.trim() === "") {
-            respond(res, 428);
-            return;
-          }
-          const contentType = req.headers["content-type"];
-          if (
-            contentType !== undefined &&
-            contentType.trim() !== "" &&
-            !/^application\/json\b/i.test(contentType)
-          ) {
-            respond(res, 415);
-            return;
-          }
-          const { bytes, tooLarge } = await readBody(req, MAX_BODY_BYTES);
-          if (tooLarge) {
-            respond(res, 413);
-            return;
-          }
-          if (!isVersionOneBundle(bytes)) {
-            respond(res, 400);
-            return;
-          }
-          const result = await store.writeIfMatch(bytes, ifMatch);
-          if (!result.ok) {
-            res.setHeader("ETag", result.currentEtag);
-            respond(res, 412);
-            return;
-          }
-          res.setHeader("ETag", result.etag);
-          respond(res, 204);
-          return;
-        }
-        default: {
-          respond(res, 405);
-          return;
-        }
+      if (req.method === "OPTIONS") {
+        const methods = route.kind === "note" ? "GET, PUT, DELETE, OPTIONS" : "GET, PUT, OPTIONS";
+        allowMethods(res, methods);
+        return;
       }
+
+      if (route.kind === "bundle") {
+        await serveBundle(req, res, store, config.token);
+        return;
+      }
+      if (!notes) {
+        respond(res, 404);
+        return;
+      }
+      if (route.kind === "notes") {
+        await serveNoteList(req, res, notes, config.token);
+        return;
+      }
+      await serveNote(req, res, notes, route.name, config.token);
     } catch {
       respond(res, 500);
     }
   };
+}
+
+async function serveBundle(
+  req: IncomingMessage,
+  res: ServerResponse,
+  store: FileStore,
+  token: string,
+): Promise<void> {
+  switch (req.method) {
+    case "GET": {
+      if (!authorized(req, token)) {
+        respond(res, 401);
+        return;
+      }
+      const { bytes, etag } = await store.read();
+      res.setHeader("ETag", etag);
+      res.setHeader("Cache-Control", "no-store, no-transform");
+      res.setHeader("Content-Type", "application/json; charset=utf-8");
+      res.writeHead(200);
+      res.end(bytes);
+      return;
+    }
+    case "PUT": {
+      if (!authorized(req, token)) {
+        respond(res, 401);
+        return;
+      }
+      const ifMatch = ifMatchOf(req);
+      if (ifMatch === null) {
+        respond(res, 428);
+        return;
+      }
+      const contentType = req.headers["content-type"];
+      if (
+        contentType !== undefined &&
+        contentType.trim() !== "" &&
+        !/^application\/json\b/i.test(contentType)
+      ) {
+        respond(res, 415);
+        return;
+      }
+      const { bytes, tooLarge } = await readBody(req, MAX_BODY_BYTES);
+      if (tooLarge) {
+        respond(res, 413);
+        return;
+      }
+      if (!isVersionOneBundle(bytes)) {
+        respond(res, 400);
+        return;
+      }
+      const result = await store.writeIfMatch(bytes, ifMatch);
+      if (!result.ok) {
+        res.setHeader("ETag", result.currentEtag);
+        respond(res, 412);
+        return;
+      }
+      res.setHeader("ETag", result.etag);
+      respond(res, 204);
+      return;
+    }
+    default: {
+      respond(res, 405);
+    }
+  }
+}
+
+async function serveNoteList(
+  req: IncomingMessage,
+  res: ServerResponse,
+  notes: NoteDirectory,
+  token: string,
+): Promise<void> {
+  if (req.method !== "GET") {
+    respond(res, 405);
+    return;
+  }
+  if (!authorized(req, token)) {
+    respond(res, 401);
+    return;
+  }
+  const files = await notes.list();
+  res.setHeader("Cache-Control", "no-store, no-transform");
+  res.setHeader("Content-Type", "application/json; charset=utf-8");
+  res.writeHead(200);
+  res.end(JSON.stringify({ files }));
+}
+
+async function serveNote(
+  req: IncomingMessage,
+  res: ServerResponse,
+  notes: NoteDirectory,
+  name: string,
+  token: string,
+): Promise<void> {
+  const file = notes.file(name);
+  switch (req.method) {
+    case "GET": {
+      if (!authorized(req, token)) {
+        respond(res, 401);
+        return;
+      }
+      const { bytes, etag } = await file.read();
+      res.setHeader("ETag", etag);
+      res.setHeader("Cache-Control", "no-store, no-transform");
+      res.setHeader("Content-Type", name.endsWith(TOMBSTONE) ? "text/plain; charset=utf-8" : "text/markdown; charset=utf-8");
+      res.writeHead(200);
+      res.end(bytes);
+      return;
+    }
+    case "PUT": {
+      if (!authorized(req, token)) {
+        respond(res, 401);
+        return;
+      }
+      const ifMatch = ifMatchOf(req);
+      if (ifMatch === null) {
+        respond(res, 428);
+        return;
+      }
+      const { bytes, tooLarge } = await readBody(req, MAX_BODY_BYTES);
+      if (tooLarge) {
+        respond(res, 413);
+        return;
+      }
+      const result = await file.writeIfMatch(bytes, ifMatch);
+      if (!result.ok) {
+        res.setHeader("ETag", result.currentEtag);
+        respond(res, 412);
+        return;
+      }
+      res.setHeader("ETag", result.etag);
+      respond(res, 204);
+      return;
+    }
+    case "DELETE": {
+      if (!authorized(req, token)) {
+        respond(res, 401);
+        return;
+      }
+      const ifMatch = ifMatchOf(req);
+      if (ifMatch === null) {
+        respond(res, 428);
+        return;
+      }
+      const result = await file.removeIfMatch(ifMatch);
+      if (!result.ok) {
+        res.setHeader("ETag", result.currentEtag);
+        respond(res, 412);
+        return;
+      }
+      res.setHeader("ETag", result.etag);
+      respond(res, 204);
+      return;
+    }
+    default: {
+      respond(res, 405);
+    }
+  }
 }
 
 async function main(): Promise<void> {
@@ -370,11 +647,13 @@ async function main(): Promise<void> {
     return;
   }
   const store = new FileStore(config.filePath);
-  const server = createServer(createSyncHandler(store, config));
+  const notes = config.notesDir ? new NoteDirectory(config.notesDir) : null;
+  const server = createServer(createSyncHandler(store, config, notes));
   server.listen(config.port, config.host, () => {
     const address = server.address();
     const bound = typeof address === "object" && address !== null ? `${address.address}:${address.port}` : String(address);
-    console.log(`listening on ${bound}, file ${config.filePath}`);
+    const notesLabel = config.notesDir ? `, notes ${config.notesDir}` : "";
+    console.log(`listening on ${bound}, file ${config.filePath}${notesLabel}`);
   });
 }
 

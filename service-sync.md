@@ -42,7 +42,7 @@ The etag is a strong hash of those bytes, quoted. A write happens only inside on
 
 ## HTTP
 
-One route: `/lectio-sessions.json`. No other path. No account and no second file.
+One route for the bundle: `/lectio-sessions.json`. A process started with `LECTIO_SYNC_FILE` alone serves no other path. `LECTIO_SYNC_DIR` adds the notes routes below. No account.
 
 The token is `LECTIO_SYNC_TOKEN`. At least 16 characters, with no spaces. Compare it in constant time. Do not log the token, the `Authorization` header, or the body. Startup prints the listen address and the file path, then refuses to run when the token or the path is missing.
 
@@ -79,6 +79,25 @@ Body cap is 1 MiB.
 
 `Content-Type` on `PUT` may be missing or `application/json`. Anything else is `415`.
 
+## Notes
+
+`LECTIO_SYNC_DIR` is the folder `lectio-sessions/` : `lectio-sessions.json` beside `notes/`. When it is set, `GET` and `PUT /lectio-sessions.json` serve `<dir>/lectio-sessions.json` with the same token and etag rule, and `LECTIO_SYNC_FILE` is not read. A process started with `LECTIO_SYNC_FILE` alone is unchanged, and `GET /notes` is `404`.
+
+The service stores each note as sent and does not merge. The app merges by filename and `updated`. A `412` leaves that device's note in place for the next read.
+
+| Request | Result |
+| --- | --- |
+| `GET /notes`, directory missing | `200`, `{"files":[]}` |
+| `GET /notes` | `200`, each name with its etag and `updated` |
+| `GET /notes/:name`, file missing | `200`, empty body, etag of the empty text |
+| `GET /notes/:name`, file present | `200`, stored bytes, that file's etag |
+| `PUT /notes/:name`, etag matches | `204`, new etag, bytes stored as sent |
+| `PUT` or `DELETE`, `If-Match` is stale | `412`, file unchanged |
+| `DELETE /notes/:name`, etag matches | `204`, file removed |
+| `:name` is not a note file or its `.deleted` tombstone | `404` |
+
+`:name` is one path segment. The body cap is 1 MiB per file. One lock per file. A name the app cannot parse is not a route.
+
 ## Process
 
 No new npm runtime dependency. Node's `http`, `fs`, and `crypto` are enough. One TypeScript file, `services/sync/server.ts`, with no imports of `src/`, so `node --experimental-strip-types` can run it on Node 22 without a compile step. Tests live in `services/sync/server.test.ts`. Vitest's include list has to grow to cover `services/**/*.test.ts`. `tsconfig.node.json` includes `services/sync/server.ts` and `services/sync/server.test.ts` so `tsc -b` checks them.
@@ -114,7 +133,8 @@ npm run sync:serve
 
 | Variable | Default | Role |
 | --- | --- | --- |
-| `LECTIO_SYNC_FILE` | none | Path of the bundle on this computer |
+| `LECTIO_SYNC_FILE` | none | Path of the bundle on this computer. Serves no notes |
+| `LECTIO_SYNC_DIR` | none | The folder. Serves `<dir>/lectio-sessions.json` and `<dir>/notes`. When set, `LECTIO_SYNC_FILE` is not read |
 | `LECTIO_SYNC_TOKEN` | none | Bearer token |
 | `LECTIO_SYNC_HOST` | `127.0.0.1` | Bind address |
 | `LECTIO_SYNC_PORT` | `3010` | Port. `0` is allowed so a test can take a free port |

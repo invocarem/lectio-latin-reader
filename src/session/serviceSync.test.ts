@@ -9,6 +9,15 @@
  * this service, never both.
  */
 
+import { createServer } from "node:http";
+import { promises as fs } from "node:fs";
+import type { AddressInfo } from "node:net";
+import * as os from "node:os";
+import * as path from "node:path";
+import { FileStore, NoteDirectory, createSyncHandler } from "../../services/sync/server";
+import { createLearningNote, editLearningNote, formatNoteFile } from "./notes";
+import { deleteLearningNote, memoryNoteFiles } from "./noteStore";
+import { createSync } from "./sync";
 import {
   clearEndpoint,
   endpointUrl,
@@ -171,5 +180,141 @@ describe("service transport (Step 4)", () => {
     }) as typeof fetch;
     const transport = serviceTransport({ load: () => loadEndpoint(store), fetchFn: failFetch });
     await expect(transport.read()).rejects.toThrow();
+  });
+});
+
+const PLACE = { kind: "psalm" as const, psalm: 118, section: "nun" };
+
+function learningFile(body: string, updated: string) {
+  const created = createLearningNote(PLACE, "09", "2026-10-22", updated);
+  const written = editLearningNote(created!, "Memoria", body, updated);
+  return { name: written.filename, text: formatNoteFile(written), note: written };
+}
+
+function httpResponse(status: number, etag: string, text: string): Response {
+  return {
+    status,
+    headers: { get: (name: string) => (name.toLowerCase() === "etag" ? etag : null) },
+    text: async () => text,
+    json: async () => JSON.parse(text),
+  } as Response;
+}
+
+describe("service notes", () => {
+  it("keeps the later note and says so", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "lectio-note-sync-"));
+    const server = createServer(
+      createSyncHandler(
+        new FileStore(path.join(root, "lectio-sessions.json")),
+        { token: ENDPOINT.token, origins: ["http://127.0.0.1:5180"] },
+        new NoteDirectory(path.join(root, "notes")),
+      ),
+    );
+    await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
+    const port = (server.address() as AddressInfo).port;
+    const endpoint = { baseUrl: `http://127.0.0.1:${port}`, token: ENDPOINT.token };
+    try {
+      const earlier = learningFile("First.", "2026-10-22T22:13:00.000Z");
+      const later = learningFile("Second.", "2026-10-22T23:00:00.000Z");
+      const here = memoryNoteFiles([earlier]);
+      const there = memoryNoteFiles([later]);
+      const syncHere = createSync({
+        transport: serviceTransport({ load: () => endpoint }),
+        storage: fakeStorage(),
+        notes: here,
+      });
+      const syncThere = createSync({
+        transport: serviceTransport({ load: () => endpoint }),
+        storage: fakeStorage(),
+        notes: there,
+      });
+      await syncHere.start();
+      await syncHere.syncNow();
+      await syncThere.start();
+      expect(syncThere.current().text).toContain("Kept the later note 09_psalm_118_nun.md");
+      await syncThere.syncNow();
+      await syncHere.syncNow();
+      expect(syncHere.current().text).toContain("Kept the later note 09_psalm_118_nun.md");
+      expect((await here.list()).find((file) => file.name === later.name)?.text).toBe(later.text);
+      const stored = await fs.readFile(path.join(root, "notes", later.name), "utf8");
+      expect(stored).toBe(later.text);
+    } finally {
+      await new Promise<void>((resolve, reject) => server.close((err) => (err ? reject(err) : resolve())));
+      await fs.rm(root, { recursive: true, force: true });
+    }
+  });
+
+  it("a delete is a tombstone, so the other device does not put the note back", async () => {
+    const root = await fs.mkdtemp(path.join(os.tmpdir(), "lectio-note-tomb-"));
+    const notesDir = path.join(root, "notes");
+    const server = createServer(
+      createSyncHandler(
+        new FileStore(path.join(root, "lectio-sessions.json")),
+        { token: ENDPOINT.token, origins: ["http://127.0.0.1:5180"] },
+        new NoteDirectory(notesDir),
+      ),
+    );
+    await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
+    const port = (server.address() as AddressInfo).port;
+    const endpoint = { baseUrl: `http://127.0.0.1:${port}`, token: ENDPOINT.token };
+    try {
+      const file = learningFile("Still here.", "2026-10-22T22:13:00.000Z");
+      const here = memoryNoteFiles([file]);
+      const there = memoryNoteFiles([file]);
+      const syncHere = createSync({
+        transport: serviceTransport({ load: () => endpoint }),
+        storage: fakeStorage(),
+        notes: here,
+      });
+      const syncThere = createSync({
+        transport: serviceTransport({ load: () => endpoint }),
+        storage: fakeStorage(),
+        notes: there,
+      });
+      await syncHere.start();
+      await syncHere.syncNow();
+      await syncThere.start();
+      await deleteLearningNote(here, file.note, "2026-10-22T23:00:00.000Z");
+      await syncHere.syncNow();
+      await syncThere.syncNow();
+      const names = await fs.readdir(notesDir);
+      expect(names).toEqual(["09_psalm_118_nun.md.deleted"]);
+      expect((await there.list()).map((item) => item.name)).toEqual(["09_psalm_118_nun.md.deleted"]);
+    } finally {
+      await new Promise<void>((resolve, reject) => server.close((err) => (err ? reject(err) : resolve())));
+      await fs.rm(root, { recursive: true, force: true });
+    }
+  });
+
+  it("a 412 leaves this device's note in place", async () => {
+    const local = learningFile("Second.", "2026-10-22T23:00:00.000Z");
+    const remote = learningFile("First.", "2026-10-22T22:13:00.000Z");
+    let puts = 0;
+    const fetchFn = (async (input, init) => {
+      const url = String(input);
+      const method = init?.method ?? "GET";
+      if (url.endsWith("/lectio-sessions.json")) return httpResponse(method === "PUT" ? 204 : 200, '"b"', method === "GET" ? "" : "");
+      if (url.endsWith("/notes") && method === "GET") {
+        return httpResponse(200, "", JSON.stringify({ files: [{ name: remote.name, etag: '"n1"' }] }));
+      }
+      if (method === "GET") return httpResponse(200, '"n1"', remote.text);
+      if (method === "PUT") {
+        puts += 1;
+        return httpResponse(412, '"n2"', "");
+      }
+      return httpResponse(405, "", "");
+    }) as typeof fetch;
+    const files = memoryNoteFiles([local]);
+    const sync = createSync({
+      transport: serviceTransport({ load: () => ENDPOINT, fetchFn }),
+      storage: fakeStorage(),
+      notes: files,
+    });
+    await sync.start();
+    expect(puts).toBe(0);
+    await sync.syncNow();
+    expect(puts).toBe(1);
+    expect(sync.current().mode).toBe("offline");
+    expect((await files.list()).find((file) => file.name === local.name)?.text).toBe(local.text);
   });
 });

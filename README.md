@@ -23,7 +23,7 @@ npm run content  # rebuild de-gradibus.json from latin-units.json
 
 ## Sync service
 
-`services/sync` is a small HTTP store for `lectio-sessions.json`, so the phone and your computers can share progress over a tailnet instead of a cloud folder. It is a plain conditional-write store (`GET`/`PUT` with an `ETag`/`If-Match`); the app still does the merge. The full plan is in `service-sync.md`.
+`services/sync` is a small HTTP store for `lectio-sessions.json` and, when `LECTIO_SYNC_DIR` is set, the `notes/` directory beside it. The phone and your computers share progress over a tailnet instead of a cloud folder. It is a plain conditional-write store (`GET`/`PUT` with an `ETag`/`If-Match`); the app still does the merge. A process started with `LECTIO_SYNC_FILE` alone serves the JSON and no notes. The full plan is in `service-sync.md`.
 
 Run it directly on any machine with Node 22+ (no install step):
 
@@ -79,7 +79,7 @@ The quick tunnel's `*.trycloudflare.com` URL changes each time `cloudflared` res
 
 The file path and token come from the environment, never from this repo. The route accepts only a version-1 bundle (`{"version":1,"sessions":{…}}`, matching `BUNDLE_VERSION` in `src/session/bundle.ts`), stores the bytes as sent, and does not merge. For a bare `node` process, `LECTIO_SYNC_HOST`, `LECTIO_SYNC_PORT`, and `LECTIO_SYNC_ORIGINS` are optional overrides (see `service-sync.md`). The Docker run above has to set `LECTIO_SYNC_HOST`.
 
-In the app, Home → Progress → **Service** lets a device aim at this service (enter the tailnet URL and `LECTIO_SYNC_TOKEN`) instead of a picked Drive file; a device uses either the file or the service, one at a time. The read is the `GET` and the write is the `PUT` (with the `ETag` as `If-Match`), so a device whose write races another is refused (`412`) and keeps its local progress until the next sync.
+In the app, Home → Progress → **Service** lets a device aim at this service (enter the tailnet URL and `LECTIO_SYNC_TOKEN`) instead of a picked Drive folder; a device uses either the folder or the service, one at a time. With `LECTIO_SYNC_DIR`, the service reads `lectio-sessions.json` and `notes/` inside that folder. The read is the `GET` and the write is the `PUT` (with the `ETag` as `If-Match`), so a device whose write races another is refused (`412`) and keeps its local progress and notes until the next sync.
 
 ## iOS (Mac)
 

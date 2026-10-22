@@ -1,4 +1,6 @@
 import { createSession, resetSession, type SessionDoc } from "./document";
+import { createLearningNote, editLearningNote, formatNoteFile } from "./notes";
+import { memoryNoteFiles, type NoteFile } from "./noteStore";
 import { loadSession, saveSession, sessionChanged } from "./store";
 import { createSync, mergeRemoteText, type SyncTransport } from "./sync";
 
@@ -408,6 +410,103 @@ describe("createSync", () => {
     await new Promise((resolve) => setTimeout(resolve, 0));
     expect(files.writes.length).toBe(1);
     expect(files.writes[0]).toContain("cap1-s2");
+  });
+});
+
+const NUN = { kind: "psalm" as const, psalm: 118, section: "nun" };
+
+function learningFile(body: string, updated: string): NoteFile {
+  const created = createLearningNote(NUN, "09", "2026-10-22", updated);
+  const written = editLearningNote(created!, "Memoria", body, updated);
+  return { name: written.filename, text: formatNoteFile(written) };
+}
+
+describe("learning notes in the folder", () => {
+  test("a pull stores the folder note and does not write it back", async () => {
+    const remote = learningFile("From the folder.", "2026-10-22T22:13:00.000Z");
+    const notes = memoryNoteFiles();
+    const written: NoteFile[] = [];
+    const files = transport(bundle(pass()));
+    files.listNotes = async () => [remote];
+    files.writeNote = async (name, text) => {
+      written.push({ name, text });
+    };
+    const sync = createSync({ transport: files, storage: new MemoryStorage(), notes });
+    await sync.start();
+    expect(await notes.list()).toEqual([remote]);
+    expect(written).toEqual([]);
+    expect(files.writes).toEqual([]);
+  });
+
+  test("a newer local note is written to the folder after the edit settles", async () => {
+    const local = learningFile("From this device.", "2026-10-22T23:00:00.000Z");
+    const remote = learningFile("From the folder.", "2026-10-22T22:13:00.000Z");
+    const notes = memoryNoteFiles([local]);
+    const written: NoteFile[] = [];
+    const files = transport(bundle(pass()));
+    files.listNotes = async () => [remote];
+    files.writeNote = async (name, text) => {
+      written.push({ name, text });
+    };
+    const queued: { current: (() => void) | null } = { current: null };
+    const sync = createSync({
+      transport: files,
+      storage: new MemoryStorage(),
+      notes,
+      schedule(fn) {
+        queued.current = fn;
+        return { cancel() {} };
+      },
+    });
+    await sync.start();
+    expect(written).toEqual([]);
+    sync.noteEdit();
+    queued.current?.();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(written).toEqual([local]);
+    expect((await notes.list()).map((file) => file.text)).toEqual([local.text]);
+  });
+
+  test("a later tombstone in the folder removes the note file there", async () => {
+    const local = learningFile("Still here.", "2026-10-22T22:13:00.000Z");
+    const tombstone = {
+      name: `${local.name}.deleted`,
+      text: "2026-10-22T23:00:00.000Z",
+    };
+    const notes = memoryNoteFiles([local]);
+    const removed: string[] = [];
+    const files = transport(bundle(pass()));
+    files.listNotes = async () => [local, tombstone];
+    files.removeNote = async (name) => {
+      removed.push(name);
+    };
+    const queued: { current: (() => void) | null } = { current: null };
+    const sync = createSync({
+      transport: files,
+      storage: new MemoryStorage(),
+      notes,
+      schedule(fn) {
+        queued.current = fn;
+        return { cancel() {} };
+      },
+    });
+    await sync.start();
+    expect(removed).toEqual([]);
+    sync.noteEdit();
+    queued.current?.();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(removed).toEqual([local.name]);
+    expect(await notes.list()).toEqual([tombstone]);
+  });
+
+  test("a backend with no notes folder leaves the local notes alone", async () => {
+    const local = learningFile("Local only.", "2026-10-22T22:13:00.000Z");
+    const notes = memoryNoteFiles([local]);
+    const files = transport(bundle(pass()));
+    files.listNotes = async () => null;
+    const sync = createSync({ transport: files, storage: new MemoryStorage(), notes });
+    await sync.start();
+    expect(await notes.list()).toEqual([local]);
   });
 });
 

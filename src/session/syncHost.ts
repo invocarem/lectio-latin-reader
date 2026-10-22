@@ -1,9 +1,12 @@
 /**
- * The sync file on this device. The desktop keeps a File System Access handle.
- * The phone keeps a security-scoped bookmark from the document picker.
+ * The sync folder on this device. The desktop keeps a File System Access
+ * directory handle. The phone keeps a security-scoped bookmark of that folder.
+ * `lectio-sessions.json` and `notes/` live inside it.
  */
 
 import { Capacitor, registerPlugin } from "@capacitor/core";
+import { openLectioDb, SYNC_FILE_STORE } from "./lectioDb";
+import { indexedNoteFiles, onLearningNoteEdit, type NoteFile } from "./noteStore";
 import { onSessionEdit } from "./store";
 import { createSync, type SyncController, type SyncTransport } from "./sync";
 import {
@@ -19,59 +22,55 @@ type NativeSync = {
   pick(): Promise<{ name: string }>;
   read(): Promise<{ text: string }>;
   write(options: { text: string }): Promise<void>;
+  listNotes(): Promise<{ files: NoteFile[] }>;
+  writeNote(options: { name: string; text: string }): Promise<void>;
+  removeNote(options: { name: string }): Promise<void>;
 };
 
 const NativeSyncFile = registerPlugin<NativeSync>("SyncFile");
 
-const DB_NAME = "lectio";
-const STORE = "sync-file";
 const HANDLE_KEY = "file";
 
+const SESSIONS_FILE = "lectio-sessions.json";
+const NOTES_DIR = "notes";
+
 type PickerWindow = Window & {
-  showOpenFilePicker?: (options: {
-    multiple?: boolean;
-    id?: string;
-    types?: { description: string; accept: Record<string, string[]> }[];
-  }) => Promise<FileSystemFileHandle[]>;
+  showDirectoryPicker?: (options?: { id?: string; mode?: "read" | "readwrite" }) => Promise<FileSystemDirectoryHandle>;
 };
 
-function openDb(): Promise<IDBDatabase> {
+async function loadHandle(): Promise<FileSystemHandle | null> {
+  const db = await openLectioDb();
   return new Promise((resolve, reject) => {
-    const request = indexedDB.open(DB_NAME, 1);
-    request.onupgradeneeded = () => {
-      if (!request.result.objectStoreNames.contains(STORE)) request.result.createObjectStore(STORE);
-    };
-    request.onsuccess = () => resolve(request.result);
+    const tx = db.transaction(SYNC_FILE_STORE, "readonly");
+    const request = tx.objectStore(SYNC_FILE_STORE).get(HANDLE_KEY);
+    request.onsuccess = () => resolve((request.result as FileSystemHandle | undefined) ?? null);
     request.onerror = () => reject(request.error);
   });
 }
 
-async function loadHandle(): Promise<FileSystemFileHandle | null> {
-  const db = await openDb();
-  return new Promise((resolve, reject) => {
-    const tx = db.transaction(STORE, "readonly");
-    const request = tx.objectStore(STORE).get(HANDLE_KEY);
-    request.onsuccess = () => resolve((request.result as FileSystemFileHandle | undefined) ?? null);
-    request.onerror = () => reject(request.error);
-  });
+/** The picked folder. A handle left from the old single-file picker is ignored. */
+async function loadDirectory(): Promise<FileSystemDirectoryHandle | null> {
+  const handle = await loadHandle();
+  if (!handle || handle.kind !== "directory") return null;
+  return handle as FileSystemDirectoryHandle;
 }
 
-async function storeHandle(handle: FileSystemFileHandle): Promise<void> {
-  const db = await openDb();
+async function storeHandle(handle: FileSystemDirectoryHandle): Promise<void> {
+  const db = await openLectioDb();
   await new Promise<void>((resolve, reject) => {
-    const tx = db.transaction(STORE, "readwrite");
-    tx.objectStore(STORE).put(handle, HANDLE_KEY);
+    const tx = db.transaction(SYNC_FILE_STORE, "readwrite");
+    tx.objectStore(SYNC_FILE_STORE).put(handle, HANDLE_KEY);
     tx.oncomplete = () => resolve();
     tx.onerror = () => reject(tx.error);
   });
 }
 
-type PermissionedHandle = FileSystemFileHandle & {
+type PermissionedHandle = FileSystemDirectoryHandle & {
   queryPermission(descriptor: { mode: "readwrite" }): Promise<"granted" | "prompt" | "denied">;
   requestPermission(descriptor: { mode: "readwrite" }): Promise<"granted" | "prompt" | "denied">;
 };
 
-async function permission(handle: FileSystemFileHandle, request: boolean): Promise<"granted" | "prompt" | "denied"> {
+async function permission(handle: FileSystemDirectoryHandle, request: boolean): Promise<"granted" | "prompt" | "denied"> {
   const permitted = handle as PermissionedHandle;
   const mode = { mode: "readwrite" as const };
   const current = await permitted.queryPermission(mode);
@@ -79,43 +78,115 @@ async function permission(handle: FileSystemFileHandle, request: boolean): Promi
   return permitted.requestPermission(mode);
 }
 
+function missing(error: unknown): boolean {
+  return error instanceof DOMException && error.name === "NotFoundError";
+}
+
+async function readSessions(dir: FileSystemDirectoryHandle): Promise<string> {
+  try {
+    const handle = await dir.getFileHandle(SESSIONS_FILE);
+    return (await handle.getFile()).text();
+  } catch (error) {
+    if (missing(error)) return "";
+    throw error;
+  }
+}
+
+async function writeSessions(dir: FileSystemDirectoryHandle, text: string): Promise<void> {
+  const handle = await dir.getFileHandle(SESSIONS_FILE, { create: true });
+  const writable = await handle.createWritable();
+  await writable.write(text);
+  await writable.close();
+}
+
+async function notesDirectory(dir: FileSystemDirectoryHandle, create: boolean): Promise<FileSystemDirectoryHandle | null> {
+  try {
+    return await dir.getDirectoryHandle(NOTES_DIR, { create });
+  } catch (error) {
+    if (!create && missing(error)) return null;
+    throw error;
+  }
+}
+
+async function listNoteFiles(dir: FileSystemDirectoryHandle): Promise<NoteFile[]> {
+  const notes = await notesDirectory(dir, false);
+  if (!notes) return [];
+  const files: NoteFile[] = [];
+  const listing = notes as FileSystemDirectoryHandle & {
+    entries(): AsyncIterable<[string, FileSystemHandle]>;
+  };
+  for await (const [name, handle] of listing.entries()) {
+    if (handle.kind !== "file") continue;
+    const file = await (handle as FileSystemFileHandle).getFile();
+    files.push({ name, text: await file.text() });
+  }
+  return files;
+}
+
+async function writeNoteFile(dir: FileSystemDirectoryHandle, name: string, text: string): Promise<void> {
+  const notes = await notesDirectory(dir, true);
+  if (!notes) throw new Error("notes");
+  const handle = await notes.getFileHandle(name, { create: true });
+  const writable = await handle.createWritable();
+  await writable.write(text);
+  await writable.close();
+}
+
+async function removeNoteFile(dir: FileSystemDirectoryHandle, name: string): Promise<void> {
+  const notes = await notesDirectory(dir, false);
+  if (!notes) return;
+  try {
+    await notes.removeEntry(name);
+  } catch (error) {
+    if (!missing(error)) throw error;
+  }
+}
+
 function webTransport(): SyncTransport {
   return {
     async status() {
-      const handle = await loadHandle();
+      const handle = await loadDirectory();
       if (!handle) return "none";
       const state = await permission(handle, false);
       return state === "granted" ? "ready" : "needs-gesture";
     },
     async choose() {
       const picker = window as PickerWindow;
-      if (!picker.showOpenFilePicker) throw new Error("unsupported");
-      const [handle] = await picker.showOpenFilePicker({
-        multiple: false,
-        id: "lectio-sessions",
-        types: [{ description: "Lectio progress", accept: { "application/json": [".json"] } }],
-      });
+      if (!picker.showDirectoryPicker) throw new Error("unsupported");
+      const handle = await picker.showDirectoryPicker({ id: "lectio-sessions", mode: "readwrite" });
       await permission(handle, true);
       await storeHandle(handle);
     },
     async prepare() {
-      const handle = await loadHandle();
+      const handle = await loadDirectory();
       if (!handle) throw new Error("none");
       const state = await permission(handle, true);
       if (state !== "granted") throw new Error("denied");
     },
     async read() {
-      const handle = await loadHandle();
+      const handle = await loadDirectory();
       if (!handle) throw new Error("none");
-      const file = await handle.getFile();
-      return file.text();
+      return readSessions(handle);
     },
     async write(text) {
-      const handle = await loadHandle();
+      const handle = await loadDirectory();
       if (!handle) throw new Error("none");
-      const writable = await handle.createWritable();
-      await writable.write(text);
-      await writable.close();
+      await writeSessions(handle, text);
+    },
+    async listNotes() {
+      const handle = await loadDirectory();
+      if (!handle) return null;
+      return listNoteFiles(handle);
+    },
+    async writeNote(name, text) {
+      const handle = await loadDirectory();
+      if (!handle) throw new Error("none");
+      await writeNoteFile(handle, name, text);
+    },
+    async removeNote(name) {
+      const handle = await loadDirectory();
+      if (!handle) throw new Error("none");
+      await removeNoteFile(handle, name);
     },
   };
 }
@@ -143,6 +214,16 @@ function nativeTransport(): SyncTransport {
     async write(text) {
       await NativeSyncFile.write({ text });
     },
+    async listNotes() {
+      const result = await NativeSyncFile.listNotes();
+      return result.files ?? [];
+    },
+    async writeNote(name, text) {
+      await NativeSyncFile.writeNote({ name, text });
+    },
+    async removeNote(name) {
+      await NativeSyncFile.removeNote({ name });
+    },
   };
 }
 
@@ -166,7 +247,7 @@ function unsupportedTransport(): SyncTransport {
 
 export function fileTransport(): SyncTransport {
   if (Capacitor.isNativePlatform()) return nativeTransport();
-  if (typeof window !== "undefined" && typeof (window as PickerWindow).showOpenFilePicker === "function") {
+  if (typeof window !== "undefined" && typeof (window as PickerWindow).showDirectoryPicker === "function") {
     return webTransport();
   }
   return unsupportedTransport();
@@ -182,8 +263,8 @@ export async function currentSyncFileName(): Promise<string | null> {
       return null;
     }
   }
-  if (typeof window !== "undefined" && typeof (window as PickerWindow).showOpenFilePicker === "function") {
-    const handle = await loadHandle();
+  if (typeof window !== "undefined" && typeof (window as PickerWindow).showDirectoryPicker === "function") {
+    const handle = await loadDirectory();
     return handle?.name ?? null;
   }
   return null;
@@ -227,6 +308,21 @@ export function liveTransport(options: {
     async write(text) {
       return options.hasService() ? options.service.write(text) : options.file.write(text);
     },
+    async listNotes() {
+      const transport = options.hasService() ? options.service : options.file;
+      if (!transport.listNotes) return null;
+      return transport.listNotes();
+    },
+    async writeNote(name, text) {
+      const transport = options.hasService() ? options.service : options.file;
+      if (!transport.writeNote) return;
+      await transport.writeNote(name, text);
+    },
+    async removeNote(name) {
+      const transport = options.hasService() ? options.service : options.file;
+      if (!transport.removeNote) return;
+      await transport.removeNote(name);
+    },
   };
 }
 
@@ -237,7 +333,11 @@ export const sync: SyncController = createSync({
     hasService: () => !!loadEndpoint(serviceStorage()),
     onFileChosen: () => clearEndpoint(serviceStorage()),
   }),
-  onRefreshed: () => window.dispatchEvent(new Event("lectio:sessions")),
+  notes: indexedNoteFiles(),
+  onRefreshed: () => {
+    window.dispatchEvent(new Event("lectio:sessions"));
+    window.dispatchEvent(new Event("lectio:notes"));
+  },
 });
 
 /** Store the service address and token, then pull its pass. Progress edits upload on their own. */
@@ -260,6 +360,7 @@ export function clearSyncService(): Promise<void> {
 /** Remember edits, read the file if it is already allowed, and read again when the app is shown. */
 export function startSync(): void {
   onSessionEdit(() => sync.noteEdit());
+  onLearningNoteEdit(() => sync.noteEdit());
   void sync.start();
   document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible") void sync.syncIfReady();
