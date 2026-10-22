@@ -15,7 +15,7 @@ import {
 } from "./serviceSync";
 
 type NativeSync = {
-  ready(): Promise<{ state: "ready" | "none" }>;
+  ready(): Promise<{ state: "ready" | "none"; name?: string }>;
   pick(): Promise<{ name: string }>;
   read(): Promise<{ text: string }>;
   write(options: { text: string }): Promise<void>;
@@ -172,49 +172,78 @@ export function fileTransport(): SyncTransport {
   return unsupportedTransport();
 }
 
+/** The picked filename, when the backend can report it. Used only for the label, never for identity. */
+export async function currentSyncFileName(): Promise<string | null> {
+  if (Capacitor.isNativePlatform()) {
+    try {
+      const result = await NativeSyncFile.ready();
+      return result.name ?? null;
+    } catch {
+      return null;
+    }
+  }
+  if (typeof window !== "undefined" && typeof (window as PickerWindow).showOpenFilePicker === "function") {
+    const handle = await loadHandle();
+    return handle?.name ?? null;
+  }
+  return null;
+}
+
 function serviceStorage(): Storage | null {
   return typeof window !== "undefined" ? window.localStorage : null;
 }
 
 /**
  * One device uses one backend at a time: a saved service endpoint means the
- * service, otherwise the picked file. Choosing a file clears the endpoint, and
- * saving a service ignores the stored file handle, so they cannot both be live.
+ * service, otherwise the picked file. Both setups are kept independently: a
+ * chosen file handle is never deleted, and a saved service is never removed
+ * except by an explicit fallback to the file. This routing decides which of
+ * the two transports a call goes to.
  */
-function liveTransport(): SyncTransport {
-  const file = fileTransport();
-  const service = serviceTransport({ load: () => loadEndpoint(serviceStorage()) });
+export function liveTransport(options: {
+  file: SyncTransport;
+  service: SyncTransport;
+  /** True when a service endpoint is saved. */
+  hasService: () => boolean;
+  /** Called after the file is successfully picked (e.g. to clear the service). */
+  onFileChosen: () => void;
+}): SyncTransport {
   return {
     async status() {
-      return loadEndpoint(serviceStorage()) ? service.status() : file.status();
+      return options.hasService() ? options.service.status() : options.file.status();
     },
     async choose() {
-      // Pick first: only a successful pick replaces a saved service. A cancelled
-      // picker keeps the service as the active backend.
-      await file.choose();
-      clearEndpoint(serviceStorage());
+      // Run the picker first: only a successful pick replaces a saved service.
+      // A cancelled picker keeps the service as the active backend.
+      await options.file.choose();
+      options.onFileChosen();
     },
     async prepare() {
-      return loadEndpoint(serviceStorage()) ? service.prepare() : file.prepare();
+      return options.hasService() ? options.service.prepare() : options.file.prepare();
     },
     async read() {
-      return loadEndpoint(serviceStorage()) ? service.read() : file.read();
+      return options.hasService() ? options.service.read() : options.file.read();
     },
     async write(text) {
-      return loadEndpoint(serviceStorage()) ? service.write(text) : file.write(text);
+      return options.hasService() ? options.service.write(text) : options.file.write(text);
     },
   };
 }
 
 export const sync: SyncController = createSync({
-  transport: liveTransport(),
+  transport: liveTransport({
+    file: fileTransport(),
+    service: serviceTransport({ load: () => loadEndpoint(serviceStorage()) }),
+    hasService: () => !!loadEndpoint(serviceStorage()),
+    onFileChosen: () => clearEndpoint(serviceStorage()),
+  }),
   onRefreshed: () => window.dispatchEvent(new Event("lectio:sessions")),
 });
 
-/** Aim this device at the home service and sync now. Replaces the picked file. */
+/** Store the service address and token, then pull its pass. Progress edits upload on their own. */
 export function configureSyncService(endpoint: ServiceEndpoint): Promise<void> {
   saveEndpoint(endpoint, serviceStorage());
-  return sync.syncNow();
+  return sync.syncNow({ pull: true });
 }
 
 /** The service this device is aimed at, if it saved one. */
@@ -222,10 +251,10 @@ export function currentSyncService(): ServiceEndpoint | null {
   return loadEndpoint(serviceStorage());
 }
 
-/** Forget the saved service; the next pick falls back to the file backend. */
+/** Forget the saved service and pull the file. */
 export function clearSyncService(): Promise<void> {
   clearEndpoint(serviceStorage());
-  return sync.syncNow();
+  return sync.syncNow({ pull: true });
 }
 
 /** Remember edits, read the file if it is already allowed, and read again when the app is shown. */

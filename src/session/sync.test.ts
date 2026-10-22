@@ -154,6 +154,34 @@ describe("mergeRemoteText", () => {
     expect(merged.nextText).not.toContain("cap1-s2");
   });
 
+  test("a local reset is not written over the other copy when that copy is being opened", () => {
+    const storage = new MemoryStorage();
+    const old = pass({
+      started: "2026-09-01",
+      cursor: "cap1-s2",
+      cursorAt: "2026-10-02T12:00:00.000Z",
+      touchedAt: "2026-10-02T12:00:00.000Z",
+      satWith: [
+        { step: "cap1-s1", at: "2026-10-01" },
+        { step: "cap1-s2", at: "2026-10-02" },
+      ],
+      annotations: [{ unit: "cap1-s1", text: "kept", at: "2026-10-01" }],
+    });
+    saveSession(resetSession(old, "2026-10-09", "2026-10-09T15:00:00.000Z"), storage);
+    const merged = mergeRemoteText(bundle(old), storage, { keepRemotePass: true });
+    expect(merged.ok).toBe(true);
+    if (!merged.ok) return;
+    const stored = loadSession("gradibus", storage);
+    expect(stored?.satWith).toEqual(old.satWith);
+    expect(stored?.cursor).toBe("cap1-s2");
+    expect(stored?.started).toBe("2026-09-01");
+    expect(stored?.passAt).toBeUndefined();
+    expect(merged.outcome.passesKept).toBe(1);
+    expect(merged.outcome.passesReset).toBe(0);
+    expect(merged.dirty).toBe(false);
+    expect(merged.nextText).toContain("cap1-s2");
+  });
+
   test("a reset in the sync file replaces this device and reloads the pass", () => {
     const storage = new MemoryStorage();
     saveSession(
@@ -239,6 +267,44 @@ describe("createSync", () => {
     expect(sync.current().text).toBe("Synced.");
   });
 
+  test("pull brings the server pass down and does not write this device over it", async () => {
+    const storage = new MemoryStorage();
+    const old = pass({
+      started: "2026-09-01",
+      cursor: "cap1-s2",
+      cursorAt: "2026-10-02T12:00:00.000Z",
+      touchedAt: "2026-10-02T12:00:00.000Z",
+      satWith: [
+        { step: "cap1-s1", at: "2026-10-01" },
+        { step: "cap1-s2", at: "2026-10-02" },
+      ],
+    });
+    saveSession(resetSession(old, "2026-10-09", "2026-10-09T15:00:00.000Z"), storage);
+    const files = transport(bundle(old));
+    const sync = createSync({ transport: files, storage });
+    await sync.syncNow({ pull: true });
+    expect(files.writes).toEqual([]);
+    expect(loadSession("gradibus", storage)?.satWith).toEqual(old.satWith);
+    expect(loadSession("gradibus", storage)?.cursor).toBe("cap1-s2");
+    expect(sync.current().text).toBe("Up to date.");
+    expect(sync.current().refreshed).toBe(true);
+  });
+
+  test("a pull that only moves the cursor says it is up to date", async () => {
+    const storage = new MemoryStorage();
+    saveSession(pass(), storage);
+    const remote = pass({
+      cursor: "cap1-s2",
+      cursorAt: "2026-10-04T12:00:00.000Z",
+    });
+    const files = transport(bundle(remote));
+    const sync = createSync({ transport: files, storage });
+    await sync.syncNow({ pull: true });
+    expect(files.writes).toEqual([]);
+    expect(loadSession("gradibus", storage)?.cursor).toBe("cap1-s2");
+    expect(sync.current().text).toBe("Up to date.");
+  });
+
   test("keeps local progress when the file cannot be read", async () => {
     const storage = new MemoryStorage();
     saveSession(pass(), storage);
@@ -248,6 +314,38 @@ describe("createSync", () => {
     expect(files.writes).toEqual([]);
     expect(loadSession("gradibus", storage)?.cursor).toBe("cap1-s1");
     expect(sync.current().mode).toBe("offline");
+  });
+
+  test("opening a file syncs it", async () => {
+    const files = transport(bundle(pass()));
+    const sync = createSync({ transport: files, storage: new MemoryStorage() });
+    expect(await sync.choose()).toBe("opened");
+    expect(files.reads()).toBe(1);
+    expect(sync.current().mode).toBe("ready");
+  });
+
+  test("a file pick that does not open leaves the current sync alone", async () => {
+    const files = transport("", "none");
+    files.choose = async () => {
+      throw new Error("unsupported");
+    };
+    const sync = createSync({ transport: files, storage: new MemoryStorage() });
+    await sync.start();
+    expect(await sync.choose()).toBe("failed");
+    expect(sync.current().mode).toBe("none");
+    expect(sync.current().text).not.toContain("Could not reach");
+  });
+
+  test("cancelling the file picker leaves the notice unchanged", async () => {
+    const files = transport("", "none");
+    files.choose = async () => {
+      throw new DOMException("The user aborted a request.", "AbortError");
+    };
+    const sync = createSync({ transport: files, storage: new MemoryStorage() });
+    await sync.start();
+    const before = sync.current().text;
+    expect(await sync.choose()).toBe("cancelled");
+    expect(sync.current().text).toBe(before);
   });
 
   test("does not read until access is granted", async () => {
@@ -280,6 +378,36 @@ describe("createSync", () => {
     queued[1].run();
     await new Promise((resolve) => setTimeout(resolve, 0));
     expect(files.reads()).toBe(1);
+  });
+
+  test("opening pulls, and an edit uploads", async () => {
+    const storage = new MemoryStorage();
+    saveSession(
+      pass({
+        satWith: [
+          { step: "cap1-s1", at: "2026-10-01" },
+          { step: "cap1-s2", at: "2026-10-03" },
+        ],
+      }),
+      storage,
+    );
+    const files = transport(bundle(pass()));
+    let queued: (() => void) | null = null;
+    const sync = createSync({
+      transport: files,
+      storage,
+      schedule(fn) {
+        queued = fn;
+        return { cancel() {} };
+      },
+    });
+    await sync.start();
+    expect(files.writes).toEqual([]);
+    sync.noteEdit();
+    queued?.();
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    expect(files.writes.length).toBe(1);
+    expect(files.writes[0]).toContain("cap1-s2");
   });
 });
 

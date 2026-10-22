@@ -46,10 +46,12 @@ export const SYNC_DELAY_MS = 4000;
 
 type Cancel = { cancel(): void };
 
+export type ChooseResult = "opened" | "cancelled" | "failed";
+
 export type SyncController = {
   start(): Promise<void>;
-  choose(): Promise<void>;
-  syncNow(): Promise<void>;
+  choose(): Promise<ChooseResult>;
+  syncNow(options?: { keepRemotePass?: boolean; pull?: boolean }): Promise<void>;
   /** Read and merge when a file is already allowed. Does nothing if it is not. */
   syncIfReady(): Promise<void>;
   noteEdit(): void;
@@ -97,11 +99,12 @@ export function canonicalBundle(bundle: SessionBundle): string {
 export function mergeRemoteText(
   text: string,
   storage?: Storage | null,
+  options?: { keepRemotePass?: boolean },
 ): { ok: true; outcome: BundleOutcome; nextText: string; dirty: boolean } | { ok: false } {
   const trimmed = text.trim();
   const parsed = trimmed === "" ? { bundle: emptyBundle(), skipped: [] } : parseBundle(trimmed);
   if (!parsed) return { ok: false };
-  const outcome = mergeBundle(bundleFromStorage(storage), parsed.bundle);
+  const outcome = mergeBundle(bundleFromStorage(storage), parsed.bundle, options);
   for (const doc of Object.values(outcome.sessions)) {
     if (!doc) continue;
     saveSession(doc, storage, { silent: true });
@@ -120,15 +123,7 @@ function noticeFor(mode: Exclude<SyncMode, "offline">): SyncNotice {
 function isCancel(error: unknown): boolean {
   if (error instanceof DOMException && error.name === "AbortError") return true;
   const message = error instanceof Error ? error.message : String(error);
-  return /cancel/i.test(message);
-}
-
-function failureText(error: unknown): string {
-  const message = error instanceof Error ? error.message : String(error);
-  if (/not implemented|unimplemented/i.test(message)) {
-    return "This build of the app cannot open a sync file yet. Install the new build, then choose the file.";
-  }
-  return OFFLINE;
+  return /cancel|abort/i.test(message);
 }
 
 export function createSync(options: {
@@ -156,7 +151,7 @@ export function createSync(options: {
     if (next.refreshed) options.onRefreshed?.();
   }
 
-  function enqueue(job: () => Promise<void>): Promise<void> {
+  function enqueue<T>(job: () => Promise<T>): Promise<T> {
     const run = tail.then(job, job);
     tail = run.then(
       () => undefined,
@@ -165,7 +160,7 @@ export function createSync(options: {
     return run;
   }
 
-  async function run(gesture: boolean): Promise<void> {
+  async function run(gesture: boolean, call: { keepRemotePass?: boolean; pull?: boolean } = {}): Promise<void> {
     const status = await options.transport.status();
     if (status === "none" || status === "unsupported") {
       if (gesture) publish(noticeFor(status));
@@ -182,7 +177,9 @@ export function createSync(options: {
       publish({ mode: "offline", text: OFFLINE, refreshed: false });
       return;
     }
-    const merged = mergeRemoteText(text, options.storage);
+    const merged = mergeRemoteText(text, options.storage, {
+      keepRemotePass: call.keepRemotePass === true || call.pull === true,
+    });
     if (!merged.ok) {
       publish({ mode: "ready", text: UNREADABLE, refreshed: false });
       return;
@@ -192,8 +189,14 @@ export function createSync(options: {
       merged.outcome.notesAdded > 0 ||
       merged.outcome.cursorsMoved > 0 ||
       merged.outcome.passesReset > 0 ||
+      merged.outcome.passesKept > 0 ||
       merged.outcome.conflicts.length > 0;
-    if (merged.dirty) {
+    const brought =
+      merged.outcome.sittingsAdded > 0 ||
+      merged.outcome.notesAdded > 0 ||
+      merged.outcome.passesReset > 0 ||
+      merged.outcome.conflicts.length > 0;
+    if (merged.dirty && !call.pull) {
       try {
         await options.transport.write(merged.nextText);
       } catch {
@@ -203,7 +206,7 @@ export function createSync(options: {
     }
     publish({
       mode: "ready",
-      text: refreshed ? `${describeMerge(merged.outcome)}.` : "Synced.",
+      text: brought ? `${describeMerge(merged.outcome)}.` : call.pull ? "Up to date." : "Synced.",
       refreshed,
     });
   }
@@ -211,24 +214,27 @@ export function createSync(options: {
   return {
     async start() {
       const status = await options.transport.status();
-      if (status === "ready") await enqueue(() => run(false));
+      if (status === "ready") await enqueue(() => run(false, { pull: true }));
       else publish(noticeFor(status));
     },
     choose() {
       pending?.cancel();
       pending = null;
+      // Start the picker in this turn so the browser still counts it as the click.
+      // A pick that does not open leaves the current backend and its notice alone.
+      const picking = options.transport.choose();
       return enqueue(async () => {
         try {
-          await options.transport.choose();
+          await picking;
         } catch (error) {
-          if (isCancel(error)) return;
-          publish({ mode: "offline", text: failureText(error), refreshed: false });
-          return;
+          if (isCancel(error)) return "cancelled";
+          return "failed";
         }
-        await run(true);
+        await run(true, { pull: true });
+        return "opened";
       });
     },
-    syncNow() {
+    syncNow(call) {
       pending?.cancel();
       pending = null;
       return enqueue(async () => {
@@ -242,11 +248,11 @@ export function createSync(options: {
             return;
           }
         }
-        await run(true);
+        await run(true, call);
       });
     },
     syncIfReady() {
-      return enqueue(() => run(false));
+      return enqueue(() => run(false, { pull: true }));
     },
     noteEdit() {
       pending?.cancel();

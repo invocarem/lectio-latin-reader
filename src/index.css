@@ -110,22 +110,10 @@ select option {
   margin: 0;
 }
 
-.home-sync-where,
-.home-sync-url {
+.home-sync-where {
   margin: 0;
   font-size: 0.95rem;
   line-height: 1.4;
-}
-
-.home-sync-url {
-  max-width: 100%;
-  color: var(--ink-soft);
-  overflow-wrap: anywhere;
-}
-
-.home-sync .home-actions {
-  margin: 0;
-  padding: 0;
 }
 
 .home-sync .start:disabled {
@@ -133,61 +121,118 @@ select option {
   cursor: progress;
 }
 
-.home-sync-places {
+.home-sync-backends {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 0.35rem;
+  border-top: 1px solid var(--rule);
+}
+
+.home-sync-backend {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+.home-sync-backend.open {
+  background: var(--veil);
+  box-shadow: inset 3px 0 0 var(--cinnabar);
+}
+
+.home-sync-heading {
+  margin: 0;
+  font: inherit;
+  font-weight: inherit;
+}
+
+.home-sync-row {
+  appearance: none;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: 0.7rem;
+  gap: 0.2rem;
   width: 100%;
-  margin-top: 0.2rem;
-}
-
-.home-sync-text {
-  appearance: none;
+  margin: 0;
+  padding: 0.72rem 0.7rem;
   background: none;
   border: 0;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.home-sync-row-title {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.home-sync-row:hover {
+  background: var(--veil);
+}
+
+.home-sync-backend.open .home-sync-row:hover {
+  background: transparent;
+}
+
+.home-sync-row:focus-visible {
+  outline: 1px solid var(--cinnabar);
+  outline-offset: -1px;
+}
+
+.home-sync-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.7rem;
+  width: 100%;
+  margin: 0;
+  padding: 0.05rem 0.7rem 0.9rem;
+}
+
+.home-sync-row-status {
+  padding: 0 0.7rem 0.7rem;
+}
+
+.home-sync h3.home-kicker {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+  font-weight: 600;
+}
+
+.home-sync-active {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  color: var(--cinnabar);
+}
+
+.home-sync-active-label {
+  position: absolute;
+  width: 1px;
+  height: 1px;
   padding: 0;
-  cursor: pointer;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
-.home-sync-text:focus-visible {
-  outline: 1px solid var(--cinnabar);
-  outline-offset: 0.25rem;
-}
-
-.home-sync-text:disabled {
-  opacity: 0.55;
-  cursor: progress;
-}
-
-.home-sync-setup {
-  width: 100%;
-}
-
-.home-sync-setup summary {
-  width: fit-content;
-  cursor: pointer;
-  list-style: none;
-}
-
-.home-sync-setup summary::-webkit-details-marker {
-  display: none;
-}
-
-.home-sync-setup summary:focus-visible {
-  outline: 1px solid var(--cinnabar);
-  outline-offset: 0.25rem;
-}
-
-.home-sync-setup[open] .home-sync-service {
-  margin-top: 0.85rem;
-}
-
-.home-sync-copy {
-  width: 100%;
-  margin-top: 0.15rem;
-  padding-top: 0.7rem;
-  border-top: 1px solid var(--rule);
+.home .home-sync-identity {
+  margin: 0;
+  color: var(--ink);
+  font-size: 0.98rem;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .home-sync-result {
@@ -195,12 +240,10 @@ select option {
   font-size: 0.92rem;
 }
 
-.home-sync-service {
+.home-sync-actions {
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
-  gap: 0.85rem;
-  width: 100%;
+  flex-wrap: wrap;
+  gap: 0.6rem;
 }
 
 .home-sync-field {
@@ -225,7 +268,7 @@ select option {
   line-height: 1.4;
 }
 
-.home-sync-service input {
+.home-sync-backend input {
   width: 100%;
   min-width: 0;
   font: inherit;
@@ -236,7 +279,11 @@ select option {
   background: transparent;
 }
 
-.home-sync-service input::placeholder {
+.home-sync-backend input:disabled {
+  opacity: 0.55;
+}
+
+.home-sync-backend input::placeholder {
   color: var(--ink-soft);
   opacity: 0.65;
 }
@@ -264,13 +311,7 @@ select option {
   font-size: 0.72rem;
 }
 
-.home-sync-service-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem;
-}
-
-.home-sync-service-error {
+.home .home-sync-service-error {
   margin: 0;
   font-size: 0.92rem;
   color: var(--cinnabar);

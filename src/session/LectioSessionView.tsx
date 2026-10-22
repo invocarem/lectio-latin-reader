@@ -135,7 +135,7 @@ export function LectioSessionView({
           onClick={() => {
             if (
               window.confirm(
-                "Start this pass over? This clears the checked marks, but keeps your notes.",
+                "Start this pass over? This clears the checked marks on the sync copy in use. A file or service that is not in use keeps its progress. Your notes stay.",
               )
             ) {
               onReset();

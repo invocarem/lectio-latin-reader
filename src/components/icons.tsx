@@ -75,6 +75,15 @@ export function SunIcon() {
   );
 }
 
+/** A small filled mark: this sync backend is the one in use. */
+export function ActiveIcon() {
+  return (
+    <svg width={8} height={8} viewBox="0 0 8 8" aria-hidden="true">
+      <circle cx="4" cy="4" r="3.25" fill="currentColor" />
+    </svg>
+  );
+}
+
 /** A crescent: the dark theme. */
 export function MoonIcon() {
   return (

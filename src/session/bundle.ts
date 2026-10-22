@@ -42,6 +42,8 @@ export type MergeOutcome = {
   cursorMoved: boolean;
   /** The other copy's later reset replaced this copy's sittings, cursor, and start date. */
   passReset: boolean;
+  /** This copy's reset was not written onto the other copy; its progress stayed. */
+  passKept: boolean;
   conflicts: NoteConflict[];
 };
 
@@ -51,6 +53,7 @@ export type BundleOutcome = {
   notesAdded: number;
   cursorsMoved: number;
   passesReset: number;
+  passesKept: number;
   conflicts: NoteConflict[];
 };
 
@@ -177,13 +180,33 @@ function mergeAnnotations(
   return { annotations: [...byKey.values()], notesAdded, conflicts };
 }
 
-/** Combine two passes of the same work. A different work is ignored. */
-export function mergeSession(local: SessionDoc, remote: SessionDoc): MergeOutcome {
+function remoteHasPass(doc: SessionDoc): boolean {
+  return doc.satWith.length > 0 || doc.cursor != null;
+}
+
+/** Combine two passes of the same work. A different work is ignored.
+ * `keepRemotePass` leaves the other copy's sittings in place when this copy
+ * was reset, so switching to that copy does not wipe it. */
+export function mergeSession(
+  local: SessionDoc,
+  remote: SessionDoc,
+  options?: { keepRemotePass?: boolean },
+): MergeOutcome {
   if (local.work !== remote.work) {
-    return { doc: local, sittingsAdded: 0, notesAdded: 0, cursorMoved: false, passReset: false, conflicts: [] };
+    return {
+      doc: local,
+      sittingsAdded: 0,
+      notesAdded: 0,
+      cursorMoved: false,
+      passReset: false,
+      passKept: false,
+      conflicts: [],
+    };
   }
   const notes = mergeAnnotations(local.work, local.annotations, remote.annotations);
-  const boundary = passSide(local.passAt, remote.passAt);
+  const natural = passSide(local.passAt, remote.passAt);
+  const passKept = options?.keepRemotePass === true && natural === "local" && remoteHasPass(remote);
+  const boundary = passKept ? "remote" : natural;
   const samePass = boundary === "same";
   const sittings = samePass
     ? mergeSittings(local.work, local.satWith, remote.satWith)
@@ -198,15 +221,22 @@ export function mergeSession(local: SessionDoc, remote: SessionDoc): MergeOutcom
   const paceSide = later(local.touchedAt, remote.touchedAt);
   const pace =
     local.work === "cursus"
-      ? paceSide === "remote" && remote.pace != null
-        ? remote.pace
-        : (local.pace ?? remote.pace)
+      ? passKept
+        ? (remote.pace ?? local.pace)
+        : paceSide === "remote" && remote.pace != null
+          ? remote.pace
+          : (local.pace ?? remote.pace)
       : undefined;
-  const touchedAt =
-    paceSide === "remote" ? remote.touchedAt : paceSide === "local" ? local.touchedAt : undefined;
+  const touchedAt = passKept
+    ? remote.touchedAt
+    : paceSide === "remote"
+      ? remote.touchedAt
+      : paceSide === "local"
+        ? local.touchedAt
+        : undefined;
   const passAt = samePass ? (local.passAt ?? remote.passAt) : winner.passAt;
   const doc: SessionDoc = {
-    id: local.id,
+    id: passKept ? remote.id : local.id,
     work: local.work,
     ...(local.work === "cursus" && pace != null ? { pace } : {}),
     started: samePass ? (local.started <= remote.started ? local.started : remote.started) : winner.started,
@@ -222,7 +252,8 @@ export function mergeSession(local: SessionDoc, remote: SessionDoc): MergeOutcom
     sittingsAdded: sittings.added,
     notesAdded: notes.notesAdded,
     cursorMoved: cursor !== local.cursor,
-    passReset: boundary === "remote",
+    passReset: natural === "remote",
+    passKept,
     conflicts: notes.conflicts,
   };
 }
@@ -321,7 +352,11 @@ export function importBundle(remote: SessionBundle, storage?: Storage | null): B
   return outcome;
 }
 
-export function mergeBundle(local: SessionBundle, remote: SessionBundle): BundleOutcome {
+export function mergeBundle(
+  local: SessionBundle,
+  remote: SessionBundle,
+  options?: { keepRemotePass?: boolean },
+): BundleOutcome {
   const works = new Set<SessionWork>([
     ...(Object.keys(local.sessions) as SessionWork[]),
     ...(Object.keys(remote.sessions) as SessionWork[]),
@@ -331,17 +366,19 @@ export function mergeBundle(local: SessionBundle, remote: SessionBundle): Bundle
   let notesAdded = 0;
   let cursorsMoved = 0;
   let passesReset = 0;
+  let passesKept = 0;
   const conflicts: NoteConflict[] = [];
   for (const work of works) {
     const here = local.sessions[work];
     const there = remote.sessions[work];
     if (here && there) {
-      const merged = mergeSession(here, there);
+      const merged = mergeSession(here, there, options);
       sessions[work] = merged.doc;
       sittingsAdded += merged.sittingsAdded;
       notesAdded += merged.notesAdded;
       if (merged.cursorMoved) cursorsMoved += 1;
       if (merged.passReset) passesReset += 1;
+      if (merged.passKept) passesKept += 1;
       conflicts.push(...merged.conflicts);
     } else if (there) {
       sessions[work] = there;
@@ -352,7 +389,7 @@ export function mergeBundle(local: SessionBundle, remote: SessionBundle): Bundle
       sessions[work] = here;
     }
   }
-  return { sessions, sittingsAdded, notesAdded, cursorsMoved, passesReset, conflicts };
+  return { sessions, sittingsAdded, notesAdded, cursorsMoved, passesReset, passesKept, conflicts };
 }
 
 /** One line for the Home screen after an import. */

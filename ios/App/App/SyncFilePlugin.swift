@@ -17,7 +17,11 @@ public class SyncFilePlugin: CAPPlugin, CAPBridgedPlugin, UIDocumentPickerDelega
     private var pickCall: CAPPluginCall?
 
     @objc func ready(_ call: CAPPluginCall) {
-        call.resolve(["state": resolveBookmark() == nil ? "none" : "ready"])
+        if let url = resolveBookmark() {
+            call.resolve(["state": "ready", "name": url.lastPathComponent])
+        } else {
+            call.resolve(["state": "none"])
+        }
     }
 
     @objc func pick(_ call: CAPPluginCall) {

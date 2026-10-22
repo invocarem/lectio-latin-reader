@@ -87,6 +87,7 @@ describe("mergeSession", () => {
       notesAdded: 0,
       cursorsMoved: 0,
       passesReset: 0,
+      passesKept: 0,
       conflicts: merged.conflicts,
     })).toBe("0 sittings added, 0 notes added, cursor unchanged. Kept the later note on cursus 50:12");
   });
@@ -129,6 +130,7 @@ describe("mergeSession", () => {
       notesAdded: 0,
       cursorsMoved: 0,
       passesReset: 0,
+      passesKept: 0,
       conflicts: merged.conflicts,
     })).toBe("0 sittings added, 0 notes added, cursor unchanged. Kept the later note on confessions 1.1");
   });
@@ -259,6 +261,7 @@ describe("mergeSession", () => {
       notesAdded: replaced.notesAdded,
       cursorsMoved: replaced.cursorMoved ? 1 : 0,
       passesReset: 1,
+      passesKept: 0,
       conflicts: replaced.conflicts,
     })).toBe("1 pass started over, 1 note added, cursor moved");
   });
