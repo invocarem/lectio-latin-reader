@@ -397,7 +397,13 @@ export function Office({ work, reading, onHome }: OfficeProps) {
                     )}
                   </div>
                 ) : null}
-                {linePlace ? <SectionNotes place={linePlace} notes={learning.notes} /> : null}
+                {linePlace ? (
+                  <SectionNotes
+                    key={`${linePlace.psalm}:${linePlace.section ?? ""}`}
+                    place={linePlace}
+                    notes={learning.notes}
+                  />
+                ) : null}
               </>
             ) : (
               current?.slices.map((slice) => {

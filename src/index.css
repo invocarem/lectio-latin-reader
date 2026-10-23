@@ -1684,6 +1684,27 @@ button.brand:hover strong {
   margin-top: 1.1rem;
 }
 
+.learning-notes-toggle {
+  appearance: none;
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  text-align: left;
+  color: var(--cinnabar);
+}
+
+.learning-notes-toggle:focus-visible {
+  outline: 1px solid var(--cinnabar);
+  outline-offset: 3px;
+}
+
 .learning-note {
   display: block;
   width: 100%;
@@ -1696,8 +1717,6 @@ button.brand:hover strong {
   border: 1px solid var(--rule);
   border-radius: 0.4rem;
   padding: 0.5rem 0.6rem;
-  overflow-y: auto;
-  max-height: 14rem;
 }
 
 .learning-note-title {
