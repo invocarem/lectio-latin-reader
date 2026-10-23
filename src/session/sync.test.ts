@@ -394,19 +394,19 @@ describe("createSync", () => {
       storage,
     );
     const files = transport(bundle(pass()));
-    let queued: (() => void) | null = null;
+    const queued: { current: (() => void) | null } = { current: null };
     const sync = createSync({
       transport: files,
       storage,
       schedule(fn) {
-        queued = fn;
+        queued.current = fn;
         return { cancel() {} };
       },
     });
     await sync.start();
     expect(files.writes).toEqual([]);
     sync.noteEdit();
-    queued?.();
+    queued.current?.();
     await new Promise((resolve) => setTimeout(resolve, 0));
     expect(files.writes.length).toBe(1);
     expect(files.writes[0]).toContain("cap1-s2");
