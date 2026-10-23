@@ -103,11 +103,14 @@ function effective(slot: Slot | undefined): Item | null {
   return later(slot.note.updated, slot.tomb.updated) === "b" ? slot.tomb : slot.note;
 }
 
-function pick(here: Item | null, there: Item | null): Item | null {
+function pick(here: Item | null, there: Item | null, tie: "local" | "remote"): Item | null {
   if (!here) return there;
   if (!there) return here;
   if (here.text === there.text && here.kind === there.kind) return here;
-  return later(here.updated, there.updated) === "b" ? there : here;
+  const which = later(here.updated, there.updated);
+  if (which === "b") return there;
+  if (which === "tie" && tie === "remote") return there;
+  return here;
 }
 
 function keptTomb(local: Slot | undefined, remote: Slot | undefined, winner: Item): Item | null {
@@ -122,8 +125,17 @@ function pushUpload(upload: NoteFile[], slot: Slot | undefined, item: Item): voi
   if (!current || current.text !== item.text) upload.push({ name: item.name, text: item.text });
 }
 
-/** Combine this device's notes with the folder. A name that does not parse is skipped. */
-export function mergeNoteFolders(localFiles: readonly NoteFile[], remoteFiles: readonly NoteFile[]): NoteFolderMerge {
+/**
+ * Combine this device's notes with the folder. A name that does not parse is skipped.
+ * `tie` chooses which text to keep when both copies differ and neither `updated`
+ * is later, including a note that has no timestamp. A pull passes `"remote"`.
+ */
+export function mergeNoteFolders(
+  localFiles: readonly NoteFile[],
+  remoteFiles: readonly NoteFile[],
+  options?: { tie?: "local" | "remote" },
+): NoteFolderMerge {
+  const tie = options?.tie ?? "local";
   const skipped: string[] = [];
   const local = index(localFiles, skipped);
   const remote = index(remoteFiles, skipped);
@@ -138,14 +150,15 @@ export function mergeNoteFolders(localFiles: readonly NoteFile[], remoteFiles: r
     const remoteSlot = remote.get(filename);
     const here = effective(localSlot);
     const there = effective(remoteSlot);
-    const winner = pick(here, there);
+    const winner = pick(here, there, tie);
     if (!winner) continue;
     if (
       here &&
       there &&
       here.kind === "note" &&
       there.kind === "note" &&
-      here.text !== there.text
+      here.text !== there.text &&
+      later(here.updated, there.updated) !== "tie"
     ) {
       const dropped = winner === here ? there.text : here.text;
       conflicts.push({ name: filename, kept: winner.text, dropped });

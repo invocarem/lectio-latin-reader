@@ -34,6 +34,27 @@ describe("mergeNoteFolders", () => {
     expect(describeNoteMerge(merged)).toBeNull();
   });
 
+  test("a tie keeps this device, unless the pull asks for the folder", () => {
+    const local = note("09", "On the device.", "2026-10-22T22:13:00.000Z");
+    const remote = note("09", "In the folder.", "2026-10-22T22:13:00.000Z");
+    const kept = mergeNoteFolders([local], [remote]);
+    expect(kept.local).toEqual([local]);
+    expect(kept.upload).toEqual([local]);
+    expect(kept.conflicts).toEqual([]);
+    const pulled = mergeNoteFolders([local], [remote], { tie: "remote" });
+    expect(pulled.local).toEqual([remote]);
+    expect(pulled.upload).toEqual([]);
+    expect(pulled.conflicts).toEqual([]);
+  });
+
+  test("a headerless edit is taken from the folder on a pull", () => {
+    const local = { name: "09_psalm_118_nun.md", text: "First reading.\n" };
+    const remote = { name: "09_psalm_118_nun.md", text: "Second reading.\n" };
+    const pulled = mergeNoteFolders([local], [remote], { tie: "remote" });
+    expect(pulled.local).toEqual([remote]);
+    expect(pulled.upload).toEqual([]);
+  });
+
   test("different text keeps the later updated and names the other", () => {
     const earlier = note("09", "First.", "2026-10-22T22:13:00.000Z");
     const later = note("09", "Second.", "2026-10-22T23:00:00.000Z");

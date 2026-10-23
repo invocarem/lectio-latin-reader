@@ -35,12 +35,15 @@ export function SectionNotes({ place, notes }: SectionNotesProps) {
       </button>
       {open ? (
         <div id={panelId}>
-          {list.map((note) => (
-            <article key={note.filename} className="learning-note">
-              <span className="learning-note-title">{noteTitle(note)}</span>
-              {note.body.trim() ? <NoteBody text={note.body} /> : null}
-            </article>
-          ))}
+          {list.map((note) => {
+            const title = noteTitle(note);
+            return (
+              <article key={note.filename} className="learning-note">
+                {title ? <span className="learning-note-title">{title}</span> : null}
+                {note.body.trim() ? <NoteBody text={note.body} /> : null}
+              </article>
+            );
+          })}
         </div>
       ) : null}
     </section>

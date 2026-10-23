@@ -123,7 +123,11 @@ export function mergeRemoteText(
   return { ok: true, outcome, nextText, dirty: canonicalBundle(parsed.bundle) !== nextText };
 }
 
-/** Read the folder's notes into the local store. A pull does not write them back. */
+/**
+ * Read the folder's notes into the local store. A pull does not write them back.
+ * When both copies differ and `updated` ties, the pull keeps the folder text,
+ * so a hand edit that does not move the timestamp still arrives.
+ */
 async function applyNotes(
   notes: NoteFiles,
   transport: SyncTransport,
@@ -132,7 +136,7 @@ async function applyNotes(
   const remote = await transport.listNotes?.();
   if (remote == null) return { changed: false, notice: null };
   const local = await notes.list();
-  const merged = mergeNoteFolders(local, remote);
+  const merged = mergeNoteFolders(local, remote, { tie: pull ? "remote" : "local" });
   const desired = new Map(merged.local.map((file) => [file.name, file.text]));
   let changed = false;
   for (const file of local) {

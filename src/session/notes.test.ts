@@ -114,7 +114,7 @@ describe("learning note files", () => {
     const filename = "01_psalm_118_aleph.md";
     const note = parseNoteFile(filename, "Beati immaculati.");
     expect(note?.title).toBe("");
-    expect(noteTitle(note!)).toBe(filename);
+    expect(noteTitle(note!)).toBe("");
     expect(note?.at).toBeUndefined();
     expect(note?.updated).toBeUndefined();
     expect(note?.body).toBe("Beati immaculati.");

@@ -422,6 +422,51 @@ function learningFile(body: string, updated: string): NoteFile {
 }
 
 describe("learning notes in the folder", () => {
+  test("a pull stores a changed note when updated is not later, and does not write it back", async () => {
+    const local = learningFile("First reading.", "2026-10-22T22:13:00.000Z");
+    const remote = learningFile("Second reading.", "2026-10-22T22:13:00.000Z");
+    const notes = memoryNoteFiles([local]);
+    const written: NoteFile[] = [];
+    const files = transport(bundle(pass()));
+    files.listNotes = async () => [remote];
+    files.writeNote = async (name, text) => {
+      written.push({ name, text });
+    };
+    const sync = createSync({ transport: files, storage: new MemoryStorage(), notes });
+    await sync.syncNow({ pull: true });
+    expect(await notes.list()).toEqual([remote]);
+    expect(written).toEqual([]);
+    expect(files.writes).toEqual([]);
+  });
+
+  test("a pull stores a headerless edit over the copy already on this device", async () => {
+    const local = { name: "09_psalm_118_nun.md", text: "First reading.\n" };
+    const remote = { name: "09_psalm_118_nun.md", text: "Second reading.\n" };
+    const notes = memoryNoteFiles([local]);
+    const files = transport(bundle(pass()));
+    files.listNotes = async () => [remote];
+    const sync = createSync({ transport: files, storage: new MemoryStorage(), notes });
+    await sync.syncNow({ pull: true });
+    expect(await notes.list()).toEqual([remote]);
+    expect(files.writes).toEqual([]);
+  });
+
+  test("a pull replaces an older device note with the later folder note", async () => {
+    const local = learningFile("First reading.", "2026-10-22T22:13:00.000Z");
+    const remote = learningFile("Second reading.", "2026-10-23T12:00:00.000Z");
+    const notes = memoryNoteFiles([local]);
+    const written: NoteFile[] = [];
+    const files = transport(bundle(pass()));
+    files.listNotes = async () => [remote];
+    files.writeNote = async (name, text) => {
+      written.push({ name, text });
+    };
+    const sync = createSync({ transport: files, storage: new MemoryStorage(), notes });
+    await sync.syncNow({ pull: true });
+    expect(await notes.list()).toEqual([remote]);
+    expect(written).toEqual([]);
+  });
+
   test("a pull stores the folder note and does not write it back", async () => {
     const remote = learningFile("From the folder.", "2026-10-22T22:13:00.000Z");
     const notes = memoryNoteFiles();

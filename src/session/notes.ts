@@ -56,7 +56,7 @@ export type LearningNote = {
   id: string;
   place: NotePlace;
   filename: string;
-  /** Header title. Empty when the file names none; the screen then shows the filename. */
+  /** Header title. Empty when the file names none; the screen then shows no title. */
   title: string;
   at?: string;
   updated?: string;
@@ -67,10 +67,9 @@ export function samePlace(a: NotePlace, b: NotePlace): boolean {
   return a.kind === b.kind && a.psalm === b.psalm && a.section === b.section;
 }
 
-/** The title the screen shows. A file with no title uses its filename. */
+/** The title the screen shows. Empty when the file names none. */
 export function noteTitle(note: LearningNote): string {
-  const title = note.title.trim();
-  return title || note.filename;
+  return note.title.trim();
 }
 
 function psalm118Section(from: number): string | undefined {
