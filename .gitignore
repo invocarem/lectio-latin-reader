@@ -28,3 +28,6 @@ xcuserdata
 
 # Ingest download cache
 tmp/
+
+# Lectio notes not in this project
+lectio-notes/
