@@ -2,11 +2,12 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { lectioFocus, chapterFocus } from "../lectioNav";
 import { EDGE_GUARD_PX, isSwipePointer, swipeIntent } from "../swipe";
 import type { LectioUnit, ReaderWork } from "../types";
+import { showsEnglish, showsLatin } from "../textLang";
 import { DictPopup } from "./DictPopup";
 import { LatinText } from "./LatinText";
 import { AppTitle } from "./AppTitle";
-import { CapitaIcon, EnglishIcon, SessionIcon } from "./icons";
-import { ThemeToggle } from "./ThemeToggle";
+import { CapitaIcon, SessionIcon } from "./icons";
+import { TextLangToggle, useTextLang } from "./TextLangToggle";
 import { LectioSessionView } from "../session/LectioSessionView";
 import { courseFor } from "../session/courses";
 import { annotationForUnit } from "../session/document";
@@ -26,7 +27,9 @@ type DictState = {
 };
 
 export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
-  const [showEnglish, setShowEnglish] = useState(true);
+  const [textLang, setTextLang] = useTextLang();
+  const latinOn = showsLatin(textLang);
+  const englishOn = showsEnglish(textLang);
   const [showToc, setShowToc] = useState(false);
   const [dict, setDict] = useState<DictState | null>(null);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -213,17 +216,7 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
               <CapitaIcon />
             </button>
           ) : null}
-          <button
-            type="button"
-            className="tool-icon"
-            aria-pressed={showEnglish}
-            aria-label={showEnglish ? "Hide English translation" : "Show English translation"}
-            title={showEnglish ? "Hide English translation" : "Show English translation"}
-            onClick={() => setShowEnglish((open) => !open)}
-          >
-            <EnglishIcon />
-          </button>
-          <ThemeToggle />
+          <TextLangToggle lang={textLang} onChange={setTextLang} />
         </div>
       </header>
 
@@ -260,7 +253,9 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
         ) : null}
 
         <div className="lectio-stage" ref={stageRef}>
-          <article className={`lectio-card${current.kind !== "section" && current.kind !== "retractatio" && current.kind !== "praefatio" ? " heading" : ""}`}>
+          <article
+            className={`lectio-card${textLang === "english" ? " lang-english" : ""}${current.kind !== "section" && current.kind !== "retractatio" && current.kind !== "praefatio" ? " heading" : ""}`}
+          >
             <div className="lectio-kicker-row">
               <p className="lectio-kicker">{kicker(current)}</p>
               {sessionEnabled ? (
@@ -295,22 +290,24 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
                 </div>
               )}
             </div>
-            <div className={`lectio-latin${highlighted ? " highlighted" : ""}`} lang="la">
-              <LatinText
-                text={current.latin}
-                unitId={current.id}
-                activeToken={dict?.tokenKey}
-                onWord={(word, el, tokenKey) => {
-                  setDict({
-                    word,
-                    rect: el.getBoundingClientRect(),
-                    tokenKey,
-                  });
-                }}
-              />
-            </div>
-            {showEnglish ? (
-              <p className="lectio-english" lang="en">
+            {latinOn ? (
+              <div className={`lectio-latin${highlighted ? " highlighted" : ""}`} lang="la">
+                <LatinText
+                  text={current.latin}
+                  unitId={current.id}
+                  activeToken={dict?.tokenKey}
+                  onWord={(word, el, tokenKey) => {
+                    setDict({
+                      word,
+                      rect: el.getBoundingClientRect(),
+                      tokenKey,
+                    });
+                  }}
+                />
+              </div>
+            ) : null}
+            {englishOn ? (
+              <p className={`lectio-english${highlighted && !latinOn ? " highlighted" : ""}`} lang="en">
                 {current.english}
               </p>
             ) : null}

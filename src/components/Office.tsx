@@ -18,11 +18,12 @@ import { placeOfSlice } from "../session/notes";
 import { annotationForLine } from "../session/document";
 import { parseStep, type OpenPlace } from "../session/cursus";
 import type { ReaderWork } from "../types";
+import { showsEnglish, showsLatin } from "../textLang";
 import { DictPopup } from "./DictPopup";
 import { LatinText } from "./LatinText";
 import { AppTitle } from "./AppTitle";
-import { EnglishIcon, SessionIcon } from "./icons";
-import { ThemeToggle } from "./ThemeToggle";
+import { SessionIcon } from "./icons";
+import { TextLangToggle, useTextLang } from "./TextLangToggle";
 
 type DictState = {
   word: string;
@@ -154,7 +155,9 @@ export function Office({ work, reading, onHome }: OfficeProps) {
   const [weekday, setWeekday] = useState<Weekday>(initial.weekday);
   const [hour, setHour] = useState<OfficeHour>(initial.hour);
   const [index, setIndex] = useState(initial.index);
-  const [showEnglish, setShowEnglish] = useState(true);
+  const [textLang, setTextLang] = useTextLang();
+  const latinOn = showsLatin(textLang);
+  const englishOn = showsEnglish(textLang);
   const [dict, setDict] = useState<DictState | null>(null);
   const closeDict = useCallback(() => setDict(null), []);
   const stageRef = useRef<HTMLDivElement>(null);
@@ -311,23 +314,15 @@ export function Office({ work, reading, onHome }: OfficeProps) {
           />
         </div>
         <div className="tools">
-          <button
-            type="button"
-            className="tool-icon"
-            aria-pressed={showEnglish}
-            aria-label={showEnglish ? "Hide English translation" : "Show English translation"}
-            title={showEnglish ? "Hide English translation" : "Show English translation"}
-            onClick={() => setShowEnglish((open) => !open)}
-          >
-            <EnglishIcon />
-          </button>
-          <ThemeToggle />
+          <TextLangToggle lang={textLang} onChange={setTextLang} />
         </div>
       </header>
 
       <div className={`lectio-layout${session.open ? " session-open" : ""}`}>
         <div className="lectio-stage" ref={stageRef}>
-            <article className={reading === "line" ? "lectio-card" : "office-card"}>
+            <article
+              className={`${reading === "line" ? "lectio-card" : "office-card"}${textLang === "english" ? " lang-english" : ""}`}
+            >
             <p className="lectio-kicker">
               {WEEKDAY_LABEL[weekday]} · {HOUR_LABEL[hour]} · {SEASON_LABEL[opened.season]} ·{" "}
               {TIME_LABEL[opened.time]}
@@ -347,22 +342,24 @@ export function Office({ work, reading, onHome }: OfficeProps) {
                     onClick={() => session.toggleHighlight(line.psalm, line.noteKey, line.legacyNoteKey)}
                   />
                 </div>
-                <div className={`lectio-latin${highlighted ? " highlighted" : ""}`} lang="la">
-                  <LatinText
-                    text={line.latin}
-                    unitId={line.id}
-                    activeToken={dict?.tokenKey}
-                    onWord={(word, el, tokenKey) => {
-                      setDict({
-                        word,
-                        rect: el.getBoundingClientRect(),
-                        tokenKey,
-                      });
-                    }}
-                  />
-                </div>
-                {showEnglish ? (
-                  <p className="lectio-english" lang="en">
+                {latinOn ? (
+                  <div className={`lectio-latin${highlighted ? " highlighted" : ""}`} lang="la">
+                    <LatinText
+                      text={line.latin}
+                      unitId={line.id}
+                      activeToken={dict?.tokenKey}
+                      onWord={(word, el, tokenKey) => {
+                        setDict({
+                          word,
+                          rect: el.getBoundingClientRect(),
+                          tokenKey,
+                        });
+                      }}
+                    />
+                  </div>
+                ) : null}
+                {englishOn ? (
+                  <p className={`lectio-english${highlighted && !latinOn ? " highlighted" : ""}`} lang="en">
                     {line.english}
                   </p>
                 ) : null}
@@ -415,21 +412,23 @@ export function Office({ work, reading, onHome }: OfficeProps) {
                     {verses.map((verse) => (
                       <div key={verse.n} className="office-verse">
                         <span className="office-verse-n">{verse.n}</span>
-                        <div className="office-latin" lang="la">
-                          <LatinText
-                            text={normLatin(verse.latin)}
-                            unitId={`${slice.psalm}:${verse.n}`}
-                            activeToken={dict?.tokenKey}
-                            onWord={(word, el, tokenKey) => {
-                              setDict({
-                                word,
-                                rect: el.getBoundingClientRect(),
-                                tokenKey,
-                              });
-                            }}
-                          />
-                        </div>
-                        {showEnglish ? (
+                        {latinOn ? (
+                          <div className="office-latin" lang="la">
+                            <LatinText
+                              text={normLatin(verse.latin)}
+                              unitId={`${slice.psalm}:${verse.n}`}
+                              activeToken={dict?.tokenKey}
+                              onWord={(word, el, tokenKey) => {
+                                setDict({
+                                  word,
+                                  rect: el.getBoundingClientRect(),
+                                  tokenKey,
+                                });
+                              }}
+                            />
+                          </div>
+                        ) : null}
+                        {englishOn ? (
                           <p className="office-english" lang="en">
                             {verse.english}
                           </p>

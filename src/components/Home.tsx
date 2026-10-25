@@ -22,11 +22,9 @@ type HomeProps = {
   studyEnabled?: boolean;
 };
 
-const FEATURED: WorkId[] = ["gradibus", "cantica"];
-const OTHER: WorkId[] = ["rule", "confessions", "psalter", "canticum"];
+const OTHER: WorkId[] = ["gradibus", "cantica", "rule", "confessions", "psalter", "canticum"];
 
 export function Home({ onOpen, studyEnabled = true }: HomeProps) {
-  const featured = worksFor(FEATURED);
   const other = worksFor(OTHER);
   const [, setProgressRev] = useState(0);
   const refreshProgress = useCallback(() => setProgressRev((rev) => rev + 1), []);
@@ -44,9 +42,6 @@ export function Home({ onOpen, studyEnabled = true }: HomeProps) {
         <SyncBar onImported={refreshProgress} />
         <div className="home-featured">
           <OfficeCard onOpen={onOpen} />
-          {featured.map((work) => (
-            <WorkCard key={work.id} work={work} onOpen={onOpen} studyEnabled={studyEnabled} />
-          ))}
         </div>
         <details className="home-other">
           <summary className="home-kicker">Other works</summary>
@@ -591,13 +586,15 @@ function SessionProgress({ work }: { work: WorkId }) {
 function OfficeCard({ onOpen }: { onOpen: HomeProps["onOpen"] }) {
   const { count, total } = sessionProgress("cursus");
   return (
-    <article className="home-card">
-      <p className="home-kicker">Cursus</p>
-      <h2>
-        Cursus psalmorum
-        <span>Psalms of the hours</span>
-      </h2>
-      <p className="home-meta">according to the Rule</p>
+    <article className="home-card home-card-main">
+      <div className="home-card-copy">
+        <p className="home-kicker">Cursus</p>
+        <h2>
+          Cursus psalmorum
+          <span>Psalms of the hours</span>
+        </h2>
+        <p className="home-meta">according to the Rule</p>
+      </div>
       <div className="home-actions">
         <button className="start" type="button" onClick={() => onOpen("psalter", "office-lectio")}>
           Lectio

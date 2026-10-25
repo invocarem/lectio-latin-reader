@@ -45,7 +45,25 @@ export function CapitaIcon() {
   );
 }
 
-/** A capital A: show or hide the English. */
+/** A capital L: the Latin on its own. */
+export function LatinIcon() {
+  return (
+    <Mark>
+      <path d="M8 5v14h8.5" />
+    </Mark>
+  );
+}
+
+/** A capital L beside a capital A: Latin and English together. */
+export function BothLangIcon() {
+  return (
+    <Mark>
+      <path d="M4 6.2v11.6h5M13.1 17.8 16.5 6.2 19.9 17.8M14.3 13.8h4.2" />
+    </Mark>
+  );
+}
+
+/** A capital A: the English. */
 export function EnglishIcon() {
   return (
     <Mark>

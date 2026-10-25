@@ -430,14 +430,27 @@ select option {
   }
 }
 
-@media (min-width: 980px) {
-  .home-featured {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.25rem;
+.home-card-copy {
+  min-width: 0;
+}
+
+@media (min-width: 800px) {
+  .home-featured .home-card-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 2rem;
+    row-gap: 0.85rem;
+    align-items: end;
+    padding: 1.8rem 1.7rem 1.5rem;
   }
 
-  .home-featured .home-card {
-    padding: 1.8rem 1.7rem 1.5rem;
+  .home-featured .home-card-main .home-actions {
+    margin-top: 0;
+    padding-top: 0;
+  }
+
+  .home-featured .home-card-main .home-session {
+    grid-column: 1 / -1;
   }
 }
 
@@ -567,6 +580,26 @@ select option {
   color: var(--ink-soft);
   font-size: 1.05rem;
   line-height: 1.65;
+}
+
+/* English alone is the reading, in the same face as the Latin. */
+.lectio-card.lang-english .lectio-english {
+  margin: 0;
+  padding-top: 0;
+  border-top: 0;
+  color: var(--ink);
+  font-family: "Source Serif 4", "EB Garamond", serif;
+  font-size: clamp(1.35rem, 2.4vw, 1.7rem);
+  line-height: 1.7;
+}
+
+.lectio-card.heading.lang-english .lectio-english {
+  font-family: "Source Serif 4", "Cormorant Garamond", serif;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 600;
+  font-style: italic;
+  color: var(--cinnabar);
+  line-height: 1.25;
 }
 
 .lectio-nav {
@@ -773,8 +806,18 @@ button.brand:hover strong {
   border-color: var(--ink);
 }
 
+.text-lang {
+  display: inline-flex;
+  flex: none;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--panel);
+}
+
 .tools {
   display: flex;
+  align-items: center;
   gap: 0.5rem;
   flex: none;
 }
@@ -795,6 +838,33 @@ button.brand:hover strong {
   border-color: var(--ink);
 }
 
+.tools .text-lang button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  border-right: 1px solid var(--rule);
+  background: transparent;
+  color: var(--ink-soft);
+}
+
+.tools .text-lang button:last-child {
+  border-right: 0;
+}
+
+.tools .text-lang button[aria-pressed="true"] {
+  background: var(--highlight);
+  color: var(--ink);
+}
+
+.tools .text-lang svg {
+  display: block;
+}
+
 .tools .tool-icon,
 .tools .theme-toggle {
   padding: 0;
@@ -805,10 +875,9 @@ button.brand:hover strong {
 }
 
 @media (max-width: 540px) {
-  /* Keep the header on a single row on narrow screens: the title (and the
-     session toggle) stays on the left with the tools (English / theme icons) on
-     the right, instead of wrapping the tools onto a second row. The brand
-     truncates with an ellipsis when space runs out. */
+  /* Keep the header on a single row on narrow screens: the title stays on
+     the left and the tools on the right. The brand truncates with an ellipsis
+     when space runs out. */
   .topbar {
     flex-wrap: nowrap;
     gap: 0.5rem;
@@ -1267,6 +1336,14 @@ button.brand:hover strong {
   line-height: 1.4;
 }
 
+.office-card.lang-english .office-english {
+  grid-row: 1;
+  color: var(--ink);
+  font-family: "Source Serif 4", "EB Garamond", serif;
+  font-size: 1.15rem;
+  line-height: 1.45;
+}
+
 /* Session panel (psalter / cursus pass), shown on the left */
 .lectio-layout.session-open {
   grid-template-columns: 23rem minmax(0, 1fr);
@@ -1613,7 +1690,8 @@ button.brand:hover strong {
   box-shadow: inset 0 0 0 1px var(--cinnabar);
 }
 
-.lectio-latin.highlighted {
+.lectio-latin.highlighted,
+.lectio-english.highlighted {
   background: color-mix(in srgb, var(--highlight) 55%, transparent);
   border-radius: 0.4rem;
   padding: 0.45rem 0.55rem;
