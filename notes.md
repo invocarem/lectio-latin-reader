@@ -142,7 +142,7 @@ A delete writes a tombstone beside the note: `notes/09_psalm_118_nun.md.deleted`
 
 **Service (step 4).** `LECTIO_SYNC_DIR` is the folder on the computer that runs the service. The path stays outside the repo. `GET` and `PUT /lectio-sessions.json` keep the route, the token, and the etag rule from `service-sync.md`, and they read `<dir>/lectio-sessions.json`. A process started with `LECTIO_SYNC_FILE` alone is unchanged, and it serves no notes.
 
-Notes are their own routes. `GET /notes` lists each name with its etag and `updated`. `GET /notes/:name` returns the bytes. `PUT /notes/:name` replaces that file when `If-Match` is the current etag, through the same temp-file rename the bundle already uses. One lock per file. The body cap stays 1 MiB per file. The service stores the bytes as sent and does not merge. A `412` leaves this device's note in place for the next read.
+Notes are their own routes. `GET /notes` lists each name with its etag, `updated`, and text, so a client can pull every note in that one response. `GET /notes/:name` returns the bytes. `PUT /notes/:name` replaces that file when `If-Match` is the current etag, through the same temp-file rename the bundle already uses. One lock per file. The body cap stays 1 MiB per file. The service stores the bytes as sent and does not merge. A `412` leaves this device's note in place for the next read.
 
 `:name` accepts a note file or its tombstone, and nothing else. Any other path is `404`, as it is today.
 

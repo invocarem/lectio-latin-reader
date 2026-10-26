@@ -3,10 +3,14 @@
  *
  * `read()` is the service's `GET /lectio-sessions.json` and `write()` is its
  * `PUT`, sent with the `ETag` captured from the last read as `If-Match`.
- * `listNotes`, `writeNote`, and `removeNote` are the `/notes` routes. A
- * service started with a single file answers `404` on `/notes`, and that is
- * an empty absence: this device keeps its local notes. A `412` on a note
- * leaves the note here for the next read.
+ * `listNotes`, `writeNote`, and `removeNote` are the `/notes` routes. The
+ * list carries each note's text, so one response is the whole folder. A list
+ * from an older service has no text; those files are fetched together, and a
+ * file already held at the same etag is not fetched again. A service started
+ * with a single file answers `404` on `/notes`, and that is an empty absence:
+ * this device keeps its local notes. A `412` on a note leaves the note here
+ * for the next read. A request that does not answer within 15 seconds fails,
+ * and this device keeps its own progress.
  *
  * The base URL and token live in device storage, chosen over (or instead of)
  * the picked Drive file. One device uses one backend at a time.
@@ -24,6 +28,9 @@ export const SERVICE_ROUTE = "/lectio-sessions.json";
 export const NOTES_ROUTE = "/notes";
 
 const SERVICE_KEY = "lectio-sync-service";
+
+/** A cold tunnel should fail the sync, not hold the button. */
+const FETCH_TIMEOUT_MS = 15_000;
 
 /** Base URL without a trailing slash, plus the route. */
 export function endpointUrl(endpoint: ServiceEndpoint): string {
@@ -99,10 +106,25 @@ function asStrongEtag(value: string | null): string | null {
   return strong.length > 0 ? strong : null;
 }
 
+/** Bound one service call. `AbortSignal.timeout` does not keep the process alive. */
+function timeoutSignal(ms: number): AbortSignal {
+  if (typeof AbortSignal.timeout === "function") return AbortSignal.timeout(ms);
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), ms);
+  if (typeof timer === "object" && timer !== null && "unref" in timer) timer.unref();
+  return controller.signal;
+}
+
+function timed(init: RequestInit): RequestInit {
+  return { ...init, signal: init.signal ?? timeoutSignal(FETCH_TIMEOUT_MS) };
+}
+
 export function serviceTransport(options: ServiceTransportOptions): SyncTransport {
   const fetchFn = options.fetchFn ?? ((input, init) => fetch(input, init));
   let etag: string | null = null;
   const noteEtags = new Map<string, string>();
+  /** Text already read for an etag, so a later list can skip the file. */
+  const noteBodies = new Map<string, { etag: string; text: string }>();
 
   function requireEndpoint(): ServiceEndpoint {
     const endpoint = options.load();
@@ -112,6 +134,37 @@ export function serviceTransport(options: ServiceTransportOptions): SyncTranspor
 
   function authHeaders(endpoint: ServiceEndpoint): Record<string, string> {
     return { Authorization: `Bearer ${endpoint.token}` };
+  }
+
+  /**
+   * One row of `GET /notes`. Text in the row is the file. A row without text
+   * is fetched, unless this transport already holds that etag.
+   */
+  async function readListedNote(
+    endpoint: ServiceEndpoint,
+    item: { name?: unknown; etag?: unknown; text?: unknown },
+  ): Promise<NoteFile | null> {
+    if (typeof item.name !== "string" || item.name.length === 0) return null;
+    const name = item.name;
+    const listedEtag = typeof item.etag === "string" ? asStrongEtag(item.etag) : null;
+    if (listedEtag) noteEtags.set(name, listedEtag);
+    if (typeof item.text === "string") {
+      if (listedEtag) noteBodies.set(name, { etag: listedEtag, text: item.text });
+      return { name, text: item.text };
+    }
+    const cached = noteBodies.get(name);
+    if (cached && listedEtag && cached.etag === listedEtag) return { name, text: cached.text };
+    const file = await fetchFn(notesUrl(endpoint, name), timed({
+      method: "GET",
+      headers: authHeaders(endpoint),
+      cache: "no-store",
+    }));
+    if (file.status !== 200) throw new Error(`Sync note GET failed (${file.status})`);
+    const next = asStrongEtag(file.headers.get("etag")) ?? listedEtag;
+    if (next) noteEtags.set(name, next);
+    const text = await file.text();
+    if (next) noteBodies.set(name, { etag: next, text });
+    return { name, text };
   }
 
   return {
@@ -126,11 +179,11 @@ export function serviceTransport(options: ServiceTransportOptions): SyncTranspor
     },
     async read() {
       const endpoint = requireEndpoint();
-      const res = await fetchFn(endpointUrl(endpoint), {
+      const res = await fetchFn(endpointUrl(endpoint), timed({
         method: "GET",
         headers: authHeaders(endpoint),
         cache: "no-store",
-      });
+      }));
       if (res.status !== 200) throw new Error(`Sync GET failed (${res.status})`);
       const next = asStrongEtag(res.headers.get("etag"));
       if (next) etag = next;
@@ -143,11 +196,11 @@ export function serviceTransport(options: ServiceTransportOptions): SyncTranspor
         "Content-Type": "application/json",
       };
       if (etag) headers["If-Match"] = etag;
-      const res = await fetchFn(endpointUrl(endpoint), {
+      const res = await fetchFn(endpointUrl(endpoint), timed({
         method: "PUT",
         headers,
         body: text,
-      });
+      }));
       if (res.status === 204) {
         const next = asStrongEtag(res.headers.get("etag"));
         if (next) etag = next;
@@ -159,39 +212,27 @@ export function serviceTransport(options: ServiceTransportOptions): SyncTranspor
     },
     async listNotes() {
       const endpoint = requireEndpoint();
-      const res = await fetchFn(notesUrl(endpoint), {
+      const res = await fetchFn(notesUrl(endpoint), timed({
         method: "GET",
         headers: authHeaders(endpoint),
         cache: "no-store",
-      });
+      }));
       if (res.status === 404) return null;
       if (res.status !== 200) throw new Error(`Sync notes GET failed (${res.status})`);
-      const body = (await res.json()) as { files?: { name?: unknown; etag?: unknown }[] };
+      const body = (await res.json()) as { files?: { name?: unknown; etag?: unknown; text?: unknown }[] };
       const listed = Array.isArray(body.files) ? body.files : [];
-      const files: NoteFile[] = [];
-      for (const item of listed) {
-        if (typeof item.name !== "string" || item.name.length === 0) continue;
-        const file = await fetchFn(notesUrl(endpoint, item.name), {
-          method: "GET",
-          headers: authHeaders(endpoint),
-          cache: "no-store",
-        });
-        if (file.status !== 200) throw new Error(`Sync note GET failed (${file.status})`);
-        const next = asStrongEtag(file.headers.get("etag")) ?? (typeof item.etag === "string" ? asStrongEtag(item.etag) : null);
-        if (next) noteEtags.set(item.name, next);
-        files.push({ name: item.name, text: await file.text() });
-      }
-      return files;
+      const files = await Promise.all(listed.map((item) => readListedNote(endpoint, item)));
+      return files.filter((file): file is NoteFile => file != null);
     },
     async writeNote(name, text) {
       const endpoint = requireEndpoint();
       let match = noteEtags.get(name) ?? null;
       if (!match) {
-        const probe = await fetchFn(notesUrl(endpoint, name), {
+        const probe = await fetchFn(notesUrl(endpoint, name), timed({
           method: "GET",
           headers: authHeaders(endpoint),
           cache: "no-store",
-        });
+        }));
         if (probe.status !== 200) throw new Error(`Sync note GET failed (${probe.status})`);
         match = asStrongEtag(probe.headers.get("etag"));
         if (match) noteEtags.set(name, match);
@@ -201,14 +242,17 @@ export function serviceTransport(options: ServiceTransportOptions): SyncTranspor
         "Content-Type": name.endsWith(".deleted") ? "text/plain; charset=utf-8" : "text/markdown; charset=utf-8",
       };
       if (match) headers["If-Match"] = match;
-      const res = await fetchFn(notesUrl(endpoint, name), {
+      const res = await fetchFn(notesUrl(endpoint, name), timed({
         method: "PUT",
         headers,
         body: text,
-      });
+      }));
       if (res.status === 204) {
         const next = asStrongEtag(res.headers.get("etag"));
-        if (next) noteEtags.set(name, next);
+        if (next) {
+          noteEtags.set(name, next);
+          noteBodies.set(name, { etag: next, text });
+        }
         return;
       }
       // 412 leaves this device's note where it is. The next read merges.
@@ -218,19 +262,20 @@ export function serviceTransport(options: ServiceTransportOptions): SyncTranspor
       const endpoint = requireEndpoint();
       let match = noteEtags.get(name) ?? null;
       if (!match) {
-        const probe = await fetchFn(notesUrl(endpoint, name), {
+        const probe = await fetchFn(notesUrl(endpoint, name), timed({
           method: "GET",
           headers: authHeaders(endpoint),
           cache: "no-store",
-        });
+        }));
         if (probe.status !== 200) throw new Error(`Sync note GET failed (${probe.status})`);
         match = asStrongEtag(probe.headers.get("etag"));
       }
       const headers: Record<string, string> = { ...authHeaders(endpoint) };
       if (match) headers["If-Match"] = match;
-      const res = await fetchFn(notesUrl(endpoint, name), { method: "DELETE", headers });
+      const res = await fetchFn(notesUrl(endpoint, name), timed({ method: "DELETE", headers }));
       if (res.status === 204) {
         noteEtags.delete(name);
+        noteBodies.delete(name);
         return;
       }
       throw new Error(`Sync note DELETE failed (${res.status})`);

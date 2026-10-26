@@ -317,4 +317,56 @@ describe("service notes", () => {
     expect(sync.current().mode).toBe("offline");
     expect((await files.list()).find((file) => file.name === local.name)?.text).toBe(local.text);
   });
+
+  it("reads note text from the list and does not fetch each file", async () => {
+    const note = learningFile("From the list.", "2026-10-22T22:13:00.000Z");
+    const calls: string[] = [];
+    const fetchFn = (async (input, init) => {
+      const url = String(input);
+      const method = init?.method ?? "GET";
+      if (url.endsWith("/lectio-sessions.json")) return httpResponse(200, '"b"', "");
+      if (url.endsWith("/notes") && method === "GET") {
+        calls.push("list");
+        return httpResponse(200, "", JSON.stringify({ files: [{ name: note.name, etag: '"n1"', text: note.text }] }));
+      }
+      calls.push(`${method} ${url}`);
+      return httpResponse(404, "", "");
+    }) as typeof fetch;
+    const files = memoryNoteFiles([]);
+    const sync = createSync({
+      transport: serviceTransport({ load: () => ENDPOINT, fetchFn }),
+      storage: fakeStorage(),
+      notes: files,
+    });
+    await sync.syncNow({ pull: true });
+    expect(calls).toEqual(["list"]);
+    expect((await files.list()).find((file) => file.name === note.name)?.text).toBe(note.text);
+  });
+
+  it("fetches note bodies together, then skips a file whose etag is unchanged", async () => {
+    const note = learningFile("Fetched once.", "2026-10-22T22:13:00.000Z");
+    let noteGets = 0;
+    const fetchFn = (async (input, init) => {
+      const url = String(input);
+      const method = init?.method ?? "GET";
+      if (url.endsWith("/lectio-sessions.json")) return httpResponse(200, '"b"', "");
+      if (url.endsWith("/notes") && method === "GET") {
+        return httpResponse(200, "", JSON.stringify({ files: [{ name: note.name, etag: '"n1"' }] }));
+      }
+      if (method === "GET") {
+        noteGets += 1;
+        return httpResponse(200, '"n1"', note.text);
+      }
+      return httpResponse(405, "", "");
+    }) as typeof fetch;
+    const transport = serviceTransport({ load: () => ENDPOINT, fetchFn });
+    const sync = createSync({
+      transport,
+      storage: fakeStorage(),
+      notes: memoryNoteFiles([]),
+    });
+    await sync.syncNow({ pull: true });
+    await sync.syncNow({ pull: true });
+    expect(noteGets).toBe(1);
+  });
 });

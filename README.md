@@ -1,10 +1,18 @@
 # Lectio
 
-A parallel Latin–English reader for Bernard of Clairvaux’s *De gradibus humilitatis et superbiae* (*The Steps of Humility and of Pride*), from Migne, *Patrologia Latina* 182, columns 939–972. The retractatio stands on 939–940; the treatise itself begins with the praefatio on 941.
+A reader for a few Latin works, with a close English beside the Latin. The title is **Lectio**, and so is the name under the icon. On the home screen the line under the title is *Lectio per cancellos*.
 
-**Lectio** is the default: one short Latin paragraph, with English underneath if you want it. **Study** is the older two-column view of each Patrologia section. Click a Latin word for a gloss from the treatise lexicon (curated Bernard cards where they exist, otherwise Whitaker).
+The front of the home screen is the weekly cursus of the Psalms according to the Rule. Under **Other works** are Bernard’s *Steps of Humility and Pride*, his sermons on the Song of Songs, the Rule of St Benedict, Augustine’s *Confessions*, the Psalter, and the Song itself.
 
-Latin is taken from the facsimile plates, with consonantal *j* written as *i* (*iam*, *iudicii*, *eius*). English is written to match each numbered section.
+Each page is one short passage.
+
+- **Lectio** reads a work section by section.
+- **Cursus** reads the psalms of the hours.
+- **Study**, on a wide screen, is the two-column view with the facsimile.
+
+A control on the Lectio and Cursus pages sets the text to Latin, Latin and English, or English only. That choice is kept. Study keeps its own column switch. Tapping a Latin word opens a gloss from that work’s lexicon.
+
+A **pass** counts the slices read, so a long work can be finished a little at a time. Progress and notes stay on the device. They can sync through a shared folder or the home sync service.
 
 ## Run
 
@@ -23,7 +31,11 @@ npm run content  # rebuild de-gradibus.json from latin-units.json
 
 ## Sync service
 
-`services/sync` is a small HTTP store for `lectio-sessions.json` and, when `LECTIO_SYNC_DIR` is set, the `notes/` directory beside it. The phone and your computers share progress over a tailnet instead of a cloud folder. It is a plain conditional-write store (`GET`/`PUT` with an `ETag`/`If-Match`); the app still does the merge. A process started with `LECTIO_SYNC_FILE` alone serves the JSON and no notes. The full plan is in `service-sync.md`.
+These steps are for the computer that hosts the service. The phone and the other computers only enter its URL and token.
+
+`services/sync` is a small HTTP store for `lectio-sessions.json` and, when `LECTIO_SYNC_DIR` is set, the `notes/` directory beside it. It is a plain conditional-write store (`GET`/`PUT` with an `ETag`/`If-Match`); the app still does the merge. A process started with `LECTIO_SYNC_FILE` alone serves the JSON and no notes. The full plan is in `service-sync.md`.
+
+`GET /notes` includes each note’s text in that one list. Restart the service after updating this repo so a sync can pull the notes in a single request. An older service still works: the app then fetches the note files together, rather than one after another.
 
 Run it directly on any machine with Node 22+ (no install step):
 
@@ -79,7 +91,7 @@ The quick tunnel's `*.trycloudflare.com` URL changes each time `cloudflared` res
 
 The file path and token come from the environment, never from this repo. The route accepts only a version-1 bundle (`{"version":1,"sessions":{…}}`, matching `BUNDLE_VERSION` in `src/session/bundle.ts`), stores the bytes as sent, and does not merge. For a bare `node` process, `LECTIO_SYNC_HOST`, `LECTIO_SYNC_PORT`, and `LECTIO_SYNC_ORIGINS` are optional overrides (see `service-sync.md`). The Docker run above has to set `LECTIO_SYNC_HOST`.
 
-In the app, Home → Progress → **Service** lets a device aim at this service (enter the tailnet URL and `LECTIO_SYNC_TOKEN`) instead of a picked Drive folder; a device uses either the folder or the service, one at a time. With `LECTIO_SYNC_DIR`, the service reads `lectio-sessions.json` and `notes/` inside that folder. The read is the `GET` and the write is the `PUT` (with the `ETag` as `If-Match`), so a device whose write races another is refused (`412`) and keeps its local progress and notes until the next sync.
+In the app, Home → Progress → **Service** lets a device aim at this service instead of a picked folder. **Set and sync** saves the URL and token and pulls. Once those match what is saved, the button says **Sync now** and only pulls. A device uses either the folder or the service, one at a time. With `LECTIO_SYNC_DIR`, the service reads `lectio-sessions.json` and `notes/` inside that folder. The read is the `GET` and the write is the `PUT` (with the `ETag` as `If-Match`), so a device whose write races another is refused (`412`) and keeps its local progress and notes until the next sync.
 
 ## iOS (Mac)
 
@@ -138,7 +150,7 @@ Each new TestFlight build needs a higher **Build** number (`CURRENT_PROJECT_VERS
 
 ## Contents
 
-The treatise is split into 82 source units: retractatio, preface, twenty-two chapter titles, and numbered sections 1–57. Long units are broken into lectio paragraphs (`praefatio-s1`, `praefatio-s2`, …) when English is merged. `latin-units.json` is left unchanged.
+*De gradibus* is taken from the facsimile plates, with consonantal *j* written as *i* (*iam*, *iudicii*, *eius*). The English is written to match each numbered section. The treatise is split into 82 source units: retractatio, preface, twenty-two chapter titles, and numbered sections 1–57. Long units are broken into lectio paragraphs (`praefatio-s1`, `praefatio-s2`, …) when English is merged. `latin-units.json` is left unchanged.
 
 | Path | Role |
 | --- | --- |
@@ -155,7 +167,7 @@ The treatise is split into 82 source units: retractatio, preface, twenty-two cha
 | [`scripts/split_lectio.py`](scripts/split_lectio.py) | Breaks long units into lectio chunks |
 | [`scripts/extract_cantica_plates.py`](scripts/extract_cantica_plates.py) | Maps PL 183 columns onto sermon paragraphs and renders `public/facsimiles/songs/` |
 
-The reader is a TypeScript Vite + React app. Lectio shows one paragraph; study mode keeps chapter navigation on the left with Latin and English in parallel. The facsimile can be toggled from the study header.
+The reader is a TypeScript Vite + React app. Lectio and Cursus show one passage, in Latin, English, or both. Study keeps chapter navigation on the left with Latin and English in parallel. The facsimile can be toggled from the study header.
 
 ## Lexicon
 
@@ -169,4 +181,4 @@ python scripts/parse_analyses.py --work canticum        # analyses.json -> lexic
 python scripts/apply_overrides.py --work canticum       # merge curated overrides.json
 ```
 
-Needs a Whitaker image (Words at `/opt/whitakers-words/bin/words`). Build with `docker build -t whitaker-mcp -f services/whitaker/Dockerfile services/whitaker` if you do not already have one. Detail: [`src/content/lexicon/README.md`](src/content/lexicon/README.md).
+Needs a Whitaker image (Words at `/opt/whitakers-words/bin/words`). Build with `docker build -t whitaker-mcp -f services/whitaker/Dockerfile services/whitaker` if you do not already have one. Each work keeps its lexicon under its own `lexicon/` directory. The Steps list is [`src/content/gradibus/lexicon/README.md`](src/content/gradibus/lexicon/README.md).

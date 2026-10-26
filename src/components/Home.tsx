@@ -32,7 +32,7 @@ export function Home({ onOpen, studyEnabled = true }: HomeProps) {
     <main className="home">
       <header className="topbar">
         <div className="topbar-left">
-          <AppTitle line="A Latin reader" />
+          <AppTitle line="Lectio per cancellos" />
         </div>
         <div className="tools">
           <ThemeToggle />
@@ -142,7 +142,9 @@ function SyncBar({ onImported }: { onImported: () => void }) {
     setFileNote(null);
     setBusyOn("service");
     try {
-      await configureSyncService({ baseUrl: url, token });
+      const existing = currentSyncService();
+      if (existing?.baseUrl === url && existing.token === token) await sync.syncNow({ pull: true });
+      else await configureSyncService({ baseUrl: url, token });
     } finally {
       setBusyOn(null);
     }
@@ -253,6 +255,8 @@ function SyncBar({ onImported }: { onImported: () => void }) {
           busy={busy}
           status={serviceStatus}
           error={serviceError}
+          identity={serviceHost(service?.baseUrl)}
+          unchanged={service?.baseUrl === serviceUrl.trim() && service?.token === serviceToken.trim()}
           onUrl={(value) => {
             setServiceError(null);
             setServiceUrl(value);
@@ -384,6 +388,8 @@ function ServiceSyncControl({
   busy,
   status,
   error,
+  identity,
+  unchanged,
   onUrl,
   onToken,
   onToggleToken,
@@ -400,6 +406,8 @@ function ServiceSyncControl({
   busy: boolean;
   status: string | null;
   error: string | null;
+  identity: string | null;
+  unchanged: boolean;
   onUrl: (value: string) => void;
   onToken: (value: string) => void;
   onToggleToken: () => void;
@@ -425,6 +433,7 @@ function ServiceSyncControl({
             <span className="home-kicker">Service</span>
             {active ? <ActiveMark /> : null}
           </span>
+          {identity ? <span className="home-sync-identity">{identity}</span> : null}
         </button>
       </h3>
       {!open && status ? (
@@ -488,7 +497,7 @@ function ServiceSyncControl({
           ) : null}
           <div className="home-sync-actions">
             <button className="start" type="submit" disabled={busy}>
-              Set and sync
+              {unchanged ? "Sync now" : "Set and sync"}
             </button>
             {saved ? (
               <button className="start ghost" type="button" disabled={busy} onClick={onForget}>
@@ -509,6 +518,15 @@ function ActiveMark() {
       <span className="home-sync-active-label">Active</span>
     </span>
   );
+}
+
+function serviceHost(url: string | undefined): string | null {
+  if (!url) return null;
+  try {
+    return new URL(url).host || null;
+  } catch {
+    return null;
+  }
 }
 
 function fileDescription(active: boolean, hasFile: boolean, fileName: string | null): string | null {

@@ -1,4 +1,4 @@
-export const APP_TITLE = "Lectio per cancellos";
+export const APP_TITLE = "Lectio";
 
 type AppTitleProps = {
   line: string;

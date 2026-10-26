@@ -27,7 +27,7 @@ Two kinds of pass ship:
 
 ### Why “cursus”
 
-The home screen names the app in the small line, **Lectio per cancellos**, and the large line is the English **A Latin reader**.
+The home screen title is **Lectio**, and so is the name under the icon. The line under the title is **Lectio per cancellos**.
 
 The card and the reader use **Cursus**, not Officium. Officium would name the finished hour: opening, Gloria, Kyrie, Pater, canticle, hymn, collect. Those are later sections. What ships now is the weekly round of psalms.
 

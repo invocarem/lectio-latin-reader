@@ -211,7 +211,7 @@ export function noteUpdated(name: string, text: string): string | undefined {
   return undefined;
 }
 
-export type ListedNote = { name: string; etag: string; updated?: string };
+export type ListedNote = { name: string; etag: string; updated?: string; text: string };
 
 /**
  * The `notes/` directory. Each file has its own `FileStore`, so one lock
@@ -250,8 +250,9 @@ export class NoteDirectory {
       if (!isSyncNoteName(name)) continue;
       const found = await this.store(name).readExisting();
       if (!found) continue;
-      const updated = noteUpdated(name, found.bytes.toString("utf8"));
-      listed.push(updated ? { name, etag: found.etag, updated } : { name, etag: found.etag });
+      const text = found.bytes.toString("utf8");
+      const updated = noteUpdated(name, text);
+      listed.push(updated ? { name, etag: found.etag, updated, text } : { name, etag: found.etag, text });
     }
     return listed;
   }

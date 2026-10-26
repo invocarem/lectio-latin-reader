@@ -88,7 +88,7 @@ The service stores each note as sent and does not merge. The app merges by filen
 | Request | Result |
 | --- | --- |
 | `GET /notes`, directory missing | `200`, `{"files":[]}` |
-| `GET /notes` | `200`, each name with its etag and `updated` |
+| `GET /notes` | `200`, each name with its etag, `updated`, and text |
 | `GET /notes/:name`, file missing | `200`, empty body, etag of the empty text |
 | `GET /notes/:name`, file present | `200`, stored bytes, that file's etag |
 | `PUT /notes/:name`, etag matches | `204`, new etag, bytes stored as sent |

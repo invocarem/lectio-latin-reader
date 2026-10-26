@@ -360,11 +360,13 @@ describe("sync notes (LECTIO_SYNC_DIR)", () => {
     expect(second.headers.etag).not.toBe(created.headers.etag);
 
     const list = await noteRequest({ method: "GET", headers: auth() });
-    const files = JSON.parse(list.body.toString()).files as { name: string; etag: string; updated: string }[];
+    const files = JSON.parse(list.body.toString()).files as { name: string; etag: string; updated: string; text: string }[];
     expect(files.map((file) => file.name)).toEqual([other, NOTE]);
     expect(files.find((file) => file.name === NOTE)?.updated).toBe("2026-10-22T22:13:00.000Z");
     expect(files.find((file) => file.name === NOTE)?.etag).toBe(got.headers.etag);
+    expect(files.find((file) => file.name === NOTE)?.text).toBe(NOTE_BODY);
     expect(files.find((file) => file.name === other)?.etag).toBe(second.headers.etag);
+    expect(files.find((file) => file.name === other)?.text).toBe(otherBody);
   });
 
   it("a stale If-Match is 412 and the file is unchanged", async () => {
