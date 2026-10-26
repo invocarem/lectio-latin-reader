@@ -24,6 +24,7 @@ import { LatinText } from "./LatinText";
 import { AppTitle } from "./AppTitle";
 import { SessionIcon } from "./icons";
 import { TextLangToggle, useTextLang } from "./TextLangToggle";
+import { ThemeToggle } from "./ThemeToggle";
 
 type DictState = {
   word: string;
@@ -315,6 +316,7 @@ export function Office({ work, reading, onHome }: OfficeProps) {
         </div>
         <div className="tools">
           <TextLangToggle lang={textLang} onChange={setTextLang} />
+          <ThemeToggle />
         </div>
       </header>
 

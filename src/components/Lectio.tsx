@@ -8,6 +8,7 @@ import { LatinText } from "./LatinText";
 import { AppTitle } from "./AppTitle";
 import { CapitaIcon, SessionIcon } from "./icons";
 import { TextLangToggle, useTextLang } from "./TextLangToggle";
+import { ThemeToggle } from "./ThemeToggle";
 import { LectioSessionView } from "../session/LectioSessionView";
 import { courseFor } from "../session/courses";
 import { annotationForUnit } from "../session/document";
@@ -217,6 +218,7 @@ export function Lectio({ work, focusId, onFocus, onHome }: LectioProps) {
             </button>
           ) : null}
           <TextLangToggle lang={textLang} onChange={setTextLang} />
+          <ThemeToggle />
         </div>
       </header>
 

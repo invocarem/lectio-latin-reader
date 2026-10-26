@@ -1,4 +1,4 @@
-import { useCallback, useState, type ReactNode } from "react";
+import { useCallback, useState, type KeyboardEvent, type ReactNode } from "react";
 import { parseTextLang, TEXT_LANG_KEY, type TextLang } from "../textLang";
 import { BothLangIcon, EnglishIcon, LatinIcon } from "./icons";
 
@@ -29,6 +29,19 @@ export function useTextLang(): [TextLang, (next: TextLang) => void] {
   return [lang, choose];
 }
 
+function moveLang(lang: TextLang, key: string): TextLang | null {
+  const index = OPTIONS.findIndex((option) => option.id === lang);
+  if (key === "ArrowRight" || key === "ArrowDown") {
+    return OPTIONS[(index + 1) % OPTIONS.length].id;
+  }
+  if (key === "ArrowLeft" || key === "ArrowUp") {
+    return OPTIONS[(index - 1 + OPTIONS.length) % OPTIONS.length].id;
+  }
+  if (key === "Home") return OPTIONS[0].id;
+  if (key === "End") return OPTIONS[OPTIONS.length - 1].id;
+  return null;
+}
+
 export function TextLangToggle({
   lang,
   onChange,
@@ -36,16 +49,29 @@ export function TextLangToggle({
   lang: TextLang;
   onChange: (next: TextLang) => void;
 }) {
+  const onKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
+    const next = moveLang(lang, event.key);
+    if (!next) return;
+    event.preventDefault();
+    onChange(next);
+    const buttons = event.currentTarget.parentElement?.querySelectorAll("button");
+    const index = OPTIONS.findIndex((option) => option.id === next);
+    buttons?.[index]?.focus();
+  };
+
   return (
-    <div className="text-lang" role="group" aria-label="Reading language">
+    <div className="text-lang" role="radiogroup" aria-label="Reading language">
       {OPTIONS.map((option) => (
         <button
           key={option.id}
           type="button"
-          aria-pressed={lang === option.id}
+          role="radio"
+          aria-checked={lang === option.id}
           aria-label={option.label}
           title={option.label}
+          tabIndex={lang === option.id ? 0 : -1}
           onClick={() => onChange(option.id)}
+          onKeyDown={onKeyDown}
         >
           {option.icon}
         </button>

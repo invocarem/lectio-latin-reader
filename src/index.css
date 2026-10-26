@@ -593,6 +593,10 @@ select option {
   line-height: 1.7;
 }
 
+.lectio-card.lang-english .lectio-english.highlighted {
+  padding: 0.45rem 0.55rem;
+}
+
 .lectio-card.heading.lang-english .lectio-english {
   font-family: "Source Serif 4", "Cormorant Garamond", serif;
   font-size: clamp(1.6rem, 3vw, 2.2rem);
@@ -856,7 +860,19 @@ button.brand:hover strong {
   border-right: 0;
 }
 
-.tools .text-lang button[aria-pressed="true"] {
+.tools .text-lang button:hover {
+  color: var(--ink);
+  background: var(--veil-strong);
+}
+
+.tools .text-lang button:focus-visible {
+  outline: 2px solid var(--cinnabar);
+  outline-offset: -2px;
+  color: var(--ink);
+}
+
+.tools .text-lang button[aria-checked="true"],
+.tools .text-lang button[aria-checked="true"]:hover {
   background: var(--highlight);
   color: var(--ink);
 }
